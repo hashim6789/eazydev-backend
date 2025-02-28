@@ -4,6 +4,8 @@ import { IUsersRepository } from "../../../repositories/user.repository";
 import { IPasswordHasher } from "../../../providers/password-hasher.provider";
 import { UserEntity } from "../../../../domain/entities/user.entity";
 import { UserErrorType } from "../../../../domain/enums/user/error-type.enum";
+import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
+import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
 
 export interface ISignupUseCase {
   execute(data: ISignupRequestDTO): Promise<ResponseDTO>;
@@ -12,7 +14,9 @@ export interface ISignupUseCase {
 export class SignupUseCase implements ISignupUseCase {
   constructor(
     private userRepository: IUsersRepository,
-    private passwordHasher: IPasswordHasher
+    private passwordHasher: IPasswordHasher,
+    private refreshTokenRepository: IRefreshTokenRepository,
+    private generateRefreshTokenProvider: IGenerateRefreshTokenProvider
   ) {}
 
   async execute({
@@ -51,7 +55,16 @@ export class SignupUseCase implements ISignupUseCase {
         password: passwordHashed,
       });
 
-      return { data: user, success: true };
+      const token = await this.generateRefreshTokenProvider.generateToken(
+        user.id
+      );
+
+      const newRefreshToken = await this.refreshTokenRepository.create(
+        user.id,
+        user.role
+      );
+
+      return { data: { refreshToken: newRefreshToken, token }, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

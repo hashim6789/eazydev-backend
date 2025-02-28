@@ -1,11 +1,11 @@
 import { ISignupRequestDTO } from "../../domain/dtos/auth";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
+import { ICreateUserRequestDTO } from "../../domain/dtos/user/create-user.dtos";
 import {
-  ICreateUserRequestDTO,
   IUpdateUserRequestDTO,
   IUserInRequestDTO,
   IUserOutRequestDTO,
-} from "../../domain/dtos/user";
+} from "../../domain/dtos/user/user.dto";
 
 /**
  * Interface for the repository handling user data.

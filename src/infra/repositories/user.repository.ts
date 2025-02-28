@@ -1,13 +1,15 @@
 import { IUsersRepository } from "../../app/repositories/user.repository";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
+
+import { ObjectId } from "mongoose";
+import { IUser, User } from "../databases/models/user.model";
+import { ICreateUserRequestDTO } from "../../domain/dtos/user/create-user.dtos";
 import {
-  ICreateUserRequestDTO,
   IUpdateUserRequestDTO,
   IUserInRequestDTO,
   IUserOutRequestDTO,
-} from "../../domain/dtos/user";
-import { ObjectId } from "mongoose";
-import { IUser, User } from "../databases/models/user.model";
+  IUserValidDTO,
+} from "../../domain/dtos/user/user.dto";
 
 export class UserRepository implements IUsersRepository {
   /**
@@ -38,6 +40,7 @@ export class UserRepository implements IUsersRepository {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
+      role: user.role,
       createdAt: user.createdAt,
     };
   }
@@ -49,7 +52,7 @@ export class UserRepository implements IUsersRepository {
    * @param {string} email - The email to search for.
    * @returns {Promise<IUserInRequestDTO | null>} The found user or null.
    */
-  async findByEmail(email: string): Promise<IUserInRequestDTO | null> {
+  async findByEmail(email: string): Promise<IUserValidDTO | null> {
     const user = await User.findOne({ email }).lean();
     if (user) {
       return {
@@ -59,6 +62,8 @@ export class UserRepository implements IUsersRepository {
         lastName: user.lastName,
         role: user.role,
         password: user.password,
+        isBlocked: user.isBlocked,
+        isVerified: user.isVerified,
         createdAt: user.createdAt,
       };
     }
@@ -128,11 +133,12 @@ export class UserRepository implements IUsersRepository {
    */
   async update(
     user: IUserOutRequestDTO,
-    { email, name, password }: IUpdateUserRequestDTO
+    { email, firstName, lastName, password }: IUpdateUserRequestDTO
   ): Promise<IUserOutRequestDTO | null> {
     const updateData: Partial<IUser> = {};
     if (email) updateData.email = email;
-    if (name) updateData.firstName = name;
+    if (firstName) updateData.firstName = firstName;
+    if (lastName) updateData.lastName = lastName;
     if (password) updateData.password = password;
 
     const userUpdated: IUser | null = await User.findByIdAndUpdate(
@@ -149,6 +155,7 @@ export class UserRepository implements IUsersRepository {
       email: userUpdated.email,
       firstName: userUpdated.firstName,
       lastName: userUpdated.lastName,
+      role: userUpdated.role,
       createdAt: userUpdated.createdAt,
     };
   }

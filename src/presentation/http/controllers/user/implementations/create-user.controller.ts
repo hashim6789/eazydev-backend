@@ -1,6 +1,6 @@
 import { ICreateUserUseCase } from "../../../../../app/usecases/user/create-user.usecase";
 import { ResponseDTO } from "../../../../../domain/dtos/response.dtos";
-import { Role } from "../../../../../domain/dtos/role.dtos";
+import { Role, SignupRole } from "../../../../../domain/dtos/role.dtos";
 import { IHttpErrors } from "../../../helpers/IHttpErrors";
 import { IHttpRequest } from "../../../helpers/IHttpRequest";
 import { IHttpResponse } from "../../../helpers/IHttpResponse";
@@ -36,7 +36,7 @@ export class CreateUserController implements IController {
           firstName: string;
           lastName: string;
           email: string;
-          role: Role;
+          role: SignupRole;
           password: string;
         };
 

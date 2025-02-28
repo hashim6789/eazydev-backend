@@ -4,13 +4,13 @@ import morgan from "morgan";
 
 // import { authenticateRoutes } from "../routers/authenticate";
 // import { documentsRoutes } from "../routers/documentation";
-import { apiRouter } from "../routers/api";
-import { userRoutes } from "../routers/user.routes";
-import { connectDB } from "../../../infra/databases/mongoose/connecton";
+import { apiRouter } from "../routers";
 
 /**
- * Express application instance.
+ * Express connections instance.
  */
+import { connectDB } from "../../../infra/databases/mongoose/connecton";
+
 const app = express();
 
 /**
@@ -34,7 +34,6 @@ connectDB();
  * Mounting routes for documentation, user-related, and authentication endpoints.
  */
 // app.use("/", documentsRoutes);
-app.use("/users", userRoutes);
 app.use("/api", apiRouter);
 // app.use("/authenticate", authenticateRoutes);
 

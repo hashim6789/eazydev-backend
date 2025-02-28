@@ -1,12 +1,9 @@
 import { Request, Response, Router } from "express";
 
-// import { createAuthComposer } from "../../../infra/services/composers/auth/create-auth.composer";
-// import { deleteAuthComposer } from '../../../infra/services/composers/Auth/deleteAuth'
-// import { getAuthComposer } from "../../../infra/services/composers/auth/get-auth.composer";
-// import { updateAuthComposer } from '../../../infra/services/composers/Auth/updateAuth'
 // import { ensureAuthenticated } from "../middlewares/authenticate-auth.middleware";
-import { signupComposer } from "../../../../infra/services/composers/auth/signup-auth.composer";
-import { expressAdapter } from "../../../adapters/express.adapter";
+import { signupComposer } from "../../../infra/services/composers/auth/signup-auth.composer";
+import { expressAdapter } from "../../adapters/express.adapter";
+import { loginComposer } from "../../../infra/services/composers/auth/login-suth.composer";
 
 /**
  * Router for handling auth-related routes.
@@ -24,7 +21,7 @@ authRouter.post("/signup", async (request: Request, response: Response) => {
  * Endpoint to create a new auth.
  */
 authRouter.post("/login", async (request: Request, response: Response) => {
-  const adapter = await expressAdapter(request, signupComposer());
+  const adapter = await expressAdapter(request, loginComposer());
   response.status(adapter.statusCode).json(adapter.body);
 });
 

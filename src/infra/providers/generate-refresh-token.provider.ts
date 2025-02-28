@@ -22,7 +22,7 @@ export class GenerateRefreshTokenProvider
    * @throws {Error} Throws an error if the API_SECRET is missing in the environment variables.
    */
   async generateToken(token: string): Promise<string> {
-    const secretKey = process.env.API_SECRET;
+    const secretKey = process.env.JWT_ACCESS_SECRET;
 
     if (!secretKey) {
       throw new Error("API_SECRET is missing in the environment variables.");

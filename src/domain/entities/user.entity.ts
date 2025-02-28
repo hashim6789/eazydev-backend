@@ -1,6 +1,6 @@
 import { ISignupRequestDTO } from "../dtos/auth";
-import { Role } from "../dtos/role.dtos";
-import { ICreateUserRequestDTO, IUpdateUserRequestDTO } from "../dtos/user";
+import { Role, SignupRole } from "../dtos/role.dtos";
+import { IUpdateUserRequestDTO } from "../dtos/user/user.dto";
 import { Email } from "../valueObjects/email.values";
 
 /**
@@ -12,7 +12,7 @@ export interface UserInterface {
   firstName: string;
   lastName: string;
   email: Email;
-  role: Role;
+  role: SignupRole;
   password: string;
 }
 
@@ -25,7 +25,7 @@ export class UserEntity {
   private _firstName: string;
   private _lastName: string;
   private _email: Email;
-  private _role: Role;
+  private _role: SignupRole;
   private _password: string;
 
   /**
@@ -97,7 +97,7 @@ export class UserEntity {
    *
    * @readonly
    */
-  get role(): Role {
+  get role(): SignupRole {
     return this._role;
   }
 

@@ -3,10 +3,13 @@ import { IUsersRepository } from "../../../repositories/user.repository";
 import { IPasswordHasher } from "../../../providers/password-hasher.provider";
 import { UserEntity } from "../../../../domain/entities/user.entity";
 import { ILoginRequestDTO } from "../../../../domain/dtos/auth/login-auth.dto";
-import { IUserInRequestDTO } from "../../../../domain/dtos/user";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/Authenticate/error-type.enum";
 import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
+import {
+  IUserInRequestDTO,
+  IUserValidDTO,
+} from "../../../../domain/dtos/user/user.dto";
 
 export interface ILoginUseCase {
   execute(data: ILoginRequestDTO): Promise<ResponseDTO>;
@@ -20,15 +23,26 @@ export class LoginUseCase implements ILoginUseCase {
     private refreshTokenRepository: IRefreshTokenRepository
   ) {}
 
-  async execute({ email, password }: ILoginRequestDTO): Promise<ResponseDTO> {
+  async execute({
+    email,
+    password,
+    role,
+  }: ILoginRequestDTO): Promise<ResponseDTO> {
     try {
       const user = (await this.userRepository.findByEmail(
         email
-      )) as IUserInRequestDTO | null;
+      )) as IUserValidDTO | null;
 
       if (!user) {
         return {
           data: { error: AuthenticateUserErrorType.EmailOrPasswordWrong },
+          success: false,
+        };
+      }
+
+      if (user.isBlocked || !user.isVerified || user.role !== role) {
+        return {
+          data: { error: AuthenticateUserErrorType.UserNotVerifiedOrBlocked },
           success: false,
         };
       }
@@ -54,11 +68,12 @@ export class LoginUseCase implements ILoginUseCase {
         await this.refreshTokenRepository.delete(user.id);
       }
 
-      const refreshToken = await this.refreshTokenRepository.create(user.id);
+      const refreshToken = await this.refreshTokenRepository.create(
+        user.id,
+        user.role
+      );
 
       return { data: { token, refreshToken, user }, success: true };
-
-      return { data: user, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

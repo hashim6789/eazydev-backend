@@ -1,5 +1,5 @@
 import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
-import { ICreateUserRequestDTO } from "../../../../domain/dtos/user";
+import { ICreateUserRequestDTO } from "../../../../domain/dtos/user/create-user.dtos";
 import { UserEntity } from "../../../../domain/entities/user.entity";
 import { UserErrorType } from "../../../../domain/enums/user/error-type.enum";
 

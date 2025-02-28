@@ -1,11 +1,11 @@
-import { IUserDTO } from "./user.dto";
+// import { IUserDTO } from "./user.dto";
 
-/**
- * Data Transfer Object (DTO) representing the output user data.
- *
- * @interface
- */
-export type IUserOutRequestDTO = Pick<
-  IUserDTO,
-  "id" | "firstName" | "lastName" | "email" | "createdAt"
->;
+// /**
+//  * Data Transfer Object (DTO) representing the output user data.
+//  *
+//  * @interface
+//  */
+// export type IUserOutRequestDTO = Pick<
+//   IUserDTO,
+//   "id" | "firstName" | "lastName" | "email" | "createdAt"
+// >;
