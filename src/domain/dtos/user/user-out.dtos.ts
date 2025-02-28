@@ -1,30 +1,11 @@
+import { IUserDTO } from "./user.dto";
+
 /**
  * Data Transfer Object (DTO) representing the output user data.
  *
  * @interface
  */
-export interface IUserOutRequestDTO {
-  /**
-   * The ID of the user.
-   */
-  id: string;
-
-  /**
-   * The name of the user.
-   */
-  firstName: string;
-  /**
-   * The name of the user.
-   */
-  lastName: string;
-
-  /**
-   * The email address of the user.
-   */
-  email: string;
-
-  /**
-   * The optional creation date of the user account.
-   */
-  createdAt?: Date;
-}
+export type IUserOutRequestDTO = Pick<
+  IUserDTO,
+  "id" | "firstName" | "lastName" | "email" | "createdAt"
+>;

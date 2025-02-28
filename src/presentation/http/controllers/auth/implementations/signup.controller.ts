@@ -1,6 +1,6 @@
 import { ISignupUseCase } from "../../../../../app/usecases/auth/signup-auth.usecase";
 import { ResponseDTO } from "../../../../../domain/dtos/response.dtos";
-import { Role } from "../../../../../domain/dtos/role.dtos";
+import { Role, SignupRole } from "../../../../../domain/dtos/role.dtos";
 import { IHttpErrors } from "../../../helpers/IHttpErrors";
 import { IHttpRequest } from "../../../helpers/IHttpRequest";
 import { IHttpResponse } from "../../../helpers/IHttpResponse";
@@ -24,8 +24,6 @@ export class SignupController implements IController {
     let error;
     let response: ResponseDTO;
 
-    console.log("object");
-
     if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
       const bodyParams = Object.keys(httpRequest.body);
 
@@ -40,7 +38,7 @@ export class SignupController implements IController {
           firstName: string;
           lastName: string;
           email: string;
-          role: Role;
+          role: SignupRole;
           password: string;
         };
 

@@ -21,9 +21,16 @@ export class UserRepository implements IUsersRepository {
     email,
     firstName,
     lastName,
+    role,
     password,
   }: ICreateUserRequestDTO): Promise<IUserOutRequestDTO> {
-    const user: IUser = new User({ email, firstName, lastName, password });
+    const user: IUser = new User({
+      email,
+      firstName,
+      lastName,
+      role,
+      password,
+    });
     await user.save();
 
     return {

@@ -14,12 +14,12 @@ export interface RefreshTokenDTO {
   /**
    * The expiration time of the refresh token (in seconds).
    */
-  expires_in: number;
+  expiresIn: number;
 
   /**
    * The user ID associated with the refresh token.
    */
-  user_id: string;
+  userId: string;
 
   role: Role;
 
