@@ -24,5 +24,63 @@ authRouter.post("/login", async (request: Request, response: Response) => {
   const adapter = await expressAdapter(request, loginComposer());
   response.status(adapter.statusCode).json(adapter.body);
 });
+/**
+ * Endpoint to create a new auth.
+ */
+authRouter.post("/logout", async (request: Request, response: Response) => {
+  const adapter = await expressAdapter(request, loginComposer());
+  response.status(adapter.statusCode).json(adapter.body);
+});
+/**
+ * Endpoint to create a new auth.
+ */
+authRouter.post("/google", async (request: Request, response: Response) => {
+  const adapter = await expressAdapter(request, loginComposer());
+  response.status(adapter.statusCode).json(adapter.body);
+});
+/**
+ * Endpoint to create a new auth.
+ */
+authRouter.post("/otp-verify", async (request: Request, response: Response) => {
+  const adapter = await expressAdapter(request, loginComposer());
+  response.status(adapter.statusCode).json(adapter.body);
+});
+/**
+ * Endpoint to create a new auth.
+ */
+authRouter.post("/otp-resend", async (request: Request, response: Response) => {
+  const adapter = await expressAdapter(request, loginComposer());
+  response.status(adapter.statusCode).json(adapter.body);
+});
+/**
+ * Endpoint to create a new auth.
+ */
+authRouter.post(
+  "/forgot-password",
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, loginComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+/**
+ * Endpoint to create a new auth.
+ */
+authRouter.get(
+  "/:token/reset-password",
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, loginComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+/**
+ * Endpoint to create a new auth.
+ */
+authRouter.patch(
+  "/reset-password",
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, loginComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export { authRouter };
