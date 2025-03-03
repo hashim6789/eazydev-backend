@@ -4,6 +4,7 @@ import { Request, Response, Router } from "express";
 import { signupComposer } from "../../../infra/services/composers/auth/signup-auth.composer";
 import { expressAdapter } from "../../adapters/express.adapter";
 import { loginComposer } from "../../../infra/services/composers/auth/login-suth.composer";
+import { logoutComposer } from "../../../infra/services/composers/auth/logout-auth-composer";
 
 /**
  * Router for handling auth-related routes.
@@ -28,7 +29,7 @@ authRouter.post("/login", async (request: Request, response: Response) => {
  * Endpoint to create a new auth.
  */
 authRouter.post("/logout", async (request: Request, response: Response) => {
-  const adapter = await expressAdapter(request, loginComposer());
+  const adapter = await expressAdapter(request, logoutComposer());
   response.status(adapter.statusCode).json(adapter.body);
 });
 /**

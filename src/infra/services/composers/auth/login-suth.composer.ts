@@ -5,7 +5,7 @@ import { IUsersRepository } from "../../../../app/repositories/user.repository";
 import { LoginUseCase } from "../../../../app/usecases/auth/implementations/login-auth-usecase";
 import { ILoginUseCase } from "../../../../app/usecases/auth/login-auth.usecase";
 import { LoginController } from "../../../../presentation/http/controllers/auth/implementations/login.controller";
-import { IController } from "../../../../presentation/http/IController";
+import { IController } from "../../../../presentation/http/controllers/IController";
 import { RefreshTokenModel } from "../../../databases/models/refresh-token.model";
 import { GenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { PasswordHasher } from "../../../providers/password-hasher.provider";

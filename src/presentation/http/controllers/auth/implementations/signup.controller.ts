@@ -8,7 +8,7 @@ import { IHttpSuccess } from "../../../helpers/IHttpSuccess";
 import { HttpErrors } from "../../../helpers/implementations/HttpErrors";
 import { HttpResponse } from "../../../helpers/implementations/HttpResponse";
 import { HttpSuccess } from "../../../helpers/implementations/HttpSuccess";
-import { IController } from "../../../IController";
+import { IController } from "../../IController";
 
 /**
  * Controller for handling requests to create a user.

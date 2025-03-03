@@ -6,6 +6,9 @@ import { UserEntity } from "../../../../domain/entities/user.entity";
 import { UserErrorType } from "../../../../domain/enums/user/error-type.enum";
 import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
 import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
+import { IOtpRepository } from "../../../repositories/otp.repository";
+import { IGenerateOtpProvider } from "../../../providers/generate-otp.provider";
+import { ISendMailProvider } from "../../../providers/send-mail.provider";
 
 export interface ISignupUseCase {
   execute(data: ISignupRequestDTO): Promise<ResponseDTO>;
@@ -16,7 +19,10 @@ export class SignupUseCase implements ISignupUseCase {
     private userRepository: IUsersRepository,
     private passwordHasher: IPasswordHasher,
     private refreshTokenRepository: IRefreshTokenRepository,
-    private generateRefreshTokenProvider: IGenerateRefreshTokenProvider
+    private generateRefreshTokenProvider: IGenerateRefreshTokenProvider,
+    private otpRepository: IOtpRepository,
+    private generateOtpProvider: IGenerateOtpProvider,
+    private sendMailProvider: ISendMailProvider
   ) {}
 
   async execute({
@@ -54,6 +60,12 @@ export class SignupUseCase implements ISignupUseCase {
         role: userEntity.role,
         password: passwordHashed,
       });
+
+      const otp = await this.otpRepository.create(
+        user.id,
+        await this.generateOtpProvider.generateOtp()
+      );
+      await this.sendMailProvider.sendOtpMail(user.email, otp.otp);
 
       const token = await this.generateRefreshTokenProvider.generateToken(
         user.id

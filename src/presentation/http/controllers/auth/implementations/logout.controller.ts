@@ -1,4 +1,5 @@
-import { ILoginUseCase } from "../../../../../app/usecases/auth/login-auth.usecase";
+import { ILogoutUseCase } from "../../../../../app/usecases/auth/logout-auth.usecase";
+import { ILogoutRequestDTO } from "../../../../../domain/dtos/auth/logut-auth-dto";
 import { ResponseDTO } from "../../../../../domain/dtos/response.dtos";
 import { Role } from "../../../../../domain/dtos/role.dtos";
 import { IHttpErrors } from "../../../helpers/IHttpErrors";
@@ -13,9 +14,9 @@ import { IController } from "../../IController";
 /**
  * Controller for handling requests to create a user.
  */
-export class LoginController implements IController {
+export class LogoutController implements IController {
   constructor(
-    private loginCase: ILoginUseCase,
+    private logoutCase: ILogoutUseCase,
     private httpErrors: IHttpErrors = new HttpErrors(),
     private httpSuccess: IHttpSuccess = new HttpSuccess()
   ) {}
@@ -29,18 +30,10 @@ export class LoginController implements IController {
     if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
       const bodyParams = Object.keys(httpRequest.body);
 
-      if (
-        bodyParams.includes("email") &&
-        bodyParams.includes("password") &&
-        bodyParams.includes("role")
-      ) {
-        const loginRequestDTO = httpRequest.body as {
-          email: string;
-          password: string;
-          role: Role;
-        };
+      if (bodyParams.includes("userId") && bodyParams.includes("role")) {
+        const logoutRequestDTO = httpRequest.body as ILogoutRequestDTO;
 
-        response = await this.loginCase.execute(loginRequestDTO);
+        response = await this.logoutCase.execute(logoutRequestDTO);
       } else {
         error = this.httpErrors.error_422();
         return new HttpResponse(error.statusCode, error.body);
@@ -51,7 +44,7 @@ export class LoginController implements IController {
         return new HttpResponse(error.statusCode, response.data);
       }
 
-      const success = this.httpSuccess.success_201(response.data);
+      const success = this.httpSuccess.success_200(response.data);
       return new HttpResponse(success.statusCode, success.body);
     }
 
