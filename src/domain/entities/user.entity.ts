@@ -1,5 +1,5 @@
-import { ISignupRequestDTO } from "../dtos/auth";
 import { Role, SignupRole } from "../dtos/role.dtos";
+import { ICreateUserRequestDTO } from "../dtos/user/create-user.dtos";
 import { IUpdateUserRequestDTO } from "../dtos/user/user.dto";
 import { Email } from "../valueObjects/email.values";
 
@@ -14,6 +14,8 @@ export interface UserInterface {
   email: Email;
   role: SignupRole;
   password: string;
+  googleId: string;
+  profilePicture: string;
 }
 
 /**
@@ -27,6 +29,8 @@ export class UserEntity {
   private _email: Email;
   private _role: SignupRole;
   private _password: string;
+  private _googleId: string;
+  private _profilePicture: string;
 
   /**
    * Creates a new user instance based on the provided data.
@@ -41,7 +45,9 @@ export class UserEntity {
     lastName,
     role,
     password,
-  }: ISignupRequestDTO): UserEntity {
+    googleId,
+    profilePicture,
+  }: ICreateUserRequestDTO): UserEntity {
     const newEmail = new Email({ address: email });
     return new UserEntity({
       firstName,
@@ -49,6 +55,8 @@ export class UserEntity {
       email: newEmail,
       role,
       password,
+      googleId,
+      profilePicture,
     });
   }
 
@@ -111,6 +119,23 @@ export class UserEntity {
   }
 
   /**
+   * Gets the user's password.
+   *
+   * @readonly
+   */
+  get googleId(): string {
+    return this._googleId;
+  }
+  /**
+   * Gets the user's password.
+   *
+   * @readonly
+   */
+  get profilePicture(): string {
+    return this._profilePicture;
+  }
+
+  /**
    * Creates an instance of UserEntity.
    *
    * @constructor
@@ -122,5 +147,7 @@ export class UserEntity {
     this._password = props.password;
     this._role = props.role;
     this._email = props.email;
+    this._googleId = props.googleId;
+    this._profilePicture = props.profilePicture;
   }
 }

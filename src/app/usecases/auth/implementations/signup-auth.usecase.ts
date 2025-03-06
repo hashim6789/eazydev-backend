@@ -39,6 +39,8 @@ export class SignupUseCase implements ISignupUseCase {
         lastName,
         role,
         password,
+        googleId: "",
+        profilePicture: "",
       });
 
       const userAlreadyExists = await this.userRepository.findByEmail(
@@ -59,6 +61,8 @@ export class SignupUseCase implements ISignupUseCase {
         lastName: userEntity.lastName,
         role: userEntity.role,
         password: passwordHashed,
+        googleId: userEntity.googleId,
+        profilePicture: userEntity.profilePicture,
       });
 
       const otp = await this.otpRepository.create(

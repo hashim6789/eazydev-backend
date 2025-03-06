@@ -10,6 +10,7 @@ export interface IUserDTO {
   isVerified: boolean;
   profilePicture: string;
   role: Role;
+  googleId: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -30,11 +31,21 @@ export type IUserValidDTO = Pick<
   | "isVerified"
   | "password"
   | "createdAt"
+  | "googleId"
 >;
 export type IUserInRequestDTO = Pick<
   IUserDTO,
   "id" | "firstName" | "lastName" | "email" | "role" | "password" | "createdAt"
 >;
 export type IUpdateUserRequestDTO = Partial<
-  Pick<IUserDTO, "id" | "firstName" | "lastName" | "email" | "password">
+  Pick<
+    IUserDTO,
+    | "id"
+    | "firstName"
+    | "lastName"
+    | "email"
+    | "password"
+    | "googleId"
+    | "profilePicture"
+  >
 >;

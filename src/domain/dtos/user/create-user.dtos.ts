@@ -6,4 +6,6 @@ export interface ICreateUserRequestDTO {
   password: string;
   role: SignupRole;
   email: string;
+  googleId: string;
+  profilePicture: string;
 }

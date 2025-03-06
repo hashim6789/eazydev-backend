@@ -1,9 +1,10 @@
-import { Role, SignupRole } from "../role.dtos";
+import { SignupRole } from "../role.dtos";
 
-export interface ISignupRequestDTO {
+export interface ICreateUserRequestDTO {
   firstName: string;
   lastName: string;
   password: string;
   role: SignupRole;
   email: string;
+  googleId: string;
 }

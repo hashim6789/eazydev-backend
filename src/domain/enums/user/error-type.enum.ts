@@ -18,4 +18,18 @@ export enum UserErrorType {
    * Error type indicating that no users were found.
    */
   UserNotFound = "Users not found",
+
+  /**
+   * Error type indicating the users is blocked.
+   */
+  UserBlocked = "Users is blocked!",
+
+  /**
+   * Error type indicating the users is blocked.
+   */
+  UserNotVerified = "Users is not verified!",
+  /**
+   * Error type indicating the users is blocked.
+   */
+  UserCantCreate = "User can't be created!",
 }
