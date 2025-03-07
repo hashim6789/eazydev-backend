@@ -1,6 +1,6 @@
-import { IGoogleLoginUseCase } from "../../../../../app/usecases/auth/google-login.usecase";
-import { IGoogleRequestDTO } from "../../../../../domain/dtos/auth/google-auth.dto";
+import { IVerifyOtpUseCase } from "../../../../../app/usecases/auth/verify-otp.usecase";
 import { ResponseDTO } from "../../../../../domain/dtos/response.dtos";
+import { Role } from "../../../../../domain/dtos/role.dtos";
 import { IHttpErrors } from "../../../helpers/IHttpErrors";
 import { IHttpRequest } from "../../../helpers/IHttpRequest";
 import { IHttpResponse } from "../../../helpers/IHttpResponse";
@@ -13,9 +13,9 @@ import { IController } from "../../IController";
 /**
  * Controller for handling requests to create a user.
  */
-export class GoogleLoginController implements IController {
+export class VerifyOtpController implements IController {
   constructor(
-    private googleLoginCase: IGoogleLoginUseCase,
+    private verifyOtpCase: IVerifyOtpUseCase,
     private httpErrors: IHttpErrors = new HttpErrors(),
     private httpSuccess: IHttpSuccess = new HttpSuccess()
   ) {}
@@ -29,10 +29,10 @@ export class GoogleLoginController implements IController {
     if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
       const bodyParams = Object.keys(httpRequest.body);
 
-      if (bodyParams.includes("googleToken") && bodyParams.includes("role")) {
-        const googleLoginRequestDTO = httpRequest.body as IGoogleRequestDTO;
+      if (bodyParams.includes("otp") && bodyParams.includes("userId")) {
+        const verifyOtpRequestDTO = httpRequest.body as IVerifyOtpRequestDTO;
 
-        response = await this.googleLoginCase.execute(googleLoginRequestDTO);
+        response = await this.verifyOtpCase.execute(verifyOtpRequestDTO);
       } else {
         error = this.httpErrors.error_422();
         return new HttpResponse(error.statusCode, error.body);

@@ -54,6 +54,13 @@ export class SignupController implements IController {
       }
 
       const success = this.httpSuccess.success_201(response.data);
+
+      // if (success.statusCode === 201) {
+      //   httpRequest.cookie = {
+      //     refreshToken: success.body.refreshToken,
+      //     accessToken: success.body.token,
+      //   };
+      // }
       return new HttpResponse(success.statusCode, success.body);
     }
 

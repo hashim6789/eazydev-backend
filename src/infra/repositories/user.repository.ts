@@ -65,6 +65,7 @@ export class UserRepository implements IUsersRepository {
         isBlocked: user.isBlocked,
         isVerified: user.isVerified,
         createdAt: user.createdAt,
+        googleId: user.googleId,
       };
     }
     return null;
@@ -132,7 +133,7 @@ export class UserRepository implements IUsersRepository {
    * @returns {Promise<IUserOutRequestDTO>} The updated user.
    */
   async update(
-    user: IUserOutRequestDTO,
+    userId: string,
     { email, firstName, lastName, password }: IUpdateUserRequestDTO
   ): Promise<IUserOutRequestDTO | null> {
     const updateData: Partial<IUser> = {};
@@ -142,7 +143,7 @@ export class UserRepository implements IUsersRepository {
     if (password) updateData.password = password;
 
     const userUpdated: IUser | null = await User.findByIdAndUpdate(
-      user.id,
+      userId,
       { $set: updateData },
       { new: true }
     ).lean();

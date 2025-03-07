@@ -10,6 +10,7 @@ export interface IUser extends Document {
   isBlocked: boolean;
   isVerified: boolean;
   profilePicture: string;
+  googleId: string;
   role: Role;
   createdAt: Date;
   updatedAt: Date;
@@ -24,6 +25,7 @@ const userSchema = new Schema<IUser>(
     isBlocked: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },
     profilePicture: { type: String },
+    googleId: { type: String },
     role: {
       type: String,
       enum: ["admin", "mentor", "learner"],

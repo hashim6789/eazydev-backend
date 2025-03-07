@@ -28,8 +28,14 @@ export enum UserErrorType {
    * Error type indicating the users is blocked.
    */
   UserNotVerified = "Users is not verified!",
+
   /**
    * Error type indicating the users is blocked.
    */
   UserCantCreate = "User can't be created!",
+
+  /**
+   * Error type indicating the users is blocked.
+   */
+  UserCantUpdate = "User can't be update!",
 }

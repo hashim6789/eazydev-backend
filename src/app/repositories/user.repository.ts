@@ -58,7 +58,8 @@ export interface IUsersRepository {
    * @returns {Promise<IUserOutRequestDTO>} The updated user data.
    */
   update(
-    user: IUserOutRequestDTO,
+    // user: IUserOutRequestDTO,
+    userId: string,
     data: IUpdateUserRequestDTO
   ): Promise<IUserOutRequestDTO | null>;
 

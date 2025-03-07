@@ -47,5 +47,7 @@ export type IUpdateUserRequestDTO = Partial<
     | "password"
     | "googleId"
     | "profilePicture"
+    | "isVerified"
+    | "isBlocked"
   >
 >;

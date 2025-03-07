@@ -9,6 +9,7 @@ export const ensureAuthenticated: RequestHandler = (
   next: NextFunction
 ) => {
   const authToken = request.headers.authorization;
+  request.body.userId = "Hashim";
 
   if (!authToken) {
     response.status(401).json({

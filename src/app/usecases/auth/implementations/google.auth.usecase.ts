@@ -97,12 +97,12 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         }
 
         if (!fetchedUser.googleId) {
-          user = await this.userRepository.update(fetchedUser, {
+          user = await this.userRepository.update(fetchedUser.id, {
             googleId: userEntity.googleId,
             profilePicture: userEntity.profilePicture,
           });
         } else {
-          user = await this.userRepository.update(fetchedUser, {
+          user = await this.userRepository.update(fetchedUser.id, {
             email: userEntity.email.address,
             firstName: userEntity.firstName,
             lastName: userEntity.lastName,
