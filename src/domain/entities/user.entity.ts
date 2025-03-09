@@ -1,6 +1,10 @@
 import { Role, SignupRole } from "../dtos/role.dtos";
 import { ICreateUserRequestDTO } from "../dtos/user/create-user.dtos";
-import { IUpdateUserRequestDTO } from "../dtos/user/user.dto";
+import {
+  IUpdateUserRequestDTO,
+  IUserOut,
+  IUserOutRequestDTO,
+} from "../dtos/user/user.dto";
 import { Email } from "../valueObjects/email.values";
 
 /**
@@ -58,6 +62,21 @@ export class UserEntity {
       googleId,
       profilePicture,
     });
+  }
+  static convert({
+    email,
+    firstName,
+    lastName,
+    role,
+    profilePicture,
+  }: IUserOutRequestDTO): IUserOut {
+    return {
+      firstName,
+      lastName,
+      email,
+      role,
+      profilePicture,
+    };
   }
 
   /**

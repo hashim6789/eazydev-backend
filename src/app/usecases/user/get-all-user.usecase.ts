@@ -1,5 +1,6 @@
 import { ResponseDTO } from "../../../domain/dtos/response.dtos";
+import { QueryUser } from "../../../domain/dtos/user";
 
 export interface IGetAllUserUseCase {
-  execute(page: number): Promise<ResponseDTO>;
+  execute(query: QueryUser): Promise<ResponseDTO>;
 }

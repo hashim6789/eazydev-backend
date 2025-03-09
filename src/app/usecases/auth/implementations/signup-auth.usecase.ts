@@ -80,7 +80,12 @@ export class SignupUseCase implements ISignupUseCase {
         user.role
       );
 
-      return { data: { refreshToken: newRefreshToken, token }, success: true };
+      const outUser = UserEntity.convert(user);
+
+      return {
+        data: { refreshTokenId: newRefreshToken.id, token, user: outUser },
+        success: true,
+      };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

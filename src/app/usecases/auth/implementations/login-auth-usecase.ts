@@ -10,6 +10,7 @@ import {
   IUserInRequestDTO,
   IUserValidDTO,
 } from "../../../../domain/dtos/user/user.dto";
+import { RefreshTokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 
 export interface ILoginUseCase {
   execute(data: ILoginRequestDTO): Promise<ResponseDTO>;
@@ -62,7 +63,9 @@ export class LoginUseCase implements ILoginUseCase {
         user.id
       );
       const refreshTokenFounded =
-        await this.refreshTokenRepository.findByUserId(user.id);
+        (await this.refreshTokenRepository.findByUserId(
+          user.id
+        )) as RefreshTokenDTO | null;
 
       if (refreshTokenFounded) {
         await this.refreshTokenRepository.delete(user.id);
@@ -73,7 +76,18 @@ export class LoginUseCase implements ILoginUseCase {
         user.role
       );
 
-      return { data: { token, refreshToken, user }, success: true };
+      // const outUser = UserEntity.convert({
+      //   email: user.email,
+      //   firstName: user.firstName,
+      //   lastName: user.lastName,
+      //   profilePicture: user.profilePicture,
+      //   role: user.role,
+      // });
+
+      return {
+        data: { token, refreshTokenId: refreshToken.id, user },
+        success: true,
+      };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

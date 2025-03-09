@@ -1,8 +1,10 @@
 import { ISignupRequestDTO } from "../../domain/dtos/auth";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
+import { QueryUser } from "../../domain/dtos/user";
 import { ICreateUserRequestDTO } from "../../domain/dtos/user/create-user.dtos";
 import {
   IUpdateUserRequestDTO,
+  IUserDetailOutDTO,
   IUserInRequestDTO,
   IUserOutRequestDTO,
 } from "../../domain/dtos/user/user.dto";
@@ -38,7 +40,7 @@ export interface IUsersRepository {
    * @param {string} id - The ID of the user.
    * @returns {Promise<IUserInRequestDTO | unknown>} The found user data, or undefined if not found.
    */
-  findById(id: string): Promise<IUserInRequestDTO | unknown>;
+  findById(id: string): Promise<IUserDetailOutDTO | unknown>;
 
   /**
    * Retrieves a paginated list of users.
@@ -47,7 +49,7 @@ export interface IUsersRepository {
    * @param {number} pageNumber - The page number for pagination.
    * @returns {Promise<PaginationDTO>} The paginated list of users.
    */
-  findAll(pageNumber: number): Promise<PaginationDTO>;
+  findAll(query: QueryUser): Promise<PaginationDTO>;
 
   /**
    * Updates the user data with the provided information.

@@ -65,7 +65,7 @@ export class RefreshTokenRepository implements IRefreshTokenRepository {
    * @returns {Promise<RefreshTokenDTO | unknown>} The found refresh token or undefined.
    */
   async findById(refreshToken: string): Promise<RefreshTokenDTO | unknown> {
-    const token = await this.RefreshToken.findById(refreshToken).exec();
+    const token = await RefreshTokenModel.findById(refreshToken).exec();
 
     return token;
   }
@@ -76,9 +76,10 @@ export class RefreshTokenRepository implements IRefreshTokenRepository {
    * @async
    * @param {string} userId - The ID of the user for whom to find the refresh token.
    * @returns {Promise<RefreshTokenDTO | unknown>} The found refresh token or undefined.
-   */
+   67cbcfce051ab2ea1b7a2125
+  */
   async findByUserId(userId: string): Promise<RefreshTokenDTO | unknown> {
-    const token = await this.RefreshToken.findOne({ userId }).exec();
+    const token = await RefreshTokenModel.findOne({ userId }).exec();
 
     return token;
   }
@@ -91,6 +92,6 @@ export class RefreshTokenRepository implements IRefreshTokenRepository {
    * @returns {Promise<void>} A Promise that resolves once the refresh token is deleted.
    */
   async delete(userId: string): Promise<void> {
-    await this.RefreshToken.deleteOne({ userId }).exec();
+    await RefreshTokenModel.deleteOne({ userId }).exec();
   }
 }

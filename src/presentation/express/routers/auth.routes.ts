@@ -1,12 +1,12 @@
 import { Request, Response, Router } from "express";
+import { expressAdapter } from "../../adapters/express.adapter";
+import { config } from "../../http/configs/env.config";
 
 // import { ensureAuthenticated } from "../middlewares/authenticate-auth.middleware";
 import { signupComposer } from "../../../infra/services/composers/auth/signup-auth.composer";
-import { expressAdapter } from "../../adapters/express.adapter";
 import { loginComposer } from "../../../infra/services/composers/auth/login-suth.composer";
 import { logoutComposer } from "../../../infra/services/composers/auth/logout-auth-composer";
 import { googleLoginComposer } from "../../../infra/services/composers/auth/google-auth-composer";
-import { config } from "../../http/configs/env.config";
 
 /**
  * Router for handling auth-related routes.
@@ -25,7 +25,7 @@ authRouter.post("/signup", async (request: Request, response: Response) => {
     });
     response.cookie(
       config.KEY_OF_REFRESH as string,
-      adapter.body.refreshToken,
+      adapter.body.refreshTokenId,
       { httpOnly: true, maxAge: 1 * 24 * 60 * 60 * 1000 }
     );
   }
@@ -43,7 +43,7 @@ authRouter.post("/login", async (request: Request, response: Response) => {
     });
     response.cookie(
       config.KEY_OF_REFRESH as string,
-      adapter.body.refreshToken,
+      adapter.body.refreshTokenId,
       { httpOnly: true, maxAge: 1 * 24 * 60 * 60 * 1000 }
     );
   }

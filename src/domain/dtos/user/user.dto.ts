@@ -17,7 +17,13 @@ export interface IUserDTO {
 
 export type IUserOutRequestDTO = Pick<
   IUserDTO,
-  "id" | "firstName" | "lastName" | "email" | "role" | "createdAt"
+  | "id"
+  | "firstName"
+  | "lastName"
+  | "email"
+  | "role"
+  | "createdAt"
+  | "profilePicture"
 >;
 
 export type IUserValidDTO = Pick<
@@ -51,3 +57,14 @@ export type IUpdateUserRequestDTO = Partial<
     | "isBlocked"
   >
 >;
+
+export interface IUserOut {
+  firstName: string;
+  lastName: string;
+  email: string;
+  profilePicture: string;
+  role: Role;
+}
+
+export type IUserDetailOutDTO = IUserOut;
+// & PurchasedCourse

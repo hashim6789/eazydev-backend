@@ -6,10 +6,12 @@ import { IUser, User } from "../databases/models/user.model";
 import { ICreateUserRequestDTO } from "../../domain/dtos/user/create-user.dtos";
 import {
   IUpdateUserRequestDTO,
+  IUserDetailOutDTO,
   IUserInRequestDTO,
   IUserOutRequestDTO,
   IUserValidDTO,
 } from "../../domain/dtos/user/user.dto";
+import { QueryUser } from "../../domain/dtos/user";
 
 export class UserRepository implements IUsersRepository {
   /**
@@ -42,6 +44,7 @@ export class UserRepository implements IUsersRepository {
       lastName: user.lastName,
       role: user.role,
       createdAt: user.createdAt,
+      profilePicture: user.profilePicture,
     };
   }
 
@@ -78,17 +81,15 @@ export class UserRepository implements IUsersRepository {
    * @param {string} id - The ID of the user to find.
    * @returns {Promise<IUserInRequestDTO | null>} The found user or null.
    */
-  async findById(id: string): Promise<IUserInRequestDTO | null> {
+  async findById(id: string): Promise<IUserDetailOutDTO | null> {
     const user = await User.findById(id).lean();
     if (user) {
       return {
-        id: user._id.toString(),
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
         role: user.role,
-        password: user.password,
-        createdAt: user.createdAt,
+        profilePicture: user.profilePicture,
       };
     }
     return null;
@@ -101,26 +102,50 @@ export class UserRepository implements IUsersRepository {
    * @param {number} pageNumber - The page number to retrieve.
    * @returns {Promise<PaginationDTO>} The paginated list of users.
    */
-  async findAll(pageNumber: number): Promise<PaginationDTO> {
-    const perPage = 4;
-    const users = await User.find({}, { email: 1, name: 1, createdAt: 1 })
-      .skip((pageNumber - 1) * perPage)
-      .limit(perPage)
+  async findAll({
+    role = "learner",
+    status = "all",
+    search = "",
+    page = "1",
+    limit = "5",
+  }: QueryUser): Promise<PaginationDTO> {
+    const query = {
+      role,
+      isBlocked:
+        status !== "all"
+          ? status === "blocked"
+            ? true
+            : false
+          : { $exists: true },
+      $or: [
+        { firstName: { $regex: search, $options: "i" } },
+        { lastName: { $regex: search, $options: "i" } },
+      ],
+    };
+    const users = await User.find(
+      query
+      // { email: 1, name: 1, createdAt: 1 }
+    )
+      .skip((parseInt(page, 10) - 1) * parseInt(limit, 10))
+      .limit(parseInt(limit, 10))
       .sort({ name: 1 })
       .lean();
 
-    const total = await User.countDocuments();
+    const total = await User.countDocuments(query);
 
     return {
       body: users.map((user) => ({
         id: user._id.toString(),
         email: user.email,
-        name: user.firstName,
-        createdAt: user.createdAt,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isBlocked: user.isBlocked,
+        isVerified: user.isVerified,
+        profilePicture: user.profilePicture,
       })),
       total,
-      page: pageNumber,
-      last_page: Math.ceil(total / perPage),
+      page: parseInt(page, 10),
+      last_page: Math.ceil(total / parseInt(limit)),
     };
   }
 
@@ -134,17 +159,11 @@ export class UserRepository implements IUsersRepository {
    */
   async update(
     userId: string,
-    { email, firstName, lastName, password }: IUpdateUserRequestDTO
+    data: IUpdateUserRequestDTO
   ): Promise<IUserOutRequestDTO | null> {
-    const updateData: Partial<IUser> = {};
-    if (email) updateData.email = email;
-    if (firstName) updateData.firstName = firstName;
-    if (lastName) updateData.lastName = lastName;
-    if (password) updateData.password = password;
-
     const userUpdated: IUser | null = await User.findByIdAndUpdate(
       userId,
-      { $set: updateData },
+      { $set: data },
       { new: true }
     ).lean();
     if (!userUpdated) {
@@ -158,6 +177,7 @@ export class UserRepository implements IUsersRepository {
       lastName: userUpdated.lastName,
       role: userUpdated.role,
       createdAt: userUpdated.createdAt,
+      profilePicture: userUpdated.profilePicture,
     };
   }
 
