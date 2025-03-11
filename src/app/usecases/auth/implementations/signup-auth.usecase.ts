@@ -9,6 +9,7 @@ import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refre
 import { IOtpRepository } from "../../../repositories/otp.repository";
 import { IGenerateOtpProvider } from "../../../providers/generate-otp.provider";
 import { ISendMailProvider } from "../../../providers/send-mail.provider";
+import { IUserInRequestDTO } from "../../../../domain/dtos/user/user.dto";
 
 export interface ISignupUseCase {
   execute(data: ISignupRequestDTO): Promise<ResponseDTO>;
@@ -43,18 +44,28 @@ export class SignupUseCase implements ISignupUseCase {
         profilePicture: "",
       });
 
-      const userAlreadyExists = await this.userRepository.findByEmail(
+      const userAlreadyExists = (await this.userRepository.findByEmail(
         userEntity.email.address
-      );
+      )) as IUserInRequestDTO | null;
 
-      if (userAlreadyExists) {
+      if (userAlreadyExists && userAlreadyExists.role !== role) {
+        return {
+          data: { error: UserErrorType.UserInvalidRole },
+          success: false,
+        };
+      }
+      if (userAlreadyExists && userAlreadyExists.isVerified) {
         return {
           data: { error: UserErrorType.UserAlreadyExists },
           success: false,
         };
       }
 
-      const passwordHashed = await this.passwordHasher.hashPassword(password);
+      if (userAlreadyExists && !userAlreadyExists.isVerified) {
+        await this.userRepository.delete(userAlreadyExists.id);
+      }
+
+      const passwordHashed = await this.passwordHasher.hash(password);
       const user = await this.userRepository.create({
         email: userEntity.email.address,
         firstName: userEntity.firstName,
@@ -65,14 +76,17 @@ export class SignupUseCase implements ISignupUseCase {
         profilePicture: userEntity.profilePicture,
       });
 
-      const otp = await this.otpRepository.create(
-        user.id,
-        await this.generateOtpProvider.generateOtp()
-      );
-      await this.sendMailProvider.sendOtpMail(user.email, otp.otp);
+      const otp = await this.generateOtpProvider.generateOtp();
+      console.log("otp =", otp);
+
+      const hashedOtp = await this.passwordHasher.hash(otp);
+
+      const otpDoc = await this.otpRepository.create(user.id, hashedOtp);
+      await this.sendMailProvider.sendOtpMail(user.email, otp);
 
       const token = await this.generateRefreshTokenProvider.generateToken(
-        user.id
+        user.id,
+        { userId: user.id, role: user.role }
       );
 
       const newRefreshToken = await this.refreshTokenRepository.create(

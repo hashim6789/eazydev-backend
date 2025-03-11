@@ -1,5 +1,8 @@
 import { RefreshTokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
-import { IRefreshTokenUserDTO } from "../../../../domain/dtos/refresh";
+import {
+  IRecoveryUserDTO,
+  IRefreshTokenUserDTO,
+} from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
 import { IUserInRequestDTO } from "../../../../domain/dtos/user/user.dto";
 import { AuthMessages } from "../../../../domain/enums/Authenticate/error-type.enum";
@@ -38,12 +41,10 @@ export class RecoverUserInformationUserUseCase
    * @param {IRefreshTokenUserDTO} refreshTokenId - The refresh token information.
    * @returns {Promise<ResponseDTO>} The response data.
    */
-  async execute({
-    refreshTokenId,
-  }: IRefreshTokenUserDTO): Promise<ResponseDTO> {
+  async execute({ userId }: IRecoveryUserDTO): Promise<ResponseDTO> {
     try {
-      const refreshToken = (await this.refreshTokenRepository.findById(
-        refreshTokenId
+      const refreshToken = (await this.refreshTokenRepository.findByUserId(
+        userId
       )) as RefreshTokenDTO | null;
 
       if (!refreshToken) {

@@ -32,9 +32,9 @@ export class PasswordHasher implements IPasswordHasher {
    * @param {string} password - The password to hash.
    * @returns {Promise<string>} The hashed password.
    */
-  async hashPassword(password: string): Promise<string> {
+  async hash(item: string): Promise<string> {
     const salt = await bcrypt.genSalt(this.saltRounds);
-    const hash = await bcrypt.hash(password, salt);
+    const hash = await bcrypt.hash(item, salt);
     return hash;
   }
 
@@ -46,10 +46,7 @@ export class PasswordHasher implements IPasswordHasher {
    * @param {string} hashedPassword - The hashed password to compare against.
    * @returns {Promise<boolean>} True if the passwords match, false otherwise.
    */
-  async comparePasswords(
-    password: string,
-    hashedPassword: string
-  ): Promise<boolean> {
-    return bcrypt.compare(password, hashedPassword);
+  async compare(item: string, hashedItem: string): Promise<boolean> {
+    return bcrypt.compare(item, hashedItem);
   }
 }

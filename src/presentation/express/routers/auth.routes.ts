@@ -7,6 +7,9 @@ import { signupComposer } from "../../../infra/services/composers/auth/signup-au
 import { loginComposer } from "../../../infra/services/composers/auth/login-suth.composer";
 import { logoutComposer } from "../../../infra/services/composers/auth/logout-auth-composer";
 import { googleLoginComposer } from "../../../infra/services/composers/auth/google-auth-composer";
+import { otpVerifyComposer } from "../../../infra/services/composers/auth";
+import { ensureAuthenticated } from "../middlewares/authenticate-user.middleware";
+import { resendOtpComposer } from "../../../infra/services/composers/auth/otp-resend-auth.composer";
 
 /**
  * Router for handling auth-related routes.
@@ -20,7 +23,7 @@ authRouter.post("/signup", async (request: Request, response: Response) => {
   const adapter = await expressAdapter(request, signupComposer());
   if (adapter.statusCode === 201) {
     response.cookie(config.KEY_OF_ACCESS as string, adapter.body.token, {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 15 * 60 * 1000,
     });
     response.cookie(
@@ -38,7 +41,7 @@ authRouter.post("/login", async (request: Request, response: Response) => {
   const adapter = await expressAdapter(request, loginComposer());
   if (adapter.statusCode === 200) {
     response.cookie(config.KEY_OF_ACCESS as string, adapter.body.token, {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 15 * 60 * 1000,
     });
     response.cookie(
@@ -67,12 +70,12 @@ authRouter.post("/google", async (request: Request, response: Response) => {
   const adapter = await expressAdapter(request, googleLoginComposer());
   if (adapter.statusCode === 200) {
     response.cookie(config.KEY_OF_ACCESS as string, adapter.body.token, {
-      httpOnly: true,
+      httpOnly: false,
       maxAge: 15 * 60 * 1000,
     });
     response.cookie(
       config.KEY_OF_REFRESH as string,
-      adapter.body.refreshToken,
+      adapter.body.refreshTokenId,
       { httpOnly: true, maxAge: 1 * 24 * 60 * 60 * 1000 }
     );
   }
@@ -82,16 +85,20 @@ authRouter.post("/google", async (request: Request, response: Response) => {
  * Endpoint to verify the otp.
  */
 authRouter.post("/otp-verify", async (request: Request, response: Response) => {
-  const adapter = await expressAdapter(request, loginComposer());
+  const adapter = await expressAdapter(request, otpVerifyComposer());
   response.status(adapter.statusCode).json(adapter.body);
 });
 /**
  * Endpoint to resend the otp.
  */
-authRouter.post("/otp-resend", async (request: Request, response: Response) => {
-  const adapter = await expressAdapter(request, loginComposer());
-  response.status(adapter.statusCode).json(adapter.body);
-});
+authRouter.post(
+  "/otp-resend",
+  ensureAuthenticated,
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, resendOtpComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
 /**
  * Endpoint to send the forgot password request.
  */

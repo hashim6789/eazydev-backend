@@ -1,3 +1,5 @@
+import { Payload } from "../../domain/dtos/jwt-payload.dto";
+
 /**
  * Interface for the provider responsible for managing and validating tokens.
  *
@@ -18,5 +20,5 @@ export interface ITokenManagerProvider {
    * @param {string} token - The token to be validated.
    * @returns {boolean} A boolean indicating whether the token is valid.
    */
-  validateToken(token: string): boolean;
+  validateToken(token: string): Payload | null;
 }

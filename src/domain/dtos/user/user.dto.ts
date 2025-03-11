@@ -22,8 +22,9 @@ export type IUserOutRequestDTO = Pick<
   | "lastName"
   | "email"
   | "role"
-  | "createdAt"
   | "profilePicture"
+  | "isBlocked"
+  | "isVerified"
 >;
 
 export type IUserValidDTO = Pick<
@@ -41,7 +42,14 @@ export type IUserValidDTO = Pick<
 >;
 export type IUserInRequestDTO = Pick<
   IUserDTO,
-  "id" | "firstName" | "lastName" | "email" | "role" | "password" | "createdAt"
+  | "id"
+  | "firstName"
+  | "lastName"
+  | "email"
+  | "role"
+  | "password"
+  | "createdAt"
+  | "isVerified"
 >;
 export type IUpdateUserRequestDTO = Partial<
   Pick<
@@ -59,11 +67,14 @@ export type IUpdateUserRequestDTO = Partial<
 >;
 
 export interface IUserOut {
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
   profilePicture: string;
   role: Role;
+  isVerified: boolean;
+  isBlocked: boolean;
 }
 
 export type IUserDetailOutDTO = IUserOut;

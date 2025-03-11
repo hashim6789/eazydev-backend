@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
 // import { authenticateRoutes } from "../routers/authenticate";
 // import { documentsRoutes } from "../routers/documentation";
@@ -23,9 +24,12 @@ const corsOptions: cors.CorsOptions = {
   credentials: true,
 };
 
-app.use(morgan("dev")); // Request logging
+app.use(morgan("dev"));
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// app.use(sessionConfig);
+app.use(cookieParser());
 
 // Database connection setup
 connectDB();

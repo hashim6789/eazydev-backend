@@ -1,20 +1,13 @@
 import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IPasswordHasher } from "../../../providers/password-hasher.provider";
-import { UserEntity } from "../../../../domain/entities/user.entity";
-import { AuthenticateUserErrorType } from "../../../../domain/enums/Authenticate/error-type.enum";
-import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
-import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
-import {
-  IUserInRequestDTO,
-  IUserValidDTO,
-} from "../../../../domain/dtos/user/user.dto";
 import { IVerifyOtpUseCase } from "../verify-otp.usecase";
 import { IOtpRepository } from "../../../repositories/otp.repository";
 import { OtpDTO } from "../../../../domain/dtos/auth/otp-auth-dto";
 import { OtpErrorType } from "../../../../domain/enums/otp/error-type.enum";
 import { UserErrorType } from "../../../../domain/enums/user/error-type.enum";
-import { error } from "console";
+import { IVerifyOtpRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
+import { UserEntity } from "../../../../domain/entities/user.entity";
 
 export class VerifyOtpUseCase implements IVerifyOtpUseCase {
   constructor(
@@ -44,7 +37,7 @@ export class VerifyOtpUseCase implements IVerifyOtpUseCase {
         };
       }
 
-      if (!(await this.passwordHasher.comparePasswords(otp, existingOtp.otp))) {
+      if (!(await this.passwordHasher.compare(otp, existingOtp.otp))) {
         return {
           statusCode: 400,
           success: false,
@@ -64,10 +57,15 @@ export class VerifyOtpUseCase implements IVerifyOtpUseCase {
         };
       }
 
+      const user = UserEntity.convert(verifiedUser);
+
       return {
         statusCode: 200,
         success: true,
-        data: { error: OtpErrorType.OtpVerifySuccess },
+        data: {
+          message: OtpErrorType.OtpVerifySuccess,
+          user,
+        },
       };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };

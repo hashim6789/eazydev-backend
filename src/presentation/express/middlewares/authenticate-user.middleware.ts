@@ -1,32 +1,34 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
-
+import { NextFunction, Request, Response } from "express";
 import { AuthMessages } from "../../../domain/enums/Authenticate/error-type.enum";
 import { TokenManagerProvider } from "../../../infra/providers/token-manager.provider";
+import { config } from "../../http/configs/env.config";
 
-export const ensureAuthenticated: RequestHandler = (
+export const ensureAuthenticated = (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  const authToken = request.headers.authorization;
-  request.body.userId = "Hashim";
+  console.log(request.cookies);
+  const accessToken = request.cookies[config.KEY_OF_ACCESS as string];
 
-  if (!authToken) {
+  if (!accessToken) {
     response.status(401).json({
       message: AuthMessages.AuthorizationHeaderMissing,
     });
     return;
   }
 
-  const [, token] = authToken.split(" ");
-
   const tokenManager = new TokenManagerProvider();
-  if (!tokenManager.validateToken(token)) {
+  const decode = tokenManager.validateToken(accessToken);
+  if (!decode) {
     response.status(401).json({
       message: AuthMessages.TokenInvalidOrExpired,
     });
     return;
   }
+
+  // Attach user to request object
+  request.body = { ...request.body, ...decode };
 
   next();
 };

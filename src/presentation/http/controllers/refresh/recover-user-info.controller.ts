@@ -1,4 +1,5 @@
 import { IRecoverUserInformationUseCase } from "../../../../app/usecases/refresh/interfaces/recover-user-info.usecase";
+import { IResendOtpRequestDTO } from "../../../../domain/dtos/auth/resend-otp-auth.dto";
 import { IRefreshTokenUserDTO } from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
 import { IHttpErrors } from "../../helpers/IHttpErrors";
@@ -35,16 +36,18 @@ export class RecoverUserInformationUserController implements IController {
     let error;
     let response: ResponseDTO;
 
-    if (httpRequest.query && Object.keys(httpRequest.query).length > 0) {
-      const queryParams = Object.keys(httpRequest.query);
+    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
+      const bodyParams = Object.keys(httpRequest.body);
 
-      if (queryParams.includes("refreshTokenId")) {
+      if (bodyParams.includes("userId")) {
         // Extract refresh token ID from the query parameters
-        const refreshTokenId = httpRequest.query as IRefreshTokenUserDTO;
+        // const refreshTokenId = httpRequest.query as IRefreshTokenUserDTO;
+
+        const userId = httpRequest.body as IResendOtpRequestDTO;
 
         // Execute the recover user information use case
         response = await this.recoverUserInformationUserUserCase.execute(
-          refreshTokenId
+          userId
         );
       } else {
         // Invalid query parameters, return a 422 Unprocessable Entity error

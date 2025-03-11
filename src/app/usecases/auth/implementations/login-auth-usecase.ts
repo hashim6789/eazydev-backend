@@ -48,7 +48,7 @@ export class LoginUseCase implements ILoginUseCase {
         };
       }
 
-      const isValidPassword = await this.passwordHasher.comparePasswords(
+      const isValidPassword = await this.passwordHasher.compare(
         password,
         user.password
       );
@@ -60,7 +60,8 @@ export class LoginUseCase implements ILoginUseCase {
       }
 
       const token = await this.generateRefreshTokenProvider.generateToken(
-        user.id
+        user.id,
+        { userId: user.id, role: user.role }
       );
       const refreshTokenFounded =
         (await this.refreshTokenRepository.findByUserId(

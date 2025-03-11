@@ -43,8 +43,9 @@ export class UserRepository implements IUsersRepository {
       firstName: user.firstName,
       lastName: user.lastName,
       role: user.role,
-      createdAt: user.createdAt,
       profilePicture: user.profilePicture,
+      isBlocked: user.isBlocked,
+      isVerified: user.isVerified,
     };
   }
 
@@ -85,11 +86,14 @@ export class UserRepository implements IUsersRepository {
     const user = await User.findById(id).lean();
     if (user) {
       return {
+        id: user._id.toString(),
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
         role: user.role,
         profilePicture: user.profilePicture,
+        isBlocked: user.isBlocked,
+        isVerified: user.isVerified,
       };
     }
     return null;
@@ -176,8 +180,9 @@ export class UserRepository implements IUsersRepository {
       firstName: userUpdated.firstName,
       lastName: userUpdated.lastName,
       role: userUpdated.role,
-      createdAt: userUpdated.createdAt,
       profilePicture: userUpdated.profilePicture,
+      isBlocked: userUpdated.isBlocked,
+      isVerified: userUpdated.isVerified,
     };
   }
 

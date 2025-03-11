@@ -64,18 +64,24 @@ export class UserEntity {
     });
   }
   static convert({
+    id,
     email,
     firstName,
     lastName,
     role,
     profilePicture,
+    isBlocked,
+    isVerified,
   }: IUserOutRequestDTO): IUserOut {
     return {
+      id,
       firstName,
       lastName,
       email,
       role,
       profilePicture,
+      isBlocked,
+      isVerified,
     };
   }
 

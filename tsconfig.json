@@ -11,7 +11,7 @@
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
     "sourceMap": true,
-    "typeRoots": ["./node_modules/@types", "./src/shared/types"]
+    "typeRoots": ["./node_modules/@types", "./src/domain/types"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

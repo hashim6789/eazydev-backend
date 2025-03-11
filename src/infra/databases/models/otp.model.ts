@@ -11,7 +11,7 @@ const OtpSchema: Schema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId },
     otp: { type: String, required: true },
-    expiresIn: { type: Date, default: Date.now(), expires: 5 * 60 },
+    expiresIn: { type: Date, default: Date.now() },
   },
   {
     timestamps: true,

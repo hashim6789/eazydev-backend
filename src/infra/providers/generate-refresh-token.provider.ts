@@ -1,8 +1,7 @@
-import { config } from "dotenv";
 import { sign } from "jsonwebtoken";
 import { IGenerateRefreshTokenProvider } from "../../app/providers/generate-refresh-token.provider";
-
-config();
+import { config } from "../../presentation/http/configs/env.config";
+import { Payload } from "../../domain/dtos/jwt-payload.dto";
 
 /**
  * Implementation of the refresh token generation provider.
@@ -21,14 +20,15 @@ export class GenerateRefreshTokenProvider
    * @returns {Promise<string>} The generated refresh token.
    * @throws {Error} Throws an error if the API_SECRET is missing in the environment variables.
    */
-  async generateToken(token: string): Promise<string> {
-    const secretKey = process.env.JWT_ACCESS_SECRET;
+  async generateToken(token: string, payload: Payload): Promise<string> {
+    const { userId, role } = payload;
+    const secretKey = config.JWT_ACCESS_SECRET;
 
     if (!secretKey) {
       throw new Error("API_SECRET is missing in the environment variables.");
     }
 
-    const generatedToken = sign({}, secretKey, {
+    const generatedToken = sign({ userId, role }, secretKey, {
       subject: token,
       expiresIn: "1h",
     });

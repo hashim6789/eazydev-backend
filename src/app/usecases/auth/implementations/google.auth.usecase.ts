@@ -17,6 +17,7 @@ import {
   IUserOutRequestDTO,
   IUserValidDTO,
 } from "../../../../domain/dtos/user/user.dto";
+import { SignupRole } from "../../../../domain/dtos/role.dtos";
 
 interface GoogleApiResponse {
   email: string;
@@ -41,19 +42,26 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
     return response.data;
   }
 
-  private handleUnverifiedOrBlockedUser(
-    fetchedUser: IUserValidDTO
+  private handleUnverifiedOrBlockedUserRole(
+    fetchedUser: IUserValidDTO,
+    role: SignupRole
   ): ResponseDTO | null {
     if (fetchedUser.isBlocked) {
       return {
         data: { error: UserErrorType.UserBlocked },
         success: false,
       };
-    } else if (!fetchedUser.isVerified) {
+    } else if (fetchedUser.role !== role) {
       return {
-        data: { error: UserErrorType.UserNotVerified },
+        data: { error: UserErrorType.UserInvalidRole },
         success: false,
       };
+
+      // } else if (!fetchedUser.isVerified) {
+      //   return {
+      //     data: { error: UserErrorType.UserNotVerified },
+      //     success: false,
+      //   };
     }
     return null;
   }
@@ -91,7 +99,7 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         });
       } else {
         const unverifiedOrBlockedResponse =
-          this.handleUnverifiedOrBlockedUser(fetchedUser);
+          this.handleUnverifiedOrBlockedUserRole(fetchedUser, role);
         if (unverifiedOrBlockedResponse) {
           return unverifiedOrBlockedResponse;
         }
@@ -100,12 +108,14 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
           user = await this.userRepository.update(fetchedUser.id, {
             googleId: userEntity.googleId,
             profilePicture: userEntity.profilePicture,
+            isVerified: true,
           });
         } else {
           user = await this.userRepository.update(fetchedUser.id, {
             email: userEntity.email.address,
             firstName: userEntity.firstName,
             lastName: userEntity.lastName,
+            isVerified: true,
             password: userEntity.password,
             googleId: userEntity.googleId,
             profilePicture: userEntity.profilePicture,
@@ -133,7 +143,8 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
       }
 
       const token = await this.generateRefreshTokenProvider.generateToken(
-        user.id
+        user.id,
+        { userId: user.id, role: user.role }
       );
 
       const newRefreshToken = await this.refreshTokenRepository.create(

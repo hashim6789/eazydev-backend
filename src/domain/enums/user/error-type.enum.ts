@@ -38,4 +38,5 @@ export enum UserErrorType {
    * Error type indicating the users is blocked.
    */
   UserCantUpdate = "User can't be update!",
+  UserInvalidRole = "User invalid role!",
 }

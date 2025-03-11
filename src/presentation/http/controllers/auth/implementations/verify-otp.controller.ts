@@ -1,6 +1,6 @@
 import { IVerifyOtpUseCase } from "../../../../../app/usecases/auth/verify-otp.usecase";
+import { IVerifyOtpRequestDTO } from "../../../../../domain/dtos/auth/vefiry-otp-auth.dto";
 import { ResponseDTO } from "../../../../../domain/dtos/response.dtos";
-import { Role } from "../../../../../domain/dtos/role.dtos";
 import { IHttpErrors } from "../../../helpers/IHttpErrors";
 import { IHttpRequest } from "../../../helpers/IHttpRequest";
 import { IHttpResponse } from "../../../helpers/IHttpResponse";
@@ -24,8 +24,6 @@ export class VerifyOtpController implements IController {
     let error;
     let response: ResponseDTO;
 
-    console.log("object");
-
     if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
       const bodyParams = Object.keys(httpRequest.body);
 
@@ -43,7 +41,7 @@ export class VerifyOtpController implements IController {
         return new HttpResponse(error.statusCode, response.data);
       }
 
-      const success = this.httpSuccess.success_201(response.data);
+      const success = this.httpSuccess.success_200(response.data);
       return new HttpResponse(success.statusCode, success.body);
     }
 

@@ -25,8 +25,6 @@ export class LogoutController implements IController {
     let error;
     let response: ResponseDTO;
 
-    console.log("object");
-
     if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
       const bodyParams = Object.keys(httpRequest.body);
 

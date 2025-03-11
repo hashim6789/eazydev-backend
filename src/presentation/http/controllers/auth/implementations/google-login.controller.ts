@@ -24,8 +24,6 @@ export class GoogleLoginController implements IController {
     let error;
     let response: ResponseDTO;
 
-    console.log("object");
-
     if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
       const bodyParams = Object.keys(httpRequest.body);
 
@@ -43,7 +41,7 @@ export class GoogleLoginController implements IController {
         return new HttpResponse(error.statusCode, response.data);
       }
 
-      const success = this.httpSuccess.success_201(response.data);
+      const success = this.httpSuccess.success_200(response.data);
       return new HttpResponse(success.statusCode, success.body);
     }
 

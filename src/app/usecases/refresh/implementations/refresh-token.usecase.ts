@@ -50,7 +50,8 @@ export class RefreshTokenUserUseCase implements IRefreshTokenUserUseCase {
         refreshToken.expiresIn
       );
       const token = await this.generateRefreshTokenProvider.generateToken(
-        refreshToken.userId
+        refreshToken.userId,
+        { userId: refreshToken.userId, role: refreshToken.role }
       );
 
       if (refreshTokenExpired) {
