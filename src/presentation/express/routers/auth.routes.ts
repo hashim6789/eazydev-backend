@@ -8,8 +8,9 @@ import { loginComposer } from "../../../infra/services/composers/auth/login-suth
 import { logoutComposer } from "../../../infra/services/composers/auth/logout-auth-composer";
 import { googleLoginComposer } from "../../../infra/services/composers/auth/google-auth-composer";
 import { otpVerifyComposer } from "../../../infra/services/composers/auth";
-import { ensureAuthenticated } from "../middlewares/authenticate-user.middleware";
+import { authenticateToken } from "../middlewares/authenticate-user.middleware";
 import { resendOtpComposer } from "../../../infra/services/composers/auth/otp-resend-auth.composer";
+import { authorizeRole } from "../middlewares";
 
 /**
  * Router for handling auth-related routes.
@@ -93,7 +94,8 @@ authRouter.post("/otp-verify", async (request: Request, response: Response) => {
  */
 authRouter.post(
   "/otp-resend",
-  ensureAuthenticated,
+  authenticateToken,
+  authorizeRole(["mentor", "learner"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, resendOtpComposer());
     response.status(adapter.statusCode).json(adapter.body);

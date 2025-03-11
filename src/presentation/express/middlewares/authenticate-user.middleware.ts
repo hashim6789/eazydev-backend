@@ -3,7 +3,7 @@ import { AuthMessages } from "../../../domain/enums/Authenticate/error-type.enum
 import { TokenManagerProvider } from "../../../infra/providers/token-manager.provider";
 import { config } from "../../http/configs/env.config";
 
-export const ensureAuthenticated = (
+export const authenticateToken = (
   request: Request,
   response: Response,
   next: NextFunction

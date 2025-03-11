@@ -3,6 +3,7 @@ import express from "express";
 import { authRouter } from "./auth.routes";
 import { refreshRouter } from "./refresh.routes";
 import { userRouter } from "./user.routes";
+import { materialRouter } from "./material.routes";
 
 export const apiRouter = express.Router();
 
@@ -10,9 +11,9 @@ export const apiRouter = express.Router();
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/refresh", refreshRouter);
 apiRouter.use("/users", userRouter);
+apiRouter.use("/materials", materialRouter);
 // apiRouter.use("/lessons", lessonRouter);
 // apiRouter.use("/upload", uploadRouter);
-// apiRouter.use("/materials", materialRouter);
 // apiRouter.use("/courses", courseRouter);
 // apiRouter.use("/mentors", mentorRouter);
 // apiRouter.use("/learners", learnerRouter);

@@ -9,6 +9,7 @@ export enum AuthenticateUserErrorType {
    */
   EmailOrPasswordWrong = "Email or password incorrect.",
   UserNotVerifiedOrBlocked = "User is not verified or blocked.",
+  UserCanNotDoIt = "User is not access to do this activity!",
 }
 
 /**
