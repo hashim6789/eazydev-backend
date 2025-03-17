@@ -1,4 +1,4 @@
-import { SignupRole } from "../role.dtos";
+import { SignupRole } from "../../types/user";
 
 export interface GetUserRequestDTO {
   userId: string;

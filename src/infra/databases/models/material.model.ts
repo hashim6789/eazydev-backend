@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Model, ObjectId } from "mongoose";
-import { MaterialType } from "../../../domain/dtos/material";
+import { MaterialType } from "../../../domain/dtos/material/material";
 
 //interface for basic Material
 export interface IMaterial extends Document {
@@ -17,7 +17,7 @@ const materialSchema = new Schema<IMaterial>(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    mentorId: { type: Schema.Types.ObjectId, ref: "Mentors", required: true },
+    mentorId: { type: Schema.Types.ObjectId, ref: "Users", required: true },
     type: {
       type: String,
       required: true,

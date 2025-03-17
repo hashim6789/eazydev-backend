@@ -1,5 +1,5 @@
 import { RefreshTokenDTO } from "../../domain/dtos/auth/refresh-token-dto";
-import { Role } from "../../domain/dtos/role.dtos";
+import { Role } from "../../domain/types/user";
 
 /**
  * Interface for the repository handling refresh tokens.

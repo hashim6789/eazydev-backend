@@ -4,7 +4,7 @@ import { verify } from "jsonwebtoken";
 
 import { ITokenManagerProvider } from "../../app/providers/token-manager.provider";
 import { config } from "../../presentation/http/configs/env.config";
-import { Payload } from "../../domain/dtos/jwt-payload.dto";
+import { Payload } from "../../domain/dtos/jwt-payload";
 
 dotenv.config();
 

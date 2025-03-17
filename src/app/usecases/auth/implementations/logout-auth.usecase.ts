@@ -1,4 +1,4 @@
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
 
 import { ILogoutRequestDTO } from "../../../../domain/dtos/auth/logut-auth-dto";

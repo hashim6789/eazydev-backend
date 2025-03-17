@@ -1,13 +1,14 @@
-import { ObjectId } from "mongoose";
 import {
   ICreateMaterialRequestDTO,
   IMaterialOutDTO,
+  IMaterialPopulateMentorDTO,
   IUpdateMaterialDTO,
   QueryMaterial,
-} from "../../domain/dtos/material";
+} from "../../domain/dtos/material/material";
 import MaterialModel from "../databases/models/material.model";
 import { IMaterialRepository } from "../../app/repositories/material.repository";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
+import { IUserDetailsDTO } from "../../domain/dtos/user/user.dto";
 
 class MaterialRepository implements IMaterialRepository {
   /**
@@ -50,17 +51,25 @@ class MaterialRepository implements IMaterialRepository {
    * @param id The ID of the material to find.
    * @returns The found material or null if not found.
    */
-  async findById(id: string): Promise<IMaterialOutDTO | null> {
+  async findById(id: string): Promise<IMaterialPopulateMentorDTO | null> {
     const material = await MaterialModel.findById(id)
-      .populate("mentorId") // Populates mentor details, if needed
+      .populate("mentorId")
       .exec();
+    if (!material) return null;
+
+    const { firstName, lastName, profilePicture } =
+      material.mentorId as unknown as IUserDetailsDTO;
 
     // Check if the material exists and format its output
     return material
       ? {
           id: material._id.toString(),
           title: material.title,
-          mentorId: material.mentorId.toString(), // Ensure mentorId is returned as a string
+          mentor: {
+            firstName,
+            lastName,
+            profilePicture,
+          }, // Ensure mentorId is returned as a string
           description: material.description,
           type: material.type,
           duration: material.duration,

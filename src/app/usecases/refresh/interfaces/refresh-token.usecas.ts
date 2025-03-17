@@ -1,5 +1,5 @@
 import { IRefreshTokenUserDTO } from "../../../../domain/dtos/refresh";
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 
 /**
  * Interface for the use case of refreshing a user's authentication token.

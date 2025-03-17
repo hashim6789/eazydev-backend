@@ -2,9 +2,10 @@ import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 import {
   ICreateMaterialRequestDTO,
   IMaterialOutDTO,
+  IMaterialPopulateMentorDTO,
   IUpdateMaterialDTO,
   QueryMaterial,
-} from "../../domain/dtos/material";
+} from "../../domain/dtos/material/material";
 
 /**
  * Interface for the repository handling material data.
@@ -28,7 +29,7 @@ export interface IMaterialRepository {
    * @param {string} id - The ID of the material.
    * @returns {Promise<IMaterialDetailOutDTO | null>} The found material data, or undefined if not found.
    */
-  findById(id: string): Promise<IMaterialOutDTO | null>;
+  findById(id: string): Promise<IMaterialPopulateMentorDTO | null>;
 
   /**
    * Retrieves a paginated list of materials based on query parameters.

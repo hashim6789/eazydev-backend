@@ -1,9 +1,9 @@
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IPasswordHasher } from "../../../providers/password-hasher.provider";
-import { UserEntity } from "../../../../domain/entities/user.entity";
+import { UserEntity } from "../../../../domain/entities/user";
 import { ILoginRequestDTO } from "../../../../domain/dtos/auth/login-auth.dto";
-import { AuthenticateUserErrorType } from "../../../../domain/enums/Authenticate/error-type.enum";
+import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
 import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
 import {

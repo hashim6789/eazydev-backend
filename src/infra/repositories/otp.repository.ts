@@ -1,7 +1,7 @@
 import { Model, Document, Schema, model } from "mongoose";
 import dayjs from "dayjs";
 
-import { Role } from "../../domain/dtos/role.dtos";
+import { Role } from "../../domain/types/user";
 import { IOtpRepository } from "../../app/repositories/otp.repository";
 import { OtpDTO } from "../../domain/dtos/auth/otp-auth-dto";
 import OtpModel from "../databases/models/otp.model";

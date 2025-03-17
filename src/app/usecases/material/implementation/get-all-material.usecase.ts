@@ -1,8 +1,8 @@
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IGetAllMaterialUseCase } from "../interface/get-all-material.usecase";
-import { IGetAllMaterialRequestDTO } from "../../../../domain/dtos/material";
+import { IGetAllMaterialRequestDTO } from "../../../../domain/dtos/material/material";
 import { IMaterialRepository } from "../../../repositories/material.repository";
-import { MaterialErrorType } from "../../../../domain/enums/material/error-type.enum";
+import { MaterialErrorType } from "../../../../domain/enums/material";
 import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
 
 export class GetAllMaterialUseCase implements IGetAllMaterialUseCase {
@@ -35,7 +35,7 @@ export class GetAllMaterialUseCase implements IGetAllMaterialUseCase {
         };
       }
       return {
-        statusCode: 201,
+        statusCode: 200,
         success: true,
         data: fetchedData,
       };

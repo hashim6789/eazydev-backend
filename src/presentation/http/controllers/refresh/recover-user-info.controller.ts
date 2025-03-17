@@ -1,7 +1,7 @@
 import { IRecoverUserInformationUseCase } from "../../../../app/usecases/refresh/interfaces/recover-user-info.usecase";
 import { IResendOtpRequestDTO } from "../../../../domain/dtos/auth/resend-otp-auth.dto";
 import { IRefreshTokenUserDTO } from "../../../../domain/dtos/refresh";
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IHttpErrors } from "../../helpers/IHttpErrors";
 import { IHttpRequest } from "../../helpers/IHttpRequest";
 import { IHttpResponse } from "../../helpers/IHttpResponse";

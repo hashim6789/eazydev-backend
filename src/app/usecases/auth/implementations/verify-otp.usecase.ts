@@ -1,13 +1,13 @@
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IPasswordHasher } from "../../../providers/password-hasher.provider";
 import { IVerifyOtpUseCase } from "../verify-otp.usecase";
 import { IOtpRepository } from "../../../repositories/otp.repository";
 import { OtpDTO } from "../../../../domain/dtos/auth/otp-auth-dto";
-import { OtpErrorType } from "../../../../domain/enums/otp/error-type.enum";
-import { UserErrorType } from "../../../../domain/enums/user/error-type.enum";
+import { OtpErrorType } from "../../../../domain/enums/otp";
+import { UserErrorType } from "../../../../domain/enums/user";
 import { IVerifyOtpRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
-import { UserEntity } from "../../../../domain/entities/user.entity";
+import { UserEntity } from "../../../../domain/entities/user";
 
 export class VerifyOtpUseCase implements IVerifyOtpUseCase {
   constructor(

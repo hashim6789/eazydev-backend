@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
 
 import { ISendMailProvider } from "../../app/providers/send-mail.provider";
-import { SignupRole } from "../../domain/dtos/role.dtos";
-import { UserEntity } from "../../domain/entities/user.entity";
+import { SignupRole } from "../../domain/types/user";
+import { UserEntity } from "../../domain/entities/user";
 import { mailConfig } from "../../presentation/http/configs/mail.configs";
 import { config } from "../../presentation/http/configs/env.config";
 

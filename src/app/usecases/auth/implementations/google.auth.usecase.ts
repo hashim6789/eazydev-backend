@@ -1,9 +1,9 @@
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { ISignupRequestDTO } from "../../../../domain/dtos/auth";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IPasswordHasher } from "../../../providers/password-hasher.provider";
-import { UserEntity } from "../../../../domain/entities/user.entity";
-import { UserErrorType } from "../../../../domain/enums/user/error-type.enum";
+import { UserEntity } from "../../../../domain/entities/user";
+import { UserErrorType } from "../../../../domain/enums/user";
 import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
 import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { IOtpRepository } from "../../../repositories/otp.repository";
@@ -17,7 +17,7 @@ import {
   IUserOutRequestDTO,
   IUserValidDTO,
 } from "../../../../domain/dtos/user/user.dto";
-import { SignupRole } from "../../../../domain/dtos/role.dtos";
+import { SignupRole } from "../../../../domain/types/user";
 
 interface GoogleApiResponse {
   email: string;

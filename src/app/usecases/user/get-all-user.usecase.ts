@@ -1,4 +1,4 @@
-import { ResponseDTO } from "../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../domain/dtos/response";
 import { QueryUser } from "../../../domain/dtos/user";
 
 export interface IGetAllUserUseCase {

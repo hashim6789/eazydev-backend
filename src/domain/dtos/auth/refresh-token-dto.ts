@@ -1,4 +1,4 @@
-import { Role } from "../role.dtos";
+import { Role } from "../../types/user";
 
 /**
  * Data Transfer Object (DTO) representing a refresh token.

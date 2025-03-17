@@ -1,6 +1,6 @@
 import { IRefreshTokenUserUseCase } from "../../../../app/usecases/refresh/interfaces/refresh-token.usecas";
 import { IRefreshTokenUserDTO } from "../../../../domain/dtos/refresh";
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IHttpErrors } from "../../helpers/IHttpErrors";
 import { IHttpRequest } from "../../helpers/IHttpRequest";
 import { IHttpResponse } from "../../helpers/IHttpResponse";

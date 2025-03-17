@@ -4,6 +4,7 @@ import { authRouter } from "./auth.routes";
 import { refreshRouter } from "./refresh.routes";
 import { userRouter } from "./user.routes";
 import { materialRouter } from "./material.routes";
+import { uploadRouter } from "./upload.routes";
 
 export const apiRouter = express.Router();
 
@@ -12,8 +13,8 @@ apiRouter.use("/auth", authRouter);
 apiRouter.use("/refresh", refreshRouter);
 apiRouter.use("/users", userRouter);
 apiRouter.use("/materials", materialRouter);
+apiRouter.use("/upload", uploadRouter);
 // apiRouter.use("/lessons", lessonRouter);
-// apiRouter.use("/upload", uploadRouter);
 // apiRouter.use("/courses", courseRouter);
 // apiRouter.use("/mentors", mentorRouter);
 // apiRouter.use("/learners", learnerRouter);

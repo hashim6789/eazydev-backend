@@ -1,5 +1,5 @@
 import { Schema, model, Document, ObjectId } from "mongoose";
-import { Role } from "../../../domain/dtos/role.dtos";
+import { Role } from "../../../domain/types/user";
 
 export interface IUser extends Document {
   _id: ObjectId;
@@ -37,4 +37,4 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-export const User = model<IUser>("User", userSchema);
+export const User = model<IUser>("Users", userSchema);

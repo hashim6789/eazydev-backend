@@ -1,14 +1,18 @@
-import { Payload } from "../../../../domain/dtos/jwt-payload.dto";
+import { Payload } from "../../../../domain/dtos/jwt-payload";
 import { ICreateMaterialRequestDTO } from "../../../../domain/dtos/material";
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { MaterialEntity } from "../../../../domain/entities";
-import { AuthenticateUserErrorType } from "../../../../domain/enums/Authenticate/error-type.enum";
-import { MaterialErrorType } from "../../../../domain/enums/material/error-type.enum";
+import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
+import { MaterialErrorType } from "../../../../domain/enums/material";
+import { ILessonRepository } from "../../../repositories";
 import { IMaterialRepository } from "../../../repositories/material.repository";
 import { ICreateMaterialUseCase } from "../interface";
 
 export class CreateMaterialUseCase implements ICreateMaterialUseCase {
-  constructor(private materialRepository: IMaterialRepository) {}
+  constructor(
+    private materialRepository: IMaterialRepository,
+    private lessonRepository: ILessonRepository
+  ) {}
 
   async execute(
     {
@@ -18,6 +22,7 @@ export class CreateMaterialUseCase implements ICreateMaterialUseCase {
       description,
       fileKey,
       duration,
+      lessonId,
     }: ICreateMaterialRequestDTO,
     authData: Payload
   ): Promise<ResponseDTO> {
@@ -48,7 +53,12 @@ export class CreateMaterialUseCase implements ICreateMaterialUseCase {
         };
       }
 
-      return { data: createdMaterial, success: true };
+      await this.lessonRepository.addMaterialToLesson(
+        lessonId,
+        createdMaterial.id
+      );
+
+      return { data: { materialId: createdMaterial.id }, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

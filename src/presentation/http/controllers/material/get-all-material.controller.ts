@@ -1,7 +1,7 @@
 import { IGetAllMaterialUseCase } from "../../../../app/usecases/material";
-import { Payload } from "../../../../domain/dtos/jwt-payload.dto";
-import { QueryMaterial } from "../../../../domain/dtos/material";
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { Payload } from "../../../../domain/dtos/jwt-payload";
+import { QueryMaterial } from "../../../../domain/dtos/material/material";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
   IHttpErrors,
   IHttpRequest,

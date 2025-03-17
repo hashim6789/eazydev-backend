@@ -1,4 +1,4 @@
-import { Role } from "../role.dtos";
+import { Role } from "../../types/user";
 
 export interface IUserDTO {
   id: string;
@@ -14,6 +14,11 @@ export interface IUserDTO {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type IUserDetailsDTO = Pick<
+  IUserDTO,
+  "firstName" | "lastName" | "profilePicture"
+>;
 
 export type IUserOutRequestDTO = Pick<
   IUserDTO,

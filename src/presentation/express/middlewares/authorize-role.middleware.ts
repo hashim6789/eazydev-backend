@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Role } from "../../../domain/dtos/role.dtos";
+import { Role } from "../../../domain/types/user";
 
 // Authorization middleware to check the user role
 export const authorizeRole = (allowedRoles: Role[]) => {

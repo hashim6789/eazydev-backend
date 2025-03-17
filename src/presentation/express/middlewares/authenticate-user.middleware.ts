@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AuthMessages } from "../../../domain/enums/Authenticate/error-type.enum";
+import { AuthMessages } from "../../../domain/enums/auth";
 import { TokenManagerProvider } from "../../../infra/providers/token-manager.provider";
 import { config } from "../../http/configs/env.config";
 

@@ -3,9 +3,9 @@ import {
   IRecoveryUserDTO,
   IRefreshTokenUserDTO,
 } from "../../../../domain/dtos/refresh";
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUserInRequestDTO } from "../../../../domain/dtos/user/user.dto";
-import { AuthMessages } from "../../../../domain/enums/Authenticate/error-type.enum";
+import { AuthMessages } from "../../../../domain/enums/auth";
 import { ITokenManagerProvider } from "../../../providers/token-manager.provider";
 import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
 import { IUsersRepository } from "../../../repositories/user.repository";

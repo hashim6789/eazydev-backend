@@ -1,6 +1,7 @@
 import { RefreshTokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { IRefreshTokenUserDTO } from "../../../../domain/dtos/refresh";
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
+import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
 import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { ITokenManagerProvider } from "../../../providers/token-manager.provider";
 import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
@@ -43,7 +44,10 @@ export class RefreshTokenUserUseCase implements IRefreshTokenUserUseCase {
       )) as RefreshTokenDTO | null;
 
       if (!refreshToken) {
-        return { data: { error: "Refresh token is invalid." }, success: false };
+        return {
+          data: { error: AuthenticateUserErrorType.RefreshTokenInvalid },
+          success: false,
+        };
       }
 
       const refreshTokenExpired = this.tokenManager.validateTokenAge(

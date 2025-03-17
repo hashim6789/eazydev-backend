@@ -1,6 +1,6 @@
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { BlockUserRequestDTO } from "../../../../domain/dtos/user/get-user-request.dto";
-import { UserErrorType } from "../../../../domain/enums/user/error-type.enum";
+import { UserErrorType } from "../../../../domain/enums/user";
 
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IBlockUserUseCase } from "../block-user.usecase";

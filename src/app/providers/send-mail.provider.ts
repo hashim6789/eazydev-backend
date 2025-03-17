@@ -1,5 +1,5 @@
-import { SignupRole } from "../../domain/dtos/role.dtos";
-import { UserEntity } from "../../domain/entities/user.entity";
+import { SignupRole } from "../../domain/types/user";
+import { UserEntity } from "../../domain/entities/user";
 
 export interface ISendMailProvider {
   sendOtpMail(email: string, otp: string): Promise<boolean>;

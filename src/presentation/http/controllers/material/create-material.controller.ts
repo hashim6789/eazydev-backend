@@ -1,13 +1,8 @@
-import {
-  ICreateMaterialUseCase,
-  IGetAllMaterialUseCase,
-} from "../../../../app/usecases/material";
-import { Payload } from "../../../../domain/dtos/jwt-payload.dto";
-import {
-  ICreateMaterialRequestDTO,
-  QueryMaterial,
-} from "../../../../domain/dtos/material";
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ICreateMaterialUseCase } from "../../../../app/usecases/material";
+import { Payload } from "../../../../domain/dtos/jwt-payload";
+import { ICreateMaterialRequestDTO } from "../../../../domain/dtos/material";
+
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
   IHttpErrors,
   IHttpRequest,
@@ -45,11 +40,10 @@ export class CreateMaterialController implements IController {
         bodyParams.includes("type") &&
         bodyParams.includes("fileKey") &&
         bodyParams.includes("duration") &&
+        bodyParams.includes("lessonId") &&
         bodyParams.includes("userId") &&
         bodyParams.includes("role")
       ) {
-        const query = httpRequest.query as QueryMaterial;
-
         const {
           userId,
           role,
@@ -59,6 +53,7 @@ export class CreateMaterialController implements IController {
           type,
           fileKey,
           duration,
+          lessonId,
         } = httpRequest.body as Payload & ICreateMaterialRequestDTO;
         response = await this.createMaterialUseCase.execute(
           {
@@ -68,6 +63,7 @@ export class CreateMaterialController implements IController {
             type,
             fileKey,
             duration,
+            lessonId,
           },
           { userId, role }
         );
@@ -81,7 +77,7 @@ export class CreateMaterialController implements IController {
         return new HttpResponse(error.statusCode, response.data);
       }
 
-      const success = this.httpSuccess.success_200(response.data);
+      const success = this.httpSuccess.success_201(response.data);
       return new HttpResponse(success.statusCode, success.body);
     }
 

@@ -1,5 +1,5 @@
 import { model, ObjectId, Schema, Types } from "mongoose";
-import { Role } from "../../../domain/dtos/role.dtos";
+import { Role } from "../../../domain/types/user";
 export interface IRefreshToken extends Document {
   _id: ObjectId;
   userId: ObjectId;

@@ -1,4 +1,4 @@
-import { EmailErrorType } from "../enums/email/error-type.enum";
+import { EmailErrorType } from "../enums/email";
 
 /**
  * Type representing the properties needed to create an Email instance.

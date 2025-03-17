@@ -1,6 +1,6 @@
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { QueryUser } from "../../../../domain/dtos/user";
-import { UserErrorType } from "../../../../domain/enums/user/error-type.enum";
+import { UserErrorType } from "../../../../domain/enums/user";
 
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IGetAllUserUseCase } from "../get-all-user.usecase";

@@ -1,7 +1,7 @@
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { GetUserRequestDTO } from "../../../../domain/dtos/user/get-user-request.dto";
 import { IUserDetailOutDTO } from "../../../../domain/dtos/user/user.dto";
-import { UserErrorType } from "../../../../domain/enums/user/error-type.enum";
+import { UserErrorType } from "../../../../domain/enums/user";
 
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IGetUserUseCase } from "../get-user.uscase";

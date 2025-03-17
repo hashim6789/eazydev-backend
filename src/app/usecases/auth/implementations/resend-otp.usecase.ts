@@ -1,4 +1,4 @@
-import { ResponseDTO } from "../../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IPasswordHasher } from "../../../providers/password-hasher.provider";
 import { IOtpRepository } from "../../../repositories/otp.repository";

@@ -3,7 +3,7 @@ import { IOtpRepository } from "../../../../app/repositories/otp.repository";
 import { IUsersRepository } from "../../../../app/repositories/user.repository";
 import { VerifyOtpUseCase } from "../../../../app/usecases/auth/implementations/verify-otp.usecase";
 import { IVerifyOtpUseCase } from "../../../../app/usecases/auth/verify-otp.usecase";
-import { VerifyOtpController } from "../../../../presentation/http/controllers/auth/implementations/verify-otp.controller";
+import { VerifyOtpController } from "../../../../presentation/http/controllers/auth/verify-otp.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import OtpModel from "../../../databases/models/otp.model";
 import { PasswordHasher } from "../../../providers/password-hasher.provider";

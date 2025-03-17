@@ -1,4 +1,4 @@
-import { ResponseDTO } from "../../../domain/dtos/response.dtos";
+import { ResponseDTO } from "../../../domain/dtos/response";
 import { IGoogleRequestDTO } from "../../../domain/dtos/auth/google-auth.dto";
 
 export interface IGoogleLoginUseCase {

@@ -7,7 +7,7 @@ import {
   IRefreshToken,
   RefreshTokenModel,
 } from "../databases/models/refresh-token.model";
-import { Role } from "../../domain/dtos/role.dtos";
+import { Role } from "../../domain/types/user";
 
 /**
  * Mongoose implementation of the refresh token repository.
