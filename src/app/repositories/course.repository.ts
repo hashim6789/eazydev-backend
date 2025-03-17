@@ -1,4 +1,8 @@
-import { ICourseOutDTO, ICreateCourseInDTO } from "../../domain/dtos/course";
+import {
+  ICourseOutDTO,
+  ICreateCourseInDTO,
+  IUpdateCourseInDTO,
+} from "../../domain/dtos/course";
 import { CourseStatus } from "../../domain/types";
 
 export interface ICourseRepository {
@@ -9,4 +13,5 @@ export interface ICourseRepository {
     newStatus: CourseStatus
   ): Promise<boolean>;
   findById(id: string): Promise<ICourseOutDTO | null>;
+  update(id: string, data: IUpdateCourseInDTO): Promise<ICourseOutDTO | null>;
 }

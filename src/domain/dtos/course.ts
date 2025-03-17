@@ -45,3 +45,8 @@ export interface IUpdateCourseRequestDTO {
   price?: number;
   lessons?: string[];
 }
+
+export type IUpdateCourseInDTO = Omit<
+  IUpdateCourseRequestDTO,
+  "courseId" | "mentorId"
+>;

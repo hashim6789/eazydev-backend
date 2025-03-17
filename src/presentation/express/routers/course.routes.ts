@@ -5,6 +5,7 @@ import { authenticateToken } from "../middlewares/authenticate-user.middleware";
 import { authorizeRole } from "../middlewares";
 import {
   createCourseComposer,
+  updateCourseComposer,
   updateStatusCourseComposer,
 } from "../../../infra/services/composers/course";
 
@@ -47,7 +48,7 @@ courseRouter.put(
   authenticateToken,
   authorizeRole(["mentor"]),
   async (request: Request, response: Response) => {
-    const adapter = await expressAdapter(request, updateStatusCourseComposer());
+    const adapter = await expressAdapter(request, updateCourseComposer());
     response.status(adapter.statusCode).json(adapter.body);
   }
 );

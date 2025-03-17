@@ -47,7 +47,7 @@ export class CourseEntity {
    *
    * @param {Partial<CourseInterface>} updatedData - The data to update the course.
    */
-  update(updatedData: Partial<CourseInterface>): void {
+  static update(updatedData: Partial<CourseInterface>): void {
     Object.assign(this, updatedData);
   }
 

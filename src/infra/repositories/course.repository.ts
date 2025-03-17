@@ -1,6 +1,10 @@
 import { Model } from "mongoose";
 import { ICourseRepository } from "../../app/repositories";
-import { ICreateCourseInDTO, ICourseOutDTO } from "../../domain/dtos";
+import {
+  ICreateCourseInDTO,
+  ICourseOutDTO,
+  IUpdateCourseInDTO,
+} from "../../domain/dtos";
 import { ICourse } from "../databases/interfaces";
 import { CourseStatus } from "../../domain/types";
 
@@ -62,6 +66,30 @@ export class CourseRepository implements ICourseRepository {
   async findById(id: string): Promise<ICourseOutDTO | null> {
     try {
       const course = await this.model.findById(id);
+      if (!course) return null;
+      return {
+        id: course._id.toString(),
+        title: course.title,
+        mentorId: course.mentorId.toString(),
+        categoryId: course.categoryId.toString(),
+        description: course.description ?? undefined,
+        lessons: course.lessons.map(toString),
+        thumbnail: course.thumbnail,
+        price: course.price,
+        status: course.status,
+      };
+    } catch (error) {
+      console.error("Error while find the course:", error);
+      throw new Error("Course fetch failed");
+    }
+  }
+
+  async update(
+    id: string,
+    data: IUpdateCourseInDTO
+  ): Promise<ICourseOutDTO | null> {
+    try {
+      const course = await this.model.findByIdAndUpdate(id, data);
       if (!course) return null;
       return {
         id: course._id.toString(),
