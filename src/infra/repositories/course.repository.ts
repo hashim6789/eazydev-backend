@@ -2,6 +2,7 @@ import { Model } from "mongoose";
 import { ICourseRepository } from "../../app/repositories";
 import { ICreateCourseInDTO, ICourseOutDTO } from "../../domain/dtos";
 import { ICourse } from "../databases/interfaces";
+import { CourseStatus } from "../../domain/types";
 
 export class CourseRepository implements ICourseRepository {
   private model: Model<ICourse>;
@@ -17,8 +18,8 @@ export class CourseRepository implements ICourseRepository {
       return {
         id: course._id.toString(),
         title: course.title,
-        mentorId: course.mentorId?.toString() || "",
-        categoryId: course.categoryId?.toString() || "",
+        mentorId: course.mentorId.toString(),
+        categoryId: course.categoryId.toString(),
         description: course.description ?? undefined,
         lessons: [],
         thumbnail: course.thumbnail,
@@ -39,6 +40,43 @@ export class CourseRepository implements ICourseRepository {
     } catch (error) {
       console.error("Error while adding lesson to course:", error);
       throw new Error("Lesson added to course failed");
+    }
+  }
+
+  async updateStatusOfCourse(
+    courseId: string,
+    newStatus: CourseStatus
+  ): Promise<boolean> {
+    try {
+      const course = await this.model.findByIdAndUpdate(courseId, {
+        status: newStatus,
+      });
+
+      return course ? true : false;
+    } catch (error) {
+      console.error("Error while update status of course:", error);
+      throw new Error("Course status update failed");
+    }
+  }
+
+  async findById(id: string): Promise<ICourseOutDTO | null> {
+    try {
+      const course = await this.model.findById(id);
+      if (!course) return null;
+      return {
+        id: course._id.toString(),
+        title: course.title,
+        mentorId: course.mentorId.toString(),
+        categoryId: course.categoryId.toString(),
+        description: course.description ?? undefined,
+        lessons: course.lessons.map(toString),
+        thumbnail: course.thumbnail,
+        price: course.price,
+        status: course.status,
+      };
+    } catch (error) {
+      console.error("Error while find the course:", error);
+      throw new Error("Course fetch failed");
     }
   }
 }

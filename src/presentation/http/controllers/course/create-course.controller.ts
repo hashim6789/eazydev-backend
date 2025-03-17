@@ -18,7 +18,7 @@ import {
 import { IController } from "../IController";
 
 /**
- * Controller for handling requests to create a user.
+ * Controller for handling requests to create a Course.
  */
 export class CreateCourseController implements IController {
   constructor(

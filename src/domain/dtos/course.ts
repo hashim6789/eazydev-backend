@@ -30,3 +30,18 @@ export interface ICreateCourseRequestDTO {
   thumbnail: string;
   price: number;
 }
+
+export interface IUpdateStatusCourseRequestDTO {
+  courseId: string;
+  newStatus: CourseStatus;
+}
+export interface IUpdateCourseRequestDTO {
+  courseId: string;
+  mentorId: string;
+  title?: string;
+  categoryId?: string;
+  description?: string;
+  thumbnail?: string;
+  price?: number;
+  lessons?: string[];
+}

@@ -1,6 +1,6 @@
-import { ICreateLessonUseCase } from "../../../../app/usecases/lesson";
+import { IUpdateStatusCourseUseCase } from "../../../../app/usecases/course";
 import {
-  ICreateLessonRequestDTO,
+  IUpdateStatusCourseRequestDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
@@ -18,11 +18,11 @@ import {
 import { IController } from "../IController";
 
 /**
- * Controller for handling requests to create a user.
+ * Controller for handling requests to create a Course.
  */
-export class CreateLessonController implements IController {
+export class UpdateStatusCourseController implements IController {
   constructor(
-    private createLessonUseCase: ICreateLessonUseCase,
+    private updateStatusCourseUseCase: IUpdateStatusCourseUseCase,
     private httpErrors: IHttpErrors = new HttpErrors(),
     private httpSuccess: IHttpSuccess = new HttpSuccess()
   ) {}
@@ -31,25 +31,32 @@ export class CreateLessonController implements IController {
     let error;
     let response: ResponseDTO;
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
+    if (
+      httpRequest.body &&
+      httpRequest.path &&
+      Object.keys(httpRequest.body).length > 0 &&
+      Object.keys(httpRequest.path).length > 0
+    ) {
       const bodyParams = Object.keys(httpRequest.body);
+      const pathParams = Object.keys(httpRequest.path);
 
       if (
-        bodyParams.includes("title") &&
-        bodyParams.includes("description") &&
-        bodyParams.includes("mentorId") &&
-        bodyParams.includes("courseId") &&
+        pathParams.includes("courseId") &&
+        bodyParams.includes("newStatus") &&
         bodyParams.includes("userId") &&
         bodyParams.includes("role")
       ) {
-        const { userId, role, title, description, mentorId, courseId } =
-          httpRequest.body as Payload & ICreateLessonRequestDTO;
-        response = await this.createLessonUseCase.execute(
+        const { userId, role, newStatus } = httpRequest.body as Payload &
+          Pick<IUpdateStatusCourseRequestDTO, "newStatus">;
+        const { courseId } = httpRequest.path as Omit<
+          IUpdateStatusCourseRequestDTO,
+          "newStatus"
+        >;
+
+        response = await this.updateStatusCourseUseCase.execute(
           {
-            title,
-            description,
-            mentorId,
             courseId,
+            newStatus,
           },
           { userId, role }
         );
