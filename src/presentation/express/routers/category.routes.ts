@@ -8,17 +8,17 @@ import {
 } from "../../../infra/services/composers/category";
 
 /**
- * Router for handling course-related routes.
+ * Router for handling category-related routes.
  */
-const courseRouter = Router();
+export const categoryRouter = Router();
 
 /**
- * Endpoint to create course.
+ * Endpoint to create category.
  */
-courseRouter.post(
+categoryRouter.post(
   "/",
   authenticateToken,
-  authorizeRole(["mentor"]),
+  authorizeRole(["admin"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, createCategoryComposer());
     response.status(adapter.statusCode).json(adapter.body);
@@ -26,10 +26,10 @@ courseRouter.post(
 );
 
 /**
- * Endpoint to update status course.
+ * Endpoint to update status category.
  */
-courseRouter.patch(
-  "/categoryId",
+categoryRouter.patch(
+  "/:categoryId",
   authenticateToken,
   authorizeRole(["admin", "mentor"]),
   async (request: Request, response: Response) => {
@@ -39,10 +39,10 @@ courseRouter.patch(
 );
 
 /**
- * Endpoint to update course.
+ * Endpoint to update category.
  */
-courseRouter.put(
-  "/courseId",
+categoryRouter.put(
+  "/categoryId",
   authenticateToken,
   authorizeRole(["mentor"]),
   async (request: Request, response: Response) => {

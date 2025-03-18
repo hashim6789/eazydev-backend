@@ -51,8 +51,10 @@ export class UpdateListCategoryController implements IController {
         bodyParams.includes("userId") &&
         bodyParams.includes("role")
       ) {
-        const { userId, role, categoryId, change, adminId } =
-          httpRequest.body as Payload & IUpdateListCategoryRequestDTO;
+        const { userId, role, change, adminId } = httpRequest.body as Payload &
+          IUpdateListCategoryRequestDTO;
+
+        const { categoryId } = httpRequest.path as { categoryId: string };
         response = await this.createCategoryUseCase.execute(
           {
             categoryId,

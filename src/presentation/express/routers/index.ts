@@ -5,6 +5,7 @@ import { refreshRouter } from "./refresh.routes";
 import { userRouter } from "./user.routes";
 import { materialRouter } from "./material.routes";
 import { uploadRouter } from "./upload.routes";
+import { categoryRouter } from "./category.routes";
 
 export const apiRouter = express.Router();
 
@@ -18,7 +19,7 @@ apiRouter.use("/upload", uploadRouter);
 // apiRouter.use("/courses", courseRouter);
 // apiRouter.use("/mentors", mentorRouter);
 // apiRouter.use("/learners", learnerRouter);
-// apiRouter.use("/categories", categoryRouter);
+apiRouter.use("/categories", categoryRouter);
 // apiRouter.use("/notify", notifyRouter);
 // apiRouter.use("/no-auth", noAuthRouter);
 // apiRouter.use("/payment", paymentRouter);

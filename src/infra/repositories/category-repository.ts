@@ -12,16 +12,19 @@ export class CategoryRepository implements ICategoryRepository {
 
   async create(data: ICreateCategoryInDTO): Promise<ICategoryOutDTO> {
     try {
-      const createData = new this.model(data);
-      const lesson = await createData.save();
+      const createData = new this.model({
+        title: data.title,
+        isListed: data.isListed,
+      });
+      const category = await createData.save();
 
       return {
-        id: lesson._id.toString(),
-        title: lesson.title,
-        isListed: lesson.isListed,
+        id: category._id.toString(),
+        title: category.title,
+        isListed: category.isListed,
       };
     } catch (error) {
-      console.error("Error while creating lesson:", error);
+      console.error("Error while creating category:", error);
       throw new Error("Lesson creation failed");
     }
   }
