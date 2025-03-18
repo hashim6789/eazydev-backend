@@ -27,22 +27,34 @@ export class UpdateCourseUseCase implements IUpdateCourseUseCase {
         };
       }
 
+      // Update the course properties
+
+      const existingCourse = await this.courseRepository.findById(
+        data.courseId
+      );
+      if (!existingCourse) {
+        return {
+          data: { error: CourseErrorType.CourseNotFound },
+          success: false,
+        };
+      }
+
       const { mentorId, courseId, ...updateData } = data;
-      const courseEntity = CourseEntity.update(updateData);
+      Object.assign(existingCourse, updateData);
 
       const updatedCourse = await this.courseRepository.update(
         courseId,
-        courseEntity
+        existingCourse
       );
 
-      if (!createdCourse) {
+      if (!updatedCourse) {
         return {
           data: { error: CourseErrorType.CourseCreationFailed },
           success: false,
         };
       }
 
-      return { data: { courseId: createdCourse.id }, success: true };
+      return { data: { courseId: updatedCourse.id }, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

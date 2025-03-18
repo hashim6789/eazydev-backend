@@ -90,7 +90,7 @@ export class UpdateCourseController implements IController {
         return new HttpResponse(error.statusCode, response.data);
       }
 
-      const success = this.httpSuccess.success_201(response.data);
+      const success = this.httpSuccess.success_200(response.data);
       return new HttpResponse(success.statusCode, success.body);
     }
 
