@@ -1,4 +1,4 @@
-import { MaterialType } from "../material/material";
+import { MaterialType } from "../../types";
 
 export interface IUploadMaterialRequestDTO {
   fileName: string;

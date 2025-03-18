@@ -8,6 +8,7 @@ import { UpdateCategoryUseCase } from "../../../../app/usecases/category/impleme
 import {
   CreateCategoryController,
   IController,
+  updateCategoryController,
 } from "../../../../presentation/http/controllers";
 
 import { CategoryModel } from "../../../databases/models";
@@ -16,6 +17,6 @@ import { CategoryRepository } from "../../../repositories";
 export function updateCategoryComposer(): IController {
   const repository: ICategoryRepository = new CategoryRepository(CategoryModel);
   const useCase: IUpdateCategoryUseCase = new UpdateCategoryUseCase(repository);
-  const controller: IController = new CreateCategoryController(useCase);
+  const controller: IController = new updateCategoryController(useCase);
   return controller;
 }

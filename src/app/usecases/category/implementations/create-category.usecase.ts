@@ -27,7 +27,7 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
       }
       const courseEntity = CategoryEntity.create({
         title,
-        isListed: false,
+        isListed: true,
       });
 
       const createdCategory = await this.categoryRepository.create(
@@ -41,7 +41,7 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
         };
       }
 
-      return { data: { categoryId: createdCategory.id }, success: true };
+      return { data: { category: createdCategory }, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

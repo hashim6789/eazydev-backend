@@ -1,3 +1,6 @@
+import { Role } from "../types";
+import { CategoryStatus } from "../types/category";
+
 export interface ICategoryOutDTO {
   id: string;
   title: string;
@@ -25,3 +28,11 @@ export type IUpdateCategoryRequestDTO = {
   title: string;
   adminId: string;
 };
+
+export interface QueryCategory {
+  role: Role;
+  search: string;
+  page: string;
+  limit: string;
+  status: CategoryStatus | "all";
+}

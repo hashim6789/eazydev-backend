@@ -30,7 +30,7 @@ export class GenerateRefreshTokenProvider
 
     const generatedToken = sign({ userId, role }, secretKey, {
       subject: token,
-      expiresIn: "1h",
+      expiresIn: "15h",
     });
 
     return generatedToken;

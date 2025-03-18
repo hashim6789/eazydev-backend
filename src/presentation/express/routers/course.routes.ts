@@ -12,7 +12,7 @@ import {
 /**
  * Router for handling course-related routes.
  */
-const courseRouter = Router();
+export const courseRouter = Router();
 
 /**
  * Endpoint to create course.

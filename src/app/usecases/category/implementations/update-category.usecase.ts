@@ -49,7 +49,7 @@ export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
         };
       }
 
-      return { data: { categoryId: updatedCategory.id }, success: true };
+      return { data: { category: updatedCategory }, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

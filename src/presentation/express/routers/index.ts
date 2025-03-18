@@ -6,6 +6,7 @@ import { userRouter } from "./user.routes";
 import { materialRouter } from "./material.routes";
 import { uploadRouter } from "./upload.routes";
 import { categoryRouter } from "./category.routes";
+import { courseRouter } from "./course.routes";
 
 export const apiRouter = express.Router();
 
@@ -16,7 +17,7 @@ apiRouter.use("/users", userRouter);
 apiRouter.use("/materials", materialRouter);
 apiRouter.use("/upload", uploadRouter);
 // apiRouter.use("/lessons", lessonRouter);
-// apiRouter.use("/courses", courseRouter);
+apiRouter.use("/courses", courseRouter);
 // apiRouter.use("/mentors", mentorRouter);
 // apiRouter.use("/learners", learnerRouter);
 apiRouter.use("/categories", categoryRouter);

@@ -5,7 +5,9 @@ import {
   ICreateCategoryInDTO,
   ICategoryOutDTO,
   IUpdateCategoryIntDTO,
+  QueryCategory,
 } from "../../domain/dtos";
+import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 
 export class CategoryRepository implements ICategoryRepository {
   private model: Model<ICategory>;
@@ -69,7 +71,9 @@ export class CategoryRepository implements ICategoryRepository {
     data: Partial<IUpdateCategoryIntDTO>
   ): Promise<ICategoryOutDTO | null> {
     try {
-      const category = await this.model.findByIdAndUpdate(id, data);
+      const category = await this.model.findByIdAndUpdate(id, data, {
+        new: true,
+      });
       if (!category) return null;
       return {
         id: category._id.toString(),
@@ -79,6 +83,67 @@ export class CategoryRepository implements ICategoryRepository {
     } catch (error) {
       console.error("Error while find the category:", error);
       throw new Error("Course fetch failed");
+    }
+  }
+
+  async findAll({
+    status = "all",
+    search = "",
+    page = "1",
+    limit = "5",
+    role = "learner",
+  }: QueryCategory): Promise<PaginationDTO> {
+    try {
+      const query = {
+        isListed:
+          role === "admin"
+            ? status !== "all"
+              ? status === "listed"
+                ? true
+                : false
+              : { $exists: true }
+            : true,
+        title: { $regex: search, $options: "i" },
+      };
+      const categories = await this.model
+        .find(
+          query
+          // { email: 1, name: 1, createdAt: 1 }
+        )
+        .skip((parseInt(page, 10) - 1) * parseInt(limit, 10))
+        .limit(parseInt(limit, 10))
+        .sort({ name: 1 })
+        .lean();
+
+      const total = await this.model.countDocuments(query);
+
+      return {
+        body: categories.map((category) => ({
+          id: category._id.toString(),
+          isListed: category.isListed,
+          title: category.title,
+        })),
+        total,
+        page: parseInt(page, 10),
+        last_page: Math.ceil(total / parseInt(limit)),
+      };
+    } catch (error) {
+      console.error("Error while find all category:", error);
+      throw new Error("Category fetch failed");
+    }
+  }
+
+  async fetch(): Promise<ICategoryOutDTO[]> {
+    try {
+      const categories = await this.model.find({ isListed: true });
+      return categories.map((category) => ({
+        id: category._id.toString(),
+        isListed: category.isListed,
+        title: category.title,
+      }));
+    } catch (error) {
+      console.error("Error while fetch all category:", error);
+      throw new Error("Category fetch failed");
     }
   }
 }

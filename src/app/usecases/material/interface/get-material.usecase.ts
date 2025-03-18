@@ -1,4 +1,4 @@
-import { IGetMaterialRequestDTO } from "../../../../domain/dtos/material/material";
+import { IGetMaterialRequestDTO } from "../../../../domain/dtos/material";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 
 export interface IGetMaterialUseCase {

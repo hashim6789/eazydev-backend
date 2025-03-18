@@ -4,7 +4,7 @@ import { ICourse } from "../interfaces";
 export const CourseSchema: Schema = new Schema<ICourse>(
   {
     title: { type: String, required: true },
-    mentorId: { type: Schema.Types.ObjectId, ref: "Mentors", required: true },
+    mentorId: { type: Schema.Types.ObjectId, ref: "Users", required: true },
     categoryId: {
       type: Schema.Types.ObjectId,
       ref: "Categories",
