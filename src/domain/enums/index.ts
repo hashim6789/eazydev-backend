@@ -6,3 +6,4 @@ export * from "./otp";
 export * from "./upload";
 export * from "./user";
 export * from "./lesson";
+export * from "./category";

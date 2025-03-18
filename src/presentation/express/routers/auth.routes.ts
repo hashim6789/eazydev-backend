@@ -25,7 +25,7 @@ authRouter.post("/signup", async (request: Request, response: Response) => {
   if (adapter.statusCode === 201) {
     response.cookie(config.KEY_OF_ACCESS as string, adapter.body.token, {
       httpOnly: false,
-      maxAge: 15 * 60 * 1000,
+      maxAge: 1 * 24 * 60 * 60 * 1000,
     });
     response.cookie(
       config.KEY_OF_REFRESH as string,
@@ -43,7 +43,7 @@ authRouter.post("/login", async (request: Request, response: Response) => {
   if (adapter.statusCode === 200) {
     response.cookie(config.KEY_OF_ACCESS as string, adapter.body.token, {
       httpOnly: false,
-      maxAge: 15 * 60 * 1000,
+      maxAge: 1 * 24 * 60 * 60 * 1000,
     });
     response.cookie(
       config.KEY_OF_REFRESH as string,
@@ -72,7 +72,7 @@ authRouter.post("/google", async (request: Request, response: Response) => {
   if (adapter.statusCode === 200) {
     response.cookie(config.KEY_OF_ACCESS as string, adapter.body.token, {
       httpOnly: false,
-      maxAge: 15 * 60 * 1000,
+      maxAge: 1 * 24 * 60 * 60 * 1000,
     });
     response.cookie(
       config.KEY_OF_REFRESH as string,
