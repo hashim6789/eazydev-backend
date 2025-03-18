@@ -1,8 +1,6 @@
 import { Payload } from "../../../../domain/dtos/jwt-payload";
-import {
-  ICreateMaterialRequestDTO,
-  IUpdateMaterialDTO,
-} from "../../../../domain/dtos/material/material";
+import { IUpdateMaterialRequestDTO } from "../../../../domain/dtos/material";
+
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { MaterialEntity } from "../../../../domain/entities";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
@@ -17,11 +15,12 @@ export class UpdateMaterialUseCase implements IUpdateMaterialUseCase {
     {
       title,
       mentorId,
-      type,
       description,
-      fileKey,
+      type,
       duration,
-    }: IUpdateMaterialDTO,
+      fileKey,
+      materialId,
+    }: IUpdateMaterialRequestDTO,
     authData: Payload
   ): Promise<ResponseDTO> {
     try {
@@ -31,27 +30,37 @@ export class UpdateMaterialUseCase implements IUpdateMaterialUseCase {
           success: false,
         };
       }
-      const materialEntity = MaterialEntity.create({
+
+      const material = await this.materialRepository.findById(materialId);
+      if (!material) {
+        return {
+          data: { error: MaterialErrorType.MaterialNotFound },
+          success: false,
+        };
+      }
+
+      const updateData = {
         title,
         mentorId,
-        type,
         description,
-        fileKey,
+        type,
         duration,
-      });
+        fileKey,
+      };
 
-      const createdMaterial = await this.materialRepository.create(
-        materialEntity
+      const updatedMaterial = await this.materialRepository.update(
+        material.id,
+        updateData
       );
 
-      if (!createdMaterial) {
+      if (!updatedMaterial) {
         return {
           data: { error: MaterialErrorType.MaterialCreationFailed },
           success: false,
         };
       }
 
-      return { data: createdMaterial, success: true };
+      return { data: updatedMaterial, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

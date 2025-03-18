@@ -1,11 +1,12 @@
-import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 import {
+  ICreateMaterialInDTO,
   ICreateMaterialRequestDTO,
   IMaterialOutDTO,
   IMaterialPopulateMentorDTO,
-  IUpdateMaterialDTO,
+  IUpdateMaterialInDTO,
   QueryMaterial,
-} from "../../domain/dtos/material/material";
+} from "../../domain/dtos/material";
+import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 
 /**
  * Interface for the repository handling material data.
@@ -20,7 +21,7 @@ export interface IMaterialRepository {
    * @param {ICreateMaterialDTO} data - The material data to be created.
    * @returns {Promise<IMaterialOutDTO>} The created material data.
    */
-  create(data: ICreateMaterialRequestDTO): Promise<IMaterialOutDTO>;
+  create(data: ICreateMaterialInDTO): Promise<IMaterialOutDTO>;
 
   /**
    * Finds a material by its ID.
@@ -50,7 +51,7 @@ export interface IMaterialRepository {
    */
   update(
     materialId: string,
-    data: IUpdateMaterialDTO
+    data: IUpdateMaterialInDTO
   ): Promise<IMaterialOutDTO | null>;
 
   /**

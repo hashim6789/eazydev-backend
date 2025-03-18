@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { MaterialType } from "../../domain/dtos/material/material";
+import { MaterialType } from "../../domain/types";
 
 export interface IS3ServiceProvider {
   /**

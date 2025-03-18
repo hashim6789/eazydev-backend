@@ -2,7 +2,7 @@ import {
   ICreateMaterialRequestDTO,
   IMaterialOutDTO,
   IMaterialPopulateMentorDTO,
-  IUpdateMaterialDTO,
+  IUpdateMaterialInDTO,
   QueryMaterial,
 } from "../../domain/dtos/material";
 import { MaterialModel } from "../databases/models";
@@ -128,7 +128,7 @@ class MaterialRepository implements IMaterialRepository {
    */
   async update(
     materialId: string,
-    data: IUpdateMaterialDTO
+    data: IUpdateMaterialInDTO
   ): Promise<IMaterialOutDTO | null> {
     const materialUpdated = await MaterialModel.findByIdAndUpdate(
       materialId,
