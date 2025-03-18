@@ -8,8 +8,8 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import multer from "multer";
 import dotenv from "dotenv";
 import { Request, Response, NextFunction } from "express";
-import { MaterialType } from "../../domain/dtos/material/material";
 import { IS3ServiceProvider } from "../../app/providers";
+import { MaterialType } from "../../domain/types";
 
 dotenv.config();
 

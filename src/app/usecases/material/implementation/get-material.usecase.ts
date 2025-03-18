@@ -1,14 +1,10 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IGetAllMaterialUseCase } from "../interface/get-all-material.usecase";
 import {
-  IGetAllMaterialRequestDTO,
   IGetMaterialRequestDTO,
-  IMaterialOutDTO,
   IMaterialPopulateMentorDTO,
-} from "../../../../domain/dtos/material/material";
+} from "../../../../domain/dtos/material";
 import { IMaterialRepository } from "../../../repositories/material.repository";
 import { MaterialErrorType } from "../../../../domain/enums/material";
-import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
 import { IGetMaterialUseCase } from "../interface/get-material.usecase";
 
 export class GetMaterialUseCase implements IGetMaterialUseCase {

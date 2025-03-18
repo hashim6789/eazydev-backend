@@ -4,8 +4,8 @@ import {
   IMaterialPopulateMentorDTO,
   IUpdateMaterialDTO,
   QueryMaterial,
-} from "../../domain/dtos/material/material";
-import MaterialModel from "../databases/models/material.model";
+} from "../../domain/dtos/material";
+import { MaterialModel } from "../databases/models";
 import { IMaterialRepository } from "../../app/repositories/material.repository";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 import { IUserDetailsDTO } from "../../domain/dtos/user/user.dto";

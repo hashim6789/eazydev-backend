@@ -1,6 +1,6 @@
 import { IGetAllMaterialUseCase } from "../../../../app/usecases/material";
 import { Payload } from "../../../../domain/dtos/jwt-payload";
-import { QueryMaterial } from "../../../../domain/dtos/material/material";
+import { QueryMaterial } from "../../../../domain/dtos/material";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
   IHttpErrors,
