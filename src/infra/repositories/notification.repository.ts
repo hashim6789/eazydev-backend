@@ -34,4 +34,23 @@ export class NotificationRepository implements INotificationRepository {
       throw new Error("Lesson creation failed");
     }
   }
+
+  async findAllByRecipientId(id: string): Promise<INotificationOutDTO[]> {
+    try {
+      const notifications = await this.model.find({ recipientId: id });
+
+      return notifications.map((item) => {
+        return {
+          id: item._id.toString(),
+          title: item.title,
+          message: item.message,
+          recipientId: item.recipientId.toString(),
+          createdAt: item.createdAt.getTime(),
+        };
+      });
+    } catch (error) {
+      console.error("Error while creating notification:", error);
+      throw new Error("Lesson creation failed");
+    }
+  }
 }

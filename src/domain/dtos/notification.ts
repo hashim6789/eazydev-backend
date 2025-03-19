@@ -7,3 +7,7 @@ export interface INotificationOutDTO {
 }
 
 export type ICreateNotificationInDTO = Omit<INotificationOutDTO, "id">;
+export type IGetAllNotificationRequestDTO = Pick<
+  ICreateNotificationInDTO,
+  "recipientId"
+>;

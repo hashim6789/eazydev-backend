@@ -8,6 +8,7 @@ import { uploadRouter } from "./upload.routes";
 import { categoryRouter } from "./category.routes";
 import { courseRouter } from "./course.routes";
 import { lessonRouter } from "./lesson.routes";
+import { notificationRouter } from "./notification.routes";
 
 export const apiRouter = express.Router();
 
@@ -22,7 +23,7 @@ apiRouter.use("/courses", courseRouter);
 // apiRouter.use("/mentors", mentorRouter);
 // apiRouter.use("/learners", learnerRouter);
 apiRouter.use("/categories", categoryRouter);
-// apiRouter.use("/notify", notifyRouter);
+apiRouter.use("/notify", notificationRouter);
 // apiRouter.use("/no-auth", noAuthRouter);
 // apiRouter.use("/payment", paymentRouter);
 // apiRouter.use("/profile", profileRouter);
