@@ -1,7 +1,10 @@
 import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
 import { authorizeRole, authenticateToken } from "../middlewares";
-import { createLessonComposer } from "../../../infra/services/composers/lesson";
+import {
+  createLessonComposer,
+  getLessonComposer,
+} from "../../../infra/services/composers/lesson";
 
 /**
  * Router for handling lesson-related routes.
@@ -17,6 +20,16 @@ lessonRouter.post(
   authorizeRole(["mentor"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, createLessonComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
+lessonRouter.get(
+  "/:lessonId",
+  authenticateToken,
+  authorizeRole(["mentor", "admin"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, getLessonComposer());
     response.status(adapter.statusCode).json(adapter.body);
   }
 );

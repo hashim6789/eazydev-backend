@@ -11,6 +11,8 @@ import { apiRouter } from "../routers";
  * Express connections instance.
  */
 import { connectDB } from "../../../infra/databases/mongoose/connecton";
+import { initializePeerServer } from "./peer";
+import { connectSocket } from "./socket";
 
 const app = express();
 
@@ -33,6 +35,9 @@ app.use(cookieParser());
 
 // Database connection setup
 connectDB();
+
+// === Initialize PeerJS ===
+// initializePeerServer();
 
 /**
  * Mounting routes for documentation, user-related, and authentication endpoints.

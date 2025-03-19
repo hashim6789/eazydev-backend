@@ -3,22 +3,35 @@ import {
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
+import { ChatGroupEntity } from "../../../../domain/entities/chat-group";
+import { NotificationEntity } from "../../../../domain/entities/notification";
 import {
   AuthenticateUserErrorType,
   CourseErrorType,
 } from "../../../../domain/enums";
-import { ICourseRepository } from "../../../repositories";
+import { getIo } from "../../../../presentation/express/settings/socket";
+import { config } from "../../../../presentation/http/configs/env.config";
+import {
+  IChatGroupRepository,
+  ICourseRepository,
+  INotificationRepository,
+} from "../../../repositories";
 import { IUpdateStatusCourseUseCase } from "../interfaces";
 
 export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
-  constructor(private courseRepository: ICourseRepository) {}
+  constructor(
+    private courseRepository: ICourseRepository,
+    private notificationRepository: INotificationRepository,
+    private chatGroupRepository: IChatGroupRepository
+  ) {}
 
   async execute(
     { courseId, newStatus }: IUpdateStatusCourseRequestDTO,
     authData: Payload
   ): Promise<ResponseDTO> {
     try {
-      if (authData.role === "learner") {
+      const { role } = authData;
+      if (role === "learner") {
         return {
           data: { error: AuthenticateUserErrorType.UserCanNotDoIt },
           success: false,
@@ -33,7 +46,7 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
         };
       }
 
-      switch (authData.role) {
+      switch (role) {
         case "mentor":
           if (newStatus === "requested" && existingCourse.status !== "draft") {
             return {
@@ -72,19 +85,71 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
           break;
       }
 
-      const isUpdated = await this.courseRepository.updateStatusOfCourse(
+      const updatedCourse = await this.courseRepository.updateStatusOfCourse(
         courseId,
         newStatus
       );
 
-      if (!isUpdated) {
+      if (!updatedCourse) {
         return {
-          data: { error: CourseErrorType.CourseCreationFailed },
+          data: { error: CourseErrorType.CourseUpdateStatusFailed },
           success: false,
         };
       }
 
-      return { data: { success: isUpdated }, success: true };
+      const notification = NotificationEntity.create({
+        title: "Course Status Update",
+        message: `The status of your course "${
+          updatedCourse.title
+        }" has been updated to ${updatedCourse.status} by the ${
+          role === "admin" ? "admin" : "mentor"
+        }.`,
+        recipientId: updatedCourse.mentorId,
+        createdAt: Date.now(),
+      });
+
+      // Send notification to the mentor
+      if (
+        role === "admin" &&
+        (newStatus === "approved" ||
+          newStatus === "rejected" ||
+          newStatus === "published")
+      ) {
+        await this.notificationRepository.create(notification);
+        const io = getIo();
+        if (io) {
+          console.log(
+            "Emitting notification to mentor:",
+            updatedCourse.mentorId
+          );
+          io.to(updatedCourse.mentorId).emit(
+            "receiveNotification",
+            notification
+          );
+        }
+      } else if (role === "mentor" && newStatus === "requested") {
+        await this.notificationRepository.create(notification);
+        const io = getIo();
+        if (io) {
+          console.log("Emitting notification to admin:");
+          io.to(config.ADMIN_ID as string).emit(
+            "receiveNotification",
+            notification
+          );
+        }
+      }
+
+      if (role === "admin" && newStatus === "published") {
+        const group = ChatGroupEntity.create({
+          course: courseId,
+          mentor: updatedCourse.mentorId,
+          learners: [],
+          createdAt: Date.now(),
+        });
+        await this.chatGroupRepository.create(group);
+      }
+
+      return { data: { course: updatedCourse }, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

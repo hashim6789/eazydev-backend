@@ -30,4 +30,5 @@ export const config = {
     process.env.CACHE_KEY_GET_ALL_MENTOR_COURSES || "",
 
   MONGO_URI: process.env.MONGO_URI || "mongodb://mongo:27017/myapp",
+  ADMIN_ID: process.env.ADMIN_ID,
 };

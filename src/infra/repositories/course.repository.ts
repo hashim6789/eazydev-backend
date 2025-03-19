@@ -6,6 +6,7 @@ import {
   IUpdateCourseInDTO,
   QueryCourse,
   ICourseOutPopulateDTO,
+  ICourseSimpleOutDTO,
 } from "../../domain/dtos";
 import { ICourse } from "../databases/interfaces";
 import { CourseStatus } from "../../domain/types";
@@ -61,13 +62,19 @@ export class CourseRepository implements ICourseRepository {
   async updateStatusOfCourse(
     courseId: string,
     newStatus: CourseStatus
-  ): Promise<boolean> {
+  ): Promise<ICourseSimpleOutDTO | null> {
     try {
       const course = await this.model.findByIdAndUpdate(courseId, {
         status: newStatus,
       });
+      if (!course) return null;
 
-      return course ? true : false;
+      return {
+        id: course._id.toString(),
+        title: course.title,
+        mentorId: course.mentorId.toString(),
+        status: course.status,
+      };
     } catch (error) {
       console.error("Error while update status of course:", error);
       throw new Error("Course status update failed");

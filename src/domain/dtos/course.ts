@@ -21,6 +21,12 @@ export interface ICourseOutDTO {
   price: number;
   status: CourseStatus;
 }
+export interface ICourseSimpleOutDTO {
+  id: string;
+  title: string;
+  mentorId: string;
+  status: CourseStatus;
+}
 
 export interface ICourseOutPopulateDTO {
   id: string;

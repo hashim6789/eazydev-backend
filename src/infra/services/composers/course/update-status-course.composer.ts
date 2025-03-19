@@ -1,4 +1,8 @@
-import { ICourseRepository } from "../../../../app/repositories";
+import {
+  IChatGroupRepository,
+  ICourseRepository,
+  INotificationRepository,
+} from "../../../../app/repositories";
 import {
   IUpdateStatusCourseUseCase,
   UpdateStatusCourseUseCase,
@@ -7,13 +11,28 @@ import {
   IController,
   UpdateStatusCourseController,
 } from "../../../../presentation/http/controllers";
-import { CourseModel } from "../../../databases/models";
-import { CourseRepository } from "../../../repositories";
+import {
+  ChatGroupModel,
+  CourseModel,
+  NotificationModel,
+} from "../../../databases/models";
+import {
+  ChatGroupRepository,
+  CourseRepository,
+  NotificationRepository,
+} from "../../../repositories";
 
 export function updateStatusCourseComposer(): IController {
   const repository: ICourseRepository = new CourseRepository(CourseModel);
+  const notificationRepository: INotificationRepository =
+    new NotificationRepository(NotificationModel);
+  const chatGroupRepository: IChatGroupRepository = new ChatGroupRepository(
+    ChatGroupModel
+  );
   const useCase: IUpdateStatusCourseUseCase = new UpdateStatusCourseUseCase(
-    repository
+    repository,
+    notificationRepository,
+    chatGroupRepository
   );
   const controller: IController = new UpdateStatusCourseController(useCase);
   return controller;

@@ -5,3 +5,5 @@ export * from "./user.repository";
 export * from "./course.repository";
 export * from "./lesson.repository";
 export * from "./category-repository";
+export * from "./norification.repository";
+export * from "./chat-group-repository";

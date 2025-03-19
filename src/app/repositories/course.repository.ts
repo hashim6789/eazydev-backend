@@ -1,6 +1,7 @@
 import {
   ICourseOutDTO,
   ICourseOutPopulateDTO,
+  ICourseSimpleOutDTO,
   ICreateCourseInDTO,
   IUpdateCourseInDTO,
   QueryCourse,
@@ -14,7 +15,7 @@ export interface ICourseRepository {
   updateStatusOfCourse(
     courseId: string,
     newStatus: CourseStatus
-  ): Promise<boolean>;
+  ): Promise<ICourseSimpleOutDTO | null>;
   findById(id: string): Promise<ICourseOutDTO | null>;
   update(id: string, data: IUpdateCourseInDTO): Promise<ICourseOutDTO | null>;
   findAll(query: QueryCourse): Promise<PaginationDTO>;
