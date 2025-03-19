@@ -31,4 +31,5 @@ export const config = {
 
   MONGO_URI: process.env.MONGO_URI || "mongodb://mongo:27017/myapp",
   ADMIN_ID: process.env.ADMIN_ID,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
 };

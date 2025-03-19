@@ -7,3 +7,5 @@ export * from "./upload";
 export * from "./user";
 export * from "./lesson";
 export * from "./category";
+export * from "./payment";
+export * from "./purchase";

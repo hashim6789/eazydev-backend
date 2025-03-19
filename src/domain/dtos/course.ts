@@ -32,6 +32,7 @@ export interface ICourseOutPopulateDTO {
   id: string;
   title: string;
   mentor: {
+    id: string;
     firstName: string;
     lastName: string;
     profilePicture: string;

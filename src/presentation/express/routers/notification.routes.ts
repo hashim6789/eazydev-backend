@@ -1,10 +1,7 @@
 import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
 import { authorizeRole, authenticateToken } from "../middlewares";
-import {
-  createLessonComposer,
-  getLessonComposer,
-} from "../../../infra/services/composers/lesson";
+
 import { getNotificationComposer } from "../../../infra/services/composers/notification";
 
 /**

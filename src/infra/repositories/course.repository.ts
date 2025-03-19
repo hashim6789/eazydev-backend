@@ -127,16 +127,21 @@ export class CourseRepository implements ICourseRepository {
         };
       });
 
-      const { firstName, lastName, profilePicture } =
-        course.mentorId as unknown as {
-          firstName: string;
-          lastName: string;
-          profilePicture: string;
-        };
+      const {
+        _id: mentorId,
+        firstName,
+        lastName,
+        profilePicture,
+      } = course.mentorId as unknown as {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        profilePicture: string;
+      };
       return {
         id: course._id.toString(),
         title: course.title,
-        mentor: { firstName, lastName, profilePicture },
+        mentor: { id: mentorId, firstName, lastName, profilePicture },
         category: {
           id: categoryId,
           title: categoryTitle,
