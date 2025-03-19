@@ -24,7 +24,8 @@ export interface Material {
 export type ICreateMaterialRequestDTO = Omit<
   Material,
   "id" | "createdAt" | "updatedAt"
-> & { lessonId: string };
+>;
+//  & { lessonId: string };
 export type ICreateMaterialInDTO = Omit<ICreateMaterialRequestDTO, "lessonId">;
 
 export type IMaterialOutDTO = Omit<Material, "createdAt" | "updatedAt">;

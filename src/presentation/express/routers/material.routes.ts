@@ -20,7 +20,7 @@ const materialRouter = Router();
 materialRouter.get(
   "/",
   authenticateToken,
-  authorizeRole(["learner", "mentor"]),
+  authorizeRole(["mentor"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, getAllMaterialComposer());
     response.status(adapter.statusCode).json(adapter.body);

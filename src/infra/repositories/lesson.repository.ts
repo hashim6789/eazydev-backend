@@ -11,7 +11,12 @@ export class LessonRepository implements ILessonRepository {
   }
   async create(data: ICreateLessonInDTO): Promise<ILessonOutDTO> {
     try {
-      const createData = new this.model(data);
+      const createData = new this.model({
+        title: data.title,
+        description: data.description,
+        mentorId: data.mentorId,
+        materials: data.materials,
+      });
       const lesson = await createData.save();
 
       return {
@@ -19,7 +24,7 @@ export class LessonRepository implements ILessonRepository {
         title: lesson.title,
         mentorId: lesson.mentorId.toString(),
         description: lesson.description,
-        materials: [],
+        materials: lesson.materials.map((item) => item.toString()),
       };
     } catch (error) {
       console.error("Error while creating lesson:", error);

@@ -39,17 +39,26 @@ export class CreateLessonController implements IController {
         bodyParams.includes("description") &&
         bodyParams.includes("mentorId") &&
         bodyParams.includes("courseId") &&
+        bodyParams.includes("materials") &&
         bodyParams.includes("userId") &&
         bodyParams.includes("role")
       ) {
-        const { userId, role, title, description, mentorId, courseId } =
-          httpRequest.body as Payload & ICreateLessonRequestDTO;
+        const {
+          userId,
+          role,
+          title,
+          description,
+          mentorId,
+          materials,
+          courseId,
+        } = httpRequest.body as Payload & ICreateLessonRequestDTO;
         response = await this.createLessonUseCase.execute(
           {
             title,
             description,
             mentorId,
             courseId,
+            materials,
           },
           { userId, role }
         );

@@ -6,7 +6,7 @@ import { createLessonComposer } from "../../../infra/services/composers/lesson";
 /**
  * Router for handling lesson-related routes.
  */
-const lessonRouter = Router();
+export const lessonRouter = Router();
 
 /**
  * Endpoint to post lesson.
@@ -14,7 +14,7 @@ const lessonRouter = Router();
 lessonRouter.post(
   "/",
   authenticateToken,
-  authorizeRole(["learner", "mentor"]),
+  authorizeRole(["mentor"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, createLessonComposer());
     response.status(adapter.statusCode).json(adapter.body);

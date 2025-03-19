@@ -43,8 +43,6 @@ export class CreateCourseUseCase implements ICreateCourseUseCase {
         status: "draft",
       });
 
-      courseEntity.status;
-
       const createdCourse = await this.courseRepository.create(courseEntity);
 
       if (!createdCourse) {
@@ -54,7 +52,7 @@ export class CreateCourseUseCase implements ICreateCourseUseCase {
         };
       }
 
-      return { data: { courseId: createdCourse.id }, success: true };
+      return { data: { course: createdCourse }, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

@@ -22,8 +22,8 @@ export class CreateMaterialUseCase implements ICreateMaterialUseCase {
       description,
       fileKey,
       duration,
-      lessonId,
-    }: ICreateMaterialRequestDTO,
+    }: // lessonId,
+    ICreateMaterialRequestDTO,
     authData: Payload
   ): Promise<ResponseDTO> {
     try {
@@ -53,12 +53,12 @@ export class CreateMaterialUseCase implements ICreateMaterialUseCase {
         };
       }
 
-      await this.lessonRepository.addMaterialToLesson(
-        lessonId,
-        createdMaterial.id
-      );
+      // await this.lessonRepository.addMaterialToLesson(
+      //   lessonId,
+      //   createdMaterial.id
+      // );
 
-      return { data: { materialId: createdMaterial.id }, success: true };
+      return { data: { material: createdMaterial }, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

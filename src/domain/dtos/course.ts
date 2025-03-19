@@ -1,4 +1,4 @@
-import { CourseStatus } from "../types";
+import { CourseSort, CourseStatus } from "../types";
 
 export interface ICreateCourseInDTO {
   title: string;
@@ -17,6 +17,25 @@ export interface ICourseOutDTO {
   categoryId: string;
   description?: string;
   lessons: string[];
+  thumbnail: string;
+  price: number;
+  status: CourseStatus;
+}
+
+export interface ICourseOutPopulateDTO {
+  id: string;
+  title: string;
+  mentor: {
+    firstName: string;
+    lastName: string;
+    profilePicture: string;
+  };
+  category: {
+    id: string;
+    title: string;
+  };
+  description?: string;
+  lessons: { id: string; title: string; description: string }[];
   thumbnail: string;
   price: number;
   status: CourseStatus;
@@ -50,3 +69,12 @@ export type IUpdateCourseInDTO = Omit<
   IUpdateCourseRequestDTO,
   "courseId" | "mentorId"
 >;
+
+export interface QueryCourse {
+  category: string;
+  // range:string;
+  search: string;
+  page: string;
+  limit: string;
+  sort: CourseSort;
+}

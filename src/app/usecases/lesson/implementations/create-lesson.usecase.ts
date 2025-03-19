@@ -18,7 +18,13 @@ export class CreateLessonUseCase implements ICreateLessonUseCase {
   ) {}
 
   async execute(
-    { title, description, mentorId, courseId }: ICreateLessonRequestDTO,
+    {
+      title,
+      description,
+      mentorId,
+      courseId,
+      materials,
+    }: ICreateLessonRequestDTO,
     authData: Payload
   ): Promise<ResponseDTO> {
     try {
@@ -32,7 +38,7 @@ export class CreateLessonUseCase implements ICreateLessonUseCase {
         title,
         description,
         mentorId,
-        materials: [],
+        materials,
       });
 
       const createdLesson = await this.lessonRepository.create(lessonEntity);
@@ -46,7 +52,7 @@ export class CreateLessonUseCase implements ICreateLessonUseCase {
 
       await this.courseRepository.addLessonToCourse(courseId, createdLesson.id);
 
-      return { data: { lessonId: createdLesson.id }, success: true };
+      return { data: { lesson: createdLesson }, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

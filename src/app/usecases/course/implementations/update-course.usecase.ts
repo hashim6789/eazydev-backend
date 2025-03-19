@@ -40,6 +40,7 @@ export class UpdateCourseUseCase implements IUpdateCourseUseCase {
       }
 
       const { mentorId, courseId, ...updateData } = data;
+
       Object.assign(existingCourse, updateData);
 
       const updatedCourse = await this.courseRepository.update(

@@ -35,18 +35,7 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
 
       switch (authData.role) {
         case "mentor":
-          if (
-            newStatus === "completed" &&
-            !["draft", "rejected"].includes(existingCourse.status)
-          ) {
-            return {
-              data: { error: CourseErrorType.CompleteStatusFailed },
-              success: false,
-            };
-          } else if (
-            newStatus === "requested" &&
-            existingCourse.status !== "completed"
-          ) {
+          if (newStatus === "requested" && existingCourse.status !== "draft") {
             return {
               data: { error: CourseErrorType.RequestStatusFailed },
               success: false,

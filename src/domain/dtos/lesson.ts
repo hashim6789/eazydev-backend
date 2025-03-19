@@ -8,7 +8,6 @@ export interface ILessonOutDTO {
 
 export type ICreateLessonInDTO = Omit<ILessonOutDTO, "id">;
 
-export type ICreateLessonRequestDTO = Omit<
-  ILessonOutDTO,
-  "id" | "materials"
-> & { courseId: string };
+export type ICreateLessonRequestDTO = Omit<ILessonOutDTO, "id"> & {
+  courseId: string;
+};

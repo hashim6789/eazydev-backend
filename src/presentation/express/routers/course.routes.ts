@@ -5,6 +5,8 @@ import { authenticateToken } from "../middlewares/authenticate-user.middleware";
 import { authorizeRole } from "../middlewares";
 import {
   createCourseComposer,
+  getAllCourseComposer,
+  getCourseComposer,
   updateCourseComposer,
   updateStatusCourseComposer,
 } from "../../../infra/services/composers/course";
@@ -31,7 +33,7 @@ courseRouter.post(
  * Endpoint to update status course.
  */
 courseRouter.patch(
-  "/courseId",
+  "/:courseId",
   authenticateToken,
   authorizeRole(["admin", "mentor"]),
   async (request: Request, response: Response) => {
@@ -44,11 +46,37 @@ courseRouter.patch(
  * Endpoint to update course.
  */
 courseRouter.put(
-  "/courseId",
+  "/:courseId",
   authenticateToken,
   authorizeRole(["mentor"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, updateCourseComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
+/**
+ * Endpoint to get all course.
+ */
+courseRouter.get(
+  "/",
+  authenticateToken,
+  authorizeRole(["mentor", "admin"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, getAllCourseComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
+/**
+ * Endpoint to get all course.
+ */
+courseRouter.get(
+  "/:courseId",
+  authenticateToken,
+  authorizeRole(["mentor", "admin"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, getCourseComposer());
     response.status(adapter.statusCode).json(adapter.body);
   }
 );
