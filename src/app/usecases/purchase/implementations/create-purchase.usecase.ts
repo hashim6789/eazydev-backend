@@ -3,19 +3,25 @@ import {
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
+import { ProgressEntity } from "../../../../domain/entities/progress";
 import { PurchaseEntity } from "../../../../domain/entities/purchase";
 import {
   AuthenticateUserErrorType,
   CourseErrorType,
   PurchaseErrorType,
 } from "../../../../domain/enums";
-import { ICourseRepository, IPurchaseRepository } from "../../../repositories";
+import {
+  ICourseRepository,
+  IProgressRepository,
+  IPurchaseRepository,
+} from "../../../repositories";
 import { ICreatePurchaseUseCase } from "../interfaces";
 
 export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
   constructor(
     private purchaseRepository: IPurchaseRepository,
-    private courseRepository: ICourseRepository
+    private courseRepository: ICourseRepository,
+    private progressRepository: IProgressRepository
   ) {}
 
   generatePurchaseId(learnerId: string, courseId: string): string {
@@ -70,6 +76,19 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
       });
 
       const createdPurchase = await this.purchaseRepository.create(purchase);
+
+      const progress = ProgressEntity.create({
+        userId: learnerId,
+        courseId,
+        completedLessons: [],
+        completedMaterials: [],
+        isCourseCompleted: false,
+        progress: 0,
+        completedDate: null,
+      });
+
+      //create the progress of the course of the corresponding learner is created
+      await this.progressRepository.create(progress);
 
       return { data: createdPurchase, success: true };
     } catch (error: any) {

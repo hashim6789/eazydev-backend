@@ -9,3 +9,4 @@ export * from "./norification.repository";
 export * from "./chat-group-repository";
 export * from "./payment-repository";
 export * from "./purchase.repository";
+export * from "./progress-repository";

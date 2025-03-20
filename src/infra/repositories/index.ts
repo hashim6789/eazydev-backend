@@ -7,3 +7,4 @@ export * from "./lesson.repository";
 export * from "./category-repository";
 export * from "./notification.repository";
 export * from "./chat-group.repository";
+export * from "./progress.repository";
