@@ -11,6 +11,7 @@ import { lessonRouter } from "./lesson.routes";
 import { notificationRouter } from "./notification.routes";
 import { noAuthRouter } from "./no-auth.routes";
 import { paymentRouter } from "./payment.routes";
+import { purchaseRouter } from "./purchase.routes";
 
 export const apiRouter = express.Router();
 
@@ -29,7 +30,7 @@ apiRouter.use("/notify", notificationRouter);
 apiRouter.use("/no-auth", noAuthRouter);
 apiRouter.use("/payment", paymentRouter);
 // apiRouter.use("/profile", profileRouter);
-// apiRouter.use("/purchase-history", purchaseHistoryRouter);
+apiRouter.use("/purchases", purchaseRouter);
 // apiRouter.use("/subscription-history", subscriptionHistoryRouter);
 // apiRouter.use("/progress", progressRouter);
 // apiRouter.use("/analysis", analysisRouter);

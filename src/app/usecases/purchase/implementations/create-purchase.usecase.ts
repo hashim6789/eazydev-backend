@@ -17,6 +17,20 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
     private purchaseRepository: IPurchaseRepository,
     private courseRepository: ICourseRepository
   ) {}
+
+  generatePurchaseId(learnerId: string, courseId: string): string {
+    const learnerFragment = learnerId.slice(0, 4) + learnerId.slice(-4);
+    const courseFragment = courseId.slice(0, 4) + courseId.slice(-4);
+
+    const timestamp = Date.now();
+
+    const purchaseId = `EZD${learnerFragment}${courseFragment}${timestamp}`
+      .replace(/[^A-Za-z0-9]/g, "") // Remove non-alphanumeric characters
+      .toUpperCase(); // Convert to uppercase
+
+    return purchaseId;
+  }
+
   async execute(
     { learnerId, courseId, paymentIntentId, amount }: ICreatePurchaseRequestDTO,
     authData: Payload
@@ -43,9 +57,11 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
           success: false,
         };
       }
+
+      const purchaseId = this.generatePurchaseId(learnerId, courseId);
       const purchase = PurchaseEntity.create({
         learnerId,
-        purchaseId: "",
+        purchaseId,
         courseId,
         paymentIntentId,
         amount,
@@ -55,7 +71,7 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
 
       const createdPurchase = await this.purchaseRepository.create(purchase);
 
-      return { data: { material: createdPurchase }, success: true };
+      return { data: createdPurchase, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

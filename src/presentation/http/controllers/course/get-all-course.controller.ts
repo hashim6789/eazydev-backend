@@ -1,10 +1,12 @@
 import { IGetAllCategoryAdminUseCase } from "../../../../app/usecases/category";
 import { IGetAllCourseUseCase } from "../../../../app/usecases/course";
 import {
+  Payload,
   QueryCategory,
   QueryCourse,
   ResponseDTO,
 } from "../../../../domain/dtos";
+import { Role } from "../../../../domain/types";
 import {
   IHttpErrors,
   IHttpRequest,
@@ -43,9 +45,11 @@ export class GetAllCourseController implements IController {
         queryParams.includes("page") &&
         queryParams.includes("limit")
       ) {
+        const { role, userId } = httpRequest.body as Payload;
+
         const query = httpRequest.query as QueryCourse;
 
-        response = await this.getAllCourseCase.execute(query);
+        response = await this.getAllCourseCase.execute(query, { userId, role });
       } else {
         error = this.httpErrors.error_422();
         return new HttpResponse(error.statusCode, error.body);

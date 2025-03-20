@@ -36,4 +36,13 @@ userRouter.patch(
   }
 );
 
+/**
+ * Endpoint to update personal data of mentor and learner.
+ */
+userRouter.post("/personal", async (request: Request, response: Response) => {
+  const adapter = await expressAdapter(request, blockUserComposer());
+
+  response.status(adapter.statusCode).json(adapter.body);
+});
+
 export { userRouter };

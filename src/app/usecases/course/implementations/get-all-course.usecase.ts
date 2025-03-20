@@ -1,4 +1,5 @@
-import { QueryCourse, ResponseDTO } from "../../../../domain/dtos";
+import { Payload, QueryCourse, ResponseDTO } from "../../../../domain/dtos";
+import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
 import { CourseErrorType } from "../../../../domain/enums";
 import { ICourseRepository } from "../../../repositories";
 import { IGetAllCourseUseCase } from "../interfaces";
@@ -6,10 +7,18 @@ import { IGetAllCourseUseCase } from "../interfaces";
 export class GetAllCourseUseCase implements IGetAllCourseUseCase {
   constructor(private courseRepository: ICourseRepository) {}
 
-  async execute(query: QueryCourse): Promise<ResponseDTO> {
+  async execute(query: QueryCourse, authData: Payload): Promise<ResponseDTO> {
     try {
-      const courses = await this.courseRepository.findAll(query);
-      if (courses.total === 0) {
+      const { userId, role } = authData;
+      let courses: PaginationDTO | null = null;
+      if (role === "admin") {
+        courses = await this.courseRepository.findAll(query);
+      } else if (role === "mentor") {
+        courses = await this.courseRepository.findAllByMentorId(query, userId);
+      } else {
+        courses = await this.courseRepository.findAllPublished(query);
+      }
+      if (!courses || courses.total === 0) {
         return {
           success: false,
           data: { error: CourseErrorType.CourseNotFound },

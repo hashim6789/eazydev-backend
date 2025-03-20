@@ -19,5 +19,10 @@ export interface ICourseRepository {
   findById(id: string): Promise<ICourseOutDTO | null>;
   update(id: string, data: IUpdateCourseInDTO): Promise<ICourseOutDTO | null>;
   findAll(query: QueryCourse): Promise<PaginationDTO>;
+  findAllByMentorId(
+    query: QueryCourse,
+    mentorId: string
+  ): Promise<PaginationDTO>;
+  findAllPublished(query: QueryCourse): Promise<PaginationDTO>;
   findByIdPopulate(id: string): Promise<ICourseOutPopulateDTO | null>;
 }

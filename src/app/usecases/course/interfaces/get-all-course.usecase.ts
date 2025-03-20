@@ -1,5 +1,5 @@
-import { QueryCourse, ResponseDTO } from "../../../../domain/dtos";
+import { Payload, QueryCourse, ResponseDTO } from "../../../../domain/dtos";
 
 export interface IGetAllCourseUseCase {
-  execute(query: QueryCourse): Promise<ResponseDTO>;
+  execute(query: QueryCourse, authData: Payload): Promise<ResponseDTO>;
 }

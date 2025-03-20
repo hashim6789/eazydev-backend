@@ -8,6 +8,7 @@ import {
   QueryCourse,
   ResponseDTO,
 } from "../../../../domain/dtos";
+import { Role } from "../../../../domain/types";
 import {
   IHttpErrors,
   IHttpRequest,

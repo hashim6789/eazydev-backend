@@ -8,12 +8,12 @@ export const purchaseSchema = new Schema<IPurchase>({
   },
   learnerId: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: "Users",
     required: true,
   },
   courseId: {
     type: Schema.Types.ObjectId,
-    ref: "Course",
+    ref: "Courses",
     required: true,
   },
   purchaseDate: {
