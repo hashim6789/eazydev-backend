@@ -4,6 +4,7 @@ export interface IProgressOutDTO {
   id: string;
   userId: string;
   courseId: string;
+  mentorId: string;
   completedLessons: string[];
   completedMaterials: string[];
   isCourseCompleted: boolean;
@@ -12,6 +13,13 @@ export interface IProgressOutDTO {
 }
 export interface IProgressOutPopulateDTO {
   userId: string;
+  mentor: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    profilePicture: string;
+  };
+
   course: {
     id: string;
     title: string;
@@ -21,4 +29,9 @@ export interface IProgressOutPopulateDTO {
   isCourseCompleted: boolean;
   progress: number;
   completedDate: number | null;
+}
+
+export interface QueryProgress {
+  page: string;
+  limit: string;
 }

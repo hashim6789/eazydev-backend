@@ -1,6 +1,4 @@
 import { IMaterialRepository } from "../../../../app/repositories/material.repository";
-import { LoginUseCase } from "../../../../app/usecases/auth/implementations/login-auth-usecase";
-import { ILoginUseCase } from "../../../../app/usecases/auth/login-auth.usecase";
 import {
   GetAllMaterialUseCase,
   IGetAllMaterialUseCase,

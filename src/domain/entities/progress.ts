@@ -6,6 +6,7 @@
 export interface ProgressInterface {
   userId: string;
   courseId: string;
+  mentorId: string;
   completedLessons: string[];
   completedMaterials: string[];
   isCourseCompleted: boolean;
@@ -21,6 +22,7 @@ export interface ProgressInterface {
 export class ProgressEntity {
   private _userId: string;
   private _courseId: string;
+  private _mentorId: string;
   private _completedLessons: string[];
   private _completedMaterials: string[];
   private _isCourseCompleted: boolean;
@@ -61,6 +63,13 @@ export class ProgressEntity {
    */
   get courseId(): string {
     return this._courseId;
+  }
+  /**
+   * Gets the course's ID.
+   * @readonly
+   */
+  get mentorId(): string {
+    return this._mentorId;
   }
 
   /**
@@ -112,6 +121,7 @@ export class ProgressEntity {
   constructor(props: ProgressInterface) {
     this._userId = props.userId;
     this._courseId = props.courseId;
+    this._mentorId = props.mentorId;
     this._completedLessons = props.completedLessons;
     this._completedMaterials = props.completedMaterials;
     this._isCourseCompleted = props.isCourseCompleted;

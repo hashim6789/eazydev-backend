@@ -5,6 +5,7 @@ export const ProgressSchema: Schema = new Schema<IProgress>(
   {
     userId: { type: Schema.Types.ObjectId, ref: "Users", required: true },
     courseId: { type: Schema.Types.ObjectId, ref: "Courses", required: true },
+    mentorId: { type: Schema.Types.ObjectId, ref: "Users", required: true },
     completedLessons: [
       { type: Schema.Types.ObjectId, ref: "Lessons", required: true },
     ],

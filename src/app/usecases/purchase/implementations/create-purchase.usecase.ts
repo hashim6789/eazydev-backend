@@ -80,6 +80,7 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
       const progress = ProgressEntity.create({
         userId: learnerId,
         courseId,
+        mentorId: course.mentorId,
         completedLessons: [],
         completedMaterials: [],
         isCourseCompleted: false,
