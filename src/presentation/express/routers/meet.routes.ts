@@ -17,3 +17,13 @@ meetingRouter.get(
     response.status(adapter.statusCode).json(adapter.body);
   }
 );
+
+meetingRouter.post(
+  "/:meetId/join",
+  authenticateToken,
+  authorizeRole(["mentor", "learner"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, getAllMeetsComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);

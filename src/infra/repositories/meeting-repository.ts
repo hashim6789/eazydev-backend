@@ -1,7 +1,11 @@
 import { Model } from "mongoose";
 import { IMeetingRepository } from "../../app/repositories";
 import { IMeeting } from "../databases/interfaces";
-import { IMeetingOutDTO, IMeetingOutPopulatedDTO } from "../../domain/dtos";
+import {
+  IMeetingOutDTO,
+  IMeetingOutPopulatedDTO,
+  Meeting,
+} from "../../domain/dtos";
 import { MeetingEntity } from "../../domain/entities";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 import { Role } from "../../domain/types";
@@ -115,6 +119,51 @@ export class MeetingRepository implements IMeetingRepository {
     } catch (error) {
       console.error("Error while create meeting:", error);
       throw new Error("Meeting create failed");
+    }
+  }
+
+  async findById(id: string): Promise<IMeetingOutDTO | null> {
+    try {
+      const meeting = await this.model.findById(id);
+      if (!meeting) return null;
+      return {
+        id: meeting._id.toString(),
+        mentorId: meeting.mentorId.toString(),
+        courseId: meeting.courseId.toString(),
+        learnerId: meeting.learnerId.toString(),
+        slotId: meeting.slotId.toString(),
+        roomId: meeting.roomId,
+        mentorPeerId: null,
+        learnerPeerId: null,
+      };
+    } catch (error) {
+      console.error("Error while fetch meeting:", error);
+      throw new Error("Meeting fetch failed");
+    }
+  }
+
+  async updateById(
+    id: string,
+    data: Partial<Meeting>
+  ): Promise<IMeetingOutDTO | null> {
+    try {
+      const meeting = await this.model.findByIdAndUpdate(id, data, {
+        new: true,
+      });
+      if (!meeting) return null;
+      return {
+        id: meeting._id.toString(),
+        mentorId: meeting.mentorId.toString(),
+        courseId: meeting.courseId.toString(),
+        learnerId: meeting.learnerId.toString(),
+        slotId: meeting.slotId.toString(),
+        roomId: meeting.roomId,
+        mentorPeerId: null,
+        learnerPeerId: null,
+      };
+    } catch (error) {
+      console.error("Error while update meeting:", error);
+      throw new Error("Meeting update failed");
     }
   }
 }

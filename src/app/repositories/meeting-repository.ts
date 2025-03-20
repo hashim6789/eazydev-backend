@@ -1,4 +1,8 @@
-import { IMeetingOutDTO, IMeetingOutPopulatedDTO } from "../../domain/dtos";
+import {
+  IMeetingOutDTO,
+  IMeetingOutPopulatedDTO,
+  Meeting,
+} from "../../domain/dtos";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 import { MeetingEntity } from "../../domain/entities";
 import { Role } from "../../domain/types";
@@ -9,4 +13,9 @@ export interface IMeetingRepository {
     userId: string,
     role: Role
   ): Promise<IMeetingOutPopulatedDTO[]>;
+  findById(id: string): Promise<IMeetingOutDTO | null>;
+  updateById(
+    id: string,
+    data: Partial<Meeting>
+  ): Promise<IMeetingOutDTO | null>;
 }

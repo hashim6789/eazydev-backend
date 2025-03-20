@@ -1,15 +1,5 @@
-import {
-  IMeetingRepository,
-  ISlotRepository,
-} from "../../../../app/repositories";
+import { IMeetingRepository } from "../../../../app/repositories";
 import { IController } from "../../../../presentation/http/controllers";
-import { SlotModel } from "../../../databases/models";
-import { SlotRepository } from "../../../repositories/slot.repository";
-import {
-  CreateSlotUseCase,
-  ICreateSlotUseCase,
-} from "../../../../app/usecases/slot";
-import { CreateSlotController } from "../../../../presentation/http/controllers/slot";
 import { MeetingRepository } from "../../../repositories/meeting-repository";
 import { MeetingModel } from "../../../databases/models/meeting.model";
 import { IGetAllMeetingUseCase } from "../../../../app/usecases/meeting/interfaces";

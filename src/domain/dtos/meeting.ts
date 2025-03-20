@@ -8,7 +8,16 @@ export interface Meeting {
   learnerPeerId: string | null;
 }
 
-export type IMeetingOutDTO = Meeting & { id: string };
+export type IMeetingOutDTO = {
+  id: string;
+  courseId: string;
+  learnerId: string;
+  mentorId: string;
+  roomId: string;
+  slotId: string;
+  mentorPeerId: string | null;
+  learnerPeerId: string | null;
+};
 
 export interface IMeetingOutPopulatedDTO {
   id: string;
@@ -17,4 +26,9 @@ export interface IMeetingOutPopulatedDTO {
   mentor: { firstName: string; lastName: string; id: string };
   roomId: string;
   slot: { time: number };
+}
+
+export interface IJoinMeetingRequestDTO {
+  peerId: string;
+  meetingId: string;
 }
