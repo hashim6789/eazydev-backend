@@ -246,20 +246,37 @@ export class ProgressRepository implements IProgressRepository {
       )) as PopulatedProgressLearningsDTO[];
 
       const progress = result[0];
-      // const mentor = progress.mentor as unknown as {
-      //   id: string;
-      //   firstName: string;
-      //   lastName: string;
-      //   profilePicture: string;
-      // }
-
-      // const course =  progress.course as unknown as {
-      //   id: string;
-      //   title: string;
-      // }
 
       const userId = progress.userId.toString();
       return { ...progress, userId };
+    } catch (error) {
+      console.error("Error while fetching progresses:", error);
+      throw new Error("Course fetch failed");
+    }
+  }
+
+  async findById(id: string): Promise<IProgressOutDTO | null> {
+    try {
+      const progress = await this.model.findById(id);
+      if (!progress) return null;
+
+      return {
+        id: progress._id.toString(),
+        userId: progress.userId.toString(),
+        mentorId: progress.mentorId.toString(),
+        courseId: progress.courseId.toString(),
+        completedLessons: progress.completedLessons.map((item) =>
+          item.toString()
+        ),
+        completedMaterials: progress.completedMaterials.map((item) =>
+          item.toString()
+        ),
+        isCourseCompleted: progress.isCourseCompleted,
+        progress: progress.progress,
+        completedDate: progress.completedDate
+          ? progress.completedDate.getTime()
+          : null,
+      };
     } catch (error) {
       console.error("Error while fetching progresses:", error);
       throw new Error("Course fetch failed");

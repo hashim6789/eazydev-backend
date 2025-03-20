@@ -4,6 +4,7 @@ import { authenticateToken, authorizeRole } from "../middlewares";
 import {
   getAllProgressComposer,
   getLearningContentsComposer,
+  getSingedUrlComposer,
 } from "../../../infra/services/composers/progress";
 
 /**
@@ -30,6 +31,16 @@ progressRouter.get(
       request,
       getLearningContentsComposer()
     );
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
+progressRouter.post(
+  "/:progressId/get-signed-url",
+  authenticateToken,
+  authorizeRole(["learner"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, getSingedUrlComposer());
     response.status(adapter.statusCode).json(adapter.body);
   }
 );
