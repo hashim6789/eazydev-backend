@@ -3,6 +3,7 @@ import { expressAdapter } from "../../adapters/express.adapter";
 import { authenticateToken, authorizeRole } from "../middlewares";
 import {
   createPurchaseComposer,
+  getAllPurchaseComposer,
   getPurchaseComposer,
 } from "../../../infra/services/composers/purchase";
 
@@ -11,6 +12,15 @@ import {
  */
 export const purchaseRouter = Router();
 
+purchaseRouter.get(
+  "/",
+  authenticateToken,
+  authorizeRole(["learner"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, getAllPurchaseComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
 purchaseRouter.post(
   "/",
   authenticateToken,

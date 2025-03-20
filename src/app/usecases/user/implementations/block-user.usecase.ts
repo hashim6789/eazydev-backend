@@ -3,7 +3,7 @@ import { BlockUserRequestDTO } from "../../../../domain/dtos/user/get-user-reque
 import { UserErrorType } from "../../../../domain/enums/user";
 
 import { IUsersRepository } from "../../../repositories/user.repository";
-import { IBlockUserUseCase } from "../block-user.usecase";
+import { IBlockUserUseCase } from "../interfaces/block-user.usecase";
 
 export class BlockUserUseCase implements IBlockUserUseCase {
   constructor(private userRepository: IUsersRepository) {}

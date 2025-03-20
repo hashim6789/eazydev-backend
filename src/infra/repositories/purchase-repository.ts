@@ -6,6 +6,7 @@ import {
   IPurchaseOutDTO,
   IPurchaseOutPopulatedDTO,
 } from "../../domain/dtos";
+import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 
 export class PurchaseRepository implements IPurchaseRepository {
   private model: Model<IPurchase>;
@@ -67,6 +68,40 @@ export class PurchaseRepository implements IPurchaseRepository {
     } catch (error) {
       console.error("Error while creating purchase:", error);
       throw new Error("Purchase creation failed");
+    }
+  }
+
+  async findAllByUser(userId: string): Promise<PaginationDTO | null> {
+    try {
+      // Fetch purchases with query, pagination, and sorting
+      const purchases = await this.model
+        .find({ learnerId: userId })
+
+        .lean();
+      return {
+        body: purchases.map((purchase) => {
+          const { title, _id: courseId } = purchase.courseId as unknown as {
+            title: string;
+            _id: string;
+          };
+          return {
+            id: purchase._id.toString(),
+            learnerId: purchase.learnerId.toString(),
+            course: { title, id: courseId },
+            purchaseId: purchase.purchaseId,
+            paymentIntentId: purchase.paymentIntentId,
+            status: purchase.status,
+            amount: purchase.amount,
+            purchaseDate: purchase.purchaseDate.getTime(),
+          };
+        }),
+        total: 0,
+        page: 0,
+        last_page: 0,
+      };
+    } catch (error) {
+      console.error("Error while fetching purchases:", error);
+      throw new Error("Course fetch failed");
     }
   }
 }

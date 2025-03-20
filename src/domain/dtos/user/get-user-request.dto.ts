@@ -1,8 +1,12 @@
-import { SignupRole } from "../../types/user";
+import { Role, SignupRole } from "../../types/user";
 
-export interface GetUserRequestDTO {
+export interface IGetUserRequestDTO {
   userId: string;
   role: SignupRole;
+}
+export interface IGetPersonalInfoRequestDTO {
+  userId: string;
+  role: Role;
 }
 export interface BlockUserRequestDTO {
   userId: string;

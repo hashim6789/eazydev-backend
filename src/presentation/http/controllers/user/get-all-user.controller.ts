@@ -1,4 +1,4 @@
-import { IGetAllUserUseCase } from "../../../../app/usecases/user/get-all-user.usecase";
+import { IGetAllUserUseCase } from "../../../../app/usecases/user/interfaces/get-all-user.usecase";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { QueryUser } from "../../../../domain/dtos/user";
 import { IHttpErrors } from "../../helpers/IHttpErrors";

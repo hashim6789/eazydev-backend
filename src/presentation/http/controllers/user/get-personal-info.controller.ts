@@ -1,6 +1,6 @@
-import { IGetUserUseCase } from "../../../../app/usecases/user/interfaces/get-user.uscase";
+import { IGetPersonalInfoUseCase } from "../../../../app/usecases/user";
+import { Payload } from "../../../../domain/dtos";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { SignupRole } from "../../../../domain/types/user";
 import {
   IHttpErrors,
   IHttpRequest,
@@ -17,31 +17,25 @@ import { IController } from "../IController";
 /**
  * Controller for handling requests to getAll a user.
  */
-export class GetUserController implements IController {
+export class GetPersonalInfoController implements IController {
   constructor(
-    private getUserCase: IGetUserUseCase,
+    private getPersonalInfoUseCase: IGetPersonalInfoUseCase,
     private httpErrors: IHttpErrors = new HttpErrors(),
     private httpSuccess: IHttpSuccess = new HttpSuccess()
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
+    console.log("object");
     let error;
     let response: ResponseDTO;
 
-    if (
-      httpRequest.query &&
-      httpRequest.path &&
-      Object.keys(httpRequest.query) &&
-      Object.keys(httpRequest.path).length > 0
-    ) {
-      const queryParams = Object.keys(httpRequest.query);
-      const pathParams = Object.keys(httpRequest.path);
+    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
+      const bodyParams = Object.keys(httpRequest.body);
 
-      if (queryParams.includes("role") && pathParams.includes("userId")) {
-        const { userId } = httpRequest.path as { userId: string };
-        const { role } = httpRequest.query as { role: SignupRole };
+      if (bodyParams.includes("role") && bodyParams.includes("userId")) {
+        const { userId, role } = httpRequest.body as Payload;
 
-        response = await this.getUserCase.execute({ userId, role });
+        response = await this.getPersonalInfoUseCase.execute({ userId, role });
       } else {
         error = this.httpErrors.error_422();
         return new HttpResponse(error.statusCode, error.body);

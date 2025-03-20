@@ -3,7 +3,7 @@ import { QueryUser } from "../../../../domain/dtos/user";
 import { UserErrorType } from "../../../../domain/enums/user";
 
 import { IUsersRepository } from "../../../repositories/user.repository";
-import { IGetAllUserUseCase } from "../get-all-user.usecase";
+import { IGetAllUserUseCase } from "../interfaces/get-all-user.usecase";
 
 export class GetAllUserUseCase implements IGetAllUserUseCase {
   constructor(private userRepository: IUsersRepository) {}

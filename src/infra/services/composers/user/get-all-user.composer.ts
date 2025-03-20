@@ -1,5 +1,5 @@
 import { IUsersRepository } from "../../../../app/repositories/user.repository";
-import { IGetAllUserUseCase } from "../../../../app/usecases/user/get-all-user.usecase";
+import { IGetAllUserUseCase } from "../../../../app/usecases/user/interfaces/get-all-user.usecase";
 import { GetAllUserUseCase } from "../../../../app/usecases/user/implementations/get-all-user.usecase";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { GetAllUserController } from "../../../../presentation/http/controllers/user/get-all-user.controller";

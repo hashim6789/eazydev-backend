@@ -6,6 +6,8 @@ import {
   getUserComposer,
 } from "../../../infra/services/composers/user";
 import { blockUserComposer } from "../../../infra/services/composers/user/block-user.composer";
+import { authenticateToken, authorizeRole } from "../middlewares";
+import { getPersonalInfoComposer } from "../../../infra/services/composers/user/get-personal-info.composer";
 
 /**
  * Router for handling auth-related routes.
@@ -21,6 +23,19 @@ userRouter.get("/", async (request: Request, response: Response) => {
   response.status(adapter.statusCode).json(adapter.body);
 });
 
+/**
+ * Endpoint to update personal data of mentor and learner.
+ */
+userRouter.get(
+  "/personal",
+  authenticateToken,
+  authorizeRole(["learner", "mentor", "admin"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, getPersonalInfoComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 userRouter.get("/:userId", async (request: Request, response: Response) => {
   const adapter = await expressAdapter(request, getUserComposer());
 
@@ -35,14 +50,5 @@ userRouter.patch(
     response.status(adapter.statusCode).json(adapter.body);
   }
 );
-
-/**
- * Endpoint to update personal data of mentor and learner.
- */
-userRouter.post("/personal", async (request: Request, response: Response) => {
-  const adapter = await expressAdapter(request, blockUserComposer());
-
-  response.status(adapter.statusCode).json(adapter.body);
-});
 
 export { userRouter };

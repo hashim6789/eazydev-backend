@@ -1,6 +1,11 @@
-import { IGetUserUseCase } from "../../../../app/usecases/user/interfaces/get-user.uscase";
+import {
+  IGetAllPurchaseUseCase,
+  IGetPurchaseUseCase,
+} from "../../../../app/usecases/purchase/interfaces";
+import { IGetPurchaseRequestDTO } from "../../../../domain/dtos";
+import { Payload } from "../../../../domain/dtos/jwt-payload";
+
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { SignupRole } from "../../../../domain/types/user";
 import {
   IHttpErrors,
   IHttpRequest,
@@ -15,11 +20,11 @@ import {
 import { IController } from "../IController";
 
 /**
- * Controller for handling requests to getAll a user.
+ * Controller for handling requests to create a user.
  */
-export class GetUserController implements IController {
+export class GetAllPurchaseController implements IController {
   constructor(
-    private getUserCase: IGetUserUseCase,
+    private getAllPurchaseUseCase: IGetAllPurchaseUseCase,
     private httpErrors: IHttpErrors = new HttpErrors(),
     private httpSuccess: IHttpSuccess = new HttpSuccess()
   ) {}
@@ -28,20 +33,12 @@ export class GetUserController implements IController {
     let error;
     let response: ResponseDTO;
 
-    if (
-      httpRequest.query &&
-      httpRequest.path &&
-      Object.keys(httpRequest.query) &&
-      Object.keys(httpRequest.path).length > 0
-    ) {
-      const queryParams = Object.keys(httpRequest.query);
-      const pathParams = Object.keys(httpRequest.path);
+    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
+      const bodyParams = Object.keys(httpRequest.body);
 
-      if (queryParams.includes("role") && pathParams.includes("userId")) {
-        const { userId } = httpRequest.path as { userId: string };
-        const { role } = httpRequest.query as { role: SignupRole };
-
-        response = await this.getUserCase.execute({ userId, role });
+      if (bodyParams.includes("userId") && bodyParams.includes("role")) {
+        const { userId, role } = httpRequest.body as Payload;
+        response = await this.getAllPurchaseUseCase.execute({ userId, role });
       } else {
         error = this.httpErrors.error_422();
         return new HttpResponse(error.statusCode, error.body);
