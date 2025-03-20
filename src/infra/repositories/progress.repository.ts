@@ -1,7 +1,11 @@
-import { Model } from "mongoose";
+import mongoose, { Model, PipelineStage } from "mongoose";
 import { IProgress } from "../databases/interfaces";
 import { IProgressRepository } from "../../app/repositories";
-import { IProgressOutDTO, QueryProgress } from "../../domain/dtos";
+import {
+  IProgressOutDTO,
+  PopulatedProgressLearningsDTO,
+  QueryProgress,
+} from "../../domain/dtos";
 import { ProgressEntity } from "../../domain/entities/progress";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 
@@ -116,6 +120,146 @@ export class ProgressRepository implements IProgressRepository {
         page: parseInt(page, 10),
         last_page: Math.ceil(total / limitParsed),
       };
+    } catch (error) {
+      console.error("Error while fetching progresses:", error);
+      throw new Error("Course fetch failed");
+    }
+  }
+
+  async findByIdPopulate(id: string): Promise<PopulatedProgressLearningsDTO> {
+    try {
+      const pipeline: PipelineStage[] = [
+        // Step 1: Match the progress document by `progressId`
+        { $match: { _id: new mongoose.Types.ObjectId(id) } },
+
+        // Step 2: Populate `userId`, `mentorId`, and `courseId`
+        {
+          $lookup: {
+            from: "users", // Collection name for Users
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        { $unwind: "$user" },
+        {
+          $lookup: {
+            from: "users", // Collection name for Mentors
+            localField: "mentorId",
+            foreignField: "_id",
+            as: "mentor",
+          },
+        },
+        { $unwind: "$mentor" },
+        {
+          $lookup: {
+            from: "courses", // Collection name for Courses
+            localField: "courseId",
+            foreignField: "_id",
+            as: "course",
+          },
+        },
+        { $unwind: "$course" },
+
+        // Step 3: Populate `lessons` for the course
+        {
+          $lookup: {
+            from: "lessons", // Collection name for Lessons
+            localField: "course.lessons",
+            foreignField: "_id",
+            as: "lessons",
+          },
+        },
+
+        // Step 4: Populate `materials` for each lesson
+        {
+          $lookup: {
+            from: "materials", // Collection name for Materials
+            localField: "lessons.materials",
+            foreignField: "_id",
+            as: "materials",
+          },
+        },
+
+        // Step 5: Transform data into the required structure
+        {
+          $addFields: {
+            lessons: {
+              $map: {
+                input: "$lessons",
+                as: "lesson",
+                in: {
+                  id: "$$lesson._id",
+                  title: "$$lesson.title",
+                  materials: {
+                    $map: {
+                      input: "$materials",
+                      as: "material",
+                      in: {
+                        id: "$$material._id",
+                        title: "$$material.title",
+                        description: "$$material.description",
+                        type: "$$material.type",
+                        duration: "$$material.duration",
+                        fileKey: "$$material.fileKey",
+                        isCompleted: {
+                          $in: ["$$material._id", "$completedMaterials"],
+                        },
+                      },
+                    },
+                  },
+                  isCompleted: {
+                    $in: ["$$lesson._id", "$completedLessons"],
+                  },
+                },
+              },
+            },
+          },
+        },
+
+        // Step 6: Select and format the final output
+        {
+          $project: {
+            userId: "$userId",
+            mentor: {
+              id: "$mentor._id",
+              firstName: "$mentor.firstName",
+              lastName: "$mentor.lastName",
+              profilePicture: "$mentor.profilePicture",
+            },
+            course: {
+              id: "$course._id",
+              title: "$course.title",
+            },
+            completedLessons: 1,
+            completedMaterials: 1,
+            isCourseCompleted: 1,
+            progress: 1,
+            completedDate: 1,
+            lessons: 1,
+          },
+        },
+      ];
+
+      const result = (await this.model.aggregate(
+        pipeline
+      )) as PopulatedProgressLearningsDTO[];
+
+      const progress = result[0];
+      // const mentor = progress.mentor as unknown as {
+      //   id: string;
+      //   firstName: string;
+      //   lastName: string;
+      //   profilePicture: string;
+      // }
+
+      // const course =  progress.course as unknown as {
+      //   id: string;
+      //   title: string;
+      // }
+
+      const userId = progress.userId.toString();
+      return { ...progress, userId };
     } catch (error) {
       console.error("Error while fetching progresses:", error);
       throw new Error("Course fetch failed");

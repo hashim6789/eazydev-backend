@@ -1,9 +1,10 @@
 import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
-
 import { authenticateToken, authorizeRole } from "../middlewares";
-import { createPaymentIntendComposer } from "../../../infra/services/composers/payment";
-import { getAllProgressComposer } from "../../../infra/services/composers/progress/get-all-progress.composer";
+import {
+  getAllProgressComposer,
+  getLearningContentsComposer,
+} from "../../../infra/services/composers/progress";
 
 /**
  * Router for handling progress-related routes.
@@ -16,6 +17,19 @@ progressRouter.get(
   authorizeRole(["learner"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, getAllProgressComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
+progressRouter.get(
+  "/:progressId",
+  authenticateToken,
+  authorizeRole(["learner"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(
+      request,
+      getLearningContentsComposer()
+    );
     response.status(adapter.statusCode).json(adapter.body);
   }
 );
