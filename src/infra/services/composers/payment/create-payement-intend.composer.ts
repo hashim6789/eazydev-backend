@@ -1,14 +1,10 @@
 import Stripe from "stripe";
 import { ICourseRepository } from "../../../../app/repositories";
-import {
-  GetCourseUseCase,
-  IGetCourseUseCase,
-} from "../../../../app/usecases/course";
+
 import { CreatePaymentIntentUseCase } from "../../../../app/usecases/payment/implementations/create-payment-intent.usecase";
 import { ICreatePaymentIntentUseCase } from "../../../../app/usecases/payment/interfaces";
 import {
   CreatePaymentIntentController,
-  GetCourseController,
   IController,
 } from "../../../../presentation/http/controllers";
 import { CourseModel } from "../../../databases/models";

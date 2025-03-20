@@ -1,4 +1,4 @@
-import mongoose, { Model, PipelineStage } from "mongoose";
+import mongoose, { Model, ObjectId, PipelineStage } from "mongoose";
 import { IProgress } from "../databases/interfaces";
 import { IProgressRepository } from "../../app/repositories";
 import {
@@ -279,6 +279,112 @@ export class ProgressRepository implements IProgressRepository {
       };
     } catch (error) {
       console.error("Error while fetching progresses:", error);
+      throw new Error("Course fetch failed");
+    }
+  }
+
+  async updateProgress(
+    id: string,
+    materialId: string
+  ): Promise<IProgressOutDTO | null> {
+    try {
+      // Step 1: Add materialId to completedMaterials
+      const result = await this.model
+        .findByIdAndUpdate(
+          id,
+          {
+            $addToSet: {
+              completedMaterials: new mongoose.Types.ObjectId(materialId),
+            },
+          },
+          { new: true }
+        )
+        .populate("courseId");
+
+      if (!result) {
+        throw new Error("Progress document not found");
+      }
+
+      // Step 2: Populate course and lessons
+      const progress = await this.model
+        .findById(id)
+        .populate({
+          path: "courseId",
+          populate: {
+            path: "lessons",
+            model: "Lessons",
+            populate: {
+              path: "materials",
+              model: "Materials",
+            },
+          },
+        })
+        .exec();
+
+      if (!progress) {
+        throw new Error("Progress document not found after update");
+      }
+
+      const course = progress.courseId as any; // Assuming courseId is populated as a Course type
+      const completedMaterials = progress.completedMaterials as ObjectId[];
+
+      // Step 3: Check if lessons are completed
+      const completedLessons = new Set(
+        progress.completedLessons.map((id) => id.toString())
+      );
+      for (const lesson of course.lessons) {
+        const allMaterialsCompleted = lesson.materials.every((material: any) =>
+          completedMaterials.some(
+            (completedMaterial) =>
+              completedMaterial.toString() === material._id.toString()
+          )
+        );
+
+        if (allMaterialsCompleted) {
+          completedLessons.add(lesson._id.toString());
+        }
+      }
+      // Step 4: Update completedLessons in Progress document
+      progress.completedLessons = Array.from(completedLessons).map(
+        (id) =>
+          new mongoose.Types.ObjectId(
+            id
+          ) as any as mongoose.Schema.Types.ObjectId
+      );
+
+      // Step 5: Update course completion status
+      progress.isCourseCompleted =
+        progress.completedLessons.length === course.lessons.length;
+
+      // Step 6: Calculate and update progress
+      const totalMaterialsCount = course.lessons.reduce(
+        (acc: number, lesson: any) => acc + lesson.materials.length,
+        0
+      );
+      const completedMaterialsCount = progress.completedMaterials.length;
+      progress.progress = (completedMaterialsCount / totalMaterialsCount) * 100;
+
+      const updatedProgress = await progress.save();
+
+      return {
+        id: updatedProgress._id.toString(),
+        userId: updatedProgress.userId.toString(),
+        mentorId: updatedProgress.mentorId.toString(),
+        courseId: updatedProgress.courseId.toString(),
+        completedLessons: updatedProgress.completedLessons.map((item) =>
+          item.toString()
+        ),
+        completedMaterials: updatedProgress.completedMaterials.map((item) =>
+          item.toString()
+        ),
+        isCourseCompleted: updatedProgress.isCourseCompleted,
+        progress: updatedProgress.progress,
+        completedDate: updatedProgress.completedDate
+          ? updatedProgress.completedDate.getTime()
+          : null,
+      };
+    } catch (error) {
+      console.error("Error while update progresses:", error);
       throw new Error("Course fetch failed");
     }
   }

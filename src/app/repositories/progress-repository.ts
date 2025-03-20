@@ -11,4 +11,8 @@ export interface IProgressRepository {
   findAllByUserId(query: QueryProgress, userId: string): Promise<PaginationDTO>;
   findByIdPopulate(id: string): Promise<PopulatedProgressLearningsDTO>;
   findById(id: string): Promise<IProgressOutDTO | null>;
+  updateProgress(
+    id: string,
+    materialId: string
+  ): Promise<IProgressOutDTO | null>;
 }

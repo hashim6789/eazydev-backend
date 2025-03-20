@@ -6,6 +6,7 @@ import {
   getLearningContentsComposer,
   getSingedUrlComposer,
 } from "../../../infra/services/composers/progress";
+import { updateProgressComposer } from "../../../infra/services/composers/progress/update-progress.composer";
 
 /**
  * Router for handling progress-related routes.
@@ -41,6 +42,16 @@ progressRouter.post(
   authorizeRole(["learner"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, getSingedUrlComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
+progressRouter.put(
+  "/:progressId",
+  authenticateToken,
+  authorizeRole(["learner"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, updateProgressComposer());
     response.status(adapter.statusCode).json(adapter.body);
   }
 );

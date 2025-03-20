@@ -6,3 +6,4 @@ export * from "./notification.model";
 export * from "./chat-group.model";
 export * from "./purchase.model";
 export * from "./progress.model";
+export * from "./slot.model";

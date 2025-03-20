@@ -4,7 +4,6 @@
  * @interface
  */
 export interface NotificationInterface {
-  // id: string;
   title: string;
   message: string;
   recipientId: string;
@@ -17,7 +16,6 @@ export interface NotificationInterface {
  * @class
  */
 export class NotificationEntity {
-  // private _id: string;
   private _title: string;
   private _message: string;
   private _recipientId: string;
@@ -42,14 +40,6 @@ export class NotificationEntity {
   update(updatedData: Partial<NotificationInterface>): void {
     Object.assign(this, updatedData);
   }
-
-  // /**
-  //  * Gets the notification ID.
-  //  * @readonly
-  //  */
-  // get id(): string {
-  //   return this._id;
-  // }
 
   /**
    * Gets the notification title.
@@ -90,7 +80,6 @@ export class NotificationEntity {
    * @param {NotificationInterface} props - The properties of the notification.
    */
   constructor(props: NotificationInterface) {
-    // this._id = props.id;
     this._title = props.title;
     this._message = props.message;
     this._recipientId = props.recipientId;

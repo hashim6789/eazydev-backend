@@ -13,6 +13,8 @@ import { noAuthRouter } from "./no-auth.routes";
 import { paymentRouter } from "./payment.routes";
 import { purchaseRouter } from "./purchase.routes";
 import { progressRouter } from "./progress.routes";
+import { slotRouter } from "./slot.routes";
+import { meetingRouter } from "./meet.routes";
 
 export const apiRouter = express.Router();
 
@@ -24,16 +26,13 @@ apiRouter.use("/materials", materialRouter);
 apiRouter.use("/upload", uploadRouter);
 apiRouter.use("/lessons", lessonRouter);
 apiRouter.use("/courses", courseRouter);
-// apiRouter.use("/mentors", mentorRouter);
-// apiRouter.use("/learners", learnerRouter);
 apiRouter.use("/categories", categoryRouter);
 apiRouter.use("/notify", notificationRouter);
 apiRouter.use("/no-auth", noAuthRouter);
 apiRouter.use("/payment", paymentRouter);
-// apiRouter.use("/profile", profileRouter);
 apiRouter.use("/purchases", purchaseRouter);
-// apiRouter.use("/subscription-history", subscriptionHistoryRouter);
 apiRouter.use("/progresses", progressRouter);
+apiRouter.use("/slots", slotRouter);
 // apiRouter.use("/analysis", analysisRouter);
 // apiRouter.use("/chats", chatRouter);
-// apiRouter.use("/meets", meetRouter);
+apiRouter.use("/meetings", meetingRouter);

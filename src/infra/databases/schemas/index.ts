@@ -6,3 +6,5 @@ export * from "./notification.schema";
 export * from "./chat-group.schema";
 export * from "./purchase.schema";
 export * from "./progress.schema";
+export * from "./slot.schema";
+export * from "./meeting.schema";

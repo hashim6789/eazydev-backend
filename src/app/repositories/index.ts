@@ -10,3 +10,5 @@ export * from "./chat-group-repository";
 export * from "./payment-repository";
 export * from "./purchase.repository";
 export * from "./progress-repository";
+export * from "./slot.repository";
+export * from "./meeting-repository";

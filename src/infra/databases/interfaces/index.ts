@@ -6,3 +6,5 @@ export * from "./notification";
 export * from "./chat-group";
 export * from "./purchase";
 export * from "./progress";
+export * from "./slot";
+export * from "./meeting";

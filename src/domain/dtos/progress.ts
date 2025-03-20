@@ -37,6 +37,10 @@ export interface QueryProgress {
 }
 
 export type IGetLearningContentRequestDTO = { progressId: string };
+export type IUpdateProgressRequestDTO = {
+  progressId: string;
+  materialId: string;
+};
 export type IGetSignedUrlRequestDTO = {
   progressId: string;
   fileKey: string;
