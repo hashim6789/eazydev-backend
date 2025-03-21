@@ -7,3 +7,19 @@ export interface IChatGroupOutDTO {
 }
 
 export type ICreateChatGroupInDTO = Omit<IChatGroupOutDTO, "id">;
+
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  profilePicture: string;
+}
+
+export interface IChatGroupOutPopulatedDTO {
+  id: string;
+  title: string;
+  thumbnail: string;
+  memberCount: number;
+  mentor: User | null;
+  learners: User[];
+}

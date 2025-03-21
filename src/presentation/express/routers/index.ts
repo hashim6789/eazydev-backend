@@ -15,6 +15,7 @@ import { purchaseRouter } from "./purchase.routes";
 import { progressRouter } from "./progress.routes";
 import { slotRouter } from "./slot.routes";
 import { meetingRouter } from "./meet.routes";
+import { chatRouter } from "./chat.routes";
 
 export const apiRouter = express.Router();
 
@@ -34,5 +35,5 @@ apiRouter.use("/purchases", purchaseRouter);
 apiRouter.use("/progresses", progressRouter);
 apiRouter.use("/slots", slotRouter);
 // apiRouter.use("/analysis", analysisRouter);
-// apiRouter.use("/chats", chatRouter);
+apiRouter.use("/chats", chatRouter);
 apiRouter.use("/meetings", meetingRouter);
