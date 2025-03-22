@@ -1,4 +1,5 @@
 import {
+  IChatGroupRepository,
   ICourseRepository,
   IProgressRepository,
   IPurchaseRepository,
@@ -8,15 +9,23 @@ import { ICreatePurchaseUseCase } from "../../../../app/usecases/purchase/interf
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { CreatePurchaseController } from "../../../../presentation/http/controllers/purchase";
 import {
+  ChatGroupModel,
   CourseModel,
   ProgressModel,
   PurchaseModel,
 } from "../../../databases/models";
-import { CourseRepository, ProgressRepository } from "../../../repositories";
+import {
+  ChatGroupRepository,
+  CourseRepository,
+  ProgressRepository,
+} from "../../../repositories";
 import { PurchaseRepository } from "../../../repositories/purchase-repository";
 
 export function createPurchaseComposer(): IController {
   const repository: IPurchaseRepository = new PurchaseRepository(PurchaseModel);
+  const chatGroupRepository: IChatGroupRepository = new ChatGroupRepository(
+    ChatGroupModel
+  );
   const progressRepository: IProgressRepository = new ProgressRepository(
     ProgressModel
   );
@@ -24,7 +33,8 @@ export function createPurchaseComposer(): IController {
   const useCase: ICreatePurchaseUseCase = new CreatePurchaseUseCases(
     repository,
     courseRepository,
-    progressRepository
+    progressRepository,
+    chatGroupRepository
   );
   const controller: IController = new CreatePurchaseController(useCase);
   return controller;

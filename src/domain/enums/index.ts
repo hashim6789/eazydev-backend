@@ -10,3 +10,4 @@ export * from "./category";
 export * from "./payment";
 export * from "./purchase";
 export * from "./slot";
+export * from "./chat-group";

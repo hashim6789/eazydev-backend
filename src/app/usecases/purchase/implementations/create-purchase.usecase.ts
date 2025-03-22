@@ -7,10 +7,12 @@ import { ProgressEntity } from "../../../../domain/entities/progress";
 import { PurchaseEntity } from "../../../../domain/entities/purchase";
 import {
   AuthenticateUserErrorType,
+  ChatGroupErrorType,
   CourseErrorType,
   PurchaseErrorType,
 } from "../../../../domain/enums";
 import {
+  IChatGroupRepository,
   ICourseRepository,
   IProgressRepository,
   IPurchaseRepository,
@@ -21,7 +23,8 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
   constructor(
     private purchaseRepository: IPurchaseRepository,
     private courseRepository: ICourseRepository,
-    private progressRepository: IProgressRepository
+    private progressRepository: IProgressRepository,
+    private chatGroupRepository: IChatGroupRepository
   ) {}
 
   generatePurchaseId(learnerId: string, courseId: string): string {
@@ -87,6 +90,18 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
         progress: 0,
         completedDate: null,
       });
+
+      const isAddedToChatGroup =
+        await this.chatGroupRepository.addLearnerToChatGroup(
+          courseId,
+          learnerId
+        );
+      if (!isAddedToChatGroup) {
+        return {
+          data: { error: ChatGroupErrorType.ChatGroupNotFound },
+          success: false,
+        };
+      }
 
       //create the progress of the course of the corresponding learner is created
       await this.progressRepository.create(progress);

@@ -119,4 +119,21 @@ export class ChatGroupRepository implements IChatGroupRepository {
       throw new Error("Lesson creation failed");
     }
   }
+
+  async addLearnerToChatGroup(
+    courseId: string,
+    learnerId: string
+  ): Promise<boolean> {
+    try {
+      const result = await this.model.updateOne(
+        { course: courseId },
+        { $addToSet: { learners: learnerId } }
+      );
+
+      return result.modifiedCount > 0;
+    } catch (error) {
+      console.error("Error while creating chatGroup:", error);
+      throw new Error("Lesson creation failed");
+    }
+  }
 }

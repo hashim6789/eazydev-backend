@@ -11,4 +11,5 @@ export interface IChatGroupRepository {
     userId: string,
     role: Role
   ): Promise<IChatGroupOutPopulatedDTO[]>;
+  addLearnerToChatGroup(courseId: string, learnerId: string): Promise<boolean>;
 }
