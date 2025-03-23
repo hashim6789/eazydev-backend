@@ -1,7 +1,5 @@
 import { IGetAllChatGroupUseCase } from "../../../../app/usecases/chat/interfaces";
-import { IGetAllProgressUseCase } from "../../../../app/usecases/progress";
 import { Payload } from "../../../../domain/dtos/jwt-payload";
-import { QueryProgress } from "../../../../domain/dtos/progress";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
   IHttpErrors,
@@ -17,7 +15,7 @@ import {
 import { IController } from "../IController";
 
 /**
- * Controller for handling requests to create a user.
+ * Controller for handling requests to get all groups.
  */
 export class GetAllChatGroupController implements IController {
   constructor(

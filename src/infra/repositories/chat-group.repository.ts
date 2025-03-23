@@ -75,7 +75,8 @@ export class ChatGroupRepository implements IChatGroupRepository {
         },
         {
           $project: {
-            _id: "$_id",
+            _id: 0,
+            id: "$_id",
             title: "$courseDetails.title",
             thumbnail: "$courseDetails.thumbnail",
             memberCount: { $size: "$learners" }, // Calculating the number of learners
@@ -84,7 +85,7 @@ export class ChatGroupRepository implements IChatGroupRepository {
                 input: "$learnerDetails",
                 as: "learner",
                 in: {
-                  _id: "$$learner._id",
+                  id: "$$learner._id",
                   firstName: "$$learner.firstName",
                   lastName: "$$learner.lastName",
                   profilePicture: "$$learner.profilePicture",
@@ -98,7 +99,7 @@ export class ChatGroupRepository implements IChatGroupRepository {
                     input: "$mentorDetails",
                     as: "mentor",
                     in: {
-                      _id: "$$mentor._id",
+                      id: "$$mentor._id",
                       firstName: "$$mentor.firstName",
                       lastName: "$$mentor.lastName",
                       profilePicture: "$$mentor.profilePicture",

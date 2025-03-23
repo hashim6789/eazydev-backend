@@ -1,13 +1,8 @@
-import {
-  IGetAllMeetingUseCase,
-  IJoinMeetingUseCase,
-} from "../../../../app/usecases/meeting/interfaces";
-import {
-  ICreateSlotRequestDTO,
-  IJoinMeetingRequestDTO,
-  Payload,
-  ResponseDTO,
-} from "../../../../domain/dtos";
+import { IGetAllChatGroupUseCase } from "../../../../app/usecases/chat/interfaces";
+import { ICreateChatMessageUseCase } from "../../../../app/usecases/chat/interfaces/post-chat-message.usecase";
+import { ICreateChatMessageRequestDTO } from "../../../../domain/dtos";
+import { Payload } from "../../../../domain/dtos/jwt-payload";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
   IHttpErrors,
   IHttpRequest,
@@ -22,11 +17,11 @@ import {
 import { IController } from "../IController";
 
 /**
- * Controller for handling requests to getAll category.
+ * Controller for handling requests to create chat message.
  */
-export class JoinMeetingController implements IController {
+export class CreateChatMessageController implements IController {
   constructor(
-    private joinMeetingUseCase: IJoinMeetingUseCase,
+    private createChatMessageUseCase: ICreateChatMessageUseCase,
     private httpErrors: IHttpErrors = new HttpErrors(),
     private httpSuccess: IHttpSuccess = new HttpSuccess()
   ) {}
@@ -35,31 +30,23 @@ export class JoinMeetingController implements IController {
     let error;
     let response: ResponseDTO;
 
-    if (
-      httpRequest.body &&
-      Object.keys(httpRequest.body).length > 0 &&
-      httpRequest.path &&
-      Object.keys(httpRequest.path).length > 0
-    ) {
+    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
       const bodyParams = Object.keys(httpRequest.body);
-      const pathParams = Object.keys(httpRequest.path);
 
       if (
         bodyParams.includes("userId") &&
         bodyParams.includes("role") &&
-        bodyParams.includes("peerId") &&
-        pathParams.includes("meetingId")
+        bodyParams.includes("message") &&
+        bodyParams.includes("groupId")
       ) {
-        const { userId, role, peerId } = httpRequest.body as Payload &
-          Pick<IJoinMeetingRequestDTO, "peerId">;
-        const { meetingId } = httpRequest.path as Pick<
-          IJoinMeetingRequestDTO,
-          "meetingId"
-        >;
-
-        response = await this.joinMeetingUseCase.execute(
-          { peerId, meetingId },
-          { userId, role }
+        const { userId, role, message, groupId } = httpRequest.body as Payload &
+          ICreateChatMessageRequestDTO;
+        response = await this.createChatMessageUseCase.execute(
+          { message, groupId },
+          {
+            userId,
+            role,
+          }
         );
       } else {
         error = this.httpErrors.error_422();

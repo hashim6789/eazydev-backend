@@ -8,3 +8,4 @@ export * from "./purchase";
 export * from "./progress";
 export * from "./slot";
 export * from "./meeting";
+export * from "./chat-message";

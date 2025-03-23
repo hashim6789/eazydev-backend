@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
 import { authenticateToken, authorizeRole } from "../middlewares";
 import { getAllMeetsComposer } from "../../../infra/services/composers/meet/get-all-meets.composer";
+import { joinMeetingComposer } from "../../../infra/services/composers/meet/join-meetinng.composer";
 
 /**
  * Router for handling notification-related routes.
@@ -19,11 +20,11 @@ meetingRouter.get(
 );
 
 meetingRouter.post(
-  "/:meetId/join",
+  "/:meetingId/join",
   authenticateToken,
   authorizeRole(["mentor", "learner"]),
   async (request: Request, response: Response) => {
-    const adapter = await expressAdapter(request, getAllMeetsComposer());
+    const adapter = await expressAdapter(request, joinMeetingComposer());
     response.status(adapter.statusCode).json(adapter.body);
   }
 );

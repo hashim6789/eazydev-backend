@@ -8,3 +8,4 @@ export * from "./purchase.schema";
 export * from "./progress.schema";
 export * from "./slot.schema";
 export * from "./meeting.schema";
+export * from "./chat-message.schema";

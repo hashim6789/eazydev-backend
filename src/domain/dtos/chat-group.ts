@@ -7,6 +7,7 @@ export interface IChatGroupOutDTO {
 }
 
 export type ICreateChatGroupInDTO = Omit<IChatGroupOutDTO, "id">;
+export type IGetAllChatMessagesRequestDTO = { groupId: string };
 
 interface User {
   id: string;

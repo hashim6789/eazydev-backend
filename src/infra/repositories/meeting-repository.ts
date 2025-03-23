@@ -133,8 +133,8 @@ export class MeetingRepository implements IMeetingRepository {
         learnerId: meeting.learnerId.toString(),
         slotId: meeting.slotId.toString(),
         roomId: meeting.roomId,
-        mentorPeerId: null,
-        learnerPeerId: null,
+        mentorPeerId: meeting.mentorPeerId,
+        learnerPeerId: meeting.learnerPeerId,
       };
     } catch (error) {
       console.error("Error while fetch meeting:", error);
@@ -158,8 +158,8 @@ export class MeetingRepository implements IMeetingRepository {
         learnerId: meeting.learnerId.toString(),
         slotId: meeting.slotId.toString(),
         roomId: meeting.roomId,
-        mentorPeerId: null,
-        learnerPeerId: null,
+        mentorPeerId: meeting.mentorPeerId,
+        learnerPeerId: meeting.learnerPeerId,
       };
     } catch (error) {
       console.error("Error while update meeting:", error);

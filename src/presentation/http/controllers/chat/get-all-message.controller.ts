@@ -1,13 +1,7 @@
-import {
-  IGetAllMeetingUseCase,
-  IJoinMeetingUseCase,
-} from "../../../../app/usecases/meeting/interfaces";
-import {
-  ICreateSlotRequestDTO,
-  IJoinMeetingRequestDTO,
-  Payload,
-  ResponseDTO,
-} from "../../../../domain/dtos";
+import { IGetAllChatMessageUseCase } from "../../../../app/usecases/chat/interfaces";
+import { IGetAllChatMessagesRequestDTO } from "../../../../domain/dtos/chat-group";
+import { Payload } from "../../../../domain/dtos/jwt-payload";
+import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
   IHttpErrors,
   IHttpRequest,
@@ -22,11 +16,11 @@ import {
 import { IController } from "../IController";
 
 /**
- * Controller for handling requests to getAll category.
+ * Controller for handling requests to create a user.
  */
-export class JoinMeetingController implements IController {
+export class GetAllChatMessageController implements IController {
   constructor(
-    private joinMeetingUseCase: IJoinMeetingUseCase,
+    private getAllChatMessageUseCase: IGetAllChatMessageUseCase,
     private httpErrors: IHttpErrors = new HttpErrors(),
     private httpSuccess: IHttpSuccess = new HttpSuccess()
   ) {}
@@ -47,19 +41,16 @@ export class JoinMeetingController implements IController {
       if (
         bodyParams.includes("userId") &&
         bodyParams.includes("role") &&
-        bodyParams.includes("peerId") &&
-        pathParams.includes("meetingId")
+        pathParams.includes("groupId")
       ) {
-        const { userId, role, peerId } = httpRequest.body as Payload &
-          Pick<IJoinMeetingRequestDTO, "peerId">;
-        const { meetingId } = httpRequest.path as Pick<
-          IJoinMeetingRequestDTO,
-          "meetingId"
-        >;
-
-        response = await this.joinMeetingUseCase.execute(
-          { peerId, meetingId },
-          { userId, role }
+        const { userId, role } = httpRequest.body as Payload;
+        const { groupId } = httpRequest.path as IGetAllChatMessagesRequestDTO;
+        response = await this.getAllChatMessageUseCase.execute(
+          { groupId },
+          {
+            userId,
+            role,
+          }
         );
       } else {
         error = this.httpErrors.error_422();

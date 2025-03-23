@@ -1,13 +1,7 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
-import { QueryProgress } from "../../../../domain/dtos/progress";
 import { IGetAllChatGroupUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";
-import {
-  IChatGroupRepository,
-  IProgressRepository,
-} from "../../../repositories";
-import { ProgressErrorType } from "../../../../domain/enums/progress";
+import { IChatGroupRepository } from "../../../repositories";
 
 export class GetAllChatGroupUseCase implements IGetAllChatGroupUseCase {
   constructor(private chatGroupRepository: IChatGroupRepository) {}
