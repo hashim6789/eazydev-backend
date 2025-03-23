@@ -1,5 +1,5 @@
 import { IGetAllCategoryUseCase } from "../../../../app/usecases/category";
-import { QueryCategory, ResponseDTO } from "../../../../domain/dtos";
+import { Payload, ResponseDTO } from "../../../../domain/dtos";
 import {
   IHttpErrors,
   IHttpRequest,
@@ -27,7 +27,9 @@ export class GetAllCategoryController implements IController {
     let error;
     let response: ResponseDTO;
 
-    response = await this.getAllCategoryCase.execute();
+    const { role } = (httpRequest.body as Payload) || { role: "learner" };
+
+    response = await this.getAllCategoryCase.execute(role);
     if (!response.success) {
       error = this.httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);

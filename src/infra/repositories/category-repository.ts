@@ -8,6 +8,7 @@ import {
   QueryCategory,
 } from "../../domain/dtos";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
+import { Role } from "../../domain/types";
 
 export class CategoryRepository implements ICategoryRepository {
   private model: Model<ICategory>;
@@ -133,9 +134,12 @@ export class CategoryRepository implements ICategoryRepository {
     }
   }
 
-  async fetch(): Promise<ICategoryOutDTO[]> {
+  async fetch(role: Role): Promise<ICategoryOutDTO[]> {
     try {
-      const categories = await this.model.find({ isListed: true });
+      const query = {
+        isListed: role === "admin" ? { $exists: true } : true,
+      };
+      const categories = await this.model.find(query);
       return categories.map((category) => ({
         id: category._id.toString(),
         isListed: category.isListed,

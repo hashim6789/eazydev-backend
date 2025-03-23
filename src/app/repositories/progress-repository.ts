@@ -15,4 +15,5 @@ export interface IProgressRepository {
     id: string,
     materialId: string
   ): Promise<IProgressOutDTO | null>;
+  mentorAnalysis(mentorId: string): Promise<any>;
 }

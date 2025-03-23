@@ -59,6 +59,7 @@ categoryRouter.put(
  */
 categoryRouter.get(
   "/admin",
+  authenticateToken,
   authorizeRole(["admin"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(
@@ -74,7 +75,7 @@ categoryRouter.get(
  */
 categoryRouter.get(
   "/",
-  authorizeRole(["admin", "mentor", "learner"]),
+  // authorizeRole(["admin", "mentor", "learner"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, getAllCategoryComposer());
     response.status(adapter.statusCode).json(adapter.body);

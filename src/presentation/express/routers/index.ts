@@ -16,10 +16,10 @@ import { progressRouter } from "./progress.routes";
 import { slotRouter } from "./slot.routes";
 import { meetingRouter } from "./meet.routes";
 import { chatRouter } from "./chat.routes";
+import { analyzeRouter } from "./analyze.routes";
 
 export const apiRouter = express.Router();
 
-//redirect all lesson routes to corresponding subroutes
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/refresh", refreshRouter);
 apiRouter.use("/users", userRouter);
@@ -34,6 +34,6 @@ apiRouter.use("/payment", paymentRouter);
 apiRouter.use("/purchases", purchaseRouter);
 apiRouter.use("/progresses", progressRouter);
 apiRouter.use("/slots", slotRouter);
-// apiRouter.use("/analysis", analysisRouter);
+apiRouter.use("/analysis", analyzeRouter);
 apiRouter.use("/chats", chatRouter);
 apiRouter.use("/meetings", meetingRouter);

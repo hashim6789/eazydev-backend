@@ -5,6 +5,7 @@ import {
   QueryCategory,
 } from "../../domain/dtos";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
+import { Role } from "../../domain/types";
 
 export interface ICategoryRepository {
   create(data: ICreateCategoryInDTO): Promise<ICategoryOutDTO>;
@@ -15,5 +16,5 @@ export interface ICategoryRepository {
     data: Partial<IUpdateCategoryIntDTO>
   ): Promise<ICategoryOutDTO | null>;
   findAll(query?: QueryCategory): Promise<PaginationDTO>;
-  fetch(): Promise<ICategoryOutDTO[]>;
+  fetch(role: Role): Promise<ICategoryOutDTO[]>;
 }

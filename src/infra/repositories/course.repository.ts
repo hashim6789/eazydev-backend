@@ -11,6 +11,7 @@ import {
 import { ICourse } from "../databases/interfaces";
 import { CourseStatus } from "../../domain/types";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
+import { mentorRevenueAnalysisPipeline } from "../pipelines/course";
 
 export class CourseRepository implements ICourseRepository {
   private model: Model<ICourse>;
@@ -472,6 +473,21 @@ export class CourseRepository implements ICourseRepository {
     } catch (error) {
       console.error("Error while fetching courses:", error);
       throw new Error("Course fetch failed");
+    }
+  }
+
+  async userRevenueAnalyze(mentorId: string): Promise<any> {
+    try {
+      // Execute the aggregation pipeline
+      const results = await this.model
+        .aggregate(mentorRevenueAnalysisPipeline(mentorId))
+        .exec();
+
+      // Return the combined result from facets
+      return results[0];
+    } catch (error) {
+      console.error("Error analyzing mentor data:", error);
+      throw new Error(`Failed to analyze mentor data: ${error}`);
     }
   }
 }

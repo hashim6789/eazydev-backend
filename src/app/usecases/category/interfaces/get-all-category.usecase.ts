@@ -1,5 +1,6 @@
-import { QueryCategory, ResponseDTO } from "../../../../domain/dtos";
+import { ResponseDTO } from "../../../../domain/dtos";
+import { Role } from "../../../../domain/types";
 
 export interface IGetAllCategoryUseCase {
-  execute(): Promise<ResponseDTO>;
+  execute(role: Role): Promise<ResponseDTO>;
 }

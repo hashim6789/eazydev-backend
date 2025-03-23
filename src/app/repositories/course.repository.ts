@@ -25,4 +25,5 @@ export interface ICourseRepository {
   ): Promise<PaginationDTO>;
   findAllPublished(query: QueryCourse): Promise<PaginationDTO>;
   findByIdPopulate(id: string): Promise<ICourseOutPopulateDTO | null>;
+  userRevenueAnalyze(mentorId: string): Promise<any>;
 }
