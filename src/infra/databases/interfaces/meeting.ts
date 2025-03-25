@@ -1,5 +1,3 @@
-// models/Meeting.ts
-
 import { ObjectId } from "mongoose";
 
 export interface IMeeting {

@@ -8,3 +8,4 @@ export * from "./purchase.model";
 export * from "./progress.model";
 export * from "./slot.model";
 export * from "./chat-message.model";
+export * from "./otp.model";

@@ -1,6 +1,5 @@
 import { IUsersRepository } from "../../app/repositories/user.repository";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
-import { IUser, User } from "../databases/models/user.model";
 import { ICreateUserRequestDTO } from "../../domain/dtos/user/create-user.dtos";
 import {
   IUpdateUserRequestDTO,
@@ -10,6 +9,7 @@ import {
 } from "../../domain/dtos/user/user.dto";
 import { QueryUser } from "../../domain/dtos/user";
 import { Model } from "mongoose";
+import { IUser } from "../databases/interfaces";
 
 export class UserRepository implements IUsersRepository {
   private model: Model<IUser>;
@@ -31,7 +31,7 @@ export class UserRepository implements IUsersRepository {
     role,
     password,
   }: ICreateUserRequestDTO): Promise<IUserOutRequestDTO> {
-    const user: IUser = new this.model({
+    const user = new this.model({
       email,
       firstName,
       lastName,
@@ -129,10 +129,11 @@ export class UserRepository implements IUsersRepository {
         { lastName: { $regex: search, $options: "i" } },
       ],
     };
-    const users = await User.find(
-      query
-      // { email: 1, name: 1, createdAt: 1 }
-    )
+    const users = await this.model
+      .find(
+        query
+        // { email: 1, name: 1, createdAt: 1 }
+      )
       .skip((parseInt(page, 10) - 1) * parseInt(limit, 10))
       .limit(parseInt(limit, 10))
       .sort({ name: 1 })
@@ -168,7 +169,7 @@ export class UserRepository implements IUsersRepository {
     userId: string,
     data: IUpdateUserRequestDTO
   ): Promise<IUserOutRequestDTO | null> {
-    const userUpdated: IUser | null = await this.model
+    const userUpdated = await this.model
       .findByIdAndUpdate(userId, { $set: data }, { new: true })
       .lean();
     if (!userUpdated) {

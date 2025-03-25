@@ -3,11 +3,8 @@ import dayjs from "dayjs";
 
 import { IRefreshTokenRepository } from "../../app/repositories/refresh-token.repository";
 import { RefreshTokenDTO } from "../../domain/dtos/auth/refresh-token-dto";
-import {
-  IRefreshToken,
-  RefreshTokenModel,
-} from "../databases/models/refresh-token.model";
 import { Role } from "../../domain/types/user";
+import { IRefreshToken } from "../databases/interfaces";
 
 /**
  * Mongoose implementation of the refresh token repository.

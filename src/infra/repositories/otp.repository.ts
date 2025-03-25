@@ -2,7 +2,7 @@ import { Model } from "mongoose";
 import dayjs from "dayjs";
 import { IOtpRepository } from "../../app/repositories/otp.repository";
 import { OtpDTO } from "../../domain/dtos/auth/otp-auth-dto";
-import OtpModel, { IOtp } from "../databases/models/otp.model";
+import { IOtp } from "../databases/interfaces";
 
 /**
  * Mongoose implementation of the refresh token repository.
@@ -43,7 +43,7 @@ export class OtpRepository implements IOtpRepository {
     return {
       id: generateOtp._id.toString(),
       userId: generateOtp.userId.toString(),
-      expiresIn: generateOtp.expiresIn,
+      expiresIn: generateOtp.expiresIn.getTime(),
       otp: generateOtp.otp,
     };
   }
