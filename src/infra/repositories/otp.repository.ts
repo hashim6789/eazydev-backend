@@ -1,10 +1,8 @@
-import { Model, Document, Schema, model } from "mongoose";
+import { Model } from "mongoose";
 import dayjs from "dayjs";
-
-import { Role } from "../../domain/types/user";
 import { IOtpRepository } from "../../app/repositories/otp.repository";
 import { OtpDTO } from "../../domain/dtos/auth/otp-auth-dto";
-import OtpModel from "../databases/models/otp.model";
+import OtpModel, { IOtp } from "../databases/models/otp.model";
 
 /**
  * Mongoose implementation of the refresh token repository.
@@ -13,7 +11,7 @@ import OtpModel from "../databases/models/otp.model";
  * @implements {IOtpRepository}
  */
 export class OtpRepository implements IOtpRepository {
-  // private Otp: Model<Document>;
+  private model: Model<IOtp>;
 
   /**
    * Creates an instance of OtpMongooseRepository.
@@ -21,9 +19,9 @@ export class OtpRepository implements IOtpRepository {
    * @constructor
    * @param {Model<Document>} refreshTokenModel - The Mongoose model instance.
    */
-  // constructor(Model: Model<Document>) {
-  //   this.Otp = refreshTokenModel;
-  // }
+  constructor(model: Model<IOtp>) {
+    this.model = model;
+  }
 
   /**
    * Creates a new refresh token for the specified user.
@@ -35,7 +33,7 @@ export class OtpRepository implements IOtpRepository {
   async create(userId: string, otp: string): Promise<OtpDTO> {
     const expiresIn = dayjs().add(5, "minute").unix();
 
-    const generateOtp = new OtpModel({
+    const generateOtp = new this.model({
       userId,
       expiresIn,
       otp,
@@ -58,7 +56,7 @@ export class OtpRepository implements IOtpRepository {
    * @returns {Promise<OtpDTO | unknown>} The found refresh token or undefined.
    */
   async findById(refreshToken: string): Promise<OtpDTO | unknown> {
-    const token = await OtpModel.findById(refreshToken).exec();
+    const token = await this.model.findById(refreshToken).exec();
 
     return token;
   }
@@ -71,7 +69,7 @@ export class OtpRepository implements IOtpRepository {
    * @returns {Promise<OtpDTO | unknown>} The found refresh token or undefined.
    */
   async findByUserId(userId: string): Promise<OtpDTO | unknown> {
-    const token = await OtpModel.findOne({ userId }).exec();
+    const token = await this.model.findOne({ userId }).exec();
 
     return token;
   }
@@ -84,6 +82,6 @@ export class OtpRepository implements IOtpRepository {
    * @returns {Promise<void>} A Promise that resolves once the refresh token is deleted.
    */
   async delete(userId: string): Promise<void> {
-    await OtpModel.deleteOne({ userId }).exec();
+    await this.model.deleteOne({ userId }).exec();
   }
 }
