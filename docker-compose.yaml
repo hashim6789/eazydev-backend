@@ -40,7 +40,7 @@ services:
       - eazydev-network
 
 networks:
-  app-network:
+  eazydev-network:
     driver: bridge # Use a bridge network for service communication
 
 
