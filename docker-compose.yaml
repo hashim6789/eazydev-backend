@@ -11,7 +11,7 @@ services:
     depends_on:
       - express # Ensure Express service is started before
       - peerjs
-    restart: unless-stopped # Automatically restart if the container stops
+    restart: always # Automatically restart if the container stops
     networks:
       - eazydev-network # Connect to the shared network
   express:
@@ -26,13 +26,13 @@ services:
       - "3333:3333" # Map port 3333 for the application
     env_file: .env # Load environment variables from the .env file
     command: npm run dev # Start the application in development mode
-    restart: unless-stopped # Automatically restart if the container stops
+    restart: always # Automatically restart if the container stops
     networks:
       - eazydev-network # Connect to the shared network
   peerjs:
     image: peerjs/peerjs-server
     container_name: eazy-dev-peerjs
-    restart: unless-stopped
+    restart: always
     ports:
       - "3001:3001"
     command: peerjs --port 3001 --path /peerjs
