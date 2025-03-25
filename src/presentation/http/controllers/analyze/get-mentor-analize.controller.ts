@@ -1,21 +1,14 @@
 import { IGetMentorAnalyzeUseCase } from "../../../../app/usecases/analyze";
-import { IGetAllMeetingUseCase } from "../../../../app/usecases/meeting/interfaces";
+import { Payload, ResponseDTO } from "../../../../domain/dtos";
 import {
-  ICreateSlotRequestDTO,
-  Payload,
-  ResponseDTO,
-} from "../../../../domain/dtos";
-import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
 import { IController } from "../IController";
 
 /**

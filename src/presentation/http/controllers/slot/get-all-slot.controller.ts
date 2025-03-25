@@ -1,27 +1,14 @@
-import { IGetAllCategoryAdminUseCase } from "../../../../app/usecases/category";
-import {
-  IGetAllCourseUseCase,
-  IGetCourseUseCase,
-} from "../../../../app/usecases/course";
 import { IGetAllSlotUseCase } from "../../../../app/usecases/slot";
+import { Payload, ResponseDTO } from "../../../../domain/dtos";
 import {
-  IGetAllSlotRequestDTO,
-  Payload,
-  QueryCategory,
-  QueryCourse,
-  ResponseDTO,
-} from "../../../../domain/dtos";
-import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
 import { IController } from "../IController";
 
 /**

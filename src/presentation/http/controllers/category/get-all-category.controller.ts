@@ -1,16 +1,14 @@
 import { IGetAllCategoryUseCase } from "../../../../app/usecases/category";
 import { Payload, ResponseDTO } from "../../../../domain/dtos";
 import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
 import { IController } from "../IController";
 
 /**

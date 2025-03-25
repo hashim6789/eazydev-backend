@@ -8,5 +8,9 @@ export * from "./lesson";
 export * from "./course";
 export * from "./category";
 export * from "./payment";
-
 export * from "./notification";
+export * from "./analyze";
+export * from "./chat";
+export * from "./meeting";
+export * from "./progress";
+export * from "./purchase";

@@ -1,24 +1,18 @@
+import { IUpdateListCategoryUseCase } from "../../../../app/usecases/category";
 import {
-  ICreateCategoryUseCase,
-  IUpdateListCategoryUseCase,
-} from "../../../../app/usecases/category";
-import {
-  ICreateCategoryRequestDTO,
   IUpdateListCategoryRequestDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
 import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
 import { IController } from "../IController";
 
 /**

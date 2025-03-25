@@ -1,27 +1,17 @@
-import {
-  IGetAllProgressUseCase,
-  IGetLearningContentsUseCase,
-  IGetSignedUrlUseCase,
-} from "../../../../app/usecases/progress";
+import { IGetSignedUrlUseCase } from "../../../../app/usecases/progress";
 import { Payload } from "../../../../domain/dtos/jwt-payload";
-import {
-  IGetLearningContentRequestDTO,
-  IGetSignedUrlRequestDTO,
-  QueryProgress,
-} from "../../../../domain/dtos/progress";
+import { IGetSignedUrlRequestDTO } from "../../../../domain/dtos/progress";
 import { ResponseDTO } from "../../../../domain/dtos/response";
+import { IController } from "../IController";
 import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
-import { IController } from "../IController";
 
 /**
  * Controller for handling requests to create a user.

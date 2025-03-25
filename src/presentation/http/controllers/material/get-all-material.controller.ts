@@ -3,16 +3,14 @@ import { Payload } from "../../../../domain/dtos/jwt-payload";
 import { QueryMaterial } from "../../../../domain/dtos/material";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
 import { IController } from "../IController";
 
 /**

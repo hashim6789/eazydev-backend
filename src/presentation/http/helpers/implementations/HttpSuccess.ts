@@ -1,5 +1,4 @@
-import { IHttpResponse } from '../IHttpResponse'
-import { IHttpSuccess } from '../IHttpSuccess'
+import { IHttpResponse, IHttpSuccess } from "../interfaces";
 
 /**
  * Implementation of IHttpSuccess representing HTTP success responses.
@@ -14,7 +13,7 @@ export class HttpSuccess implements IHttpSuccess {
     return {
       statusCode: 200,
       body: data,
-    }
+    };
   }
 
   /**
@@ -26,6 +25,6 @@ export class HttpSuccess implements IHttpSuccess {
     return {
       statusCode: 201,
       body: data,
-    }
+    };
   }
 }

@@ -1,5 +1,5 @@
 import { IController } from "../http/controllers/IController";
-import { IHttpResponse } from "../http/helpers/IHttpResponse";
+import { IHttpResponse } from "../http/helpers";
 import { HttpRequest } from "../http/helpers/implementations/HttpRequest";
 import { Request } from "express";
 

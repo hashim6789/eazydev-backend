@@ -1,14 +1,15 @@
 import { ILogoutUseCase } from "../../../../app/usecases/auth/interfaces/logout-auth.usecase";
 import { ILogoutRequestDTO } from "../../../../domain/dtos/auth/logut-auth-dto";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { Role } from "../../../../domain/types/user";
-import { IHttpErrors } from "../../helpers/IHttpErrors";
-import { IHttpRequest } from "../../helpers/IHttpRequest";
-import { IHttpResponse } from "../../helpers/IHttpResponse";
-import { IHttpSuccess } from "../../helpers/IHttpSuccess";
-import { HttpErrors } from "../../helpers/implementations/HttpErrors";
-import { HttpResponse } from "../../helpers/implementations/HttpResponse";
-import { HttpSuccess } from "../../helpers/implementations/HttpSuccess";
+import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpRequest,
+  IHttpResponse,
+  IHttpSuccess,
+} from "../../helpers";
 import { IController } from "../IController";
 
 /**

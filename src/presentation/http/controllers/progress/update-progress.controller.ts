@@ -1,28 +1,16 @@
-import {
-  IGetAllProgressUseCase,
-  IGetLearningContentsUseCase,
-  IGetSignedUrlUseCase,
-  IUpdateProgressUseCase,
-} from "../../../../app/usecases/progress";
+import { IUpdateProgressUseCase } from "../../../../app/usecases/progress";
 import { Payload } from "../../../../domain/dtos/jwt-payload";
-import {
-  IGetLearningContentRequestDTO,
-  IGetSignedUrlRequestDTO,
-  IUpdateProgressRequestDTO,
-  QueryProgress,
-} from "../../../../domain/dtos/progress";
+import { IUpdateProgressRequestDTO } from "../../../../domain/dtos/progress";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
 import { IController } from "../IController";
 
 /**

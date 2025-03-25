@@ -1,23 +1,14 @@
-import { IGetAllCategoryAdminUseCase } from "../../../../app/usecases/category";
 import { IGetAllCourseUseCase } from "../../../../app/usecases/course";
+import { Payload, QueryCourse, ResponseDTO } from "../../../../domain/dtos";
 import {
-  Payload,
-  QueryCategory,
-  QueryCourse,
-  ResponseDTO,
-} from "../../../../domain/dtos";
-import { Role } from "../../../../domain/types";
-import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
 import { IController } from "../IController";
 
 /**
