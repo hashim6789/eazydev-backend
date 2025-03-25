@@ -22,6 +22,7 @@ export const apiRouter = express.Router();
 
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/refresh", refreshRouter);
+
 apiRouter.use("/users", userRouter);
 apiRouter.use("/materials", materialRouter);
 apiRouter.use("/upload", uploadRouter);

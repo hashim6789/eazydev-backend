@@ -12,8 +12,6 @@ export const initializePeerServer = () => {
   });
 
   app.use("/", peer);
-
-  // Listen on a dedicated port (e.g., 3001)
   const PORT = 3001;
   peerServer.listen(PORT, () => {
     console.log(`PeerJS server is running on http://localhost:${PORT}/peerjs`);

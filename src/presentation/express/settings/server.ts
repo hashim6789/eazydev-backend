@@ -17,6 +17,7 @@ connectSocket(server);
 /**
  * Start the server and listen on the specified port.
  */
+
 server.listen(PORT, () =>
   console.log(`Server is running in http://localhost:${PORT}`)
 );

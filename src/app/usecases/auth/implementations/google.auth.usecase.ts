@@ -1,15 +1,9 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { ISignupRequestDTO } from "../../../../domain/dtos/auth";
 import { IUsersRepository } from "../../../repositories/user.repository";
-import { IPasswordHasher } from "../../../providers/password-hasher.provider";
 import { UserEntity } from "../../../../domain/entities/user";
 import { UserErrorType } from "../../../../domain/enums/user";
 import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
 import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
-import { IOtpRepository } from "../../../repositories/otp.repository";
-import { IGenerateOtpProvider } from "../../../providers/generate-otp.provider";
-import { ISendMailProvider } from "../../../providers/send-mail.provider";
-import { ISignupUseCase } from "../signup-auth.usecase";
 import { IGoogleRequestDTO } from "../../../../domain/dtos/auth/google-auth.dto";
 import { IGoogleLoginUseCase } from "../google-login.usecase";
 import axios from "axios";
@@ -70,6 +64,7 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
     googleToken,
     role,
   }: IGoogleRequestDTO): Promise<ResponseDTO> {
+    console.log("usecase");
     try {
       const data = await this.getGoogleUserData(googleToken);
       const userEntity = UserEntity.create({
@@ -100,6 +95,7 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
       } else {
         const unverifiedOrBlockedResponse =
           this.handleUnverifiedOrBlockedUserRole(fetchedUser, role);
+
         if (unverifiedOrBlockedResponse) {
           return unverifiedOrBlockedResponse;
         }
@@ -159,6 +155,7 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         success: true,
       };
     } catch (error: any) {
+      console.log(error);
       return { data: { error: error.message }, success: false };
     }
   }
