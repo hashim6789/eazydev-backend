@@ -14,6 +14,9 @@ export const env = {
   get PORT() {
     return process.env.PORT;
   },
+  get PEER_PORT() {
+    return process.env.PEER_PORT;
+  },
   get MONGO_URI() {
     return process.env.MONGO_URI;
   },

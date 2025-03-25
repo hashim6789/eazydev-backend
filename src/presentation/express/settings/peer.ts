@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import { createServer } from "http";
 import { ExpressPeerServer } from "peer";
+import { env } from "../configs/env.config";
 
 export const initializePeerServer = () => {
   const app: Application = express();
@@ -12,9 +13,11 @@ export const initializePeerServer = () => {
   });
 
   app.use("/", peer);
-  const PORT = 3001;
+  const PORT = env.PEER_PORT;
   peerServer.listen(PORT, () => {
-    console.log(`PeerJS server is running on http://localhost:${PORT}/peerjs`);
+    console.log(
+      `PeerJS server is running on http://${env.DOMAIN}:${PORT}/peerjs`
+    );
   });
 
   return peerServer;
