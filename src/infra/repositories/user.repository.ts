@@ -1,5 +1,6 @@
 import { IUsersRepository } from "../../app/repositories/user.repository";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
+
 import { ICreateUserRequestDTO } from "../../domain/dtos/user/create-user.dtos";
 import {
   IUpdateUserRequestDTO,
@@ -8,8 +9,8 @@ import {
   IUserValidDTO,
 } from "../../domain/dtos/user/user.dto";
 import { QueryUser } from "../../domain/dtos/user";
-import { Model } from "mongoose";
 import { IUser } from "../databases/interfaces";
+import { Model } from "mongoose";
 
 export class UserRepository implements IUsersRepository {
   private model: Model<IUser>;
@@ -186,5 +187,16 @@ export class UserRepository implements IUsersRepository {
       isBlocked: userUpdated.isBlocked,
       isVerified: userUpdated.isVerified,
     };
+  }
+
+  /**
+   * Deletes a user by ID.
+   *
+   * @async
+   * @param {string} id - The ID of the user to delete.
+   * @returns {Promise<void>} A Promise that resolves once the user is deleted.
+   */
+  async delete(id: string): Promise<void> {
+    await this.model.findByIdAndDelete(id);
   }
 }

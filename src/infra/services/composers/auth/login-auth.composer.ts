@@ -10,14 +10,15 @@ import { GenerateRefreshTokenProvider } from "../../../providers/generate-refres
 import { PasswordHasher } from "../../../providers/password-hasher.provider";
 import { RefreshTokenRepository } from "../../../repositories/refresh-token-repository";
 import { UserRepository } from "../../../repositories/user.repository";
+import { RefreshTokenModel, UserModel } from "../../../databases/models";
 
 export function loginComposer(): IController {
-  const repository: IUsersRepository = new UserRepository();
+  const repository: IUsersRepository = new UserRepository(UserModel);
   const passwordHasher: IPasswordHasher = new PasswordHasher();
   const generateRefreshTokenProvider: IGenerateRefreshTokenProvider =
     new GenerateRefreshTokenProvider();
   const refreshTokenRepository: IRefreshTokenRepository =
-    new RefreshTokenRepository();
+    new RefreshTokenRepository(RefreshTokenModel);
   const useCase: ILoginUseCase = new LoginUseCase(
     repository,
     passwordHasher,

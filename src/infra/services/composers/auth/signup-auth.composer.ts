@@ -9,6 +9,11 @@ import { SignupUseCase } from "../../../../app/usecases/auth/implementations/sig
 import { ISignupUseCase } from "../../../../app/usecases/auth/interfaces/signup-auth.usecase";
 import { SignupController } from "../../../../presentation/http/controllers/auth/signup.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
+import {
+  OtpModel,
+  RefreshTokenModel,
+  UserModel,
+} from "../../../databases/models";
 import { GenerateOtpProvider } from "../../../providers/generate-otp.provider";
 import { GenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { PasswordHasher } from "../../../providers/password-hasher.provider";
@@ -18,12 +23,12 @@ import { RefreshTokenRepository } from "../../../repositories/refresh-token-repo
 import { UserRepository } from "../../../repositories/user.repository";
 
 export function signupComposer(): IController {
-  const repository: IUsersRepository = new UserRepository();
+  const repository: IUsersRepository = new UserRepository(UserModel);
   const passwordHasher: IPasswordHasher = new PasswordHasher();
   const refreshTokenRepository: IRefreshTokenRepository =
-    new RefreshTokenRepository();
+    new RefreshTokenRepository(RefreshTokenModel);
 
-  const otpRepository: IOtpRepository = new OtpRepository();
+  const otpRepository: IOtpRepository = new OtpRepository(OtpModel);
   const generateOtpProvider: IGenerateOtpProvider = new GenerateOtpProvider();
   const sendMailProvider: ISendMailProvider = new SendMailProvider();
   const generateRefreshTokenProvider: IGenerateRefreshTokenProvider =

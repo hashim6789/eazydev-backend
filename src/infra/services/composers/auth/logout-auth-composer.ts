@@ -3,11 +3,12 @@ import { LogoutUseCase } from "../../../../app/usecases/auth/implementations/log
 import { ILogoutUseCase } from "../../../../app/usecases/auth/interfaces/logout-auth.usecase";
 import { LogoutController } from "../../../../presentation/http/controllers/auth/logout.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
+import { RefreshTokenModel } from "../../../databases/models";
 import { RefreshTokenRepository } from "../../../repositories/refresh-token-repository";
 
 export function logoutComposer(): IController {
   const refreshTokenRepository: IRefreshTokenRepository =
-    new RefreshTokenRepository();
+    new RefreshTokenRepository(RefreshTokenModel);
   const useCase: ILogoutUseCase = new LogoutUseCase(refreshTokenRepository);
   const controller: IController = new LogoutController(useCase);
   return controller;

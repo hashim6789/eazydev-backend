@@ -6,18 +6,19 @@ import { LoginUseCase } from "../../../../app/usecases/auth/implementations/logi
 import { ILoginUseCase } from "../../../../app/usecases/auth/interfaces/login-auth.usecase";
 import { LoginController } from "../../../../presentation/http/controllers/auth/login.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
+import { RefreshTokenModel, UserModel } from "../../../databases/models";
 import { GenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { PasswordHasher } from "../../../providers/password-hasher.provider";
 import { RefreshTokenRepository } from "../../../repositories/refresh-token-repository";
 import { UserRepository } from "../../../repositories/user.repository";
 
 export function loginComposer(): IController {
-  const repository: IUsersRepository = new UserRepository();
+  const repository: IUsersRepository = new UserRepository(UserModel);
   const passwordHasher: IPasswordHasher = new PasswordHasher();
   const generateRefreshTokenProvider: IGenerateRefreshTokenProvider =
     new GenerateRefreshTokenProvider();
   const refreshTokenRepository: IRefreshTokenRepository =
-    new RefreshTokenRepository();
+    new RefreshTokenRepository(RefreshTokenModel);
   const useCase: ILoginUseCase = new LoginUseCase(
     repository,
     passwordHasher,
