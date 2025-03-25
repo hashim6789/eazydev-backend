@@ -1,6 +1,5 @@
 import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
-import { config } from "../../http/configs/env.config";
 
 // import { ensureAuthenticated } from "../middlewares/authenticate-auth.middleware";
 import { signupComposer } from "../../../infra/services/composers/auth/signup-auth.composer";
@@ -11,6 +10,7 @@ import { otpVerifyComposer } from "../../../infra/services/composers/auth";
 import { authenticateToken } from "../middlewares/authenticate-user.middleware";
 import { resendOtpComposer } from "../../../infra/services/composers/auth/otp-resend-auth.composer";
 import { authorizeRole } from "../middlewares";
+import { env } from "../configs/env.config";
 
 /**
  * Router for handling auth-related routes.
@@ -23,15 +23,14 @@ const authRouter = Router();
 authRouter.post("/signup", async (request: Request, response: Response) => {
   const adapter = await expressAdapter(request, signupComposer());
   if (adapter.statusCode === 201) {
-    response.cookie(config.KEY_OF_ACCESS as string, adapter.body.token, {
+    response.cookie(env.KEY_OF_ACCESS as string, adapter.body.token, {
       httpOnly: false,
       maxAge: 1 * 24 * 60 * 60 * 1000,
     });
-    response.cookie(
-      config.KEY_OF_REFRESH as string,
-      adapter.body.refreshTokenId,
-      { httpOnly: true, maxAge: 1 * 24 * 60 * 60 * 1000 }
-    );
+    response.cookie(env.KEY_OF_REFRESH as string, adapter.body.refreshTokenId, {
+      httpOnly: true,
+      maxAge: 1 * 24 * 60 * 60 * 1000,
+    });
   }
   response.status(adapter.statusCode).json(adapter.body);
 });
@@ -41,15 +40,14 @@ authRouter.post("/signup", async (request: Request, response: Response) => {
 authRouter.post("/login", async (request: Request, response: Response) => {
   const adapter = await expressAdapter(request, loginComposer());
   if (adapter.statusCode === 200) {
-    response.cookie(config.KEY_OF_ACCESS as string, adapter.body.token, {
+    response.cookie(env.KEY_OF_ACCESS as string, adapter.body.token, {
       httpOnly: false,
       maxAge: 1 * 24 * 60 * 60 * 1000,
     });
-    response.cookie(
-      config.KEY_OF_REFRESH as string,
-      adapter.body.refreshTokenId,
-      { httpOnly: true, maxAge: 1 * 24 * 60 * 60 * 1000 }
-    );
+    response.cookie(env.KEY_OF_REFRESH as string, adapter.body.refreshTokenId, {
+      httpOnly: true,
+      maxAge: 1 * 24 * 60 * 60 * 1000,
+    });
   }
   response.status(adapter.statusCode).json(adapter.body);
 });
@@ -59,8 +57,8 @@ authRouter.post("/login", async (request: Request, response: Response) => {
 authRouter.post("/logout", async (request: Request, response: Response) => {
   const adapter = await expressAdapter(request, logoutComposer());
   if (adapter.statusCode === 200) {
-    response.clearCookie(config.KEY_OF_ACCESS as string);
-    response.clearCookie(config.KEY_OF_REFRESH as string);
+    response.clearCookie(env.KEY_OF_ACCESS as string);
+    response.clearCookie(env.KEY_OF_REFRESH as string);
   }
   response.status(adapter.statusCode).json(adapter.body);
 });
@@ -70,15 +68,14 @@ authRouter.post("/logout", async (request: Request, response: Response) => {
 authRouter.post("/google", async (request: Request, response: Response) => {
   const adapter = await expressAdapter(request, googleLoginComposer());
   if (adapter.statusCode === 200) {
-    response.cookie(config.KEY_OF_ACCESS as string, adapter.body.token, {
+    response.cookie(env.KEY_OF_ACCESS as string, adapter.body.token, {
       httpOnly: false,
       maxAge: 1 * 24 * 60 * 60 * 1000,
     });
-    response.cookie(
-      config.KEY_OF_REFRESH as string,
-      adapter.body.refreshTokenId,
-      { httpOnly: true, maxAge: 1 * 24 * 60 * 60 * 1000 }
-    );
+    response.cookie(env.KEY_OF_REFRESH as string, adapter.body.refreshTokenId, {
+      httpOnly: true,
+      maxAge: 1 * 24 * 60 * 60 * 1000,
+    });
   }
   response.status(adapter.statusCode).json(adapter.body);
 });

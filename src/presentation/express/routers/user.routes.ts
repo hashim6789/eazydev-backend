@@ -1,6 +1,5 @@
 import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
-import { config } from "../../http/configs/env.config";
 import {
   getAllUsersComposer,
   getUserComposer,

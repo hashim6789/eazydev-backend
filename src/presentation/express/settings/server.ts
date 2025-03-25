@@ -1,12 +1,14 @@
 import { app } from "./app";
 import http from "http";
 import { connectSocket } from "./socket";
+import { env } from "../configs/env.config";
 
 /**
  * Port number for the server to listen on.
  * Default is 3333, can be overridden with the PORT environment variable.
  */
-const PORT = process.env.PORT || 3000;
+const PORT = env.PORT || 3000;
+const domain = env.DOMAIN || 3000;
 
 // Create HTTP server
 const server = http.createServer(app);
@@ -19,5 +21,5 @@ connectSocket(server);
  */
 
 server.listen(PORT, () =>
-  console.log(`Server is running in http://localhost:${PORT}`)
+  console.log(`Server is running in http://${domain}:${PORT}`)
 );

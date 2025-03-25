@@ -8,6 +8,9 @@ export const env = {
   get BACKEND_HOST() {
     return process.env.BACKEND_HOST;
   },
+  get DOMAIN() {
+    return process.env.DOMAIN;
+  },
   get PORT() {
     return process.env.PORT;
   },

@@ -9,8 +9,8 @@ import {
   AuthenticateUserErrorType,
   CourseErrorType,
 } from "../../../../domain/enums";
+import { env } from "../../../../presentation/express/configs/env.config";
 import { getIo } from "../../../../presentation/express/settings/socket";
-import { config } from "../../../../presentation/http/configs/env.config";
 import {
   IChatGroupRepository,
   ICourseRepository,
@@ -132,7 +132,7 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
         const io = getIo();
         if (io) {
           console.log("Emitting notification to admin:");
-          io.to(config.ADMIN_ID as string).emit(
+          io.to(env.ADMIN_ID as string).emit(
             "receiveNotification",
             notification
           );

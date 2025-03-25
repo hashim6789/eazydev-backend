@@ -9,11 +9,11 @@ import {
 } from "../../../../presentation/http/controllers";
 import { CourseModel } from "../../../databases/models";
 import { CourseRepository } from "../../../repositories";
-import { config } from "../../../../presentation/http/configs/env.config";
+import { env } from "../../../../presentation/express/configs/env.config";
 
 export function createPaymentIntendComposer(): IController {
   const repository: ICourseRepository = new CourseRepository(CourseModel);
-  const stripe = new Stripe(config.STRIPE_SECRET_KEY as string, {
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY as string, {
     apiVersion: "2025-02-24.acacia",
   });
 

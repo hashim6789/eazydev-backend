@@ -1,12 +1,9 @@
 import dayjs from "dayjs";
-import dotenv from "dotenv";
 import { verify } from "jsonwebtoken";
 
 import { ITokenManagerProvider } from "../../app/providers/token-manager.provider";
-import { config } from "../../presentation/http/configs/env.config";
 import { Payload } from "../../domain/dtos/jwt-payload";
-
-dotenv.config();
+import { env } from "../../presentation/express/configs/env.config";
 
 /**
  * Provider for managing and validating authentication tokens.
@@ -40,7 +37,7 @@ export class TokenManagerProvider implements ITokenManagerProvider {
     // }
 
     try {
-      const decoded = verify(token, config.JWT_ACCESS_SECRET as string);
+      const decoded = verify(token, env.JWT_ACCESS_SECRET as string);
       if (typeof decoded === "object" && decoded !== null) {
         return decoded as Payload;
       }

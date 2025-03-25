@@ -1,8 +1,5 @@
 import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
-import { config } from "../../http/configs/env.config";
-
-import { loginComposer } from "../../../infra/services/composers/auth/login-suth.composer";
 import { authenticateToken } from "../middlewares/authenticate-user.middleware";
 import { authorizeRole } from "../middlewares";
 import { getAllMaterialComposer } from "../../../infra/services/composers/material/get-all-materials";

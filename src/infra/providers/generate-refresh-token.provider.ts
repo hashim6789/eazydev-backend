@@ -1,7 +1,7 @@
 import { sign } from "jsonwebtoken";
 import { IGenerateRefreshTokenProvider } from "../../app/providers/generate-refresh-token.provider";
-import { config } from "../../presentation/http/configs/env.config";
 import { Payload } from "../../domain/dtos/jwt-payload";
+import { env } from "../../presentation/express/configs/env.config";
 
 /**
  * Implementation of the refresh token generation provider.
@@ -22,7 +22,7 @@ export class GenerateRefreshTokenProvider
    */
   async generateToken(token: string, payload: Payload): Promise<string> {
     const { userId, role } = payload;
-    const secretKey = config.JWT_ACCESS_SECRET;
+    const secretKey = env.JWT_ACCESS_SECRET;
 
     if (!secretKey) {
       throw new Error("API_SECRET is missing in the environment variables.");

@@ -3,8 +3,8 @@ import nodemailer from "nodemailer";
 import { ISendMailProvider } from "../../app/providers/send-mail.provider";
 import { SignupRole } from "../../domain/types/user";
 import { UserEntity } from "../../domain/entities/user";
+import { env } from "process";
 import { mailConfig } from "../../presentation/http/configs/mail.configs";
-import { config } from "../../presentation/http/configs/env.config";
 
 export class SendMailProvider implements ISendMailProvider {
   async sendOtpMail(email: string, otp: string): Promise<boolean> {
@@ -12,7 +12,7 @@ export class SendMailProvider implements ISendMailProvider {
       const transporter = nodemailer.createTransport(mailConfig);
 
       const mailOptions = {
-        from: config.EMAIL_USER,
+        from: env.EMAIL_USER,
         to: email,
         subject: "Your OTP Code for Verification",
         html: `
@@ -53,7 +53,7 @@ export class SendMailProvider implements ISendMailProvider {
       const transporter = nodemailer.createTransport(mailConfig);
 
       const mailOptions = {
-        from: config.EMAIL_USER,
+        from: env.EMAIL_USER,
         to: user.email.address,
         subject: "Reset Your Password - Action Required",
         html: `
@@ -62,12 +62,12 @@ export class SendMailProvider implements ISendMailProvider {
               <p>Hello <strong>${user.firstName}</strong>,</p>
               <p>You recently requested to reset your password for your account. No worries, we've got you covered!</p>
               <p style="text-align: center;">
-                <a href="${config.FRONTEND_HOST}/${role}/auth/${resetURL}/change-password" style="display: inline-block; padding: 12px 24px; font-size: 16px; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;">
+                <a href="${env.FRONTEND_HOST}/${role}/auth/${resetURL}/change-password" style="display: inline-block; padding: 12px 24px; font-size: 16px; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;">
                   Reset My Password
                 </a>
               </p>
               <p>If the button above doesn't work, please copy and paste the following link into your web browser:</p>
-              <p style="word-break: break-all; background-color: #f4f4f4; padding: 10px; border-radius: 5px;">${config.FRONTEND_HOST}/${role}/auth/${resetURL}/change-password</p>
+              <p style="word-break: break-all; background-color: #f4f4f4; padding: 10px; border-radius: 5px;">${env.FRONTEND_HOST}/${role}/auth/${resetURL}/change-password</p>
               <p>If you didn’t request a password reset, please ignore this email. Your account is safe with us.</p>
               <p>Best regards,</p>
               <p><strong>Your Support Team</strong></p>
