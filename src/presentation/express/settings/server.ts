@@ -8,7 +8,7 @@ import { env } from "../configs/env.config";
  * Default is 3333, can be overridden with the PORT environment variable.
  */
 const PORT = env.PORT || 3000;
-const domain = env.DOMAIN || 3000;
+const domain = env.DOMAIN || "localhost";
 
 // Create HTTP server
 const server = http.createServer(app);
