@@ -1,7 +1,7 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IPasswordHasher } from "../../../providers/password-hasher.provider";
-import { IVerifyOtpUseCase } from "../verify-otp.usecase";
+import { IVerifyOtpUseCase } from "../interfaces/verify-otp.usecase";
 import { IOtpRepository } from "../../../repositories/otp.repository";
 import { OtpDTO } from "../../../../domain/dtos/auth/otp-auth-dto";
 import { OtpErrorType } from "../../../../domain/enums/otp";

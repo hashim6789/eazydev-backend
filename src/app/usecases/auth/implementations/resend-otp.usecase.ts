@@ -2,7 +2,7 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IPasswordHasher } from "../../../providers/password-hasher.provider";
 import { IOtpRepository } from "../../../repositories/otp.repository";
-import { IResendOtpUseCase } from "../resend-otp-usecase";
+import { IResendOtpUseCase } from "../interfaces/resend-otp-usecase";
 import { IResendOtpRequestDTO } from "../../../../domain/dtos/auth/resend-otp-auth.dto";
 import { IGenerateOtpProvider } from "../../../providers/generate-otp.provider";
 import { ISendMailProvider } from "../../../providers/send-mail.provider";

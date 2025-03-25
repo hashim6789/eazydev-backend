@@ -1,4 +1,4 @@
-import { IGoogleLoginUseCase } from "../../../../app/usecases/auth/google-login.usecase";
+import { IGoogleLoginUseCase } from "../../../../app/usecases/auth/interfaces/google-login.usecase";
 import { IGoogleRequestDTO } from "../../../../domain/dtos/auth/google-auth.dto";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IHttpErrors } from "../../helpers/IHttpErrors";

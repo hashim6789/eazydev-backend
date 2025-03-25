@@ -5,7 +5,7 @@ import { UserErrorType } from "../../../../domain/enums/user";
 import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
 import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { IGoogleRequestDTO } from "../../../../domain/dtos/auth/google-auth.dto";
-import { IGoogleLoginUseCase } from "../google-login.usecase";
+import { IGoogleLoginUseCase } from "../interfaces/google-login.usecase";
 import axios from "axios";
 import {
   IUserOutRequestDTO,

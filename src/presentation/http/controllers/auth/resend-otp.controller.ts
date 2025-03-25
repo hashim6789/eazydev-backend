@@ -1,4 +1,4 @@
-import { IResendOtpUseCase } from "../../../../app/usecases/auth/resend-otp-usecase";
+import { IResendOtpUseCase } from "../../../../app/usecases/auth/interfaces/resend-otp-usecase";
 import { IResendOtpRequestDTO } from "../../../../domain/dtos/auth/resend-otp-auth.dto";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IHttpErrors } from "../../helpers/IHttpErrors";

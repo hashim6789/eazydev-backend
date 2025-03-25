@@ -1,4 +1,4 @@
-import { IVerifyOtpUseCase } from "../../../../app/usecases/auth/verify-otp.usecase";
+import { IVerifyOtpUseCase } from "../../../../app/usecases/auth/interfaces/verify-otp.usecase";
 import { IVerifyOtpRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IHttpErrors } from "../../helpers/IHttpErrors";

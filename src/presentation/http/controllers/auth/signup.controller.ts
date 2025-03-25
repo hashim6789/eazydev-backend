@@ -1,4 +1,4 @@
-import { ISignupUseCase } from "../../../../app/usecases/auth/signup-auth.usecase";
+import { ISignupUseCase } from "../../../../app/usecases/auth/interfaces/signup-auth.usecase";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { Role, SignupRole } from "../../../../domain/types/user";
 import { IHttpErrors } from "../../helpers/IHttpErrors";

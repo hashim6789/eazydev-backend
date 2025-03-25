@@ -3,7 +3,6 @@ import {
   IProgressRepository,
 } from "../../../../app/repositories";
 import { IController } from "../../../../presentation/http/controllers";
-import { GetAllMeetingController } from "../../../../presentation/http/controllers/meeting/get-all-meeting.controller";
 import { CourseRepository, ProgressRepository } from "../../../repositories";
 import { CourseModel, ProgressModel } from "../../../databases/models";
 import {

@@ -1,5 +1,6 @@
-export * from "./login-auth-usecase";
-export * from "./logout-auth.usecase";
-export * from "./signup-auth.usecase";
-export * from "./verify-otp.usecase";
-export * from "./google.auth.usecase";
+export { LoginUseCase } from "./login-auth-usecase";
+export { LogoutUseCase } from "./logout-auth.usecase";
+export { SignupUseCase } from "./signup-auth.usecase";
+export { VerifyOtpUseCase } from "./verify-otp.usecase";
+export { GoogleLoginUseCase } from "./google.auth.usecase";
+export { ResendOtpUseCase } from "./resend-otp.usecase";

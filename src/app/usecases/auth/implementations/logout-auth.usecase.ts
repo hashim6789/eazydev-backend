@@ -2,7 +2,7 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
 
 import { ILogoutRequestDTO } from "../../../../domain/dtos/auth/logut-auth-dto";
-import { ILogoutUseCase } from "../logout-auth.usecase";
+import { ILogoutUseCase } from "../interfaces/logout-auth.usecase";
 
 export class LogoutUseCase implements ILogoutUseCase {
   constructor(private refreshTokenRepository: IRefreshTokenRepository) {}

@@ -6,7 +6,7 @@ import { IOtpRepository } from "../../../../app/repositories/otp.repository";
 import { IRefreshTokenRepository } from "../../../../app/repositories/refresh-token.repository";
 import { IUsersRepository } from "../../../../app/repositories/user.repository";
 import { SignupUseCase } from "../../../../app/usecases/auth/implementations/signup-auth.usecase";
-import { ISignupUseCase } from "../../../../app/usecases/auth/signup-auth.usecase";
+import { ISignupUseCase } from "../../../../app/usecases/auth/interfaces/signup-auth.usecase";
 import { SignupController } from "../../../../presentation/http/controllers/auth/signup.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { GenerateOtpProvider } from "../../../providers/generate-otp.provider";

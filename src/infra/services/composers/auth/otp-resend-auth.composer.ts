@@ -4,7 +4,7 @@ import { ISendMailProvider } from "../../../../app/providers/send-mail.provider"
 import { IOtpRepository } from "../../../../app/repositories/otp.repository";
 import { IUsersRepository } from "../../../../app/repositories/user.repository";
 import { ResendOtpUseCase } from "../../../../app/usecases/auth/implementations/resend-otp.usecase";
-import { IResendOtpUseCase } from "../../../../app/usecases/auth/resend-otp-usecase";
+import { IResendOtpUseCase } from "../../../../app/usecases/auth/interfaces/resend-otp-usecase";
 import { ResendOtpController } from "../../../../presentation/http/controllers/auth/resend-otp.controller";
 import { VerifyOtpController } from "../../../../presentation/http/controllers/auth/verify-otp.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
