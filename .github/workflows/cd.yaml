@@ -1,0 +1,30 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      
+      # Step 1: Change directory
+      name: Change directory to main
+      run: cd ~/eazydev-backend
+
+      # Step 2: Pull Docker Image
+      name: Pull docker image
+      run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/eazydev-backend:latest
+
+      # Step 3: Delete old  Docker Image
+      name: Delete old docker images
+      run: sudo docker system prune -af
+      # run: sudo docker rm -f eazydev-express-container || true
+
+      # Step 4: Delete old  Docker Image
+      name: Docker compose up
+      run: sudo docker-compose up -d
