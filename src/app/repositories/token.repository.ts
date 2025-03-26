@@ -46,4 +46,5 @@ export interface ITokenRepository {
    * @returns {Promise<void>} A promise that resolves when the refresh token is deleted.
    */
   delete(userId: string): Promise<void>;
+  deleteById(id: string): Promise<void>;
 }

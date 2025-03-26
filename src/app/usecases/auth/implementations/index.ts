@@ -6,3 +6,4 @@ export { GoogleLoginUseCase } from "./google.auth.usecase";
 export { ResendOtpUseCase } from "./resend-otp.usecase";
 export { ForgotPasswordUseCase } from "./forgot-password-auth.usecase";
 export { GetResetPageUseCase } from "./get-reset-page-auth.usecase";
+export { ResetPasswordUseCase } from "./reset-password-auth.usecase";

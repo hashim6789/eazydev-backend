@@ -98,4 +98,14 @@ export class TokenRepository implements ITokenRepository {
   async delete(userId: string): Promise<void> {
     await this.model.deleteOne({ userId }).exec();
   }
+  /**
+   * Deletes a refresh token associated with the specified token ID.
+   *
+   * @async
+   * @param {string} userId - The ID of the user for whom to delete the refresh token.
+   * @returns {Promise<void>} A Promise that resolves once the refresh token is deleted.
+   */
+  async deleteById(id: string): Promise<void> {
+    await this.model.findByIdAndDelete(id).exec();
+  }
 }

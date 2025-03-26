@@ -1,20 +1,19 @@
 import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
-
-// import { ensureAuthenticated } from "../middlewares/authenticate-auth.middleware";
 import { signupComposer } from "../../../infra/services/composers/auth/signup-auth.composer";
 import { loginComposer } from "../../../infra/services/composers/auth/login-suth.composer";
 import { logoutComposer } from "../../../infra/services/composers/auth/logout-auth-composer";
 import { googleLoginComposer } from "../../../infra/services/composers/auth/google-auth-composer";
 import {
   forgotPasswordComposer,
+  getResetPageComposer,
   otpVerifyComposer,
+  resetPasswordComposer,
 } from "../../../infra/services/composers/auth";
 import { authenticateToken } from "../middlewares/authenticate-user.middleware";
 import { resendOtpComposer } from "../../../infra/services/composers/auth/otp-resend-auth.composer";
-import { authorizeRole } from "../middlewares";
+import { authorizeRole, validateResetToken } from "../middlewares";
 import { env } from "../configs/env.config";
-import { getResetPageComposer } from "../../../infra/services/composers/auth/get-reset-page.auth";
 
 /**
  * Router for handling auth-related routes.
@@ -137,9 +136,15 @@ authRouter.get(
  */
 authRouter.patch(
   "/reset-password",
+  validateResetToken,
   async (request: Request, response: Response) => {
-    const adapter = await expressAdapter(request, loginComposer());
-    response.status(adapter.statusCode).json(adapter.body);
+    const adapter = await expressAdapter(request, resetPasswordComposer());
+    if (adapter.statusCode === 200) {
+      response.clearCookie(env.KEY_OF_RESET as string);
+    }
+    response
+      .status(adapter.statusCode)
+      .json({ success: adapter.statusCode === 200 });
   }
 );
 

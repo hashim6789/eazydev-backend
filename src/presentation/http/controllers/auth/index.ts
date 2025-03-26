@@ -6,3 +6,4 @@ export { SignupController } from "./signup.controller";
 export { VerifyOtpController } from "./verify-otp.controller";
 export { ForgotPasswordController } from "./forgot-password.controller";
 export { GetResetPasswordPageController } from "./get-reset-password-page.controller";
+export { ResetPasswordController } from "./reset-password.controller";
