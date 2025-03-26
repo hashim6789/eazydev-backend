@@ -13,3 +13,4 @@ export * from "./slot";
 export * from "./chat-group";
 export * from "./analyze";
 export * from "./response";
+export * from "./category";

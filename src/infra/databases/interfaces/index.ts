@@ -12,3 +12,4 @@ export * from "./chat-message";
 export * from "./otp";
 export * from "./token";
 export * from "./user";
+export * from "./certificate";

@@ -10,3 +10,4 @@ export * from "./slot";
 export * from "./meeting";
 export * from "./chat-message";
 export * from "./user";
+export * from "./certificate";

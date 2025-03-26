@@ -11,3 +11,4 @@ export * from "./chat-message.model";
 export * from "./otp.model";
 export * from "./user.model";
 export * from "./refresh-token.model";
+export * from "./certificate.model";
