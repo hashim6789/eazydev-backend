@@ -55,7 +55,6 @@ export const ProgressPopulatedPipeline = (
     },
   },
 
-  // Step 5: Transform data into the required structure
   {
     $addFields: {
       lessons: {
@@ -67,30 +66,37 @@ export const ProgressPopulatedPipeline = (
             title: "$$lesson.title",
             materials: {
               $map: {
-                input: "$materials",
+                input: {
+                  $filter: {
+                    input: "$materials",
+                    as: "material",
+                    cond: {
+                      $in: ["$$material._id", "$$lesson.materials"], // Ensure materials are filtered for the lesson
+                    },
+                  },
+                },
                 as: "material",
                 in: {
-                  id: "$$material._id",
-                  title: "$$material.title",
-                  description: "$$material.description",
-                  type: "$$material.type",
-                  duration: "$$material.duration",
-                  fileKey: "$$material.fileKey",
+                  id: "$$material._id", // Material ID
+                  title: "$$material.title", // Material title
+                  description: "$$material.description", // Material description
+                  type: "$$material.type", // Material type (reading or video)
+                  duration: "$$material.duration", // Duration
+                  fileKey: "$$material.fileKey", // File key
                   isCompleted: {
-                    $in: ["$$material._id", "$completedMaterials"],
+                    $in: ["$$material._id", "$completedMaterials"], // Check completion status
                   },
                 },
               },
             },
             isCompleted: {
-              $in: ["$$lesson._id", "$completedLessons"],
+              $in: ["$$lesson._id", "$completedLessons"], // Check lesson completion status
             },
           },
         },
       },
     },
   },
-
   // Step 6: Select and format the final output
   {
     $project: {
