@@ -4,3 +4,4 @@ export { LogoutController } from "./logout.controller";
 export { ResendOtpController } from "./resend-otp.controller";
 export { SignupController } from "./signup.controller";
 export { VerifyOtpController } from "./verify-otp.controller";
+export { ForgotPasswordController } from "./forgot-password.controller";

@@ -32,13 +32,13 @@ export class RefreshTokenUserUseCase implements IRefreshTokenUserUseCase {
    * Executes the refresh token user use case.
    *
    * @async
-   * @param {ITokenUserDTO} refreshTokenId - The refresh token information.
+   * @param {ITokenUserDTO} tokenId - The refresh token information.
    * @returns {Promise<ResponseDTO>} The response data.
    */
-  async execute({ refreshTokenId }: ITokenUserDTO): Promise<ResponseDTO> {
+  async execute({ tokenId }: ITokenUserDTO): Promise<ResponseDTO> {
     try {
       const refreshToken = (await this.refreshTokenRepository.findById(
-        refreshTokenId
+        tokenId
       )) as TokenDTO | null;
 
       if (!refreshToken) {

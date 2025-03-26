@@ -6,11 +6,14 @@ import { IUserValidDTO } from "../../../../domain/dtos";
 import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { IForgotPasswordUseCase } from "../interfaces";
 import { IForgotPasswordRequestDTO } from "../../../../domain/dtos";
+import { ISendMailProvider } from "../../../providers";
+import { SignupRole } from "../../../../domain/types";
 
 export class ForgotPasswordUseCase implements IForgotPasswordUseCase {
   constructor(
     private userRepository: IUsersRepository,
-    private tokenRepository: ITokenRepository
+    private tokenRepository: ITokenRepository,
+    private sendMailProvider: ISendMailProvider
   ) {}
 
   async execute({
@@ -45,14 +48,20 @@ export class ForgotPasswordUseCase implements IForgotPasswordUseCase {
         await this.tokenRepository.delete(user.id);
       }
 
-      const refreshToken = await this.tokenRepository.create(
+      const resetToken = await this.tokenRepository.create(
         user.id,
         user.role,
         "reset"
       );
 
+      await this.sendMailProvider.sendForgotPasswordMail(
+        user.role as SignupRole,
+        user,
+        resetToken.id
+      );
+
       return {
-        data: { tokenId: refreshToken.id, user },
+        data: { tokenId: resetToken.id },
         success: true,
       };
     } catch (error: any) {

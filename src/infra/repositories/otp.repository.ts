@@ -17,7 +17,7 @@ export class OtpRepository implements IOtpRepository {
    * Creates an instance of OtpMongooseRepository.
    *
    * @constructor
-   * @param {Model<Document>} refreshTokenModel - The Mongoose model instance.
+   * @param {Model<Document>} OtpModel - The Mongoose model instance.
    */
   constructor(model: Model<IOtp>) {
     this.model = model;

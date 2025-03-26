@@ -1,6 +1,6 @@
 import { model } from "mongoose";
 import { IToken } from "../interfaces";
-import { refreshTokenSchema } from "../schemas";
+import { tokenSchema } from "../schemas";
 
 // Create the Refresh Token model
-export const TokenModel = model<IToken>("RefreshToken", refreshTokenSchema);
+export const TokenModel = model<IToken>("token", tokenSchema);

@@ -1,5 +1,5 @@
 export interface ITokenUserDTO {
-  refreshTokenId: string;
+  tokenId: string;
 }
 
 export interface IRecoveryUserDTO {

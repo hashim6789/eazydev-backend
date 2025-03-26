@@ -1,11 +1,12 @@
 import { SignupRole } from "../../domain/types/user";
 import { UserEntity } from "../../domain/entities/user";
+import { IUserValidDTO } from "../../domain/dtos";
 
 export interface ISendMailProvider {
   sendOtpMail(email: string, otp: string): Promise<boolean>;
   sendForgotPasswordMail(
     role: SignupRole,
-    user: UserEntity,
+    user: IUserValidDTO,
     resetURL: string
   ): Promise<boolean>;
 }

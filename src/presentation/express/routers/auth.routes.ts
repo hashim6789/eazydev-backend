@@ -35,7 +35,7 @@ authRouter.post("/signup", async (request: Request, response: Response) => {
       maxAge: 1 * 24 * 60 * 60 * 1000,
     });
   }
-  response.status(adapter.statusCode).json(adapter.body);
+  response.status(adapter.statusCode).json(adapter.body.user);
 });
 /**
  * Endpoint to login the users.
@@ -87,7 +87,7 @@ authRouter.post("/google", async (request: Request, response: Response) => {
  */
 authRouter.post("/otp-verify", async (request: Request, response: Response) => {
   const adapter = await expressAdapter(request, otpVerifyComposer());
-  response.status(adapter.statusCode).json(adapter.body);
+  response.status(adapter.statusCode).json(adapter.body.user);
 });
 /**
  * Endpoint to resend the otp.
@@ -108,7 +108,15 @@ authRouter.post(
   "/forgot-password",
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, forgotPasswordComposer());
-    response.status(adapter.statusCode).json(adapter.body);
+    if (adapter.statusCode === 200) {
+      response.cookie(env.KEY_OF_RESET as string, adapter.body.tokenId, {
+        httpOnly: true,
+        maxAge: 1 * 24 * 60 * 60 * 1000,
+      });
+    }
+    response
+      .status(adapter.statusCode)
+      .json({ success: adapter.statusCode === 200 });
   }
 );
 /**

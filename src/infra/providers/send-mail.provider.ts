@@ -3,8 +3,9 @@ import nodemailer from "nodemailer";
 import { ISendMailProvider } from "../../app/providers/send-mail.provider";
 import { SignupRole } from "../../domain/types/user";
 import { UserEntity } from "../../domain/entities/user";
-import { env } from "process";
 import { mailConfig } from "../../presentation/express/configs/mail.configs";
+import { env } from "../../presentation/express/configs";
+import { IUserValidDTO } from "../../domain/dtos";
 
 export class SendMailProvider implements ISendMailProvider {
   async sendOtpMail(email: string, otp: string): Promise<boolean> {
@@ -46,15 +47,16 @@ export class SendMailProvider implements ISendMailProvider {
 
   async sendForgotPasswordMail(
     role: SignupRole,
-    user: UserEntity,
+    user: IUserValidDTO,
     resetURL: string
   ): Promise<boolean> {
     try {
+      console.log("mail sent");
       const transporter = nodemailer.createTransport(mailConfig);
 
       const mailOptions = {
         from: env.EMAIL_USER,
-        to: user.email.address,
+        to: user.email,
         subject: "Reset Your Password - Action Required",
         html: `
             <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 10px; padding: 20px;">

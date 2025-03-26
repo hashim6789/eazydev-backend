@@ -1,5 +1,5 @@
 import { MaterialType, Role } from "../types";
-import { IUserDetailsDTO } from "./user/user.dto";
+import { IUserDetailsDTO } from ".";
 
 export interface QueryMaterial {
   type: MaterialType | "all";

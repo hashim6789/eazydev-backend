@@ -32,6 +32,9 @@ export const env = {
   get KEY_OF_REFRESH() {
     return process.env.KEY_OF_REFRESH;
   },
+  get KEY_OF_RESET() {
+    return process.env.KEY_OF_RESET;
+  },
   get CLOUDINARY_API_KEY() {
     return process.env.CLOUDINARY_API_KEY;
   },

@@ -10,7 +10,7 @@ import { IController } from "../../../../presentation/http/controllers/IControll
 import { OtpModel, UserModel } from "../../../databases/models";
 import { GenerateOtpProvider } from "../../../providers/generate-otp.provider";
 import { PasswordHasher } from "../../../providers/password-hasher.provider";
-import { SendMailProvider } from "../../../providers/send-mai.provider";
+import { SendMailProvider } from "../../../providers/send-mail.provider";
 import { OtpRepository } from "../../../repositories/otp.repository";
 import { UserRepository } from "../../../repositories/user.repository";
 

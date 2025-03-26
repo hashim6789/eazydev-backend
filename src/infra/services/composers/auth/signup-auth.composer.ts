@@ -13,7 +13,7 @@ import { OtpModel, TokenModel, UserModel } from "../../../databases/models";
 import { GenerateOtpProvider } from "../../../providers/generate-otp.provider";
 import { GenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { PasswordHasher } from "../../../providers/password-hasher.provider";
-import { SendMailProvider } from "../../../providers/send-mai.provider";
+import { SendMailProvider } from "../../../providers/send-mail.provider";
 import { TokenRepository } from "../../../repositories";
 import { OtpRepository } from "../../../repositories/otp.repository";
 import { UserRepository } from "../../../repositories/user.repository";

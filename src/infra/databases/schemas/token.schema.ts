@@ -2,7 +2,7 @@ import { Schema, Types } from "mongoose";
 import { IToken } from "../interfaces";
 
 // Define the Refresh Token schema
-export const refreshTokenSchema = new Schema<IToken>({
+export const tokenSchema = new Schema<IToken>({
   userId: { type: Types.ObjectId, required: true },
   type: { type: String, enum: ["refresh", "reset"], required: true },
   expiresIn: { type: Number, required: true },

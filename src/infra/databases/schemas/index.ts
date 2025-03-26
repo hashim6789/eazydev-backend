@@ -10,5 +10,5 @@ export * from "./slot.schema";
 export * from "./meeting.schema";
 export * from "./chat-message.schema";
 export * from "./otp.schema";
-export * from "./refresh-token.schema";
+export * from "./token.schema";
 export * from "./user.schema";
