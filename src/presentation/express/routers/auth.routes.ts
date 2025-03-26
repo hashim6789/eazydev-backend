@@ -14,6 +14,7 @@ import { authenticateToken } from "../middlewares/authenticate-user.middleware";
 import { resendOtpComposer } from "../../../infra/services/composers/auth/otp-resend-auth.composer";
 import { authorizeRole } from "../middlewares";
 import { env } from "../configs/env.config";
+import { getResetPageComposer } from "../../../infra/services/composers/auth/get-reset-page.auth";
 
 /**
  * Router for handling auth-related routes.
@@ -108,12 +109,6 @@ authRouter.post(
   "/forgot-password",
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, forgotPasswordComposer());
-    if (adapter.statusCode === 200) {
-      response.cookie(env.KEY_OF_RESET as string, adapter.body.tokenId, {
-        httpOnly: true,
-        maxAge: 1 * 24 * 60 * 60 * 1000,
-      });
-    }
     response
       .status(adapter.statusCode)
       .json({ success: adapter.statusCode === 200 });
@@ -123,10 +118,18 @@ authRouter.post(
  * Endpoint to get the reset password page.
  */
 authRouter.get(
-  "/:token/reset-password",
+  "/:tokenId/reset-password",
   async (request: Request, response: Response) => {
-    const adapter = await expressAdapter(request, loginComposer());
-    response.status(adapter.statusCode).json(adapter.body);
+    const adapter = await expressAdapter(request, getResetPageComposer());
+    if (adapter.statusCode === 200) {
+      response.cookie(env.KEY_OF_RESET as string, adapter.body.tokenId, {
+        httpOnly: true,
+        maxAge: 1 * 24 * 60 * 60 * 1000,
+      });
+    }
+    response
+      .status(adapter.statusCode)
+      .json({ success: adapter.statusCode === 200 });
   }
 );
 /**
