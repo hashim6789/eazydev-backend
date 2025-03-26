@@ -1,4 +1,4 @@
-import { IHttpRequest } from "../IHttpRequest";
+import { IHttpRequest } from "../interfaces";
 
 /**
  * Implementation of IHttpRequest representing an HTTP request.

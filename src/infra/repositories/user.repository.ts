@@ -1,19 +1,23 @@
 import { IUsersRepository } from "../../app/repositories/user.repository";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 
-import { ObjectId } from "mongoose";
-import { IUser, User } from "../databases/models/user.model";
 import { ICreateUserRequestDTO } from "../../domain/dtos/user/create-user.dtos";
 import {
   IUpdateUserRequestDTO,
   IUserDetailOutDTO,
-  IUserInRequestDTO,
   IUserOutRequestDTO,
   IUserValidDTO,
 } from "../../domain/dtos/user/user.dto";
 import { QueryUser } from "../../domain/dtos/user";
+import { IUser } from "../databases/interfaces";
+import { Model } from "mongoose";
 
 export class UserRepository implements IUsersRepository {
+  private model: Model<IUser>;
+
+  constructor(model: Model<IUser>) {
+    this.model = model;
+  }
   /**
    * Creates a new user.
    *
@@ -28,7 +32,7 @@ export class UserRepository implements IUsersRepository {
     role,
     password,
   }: ICreateUserRequestDTO): Promise<IUserOutRequestDTO> {
-    const user: IUser = new User({
+    const user = new this.model({
       email,
       firstName,
       lastName,
@@ -57,7 +61,7 @@ export class UserRepository implements IUsersRepository {
    * @returns {Promise<IUserInRequestDTO | null>} The found user or null.
    */
   async findByEmail(email: string): Promise<IUserValidDTO | null> {
-    const user = await User.findOne({ email }).lean();
+    const user = await this.model.findOne({ email }).lean();
     if (user) {
       return {
         id: user._id.toString(),
@@ -83,7 +87,7 @@ export class UserRepository implements IUsersRepository {
    * @returns {Promise<IUserInRequestDTO | null>} The found user or null.
    */
   async findById(id: string): Promise<IUserDetailOutDTO | null> {
-    const user = await User.findById(id).lean();
+    const user = await this.model.findById(id).lean();
     if (user) {
       return {
         id: user._id.toString(),
@@ -126,16 +130,17 @@ export class UserRepository implements IUsersRepository {
         { lastName: { $regex: search, $options: "i" } },
       ],
     };
-    const users = await User.find(
-      query
-      // { email: 1, name: 1, createdAt: 1 }
-    )
+    const users = await this.model
+      .find(
+        query
+        // { email: 1, name: 1, createdAt: 1 }
+      )
       .skip((parseInt(page, 10) - 1) * parseInt(limit, 10))
       .limit(parseInt(limit, 10))
       .sort({ name: 1 })
       .lean();
 
-    const total = await User.countDocuments(query);
+    const total = await this.model.countDocuments(query);
 
     return {
       body: users.map((user) => ({
@@ -165,11 +170,9 @@ export class UserRepository implements IUsersRepository {
     userId: string,
     data: IUpdateUserRequestDTO
   ): Promise<IUserOutRequestDTO | null> {
-    const userUpdated: IUser | null = await User.findByIdAndUpdate(
-      userId,
-      { $set: data },
-      { new: true }
-    ).lean();
+    const userUpdated = await this.model
+      .findByIdAndUpdate(userId, { $set: data }, { new: true })
+      .lean();
     if (!userUpdated) {
       return null;
     }
@@ -194,6 +197,6 @@ export class UserRepository implements IUsersRepository {
    * @returns {Promise<void>} A Promise that resolves once the user is deleted.
    */
   async delete(id: string): Promise<void> {
-    await User.findByIdAndDelete(id);
+    await this.model.findByIdAndDelete(id);
   }
 }

@@ -1,5 +1,4 @@
-import { IHttpErrors } from '../IHttpErrors'
-import { IHttpResponse } from '../IHttpResponse'
+import { IHttpErrors, IHttpResponse } from "../interfaces";
 
 /**
  * Implementation of IHttpErrors for generating common HTTP error responses.
@@ -12,8 +11,8 @@ export class HttpErrors implements IHttpErrors {
   error_422(): IHttpResponse {
     return {
       statusCode: 422,
-      body: { error: 'Unprocessable Entity' },
-    }
+      body: { error: "Unprocessable Entity" },
+    };
   }
 
   /**
@@ -23,8 +22,8 @@ export class HttpErrors implements IHttpErrors {
   error_400(): IHttpResponse {
     return {
       statusCode: 400,
-      body: { error: 'Bad Request' },
-    }
+      body: { error: "Bad Request" },
+    };
   }
 
   /**
@@ -34,8 +33,8 @@ export class HttpErrors implements IHttpErrors {
   error_404(): IHttpResponse {
     return {
       statusCode: 404,
-      body: { error: 'Not Found' },
-    }
+      body: { error: "Not Found" },
+    };
   }
 
   /**
@@ -45,7 +44,7 @@ export class HttpErrors implements IHttpErrors {
   error_500(): IHttpResponse {
     return {
       statusCode: 500,
-      body: { error: 'Internal Error' },
-    }
+      body: { error: "Internal Error" },
+    };
   }
 }

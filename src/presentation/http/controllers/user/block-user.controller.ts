@@ -1,18 +1,15 @@
 import { IBlockUserUseCase } from "../../../../app/usecases/user/interfaces/block-user.usecase";
-import { IGetUserUseCase } from "../../../../app/usecases/user/interfaces/get-user.uscase";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { SignupRole } from "../../../../domain/types/user";
+
 import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
 import { IController } from "../IController";
 
 /**

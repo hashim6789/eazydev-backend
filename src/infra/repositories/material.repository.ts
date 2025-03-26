@@ -5,12 +5,18 @@ import {
   IUpdateMaterialInDTO,
   QueryMaterial,
 } from "../../domain/dtos/material";
-import { MaterialModel } from "../databases/models";
 import { IMaterialRepository } from "../../app/repositories/material.repository";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 import { IUserDetailsDTO } from "../../domain/dtos/user/user.dto";
+import { IMaterial } from "../databases/interfaces";
+import { Model } from "mongoose";
 
 class MaterialRepository implements IMaterialRepository {
+  private model: Model<IMaterial>;
+
+  constructor(model: Model<IMaterial>) {
+    this.model = model;
+  }
   /**
    * Creates a new material in the database.
    * @param data The data for the new material.
@@ -24,7 +30,7 @@ class MaterialRepository implements IMaterialRepository {
     duration,
     fileKey,
   }: ICreateMaterialRequestDTO): Promise<IMaterialOutDTO> {
-    const material = new MaterialModel({
+    const material = new this.model({
       title,
       description,
       mentorId,
@@ -52,9 +58,7 @@ class MaterialRepository implements IMaterialRepository {
    * @returns The found material or null if not found.
    */
   async findById(id: string): Promise<IMaterialPopulateMentorDTO | null> {
-    const material = await MaterialModel.findById(id)
-      .populate("mentorId")
-      .exec();
+    const material = await this.model.findById(id).populate("mentorId").exec();
     if (!material) return null;
 
     const { firstName, lastName, profilePicture } =
@@ -96,13 +100,14 @@ class MaterialRepository implements IMaterialRepository {
       mentorId: mentorId ? mentorId : { $exists: true },
     };
 
-    const materials = await MaterialModel.find(query)
+    const materials = await this.model
+      .find(query)
       .skip((parseInt(page, 10) - 1) * parseInt(limit, 10))
       .limit(parseInt(limit, 10))
       .sort({ title: 1 })
       .exec();
 
-    const total = await MaterialModel.countDocuments(query);
+    const total = await this.model.countDocuments(query);
 
     return {
       body: materials.map((material) => ({
@@ -130,11 +135,13 @@ class MaterialRepository implements IMaterialRepository {
     materialId: string,
     data: IUpdateMaterialInDTO
   ): Promise<IMaterialOutDTO | null> {
-    const materialUpdated = await MaterialModel.findByIdAndUpdate(
-      materialId,
-      { $set: data },
-      { new: true } // Return the updated document
-    ).lean(); // Use lean() for a plain JavaScript object instead of a mongoose document
+    const materialUpdated = await this.model
+      .findByIdAndUpdate(
+        materialId,
+        { $set: data },
+        { new: true } // Return the updated document
+      )
+      .lean(); // Use lean() for a plain JavaScript object instead of a mongoose document
 
     if (!materialUpdated) {
       return null;
@@ -157,7 +164,7 @@ class MaterialRepository implements IMaterialRepository {
    * @returns A promise that resolves when the deletion is complete.
    */
   async delete(id: string): Promise<void> {
-    await MaterialModel.findByIdAndDelete(id).exec();
+    await this.model.findByIdAndDelete(id).exec();
   }
 }
 

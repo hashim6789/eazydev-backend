@@ -1,26 +1,16 @@
-import { IGetAllCategoryAdminUseCase } from "../../../../app/usecases/category";
-import {
-  IGetAllCourseUseCase,
-  IGetCourseUseCase,
-} from "../../../../app/usecases/course";
 import { ICreatePaymentIntentUseCase } from "../../../../app/usecases/payment/interfaces";
+import { ResponseDTO } from "../../../../domain/dtos";
+import { IController } from "../IController";
+
 import {
-  QueryCategory,
-  QueryCourse,
-  ResponseDTO,
-} from "../../../../domain/dtos";
-import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
-import { IController } from "../IController";
 
 /**
  * Controller for handling requests to getAll category.

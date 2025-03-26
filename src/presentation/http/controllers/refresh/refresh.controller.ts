@@ -1,13 +1,15 @@
 import { IRefreshTokenUserUseCase } from "../../../../app/usecases/refresh/interfaces/refresh-token.usecas";
 import { IRefreshTokenUserDTO } from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IHttpErrors } from "../../helpers/IHttpErrors";
-import { IHttpRequest } from "../../helpers/IHttpRequest";
-import { IHttpResponse } from "../../helpers/IHttpResponse";
-import { IHttpSuccess } from "../../helpers/IHttpSuccess";
-import { HttpErrors } from "../../helpers/implementations/HttpErrors";
-import { HttpResponse } from "../../helpers/implementations/HttpResponse";
-import { HttpSuccess } from "../../helpers/implementations/HttpSuccess";
+import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpRequest,
+  IHttpResponse,
+  IHttpSuccess,
+} from "../../helpers";
 import { IController } from "../IController";
 
 /**

@@ -4,7 +4,7 @@ import { ISendMailProvider } from "../../app/providers/send-mail.provider";
 import { SignupRole } from "../../domain/types/user";
 import { UserEntity } from "../../domain/entities/user";
 import { env } from "process";
-import { mailConfig } from "../../presentation/http/configs/mail.configs";
+import { mailConfig } from "../../presentation/express/configs/mail.configs";
 
 export class SendMailProvider implements ISendMailProvider {
   async sendOtpMail(email: string, otp: string): Promise<boolean> {

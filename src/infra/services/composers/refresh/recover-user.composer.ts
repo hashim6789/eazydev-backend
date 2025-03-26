@@ -5,6 +5,7 @@ import { RecoverUserInformationUserUseCase } from "../../../../app/usecases/refr
 import { IRecoverUserInformationUseCase } from "../../../../app/usecases/refresh/interfaces/recover-user-info.usecase";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { RecoverUserInformationUserController } from "../../../../presentation/http/controllers/refresh/recover-user-info.controller";
+import { RefreshTokenModel, UserModel } from "../../../databases/models";
 import { TokenManagerProvider } from "../../../providers/token-manager.provider";
 import { RefreshTokenRepository } from "../../../repositories/refresh-token-repository";
 import { UserRepository } from "../../../repositories/user.repository";
@@ -16,9 +17,9 @@ import { UserRepository } from "../../../repositories/user.repository";
  * @returns {IController} The configured user information recovery controller.
  */
 export function recoverUserInformationUserComposer(): IController {
-  const userRepository: IUsersRepository = new UserRepository();
+  const userRepository: IUsersRepository = new UserRepository(UserModel);
   const refreshTokenRepository: IRefreshTokenRepository =
-    new RefreshTokenRepository();
+    new RefreshTokenRepository(RefreshTokenModel);
   const tokenManagerProvider: ITokenManagerProvider =
     new TokenManagerProvider();
   const useCase: IRecoverUserInformationUseCase =

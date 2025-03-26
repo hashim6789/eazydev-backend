@@ -1,23 +1,18 @@
-import {
-  IBookSlotUseCase,
-  IGetAllSlotUseCase,
-} from "../../../../app/usecases/slot";
+import { IBookSlotUseCase } from "../../../../app/usecases/slot";
 import {
   IBookSlotRequestDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
 import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
 import { IController } from "../IController";
 
 /**

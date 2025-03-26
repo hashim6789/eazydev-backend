@@ -1,4 +1,2 @@
-export * from "./IHttpErrors";
-export * from "./IHttpRequest";
-export * from "./IHttpResponse";
-export * from "./IHttpSuccess";
+export * from "./implementations";
+export * from "./interfaces";

@@ -7,7 +7,6 @@ import {
   Meeting,
 } from "../../domain/dtos";
 import { MeetingEntity } from "../../domain/entities";
-import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 import { Role } from "../../domain/types";
 
 export class MeetingRepository implements IMeetingRepository {

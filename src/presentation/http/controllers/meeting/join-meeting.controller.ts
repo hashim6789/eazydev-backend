@@ -1,24 +1,18 @@
+import { IJoinMeetingUseCase } from "../../../../app/usecases/meeting/interfaces";
 import {
-  IGetAllMeetingUseCase,
-  IJoinMeetingUseCase,
-} from "../../../../app/usecases/meeting/interfaces";
-import {
-  ICreateSlotRequestDTO,
   IJoinMeetingRequestDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
 import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
 import { IController } from "../IController";
 
 /**

@@ -1,13 +1,15 @@
-import { IGoogleLoginUseCase } from "../../../../app/usecases/auth/google-login.usecase";
+import { IGoogleLoginUseCase } from "../../../../app/usecases/auth/interfaces/google-login.usecase";
 import { IGoogleRequestDTO } from "../../../../domain/dtos/auth/google-auth.dto";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IHttpErrors } from "../../helpers/IHttpErrors";
-import { IHttpRequest } from "../../helpers/IHttpRequest";
-import { IHttpResponse } from "../../helpers/IHttpResponse";
-import { IHttpSuccess } from "../../helpers/IHttpSuccess";
-import { HttpErrors } from "../../helpers/implementations/HttpErrors";
-import { HttpResponse } from "../../helpers/implementations/HttpResponse";
-import { HttpSuccess } from "../../helpers/implementations/HttpSuccess";
+import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpRequest,
+  IHttpResponse,
+  IHttpSuccess,
+} from "../../helpers";
 import { IController } from "../IController";
 
 /**

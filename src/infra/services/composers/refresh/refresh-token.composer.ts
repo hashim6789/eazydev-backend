@@ -5,6 +5,7 @@ import { RefreshTokenUserUseCase } from "../../../../app/usecases/refresh/implem
 import { IRefreshTokenUserUseCase } from "../../../../app/usecases/refresh/interfaces/refresh-token.usecas";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { RefreshTokenUserController } from "../../../../presentation/http/controllers/refresh/refresh.controller";
+import { RefreshTokenModel } from "../../../databases/models";
 import { GenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { TokenManagerProvider } from "../../../providers/token-manager.provider";
 import { RefreshTokenRepository } from "../../../repositories/refresh-token-repository";
@@ -17,7 +18,7 @@ import { RefreshTokenRepository } from "../../../repositories/refresh-token-repo
  */
 export function refreshTokenUserComposer(): IController {
   const refreshTokenRepository: IRefreshTokenRepository =
-    new RefreshTokenRepository();
+    new RefreshTokenRepository(RefreshTokenModel);
   const generateRefreshTokenProvider: IGenerateRefreshTokenProvider =
     new GenerateRefreshTokenProvider();
   const tokenManagerProvider: ITokenManagerProvider =

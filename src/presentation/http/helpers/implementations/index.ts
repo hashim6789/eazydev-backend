@@ -1,4 +1,4 @@
-export * from "./HttpErrors";
-export * from "./HttpRequest";
-export * from "./HttpResponse";
-export * from "./HttpSuccess";
+export { HttpErrors } from "./HttpErrors";
+export { HttpRequest } from "./HttpRequest";
+export { HttpResponse } from "./HttpResponse";
+export { HttpSuccess } from "./HttpSuccess";

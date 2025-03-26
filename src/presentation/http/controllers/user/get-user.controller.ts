@@ -2,16 +2,14 @@ import { IGetUserUseCase } from "../../../../app/usecases/user/interfaces/get-us
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { SignupRole } from "../../../../domain/types/user";
 import {
+  HttpErrors,
+  HttpResponse,
+  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
 import { IController } from "../IController";
 
 /**
