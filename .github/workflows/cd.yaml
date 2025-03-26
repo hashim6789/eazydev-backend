@@ -19,6 +19,6 @@ jobs:
       - name: Delete old Docker Images
         run: sudo docker system prune -af
 
-      # Step 3: Deploy with Docker compose
-      - name: Deploy with Docker Compose
-        run: sudo docker-compose up -d
+      # Step 3: Change to Project Directory & Deploy with Docker Compose
+      - name: Change to Project Directory & Deploy with Docker Compose
+        run: cd /home/ubuntu/eazydev-backend && sudo docker-compose up -d
