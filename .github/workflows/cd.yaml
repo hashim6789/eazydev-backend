@@ -1,9 +1,6 @@
 name: CD Pipeline
 
 on:
-  # push:
-  #   branches:
-  #     - main
   workflow_run:
     workflows: ["CI Pipeline"]
     types:
@@ -14,16 +11,11 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: Pull Docker Image
+        run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/eazydev-backend:latest
 
-      # Step 2: Pull Docker Image
-      name: Pull docker image
-      run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/eazydev-backend:latest
+      - name: Delete old Docker Images
+        run: sudo docker system prune -af
 
-      # Step 3: Delete old  Docker Image
-      name: Delete old docker images
-      run: sudo docker system prune -af
-      # run: sudo docker rm -f eazydev-express-container || true
-
-      # Step 4: Delete old  Docker Image
-      name: Docker compose up
-      run: sudo docker-compose up -d
+      - name: Deploy with Docker Compose
+        run: sudo docker-compose up -d
