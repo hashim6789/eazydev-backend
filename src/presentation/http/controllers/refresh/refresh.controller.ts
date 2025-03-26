@@ -1,5 +1,5 @@
 import { IRefreshTokenUserUseCase } from "../../../../app/usecases/refresh/interfaces/refresh-token.usecas";
-import { IRefreshTokenUserDTO } from "../../../../domain/dtos/refresh";
+import { ITokenUserDTO } from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
   HttpErrors,
@@ -17,7 +17,7 @@ import { IController } from "../IController";
  */
 export class RefreshTokenUserController implements IController {
   /**
-   * Creates an instance of RefreshTokenUserController.
+   * Creates an instance of TokenUserController.
    * @param refreshTokenUserUserCase The use case for refreshing authentication tokens.
    * @param httpErrors HTTP errors utility.
    * @param httpSuccess HTTP success utility.
@@ -42,7 +42,7 @@ export class RefreshTokenUserController implements IController {
 
       if (bodyParams.includes("refreshTokenId")) {
         // Extract refresh token ID from the request body
-        const refreshTokenId = httpRequest.body as IRefreshTokenUserDTO;
+        const refreshTokenId = httpRequest.body as ITokenUserDTO;
 
         // Execute the refresh token use case
         response = await this.refreshTokenUserUserCase.execute(refreshTokenId);

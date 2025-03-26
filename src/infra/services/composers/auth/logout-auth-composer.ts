@@ -1,14 +1,15 @@
-import { IRefreshTokenRepository } from "../../../../app/repositories/refresh-token.repository";
+import { ITokenRepository } from "../../../../app/repositories/token.repository";
 import { LogoutUseCase } from "../../../../app/usecases/auth/implementations/logout-auth.usecase";
 import { ILogoutUseCase } from "../../../../app/usecases/auth/interfaces/logout-auth.usecase";
 import { LogoutController } from "../../../../presentation/http/controllers/auth/logout.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
-import { RefreshTokenModel } from "../../../databases/models";
-import { RefreshTokenRepository } from "../../../repositories/refresh-token-repository";
+import { TokenModel } from "../../../databases/models";
+import { TokenRepository } from "../../../repositories/token-repository";
 
 export function logoutComposer(): IController {
-  const refreshTokenRepository: IRefreshTokenRepository =
-    new RefreshTokenRepository(RefreshTokenModel);
+  const refreshTokenRepository: ITokenRepository = new TokenRepository(
+    TokenModel
+  );
   const useCase: ILogoutUseCase = new LogoutUseCase(refreshTokenRepository);
   const controller: IController = new LogoutController(useCase);
   return controller;

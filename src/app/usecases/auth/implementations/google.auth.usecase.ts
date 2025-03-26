@@ -2,8 +2,8 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { UserEntity } from "../../../../domain/entities/user";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
-import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
+import { ITokenRepository } from "../../../repositories/token.repository";
+import { IGenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { IGoogleRequestDTO } from "../../../../domain/dtos/auth/google-auth.dto";
 import { IGoogleLoginUseCase } from "../interfaces/google-login.usecase";
 import axios from "axios";
@@ -25,8 +25,8 @@ interface GoogleApiResponse {
 export class GoogleLoginUseCase implements IGoogleLoginUseCase {
   constructor(
     private userRepository: IUsersRepository,
-    private refreshTokenRepository: IRefreshTokenRepository,
-    private generateRefreshTokenProvider: IGenerateRefreshTokenProvider
+    private refreshTokenRepository: ITokenRepository,
+    private generateTokenProvider: IGenerateTokenProvider
   ) {}
 
   private async getGoogleUserData(token: string): Promise<GoogleApiResponse> {
@@ -138,20 +138,21 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         return { data: { error: UserErrorType.UserCantCreate }, success: true };
       }
 
-      const token = await this.generateRefreshTokenProvider.generateToken(
-        user.id,
-        { userId: user.id, role: user.role }
-      );
+      const token = await this.generateTokenProvider.generateToken(user.id, {
+        userId: user.id,
+        role: user.role,
+      });
 
-      const newRefreshToken = await this.refreshTokenRepository.create(
+      const newToken = await this.refreshTokenRepository.create(
         user.id,
-        user.role
+        user.role,
+        "refresh"
       );
 
       const outUser = UserEntity.convert(user);
 
       return {
-        data: { refreshTokenId: newRefreshToken.id, token, user: outUser },
+        data: { refreshTokenId: newToken.id, token, user: outUser },
         success: true,
       };
     } catch (error: any) {

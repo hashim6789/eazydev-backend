@@ -1,16 +1,12 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IPasswordHasher } from "../../../providers/password-hasher.provider";
-import { UserEntity } from "../../../../domain/entities/user";
 import { ILoginRequestDTO } from "../../../../domain/dtos/auth/login-auth.dto";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
-import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
-import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
-import {
-  IUserInRequestDTO,
-  IUserValidDTO,
-} from "../../../../domain/dtos/user/user.dto";
-import { RefreshTokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
+import { IGenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
+import { ITokenRepository } from "../../../repositories/token.repository";
+import { IUserValidDTO } from "../../../../domain/dtos/user/user.dto";
+import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 
 export interface ILoginUseCase {
   execute(data: ILoginRequestDTO): Promise<ResponseDTO>;
@@ -20,8 +16,8 @@ export class LoginUseCase implements ILoginUseCase {
   constructor(
     private userRepository: IUsersRepository,
     private passwordHasher: IPasswordHasher,
-    private generateRefreshTokenProvider: IGenerateRefreshTokenProvider,
-    private refreshTokenRepository: IRefreshTokenRepository
+    private generateTokenProvider: IGenerateTokenProvider,
+    private tokenRepository: ITokenRepository
   ) {}
 
   async execute({
@@ -59,22 +55,23 @@ export class LoginUseCase implements ILoginUseCase {
         };
       }
 
-      const token = await this.generateRefreshTokenProvider.generateToken(
+      const token = await this.generateTokenProvider.generateToken(user.id, {
+        userId: user.id,
+        role: user.role,
+      });
+      const tokenFounded = (await this.tokenRepository.findByUserIdAndType(
         user.id,
-        { userId: user.id, role: user.role }
-      );
-      const refreshTokenFounded =
-        (await this.refreshTokenRepository.findByUserId(
-          user.id
-        )) as RefreshTokenDTO | null;
+        "refresh"
+      )) as TokenDTO | null;
 
-      if (refreshTokenFounded) {
-        await this.refreshTokenRepository.delete(user.id);
+      if (tokenFounded) {
+        await this.tokenRepository.delete(user.id);
       }
 
-      const refreshToken = await this.refreshTokenRepository.create(
+      const refreshToken = await this.tokenRepository.create(
         user.id,
-        user.role
+        user.role,
+        "refresh"
       );
 
       // const outUser = UserEntity.convert({
@@ -86,7 +83,7 @@ export class LoginUseCase implements ILoginUseCase {
       // });
 
       return {
-        data: { token, refreshTokenId: refreshToken.id, user },
+        data: { token, tokenId: refreshToken.id, user },
         success: true,
       };
     } catch (error: any) {

@@ -4,12 +4,12 @@ import { IUsersRepository } from "../../../repositories/user.repository";
 import { IPasswordHasher } from "../../../providers/password-hasher.provider";
 import { UserEntity } from "../../../../domain/entities/user";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
-import { IGenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
+import { IGenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { IOtpRepository } from "../../../repositories/otp.repository";
 import { IGenerateOtpProvider } from "../../../providers/generate-otp.provider";
 import { ISendMailProvider } from "../../../providers/send-mail.provider";
 import { IUserInRequestDTO } from "../../../../domain/dtos/user/user.dto";
+import { ITokenRepository } from "../../../repositories";
 
 export interface ISignupUseCase {
   execute(data: ISignupRequestDTO): Promise<ResponseDTO>;
@@ -19,8 +19,8 @@ export class SignupUseCase implements ISignupUseCase {
   constructor(
     private userRepository: IUsersRepository,
     private passwordHasher: IPasswordHasher,
-    private refreshTokenRepository: IRefreshTokenRepository,
-    private generateRefreshTokenProvider: IGenerateRefreshTokenProvider,
+    private tokenRepository: ITokenRepository,
+    private generateTokenProvider: IGenerateTokenProvider,
     private otpRepository: IOtpRepository,
     private generateOtpProvider: IGenerateOtpProvider,
     private sendMailProvider: ISendMailProvider
@@ -84,20 +84,21 @@ export class SignupUseCase implements ISignupUseCase {
       const otpDoc = await this.otpRepository.create(user.id, hashedOtp);
       await this.sendMailProvider.sendOtpMail(user.email, otp);
 
-      const token = await this.generateRefreshTokenProvider.generateToken(
-        user.id,
-        { userId: user.id, role: user.role }
-      );
+      const token = await this.generateTokenProvider.generateToken(user.id, {
+        userId: user.id,
+        role: user.role,
+      });
 
-      const newRefreshToken = await this.refreshTokenRepository.create(
+      const newToken = await this.tokenRepository.create(
         user.id,
-        user.role
+        user.role,
+        "refresh"
       );
 
       const outUser = UserEntity.convert(user);
 
       return {
-        data: { refreshTokenId: newRefreshToken.id, token, user: outUser },
+        data: { refreshTokenId: newToken.id, token, user: outUser },
         success: true,
       };
     } catch (error: any) {

@@ -1,4 +1,5 @@
-import { RefreshTokenDTO } from "../../domain/dtos/auth/refresh-token-dto";
+import { TokenDTO } from "../../domain/dtos/auth/refresh-token-dto";
+import { TokenType } from "../../domain/types";
 import { Role } from "../../domain/types/user";
 
 /**
@@ -6,33 +7,36 @@ import { Role } from "../../domain/types/user";
  *
  * @interface
  */
-export interface IRefreshTokenRepository {
+export interface ITokenRepository {
   /**
    * Creates a new refresh token for the specified user.
    *
    * @async
    * @param {string} userId - The ID of the user.
-   * @returns {Promise<RefreshTokenDTO>} The created refresh token.
+   * @returns {Promise<TokenDTO>} The created refresh token.
    */
-  create(userId: string, role: Role): Promise<RefreshTokenDTO>;
+  create(userId: string, role: Role, type: TokenType): Promise<TokenDTO>;
 
   /**
    * Finds a refresh token by its identifier.
    *
    * @async
-   * @param {string} refreshToken - The refresh token identifier.
-   * @returns {Promise<RefreshTokenDTO | unknown>} The found refresh token, or undefined if not found.
+   * @param {string} token - The refresh token identifier.
+   * @returns {Promise<TokenDTO | unknown>} The found refresh token, or undefined if not found.
    */
-  findById(refreshToken: string): Promise<RefreshTokenDTO | unknown>;
+  findById(token: string): Promise<TokenDTO | unknown>;
 
   /**
    * Finds a refresh token by the user's ID.
    *
    * @async
    * @param {string} userId - The ID of the user.
-   * @returns {Promise<RefreshTokenDTO | unknown>} The found refresh token, or undefined if not found.
+   * @returns {Promise<tTokenDTO | unknown>} The found refresh token, or undefined if not found.
    */
-  findByUserId(userId: string): Promise<RefreshTokenDTO | unknown>;
+  findByUserIdAndType(
+    userId: string,
+    type: TokenType
+  ): Promise<TokenDTO | unknown>;
 
   /**
    * Deletes a refresh token associated with the specified user.

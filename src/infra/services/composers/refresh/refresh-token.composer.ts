@@ -1,14 +1,14 @@
-import { IGenerateRefreshTokenProvider } from "../../../../app/providers/generate-refresh-token.provider";
+import { IGenerateTokenProvider } from "../../../../app/providers/generate-refresh-token.provider";
 import { ITokenManagerProvider } from "../../../../app/providers/token-manager.provider";
-import { IRefreshTokenRepository } from "../../../../app/repositories/refresh-token.repository";
+import { ITokenRepository } from "../../../../app/repositories/token.repository";
 import { RefreshTokenUserUseCase } from "../../../../app/usecases/refresh/implementations/refresh-token.usecase";
 import { IRefreshTokenUserUseCase } from "../../../../app/usecases/refresh/interfaces/refresh-token.usecas";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { RefreshTokenUserController } from "../../../../presentation/http/controllers/refresh/refresh.controller";
-import { RefreshTokenModel } from "../../../databases/models";
-import { GenerateRefreshTokenProvider } from "../../../providers/generate-refresh-token.provider";
+import { TokenModel } from "../../../databases/models";
+import { GenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { TokenManagerProvider } from "../../../providers/token-manager.provider";
-import { RefreshTokenRepository } from "../../../repositories/refresh-token-repository";
+import { TokenRepository } from "../../../repositories/token-repository";
 
 /**
  * Composer function for creating and configuring the components required for refreshing authentication tokens.
@@ -17,14 +17,15 @@ import { RefreshTokenRepository } from "../../../repositories/refresh-token-repo
  * @returns {IController} The configured refresh token controller.
  */
 export function refreshTokenUserComposer(): IController {
-  const refreshTokenRepository: IRefreshTokenRepository =
-    new RefreshTokenRepository(RefreshTokenModel);
-  const generateRefreshTokenProvider: IGenerateRefreshTokenProvider =
-    new GenerateRefreshTokenProvider();
+  const refreshTokenRepository: ITokenRepository = new TokenRepository(
+    TokenModel
+  );
+  const generateTokenProvider: IGenerateTokenProvider =
+    new GenerateTokenProvider();
   const tokenManagerProvider: ITokenManagerProvider =
     new TokenManagerProvider();
   const useCase: IRefreshTokenUserUseCase = new RefreshTokenUserUseCase(
-    generateRefreshTokenProvider,
+    generateTokenProvider,
     refreshTokenRepository,
     tokenManagerProvider
   );

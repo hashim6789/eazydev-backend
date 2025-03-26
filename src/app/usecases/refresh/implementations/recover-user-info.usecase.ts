@@ -1,13 +1,10 @@
-import { RefreshTokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
-import {
-  IRecoveryUserDTO,
-  IRefreshTokenUserDTO,
-} from "../../../../domain/dtos/refresh";
+import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
+import { IRecoveryUserDTO } from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUserInRequestDTO } from "../../../../domain/dtos/user/user.dto";
 import { AuthMessages } from "../../../../domain/enums/auth";
 import { ITokenManagerProvider } from "../../../providers/token-manager.provider";
-import { IRefreshTokenRepository } from "../../../repositories/refresh-token.repository";
+import { ITokenRepository } from "../../../repositories/token.repository";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IRecoverUserInformationUseCase } from "../interfaces/recover-user-info.usecase";
 
@@ -24,12 +21,12 @@ export class RecoverUserInformationUserUseCase
    * Creates an instance of RecoverUserInformationUserUseCase.
    *
    * @constructor
-   * @param {IRefreshTokenRepository} refreshTokenRepository - The repository for refresh tokens.
+   * @param {ITokenRepository} refreshTokenRepository - The repository for refresh tokens.
    * @param {IUsersRepository} userRepository - The repository for user data.
    * @param {ITokenManagerProvider} tokenManager - The token manager provider.
    */
   constructor(
-    private refreshTokenRepository: IRefreshTokenRepository,
+    private refreshTokenRepository: ITokenRepository,
     private userRepository: IUsersRepository,
     private tokenManager: ITokenManagerProvider
   ) {}
@@ -38,14 +35,16 @@ export class RecoverUserInformationUserUseCase
    * Executes the recover user information use case.
    *
    * @async
-   * @param {IRefreshTokenUserDTO} refreshTokenId - The refresh token information.
+   * @param {ITokenUserDTO} refreshTokenId - The refresh token information.
    * @returns {Promise<ResponseDTO>} The response data.
    */
   async execute({ userId }: IRecoveryUserDTO): Promise<ResponseDTO> {
     try {
-      const refreshToken = (await this.refreshTokenRepository.findByUserId(
-        userId
-      )) as RefreshTokenDTO | null;
+      const refreshToken =
+        (await this.refreshTokenRepository.findByUserIdAndType(
+          userId,
+          "refresh"
+        )) as TokenDTO | null;
 
       if (!refreshToken) {
         return {

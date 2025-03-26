@@ -1,27 +1,28 @@
 import { Model } from "mongoose";
 import dayjs from "dayjs";
 
-import { IRefreshTokenRepository } from "../../app/repositories/refresh-token.repository";
-import { RefreshTokenDTO } from "../../domain/dtos/auth/refresh-token-dto";
+import { ITokenRepository } from "../../app/repositories/token.repository";
+import { TokenDTO } from "../../domain/dtos/auth/refresh-token-dto";
 import { Role } from "../../domain/types/user";
-import { IRefreshToken } from "../databases/interfaces";
+import { IToken } from "../databases/interfaces";
+import { TokenType } from "../../domain/types";
 
 /**
  * Mongoose implementation of the refresh token repository.
  *
  * @class
- * @implements {IRefreshTokenRepository}
+ * @implements {ITokenRepository}
  */
-export class RefreshTokenRepository implements IRefreshTokenRepository {
-  private model: Model<IRefreshToken>;
+export class TokenRepository implements ITokenRepository {
+  private model: Model<IToken>;
 
   /**
-   * Creates an instance of RefreshTokenMongooseRepository.
+   * Creates an instance of TokenMongooseRepository.
    *
    * @constructor
    * @param {Model<Document>} refreshTokenModel - The Mongoose model instance.
    */
-  constructor(model: Model<IRefreshToken>) {
+  constructor(model: Model<IToken>) {
     this.model = model;
   }
 
@@ -30,27 +31,30 @@ export class RefreshTokenRepository implements IRefreshTokenRepository {
    *
    * @async
    * @param {string} userId - The ID of the user for whom the refresh token is created.
-   * @returns {Promise<RefreshTokenDTO>} The generated refresh token.
+   * @returns {Promise<TokenDTO>} The generated refresh token.
    */
   async create(
     userId: string,
-    role: Role = "learner"
-  ): Promise<RefreshTokenDTO> {
+    role: Role = "learner",
+    type: TokenType
+  ): Promise<TokenDTO> {
     const expiresIn = dayjs().add(2, "hour").unix();
 
-    const generateRefreshToken = new this.model({
+    const generateToken = new this.model({
       userId,
+      type,
       expiresIn,
       role,
     });
-    await generateRefreshToken.save();
+    await generateToken.save();
 
     return {
-      id: generateRefreshToken._id.toString(),
-      userId: generateRefreshToken.userId.toString(),
-      expiresIn: generateRefreshToken.expiresIn,
-      createdAt: generateRefreshToken.createdAt,
-      role: generateRefreshToken.role,
+      id: generateToken._id.toString(),
+      userId: generateToken.userId.toString(),
+      type,
+      expiresIn: generateToken.expiresIn,
+      createdAt: generateToken.createdAt,
+      role: generateToken.role,
     };
   }
 
@@ -59,9 +63,9 @@ export class RefreshTokenRepository implements IRefreshTokenRepository {
    *
    * @async
    * @param {string} refreshToken - The ID of the refresh token to find.
-   * @returns {Promise<RefreshTokenDTO | unknown>} The found refresh token or undefined.
+   * @returns {Promise<TokenDTO | unknown>} The found refresh token or undefined.
    */
-  async findById(refreshToken: string): Promise<RefreshTokenDTO | unknown> {
+  async findById(refreshToken: string): Promise<TokenDTO | unknown> {
     const token = await this.model.findById(refreshToken).exec();
 
     return token;
@@ -72,11 +76,14 @@ export class RefreshTokenRepository implements IRefreshTokenRepository {
    *
    * @async
    * @param {string} userId - The ID of the user for whom to find the refresh token.
-   * @returns {Promise<RefreshTokenDTO | unknown>} The found refresh token or undefined.
+   * @returns {Promise<TokenDTO | unknown>} The found refresh token or undefined.
    67cbcfce051ab2ea1b7a2125
   */
-  async findByUserId(userId: string): Promise<RefreshTokenDTO | unknown> {
-    const token = await this.model.findOne({ userId }).exec();
+  async findByUserIdAndType(
+    userId: string,
+    type: TokenType
+  ): Promise<TokenDTO | unknown> {
+    const token = await this.model.findOne({ userId, type }).exec();
 
     return token;
   }

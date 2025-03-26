@@ -1,3 +1,4 @@
+import { TokenType } from "../../types";
 import { Role } from "../../types/user";
 
 /**
@@ -5,7 +6,7 @@ import { Role } from "../../types/user";
  *
  * @interface
  */
-export interface RefreshTokenDTO {
+export interface TokenDTO {
   /**
    * The unique identifier for the refresh token.
    */
@@ -20,6 +21,7 @@ export interface RefreshTokenDTO {
    * The user ID associated with the refresh token.
    */
   userId: string;
+  type: TokenType;
 
   role: Role;
 

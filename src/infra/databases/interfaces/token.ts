@@ -1,8 +1,9 @@
 import { ObjectId } from "mongoose";
-import { Role } from "../../../domain/types";
+import { Role, TokenType } from "../../../domain/types";
 
-export interface IRefreshToken extends Document {
+export interface IToken extends Document {
   _id: ObjectId;
+  type: TokenType;
   userId: ObjectId;
   expiresIn: number;
   role: Role;

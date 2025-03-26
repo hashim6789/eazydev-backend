@@ -1,4 +1,4 @@
-// export * from "./forgot-password.auth.composer"
+export * from "./forgot-password.auth.composer";
 // export * from "./get-reset-password-auth.componser"
 // export * from "./";
 export * from "./login-auth.composer";

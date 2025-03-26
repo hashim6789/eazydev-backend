@@ -5,7 +5,7 @@ import { Payload } from "../../domain/dtos/jwt-payload";
  *
  * @interface
  */
-export interface IGenerateRefreshTokenProvider {
+export interface IGenerateTokenProvider {
   /**
    * Generates a new refresh token based on the provided token.
    *

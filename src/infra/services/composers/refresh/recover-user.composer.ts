@@ -1,13 +1,13 @@
 import { ITokenManagerProvider } from "../../../../app/providers/token-manager.provider";
-import { IRefreshTokenRepository } from "../../../../app/repositories/refresh-token.repository";
+import { ITokenRepository } from "../../../../app/repositories/token.repository";
 import { IUsersRepository } from "../../../../app/repositories/user.repository";
 import { RecoverUserInformationUserUseCase } from "../../../../app/usecases/refresh/implementations/recover-user-info.usecase";
 import { IRecoverUserInformationUseCase } from "../../../../app/usecases/refresh/interfaces/recover-user-info.usecase";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { RecoverUserInformationUserController } from "../../../../presentation/http/controllers/refresh/recover-user-info.controller";
-import { RefreshTokenModel, UserModel } from "../../../databases/models";
+import { TokenModel, UserModel } from "../../../databases/models";
 import { TokenManagerProvider } from "../../../providers/token-manager.provider";
-import { RefreshTokenRepository } from "../../../repositories/refresh-token-repository";
+import { TokenRepository } from "../../../repositories/token-repository";
 import { UserRepository } from "../../../repositories/user.repository";
 
 /**
@@ -18,8 +18,9 @@ import { UserRepository } from "../../../repositories/user.repository";
  */
 export function recoverUserInformationUserComposer(): IController {
   const userRepository: IUsersRepository = new UserRepository(UserModel);
-  const refreshTokenRepository: IRefreshTokenRepository =
-    new RefreshTokenRepository(RefreshTokenModel);
+  const refreshTokenRepository: ITokenRepository = new TokenRepository(
+    TokenModel
+  );
   const tokenManagerProvider: ITokenManagerProvider =
     new TokenManagerProvider();
   const useCase: IRecoverUserInformationUseCase =

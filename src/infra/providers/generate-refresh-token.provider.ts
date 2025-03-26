@@ -1,5 +1,5 @@
 import { sign } from "jsonwebtoken";
-import { IGenerateRefreshTokenProvider } from "../../app/providers/generate-refresh-token.provider";
+import { IGenerateTokenProvider } from "../../app/providers/generate-refresh-token.provider";
 import { Payload } from "../../domain/dtos/jwt-payload";
 import { env } from "../../presentation/express/configs/env.config";
 
@@ -7,11 +7,9 @@ import { env } from "../../presentation/express/configs/env.config";
  * Implementation of the refresh token generation provider.
  *
  * @class
- * @implements {IGenerateRefreshTokenProvider}
+ * @implements {IGenerateTokenProvider}
  */
-export class GenerateRefreshTokenProvider
-  implements IGenerateRefreshTokenProvider
-{
+export class GenerateTokenProvider implements IGenerateTokenProvider {
   /**
    * Generates a new refresh token based on the provided token.
    *
