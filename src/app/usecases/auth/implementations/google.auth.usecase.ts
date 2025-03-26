@@ -7,10 +7,7 @@ import { IGenerateTokenProvider } from "../../../providers/generate-refresh-toke
 import { IGoogleRequestDTO } from "../../../../domain/dtos/auth/google-auth.dto";
 import { IGoogleLoginUseCase } from "../interfaces/google-login.usecase";
 import axios from "axios";
-import {
-  IUserOutRequestDTO,
-  IUserValidDTO,
-} from "../../../../domain/dtos/user/user.dto";
+import { IUserOutRequestDTO, IUserValidDTO } from "../../../../domain/dtos";
 import { SignupRole } from "../../../../domain/types/user";
 
 interface GoogleApiResponse {

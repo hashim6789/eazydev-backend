@@ -1,14 +1,14 @@
 import { IUsersRepository } from "../../app/repositories/user.repository";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
-
-import { ICreateUserRequestDTO } from "../../domain/dtos/user/create-user.dtos";
 import {
+  ICreateUserRequestDTO,
   IUpdateUserRequestDTO,
   IUserDetailOutDTO,
   IUserOutRequestDTO,
   IUserValidDTO,
-} from "../../domain/dtos/user/user.dto";
-import { QueryUser } from "../../domain/dtos/user";
+  QueryUser,
+} from "../../domain/dtos/user";
+
 import { IUser } from "../databases/interfaces";
 import { Model } from "mongoose";
 

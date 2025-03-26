@@ -1,6 +1,6 @@
+import { IGetUserRequestDTO, IUserDetailOutDTO } from "../../../../domain/dtos";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IGetUserRequestDTO } from "../../../../domain/dtos/user/get-user-request.dto";
-import { IUserDetailOutDTO } from "../../../../domain/dtos/user/user.dto";
+
 import { UserErrorType } from "../../../../domain/enums/user";
 
 import { IUsersRepository } from "../../../repositories/user.repository";

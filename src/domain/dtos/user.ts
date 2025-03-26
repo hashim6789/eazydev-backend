@@ -1,4 +1,41 @@
-import { Role } from "../../types/user";
+import { Role, SignupRole } from "../types";
+
+export interface IForgotPasswordRequestDTO {
+  email: string;
+  role: Role;
+}
+
+export interface ICreateUserRequestDTO {
+  firstName: string;
+  lastName: string;
+  password: string;
+  role: SignupRole;
+  email: string;
+  googleId: string;
+  profilePicture: string;
+}
+
+export interface IGetUserRequestDTO {
+  userId: string;
+  role: SignupRole;
+}
+export interface IGetPersonalInfoRequestDTO {
+  userId: string;
+  role: Role;
+}
+export interface BlockUserRequestDTO {
+  userId: string;
+  change: boolean;
+}
+
+export interface QueryUser {
+  role: Role;
+  status: "blocked" | "unblocked" | "all";
+  search: string;
+  page: string;
+  sort: "ASC" | "DEC";
+  limit: string;
+}
 
 export interface IUserDTO {
   id: string;

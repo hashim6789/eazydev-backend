@@ -1,9 +1,8 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
   IGetPersonalInfoRequestDTO,
-  IGetUserRequestDTO,
-} from "../../../../domain/dtos/user/get-user-request.dto";
-import { IUserDetailOutDTO } from "../../../../domain/dtos/user/user.dto";
+  IUserDetailOutDTO,
+} from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums/user";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IGetPersonalInfoUseCase } from "../interfaces";

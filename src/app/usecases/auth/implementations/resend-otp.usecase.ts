@@ -6,7 +6,7 @@ import { IResendOtpUseCase } from "../interfaces/resend-otp-usecase";
 import { IResendOtpRequestDTO } from "../../../../domain/dtos/auth/resend-otp-auth.dto";
 import { IGenerateOtpProvider } from "../../../providers/generate-otp.provider";
 import { ISendMailProvider } from "../../../providers/send-mail.provider";
-import { IUserDetailOutDTO } from "../../../../domain/dtos/user/user.dto";
+import { IUserDetailOutDTO } from "../../../../domain/dtos";
 
 export class ResendOtpUseCase implements IResendOtpUseCase {
   constructor(

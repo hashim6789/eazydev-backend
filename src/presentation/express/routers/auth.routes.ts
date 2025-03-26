@@ -6,7 +6,10 @@ import { signupComposer } from "../../../infra/services/composers/auth/signup-au
 import { loginComposer } from "../../../infra/services/composers/auth/login-suth.composer";
 import { logoutComposer } from "../../../infra/services/composers/auth/logout-auth-composer";
 import { googleLoginComposer } from "../../../infra/services/composers/auth/google-auth-composer";
-import { otpVerifyComposer } from "../../../infra/services/composers/auth";
+import {
+  forgotPasswordComposer,
+  otpVerifyComposer,
+} from "../../../infra/services/composers/auth";
 import { authenticateToken } from "../middlewares/authenticate-user.middleware";
 import { resendOtpComposer } from "../../../infra/services/composers/auth/otp-resend-auth.composer";
 import { authorizeRole } from "../middlewares";
@@ -104,7 +107,7 @@ authRouter.post(
 authRouter.post(
   "/forgot-password",
   async (request: Request, response: Response) => {
-    const adapter = await expressAdapter(request, loginComposer());
+    const adapter = await expressAdapter(request, forgotPasswordComposer());
     response.status(adapter.statusCode).json(adapter.body);
   }
 );

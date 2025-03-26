@@ -1,7 +1,7 @@
 import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { IRecoveryUserDTO } from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IUserInRequestDTO } from "../../../../domain/dtos/user/user.dto";
+import { IUserInRequestDTO } from "../../../../domain/dtos";
 import { AuthMessages } from "../../../../domain/enums/auth";
 import { ITokenManagerProvider } from "../../../providers/token-manager.provider";
 import { ITokenRepository } from "../../../repositories/token.repository";

@@ -1,5 +1,5 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { BlockUserRequestDTO } from "../../../../domain/dtos/user/get-user-request.dto";
+import { BlockUserRequestDTO } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums/user";
 
 import { IUsersRepository } from "../../../repositories/user.repository";

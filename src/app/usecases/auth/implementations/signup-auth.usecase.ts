@@ -8,8 +8,8 @@ import { IGenerateTokenProvider } from "../../../providers/generate-refresh-toke
 import { IOtpRepository } from "../../../repositories/otp.repository";
 import { IGenerateOtpProvider } from "../../../providers/generate-otp.provider";
 import { ISendMailProvider } from "../../../providers/send-mail.provider";
-import { IUserInRequestDTO } from "../../../../domain/dtos/user/user.dto";
 import { ITokenRepository } from "../../../repositories";
+import { IUserInRequestDTO } from "../../../../domain/dtos";
 
 export interface ISignupUseCase {
   execute(data: ISignupRequestDTO): Promise<ResponseDTO>;

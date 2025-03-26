@@ -1,10 +1,11 @@
-import { Role, SignupRole } from "../types/user";
-import { ICreateUserRequestDTO } from "../dtos/user/create-user.dtos";
 import {
+  ICreateUserRequestDTO,
   IUpdateUserRequestDTO,
   IUserOut,
   IUserOutRequestDTO,
-} from "../dtos/user/user.dto";
+} from "../dtos";
+import { SignupRole } from "../types/user";
+
 import { Email } from "../valueObjects/email.values";
 
 /**

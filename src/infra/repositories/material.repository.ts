@@ -7,9 +7,9 @@ import {
 } from "../../domain/dtos/material";
 import { IMaterialRepository } from "../../app/repositories/material.repository";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
-import { IUserDetailsDTO } from "../../domain/dtos/user/user.dto";
 import { IMaterial } from "../databases/interfaces";
 import { Model } from "mongoose";
+import { IUserDetailsDTO } from "../../domain/dtos";
 
 class MaterialRepository implements IMaterialRepository {
   private model: Model<IMaterial>;
