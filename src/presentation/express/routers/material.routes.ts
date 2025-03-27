@@ -5,6 +5,7 @@ import { authorizeRole } from "../middlewares";
 import { getAllMaterialComposer } from "../../../infra/services/composers/material/get-all-materials";
 import { createMaterialComposer } from "../../../infra/services/composers/material/create-material.composer";
 import { getMaterialComposer } from "../../../infra/services/composers/material";
+import { updateMaterialComposer } from "../../../infra/services/composers/material/update-material.composer";
 
 /**
  * Router for handling auth-related routes.
@@ -50,17 +51,17 @@ materialRouter.get(
   }
 );
 
-// /**
-//  * Endpoint to edit material details.
-//  */
-// materialRouter.put(
-//   "/materialId",
-//   authenticateToken,
-//   authorizeRole(["mentor"]),
-//   async (request: Request, response: Response) => {
-//     const adapter = await expressAdapter(request, getMaterialComposer());
-//     response.status(adapter.statusCode).json(adapter.body);
-//   }
-// );
+/**
+ * Endpoint to edit material details.
+ */
+materialRouter.put(
+  "/:materialId",
+  authenticateToken,
+  authorizeRole(["mentor"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, updateMaterialComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
 
 export { materialRouter };

@@ -1,5 +1,4 @@
 import { IMaterialRepository } from "../../../../app/repositories/material.repository";
-
 import { GetMaterialUseCase } from "../../../../app/usecases/material/implementation/get-material.usecase";
 import { IGetMaterialUseCase } from "../../../../app/usecases/material/interface/get-material.usecase";
 import { IController } from "../../../../presentation/http/controllers/IController";

@@ -5,6 +5,7 @@ import {
   createLessonComposer,
   getLessonComposer,
 } from "../../../infra/services/composers/lesson";
+import { updateLessonComposer } from "../../../infra/services/composers/lesson/update-lesson.composer";
 
 /**
  * Router for handling lesson-related routes.
@@ -39,7 +40,7 @@ lessonRouter.put(
   authenticateToken,
   authorizeRole(["mentor"]),
   async (request: Request, response: Response) => {
-    const adapter = await expressAdapter(request, getLessonComposer());
+    const adapter = await expressAdapter(request, updateLessonComposer());
     response.status(adapter.statusCode).json(adapter.body);
   }
 );

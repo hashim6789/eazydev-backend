@@ -3,6 +3,7 @@ import { IUpdateMaterialRequestDTO } from "../../../../domain/dtos/material";
 
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { MaterialEntity } from "../../../../domain/entities";
+import { UserErrorType } from "../../../../domain/enums";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
 import { MaterialErrorType } from "../../../../domain/enums/material";
 import { IMaterialRepository } from "../../../repositories/material.repository";
@@ -38,6 +39,12 @@ export class UpdateMaterialUseCase implements IUpdateMaterialUseCase {
           success: false,
         };
       }
+      if (material.mentor.id !== mentorId) {
+        return {
+          data: { error: UserErrorType.UserCantUpdate },
+          success: false,
+        };
+      }
 
       const updateData = {
         title,
@@ -60,7 +67,7 @@ export class UpdateMaterialUseCase implements IUpdateMaterialUseCase {
         };
       }
 
-      return { data: updatedMaterial, success: true };
+      return { data: updatedMaterial.id, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

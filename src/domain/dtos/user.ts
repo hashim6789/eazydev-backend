@@ -54,7 +54,7 @@ export interface IUserDTO {
 
 export type IUserDetailsDTO = Pick<
   IUserDTO,
-  "firstName" | "lastName" | "profilePicture"
+  "firstName" | "lastName" | "profilePicture" | "id"
 >;
 
 export type IUserOutRequestDTO = Pick<

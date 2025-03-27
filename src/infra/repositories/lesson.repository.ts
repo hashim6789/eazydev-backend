@@ -1,4 +1,4 @@
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 import { ILessonRepository } from "../../app/repositories";
 import {
   ICreateLessonInDTO,
@@ -101,7 +101,12 @@ export class LessonRepository implements ILessonRepository {
     data: IUpdateLessonRequestDTO
   ): Promise<ILessonOutDTO | null> {
     try {
-      const lesson = await this.model.findByIdAndUpdate(id, data);
+      const lesson = await this.model.findByIdAndUpdate(id, {
+        ...data,
+        materials: data.materials.map(
+          (item) => new mongoose.Types.ObjectId(item)
+        ),
+      });
       if (!lesson) return null;
 
       return {

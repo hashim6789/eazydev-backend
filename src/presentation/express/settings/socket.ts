@@ -18,9 +18,9 @@ export const handleNotification = (
 
 //group chat
 export const handleGroupChat = (namespace: Namespace, socket: Socket): void => {
-  socket.on("setup", (userData) => {
-    socket.join(userData._id);
-    console.log("room created and user joined", userData);
+  socket.on("setup", (userId: string) => {
+    socket.join(userId);
+    console.log("room created and user joined", userId);
     socket.emit("connected");
   });
 
@@ -48,7 +48,7 @@ export const handleGroupChat = (namespace: Namespace, socket: Socket): void => {
   );
 
   socket.on("send message", (message) => {
-    // console.log("message", message);
+    console.log("message", message);
 
     socket.to(message.groupId).emit("receive message", message);
   });

@@ -43,7 +43,7 @@ export class UpdateLessonController implements IController {
 
       if (
         pathParams.includes("lessonId") &&
-        bodyParams.includes("userid") &&
+        bodyParams.includes("userId") &&
         bodyParams.includes("role") &&
         bodyParams.includes("courseId") &&
         bodyParams.includes("mentorId") &&

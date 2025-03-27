@@ -61,8 +61,17 @@ class MaterialRepository implements IMaterialRepository {
     const material = await this.model.findById(id).populate("mentorId").exec();
     if (!material) return null;
 
-    const { firstName, lastName, profilePicture } =
-      material.mentorId as unknown as IUserDetailsDTO;
+    const {
+      firstName,
+      lastName,
+      profilePicture,
+      _id: mentorId,
+    } = material.mentorId as unknown as {
+      firstName: string;
+      lastName: string;
+      profilePicture: string;
+      _id: string;
+    };
 
     // Check if the material exists and format its output
     return material
@@ -73,6 +82,7 @@ class MaterialRepository implements IMaterialRepository {
             firstName,
             lastName,
             profilePicture,
+            id: mentorId.toString(),
           }, // Ensure mentorId is returned as a string
           description: material.description,
           type: material.type,
