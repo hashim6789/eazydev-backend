@@ -4,3 +4,4 @@ export { IBlockUserUseCase } from "./block-user.usecase";
 export { ICreateUserUseCase } from "./create-user.usecase";
 export { IGetAllUserUseCase } from "./get-all-user.usecase";
 export { IGetUserUseCase } from "./get-user.uscase";
+export { IUpdatePersonalInfoUseCase } from "./update-personal-info.usecase";

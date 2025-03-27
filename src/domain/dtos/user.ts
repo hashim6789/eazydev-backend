@@ -23,6 +23,10 @@ export interface IGetPersonalInfoRequestDTO {
   userId: string;
   role: Role;
 }
+export interface IUpdatePersonalInfoRequestDTO {
+  firstName: string;
+  lastName: string;
+}
 export interface BlockUserRequestDTO {
   userId: string;
   change: boolean;
