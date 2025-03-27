@@ -26,3 +26,6 @@ export type ICreateLessonInDTO = Omit<ILessonOutDTO, "id">;
 export type ICreateLessonRequestDTO = Omit<ILessonOutDTO, "id"> & {
   courseId: string;
 };
+export type IUpdateLessonRequestDTO = ILessonOutDTO & {
+  courseId: string;
+};

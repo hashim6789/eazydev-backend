@@ -53,7 +53,7 @@ export class UpdateCourseUseCase implements IUpdateCourseUseCase {
         };
       }
 
-      return { data: { courseId: updatedCourse.id }, success: true };
+      return { data: updatedCourse.id, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

@@ -1,17 +1,7 @@
-import {
-  ICreateLessonRequestDTO,
-  ILessonOutDTO,
-  ILessonOutPopulateDTO,
-  Payload,
-  ResponseDTO,
-} from "../../../../domain/dtos";
-import { LessonEntity } from "../../../../domain/entities";
-import {
-  AuthenticateUserErrorType,
-  LessonErrorType,
-} from "../../../../domain/enums";
-import { ICourseRepository, ILessonRepository } from "../../../repositories";
-import { ICreateLessonUseCase, IGetLessonUseCase } from "../interfaces";
+import { Payload, ResponseDTO } from "../../../../domain/dtos";
+import { LessonErrorType } from "../../../../domain/enums";
+import { ILessonRepository } from "../../../repositories";
+import { IGetLessonUseCase } from "../interfaces";
 
 export class GetLessonUseCase implements IGetLessonUseCase {
   constructor(private lessonRepository: ILessonRepository) {}

@@ -1,4 +1,6 @@
 import { CourseSort, CourseStatus } from "../types";
+import { ICategoryOutDTO } from "./category";
+import { Material } from "./material";
 
 export interface ICreateCourseInDTO {
   title: string;
@@ -37,12 +39,14 @@ export interface ICourseOutPopulateDTO {
     lastName: string;
     profilePicture: string;
   };
-  category: {
+  category: ICategoryOutDTO;
+  description: string;
+  lessons: {
     id: string;
     title: string;
-  };
-  description?: string;
-  lessons: { id: string; title: string; description: string }[];
+    description: string;
+    materials: Material[];
+  }[];
   thumbnail: string;
   price: number;
   status: CourseStatus;

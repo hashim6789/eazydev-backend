@@ -17,8 +17,8 @@ export interface Material {
   type: MaterialType;
   duration: number;
   fileKey: string;
-  createdAt: number;
-  updatedAt: number;
+  // createdAt: number;
+  // updatedAt: number;
 }
 
 export type ICreateMaterialRequestDTO = Omit<

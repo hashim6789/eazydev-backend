@@ -33,3 +33,13 @@ lessonRouter.get(
     response.status(adapter.statusCode).json(adapter.body);
   }
 );
+
+lessonRouter.put(
+  "/:lessonId",
+  authenticateToken,
+  authorizeRole(["mentor"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, getLessonComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);

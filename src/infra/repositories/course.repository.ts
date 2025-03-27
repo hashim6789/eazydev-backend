@@ -9,9 +9,10 @@ import {
   ICourseSimpleOutDTO,
 } from "../../domain/dtos";
 import { ICourse } from "../databases/interfaces";
-import { CourseStatus } from "../../domain/types";
+import { CourseStatus, MaterialType } from "../../domain/types";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 import { mentorRevenueAnalysisPipeline } from "../pipelines/course";
+import { Material } from "../../domain/dtos/material";
 
 export class CourseRepository implements ICourseRepository {
   private model: Model<ICourse>;
@@ -108,26 +109,66 @@ export class CourseRepository implements ICourseRepository {
     try {
       const course = await this.model
         .findById(id)
-        .populate("mentorId", "firstName lastName, profilePicture")
-        .populate("lessons", "title description")
+        .populate("mentorId", "firstName lastName profilePicture")
+        .populate({
+          path: "lessons",
+          select: "title description",
+          populate: {
+            path: "materials", // Populate materials
+            select: "title description type duration fileKey",
+          },
+        })
         .populate("categoryId", "title");
+
       if (!course) return null;
 
+      // Extract category details
       const { _id: categoryId, title: categoryTitle } =
-        course.categoryId as unknown as { title: string; _id: string };
-      const lessons = course.lessons.map((item) => {
-        const { _id, title, description } = item as unknown as {
+        course.categoryId as unknown as {
           title: string;
           _id: string;
-          description: string;
         };
+
+      // Extract lessons with materials
+      const lessons = course.lessons.map((lesson) => {
+        const { _id, title, description, materials } = lesson as unknown as {
+          _id: string;
+          title: string;
+          description: string;
+          materials: {
+            _id: string;
+            title: string;
+            mentorId: string;
+            description: string;
+            type: MaterialType;
+            duration: number;
+            fileKey: string;
+            createdAt: number;
+            updatedAt: number;
+          }[];
+        };
+
+        const formattedMaterials = materials.map((material) => ({
+          id: material._id.toString(),
+          title: material.title,
+          mentorId: material.mentorId,
+          description: material.description,
+          type: material.type,
+          duration: material.duration,
+          fileKey: material.fileKey,
+          createdAt: material.createdAt,
+          updatedAt: material.updatedAt,
+        }));
+
         return {
-          id: _id,
+          id: _id.toString(),
           title,
           description,
+          materials: formattedMaterials,
         };
       });
 
+      // Extract mentor details
       const {
         _id: mentorId,
         firstName,
@@ -139,16 +180,24 @@ export class CourseRepository implements ICourseRepository {
         lastName: string;
         profilePicture: string;
       };
+
+      // Final DTO structure
       return {
         id: course._id.toString(),
         title: course.title,
-        mentor: { id: mentorId, firstName, lastName, profilePicture },
+        mentor: {
+          id: mentorId.toString(),
+          firstName,
+          lastName,
+          profilePicture,
+        },
         category: {
-          id: categoryId,
+          id: categoryId.toString(),
           title: categoryTitle,
+          isListed: true,
         },
         description: course.description ?? undefined,
-        lessons: lessons,
+        lessons,
         thumbnail: course.thumbnail,
         price: course.price,
         status: course.status,
