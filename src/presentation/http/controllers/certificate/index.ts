@@ -1,1 +1,1 @@
-export { CreateCertificateController } from "./create-certificate.controller";
+export { GetCertificateController } from "./get-certificate.controller";

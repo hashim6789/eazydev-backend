@@ -1,12 +1,12 @@
 import {
-  ICreateCertificateRequestDTO,
+  IGetCertificateRequestDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
 
-export interface ICreateCertificateUseCase {
+export interface IGetCertificateUseCase {
   execute(
-    data: ICreateCertificateRequestDTO,
+    data: IGetCertificateRequestDTO,
     authData: Payload
   ): Promise<ResponseDTO>;
 }

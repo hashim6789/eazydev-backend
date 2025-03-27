@@ -7,6 +7,7 @@ import {
   IUserInRequestDTO,
   IUserOutRequestDTO,
 } from "../../domain/dtos";
+import { UserStatusData } from "../../domain/types/analysis";
 
 /**
  * Interface for the repository handling user data.
@@ -72,4 +73,15 @@ export interface IUsersRepository {
    * @returns {Promise<void>} A promise that resolves when the user is deleted.
    */
   delete(id: string): Promise<void>;
+  /**
+   * Deletes a user by their ID.
+   *
+   * @async
+   * @param {string} id - The ID of the user to be deleted.
+   * @returns {Promise<void>} A promise that resolves when the user is deleted.
+   */
+  getUsersAnalysis(): Promise<{
+    learnerData: UserStatusData[];
+    mentorData: UserStatusData[];
+  }>;
 }

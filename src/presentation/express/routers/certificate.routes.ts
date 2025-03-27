@@ -2,28 +2,22 @@ import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
 import { authenticateToken } from "../middlewares/authenticate-user.middleware";
 import { authorizeRole } from "../middlewares";
-import {
-  createCategoryComposer,
-  getAllCategoryAdminComposer,
-  getAllCategoryComposer,
-  updateCategoryComposer,
-  updateListCategoryComposer,
-} from "../../../infra/services/composers/category";
+// import { createCertificateComposer } from "../../../infra/services/composers/certificate/get-certificate.composer";
 
 /**
- * Router for handling category-related routes.
+ * Router for handling certificate-related routes.
  */
-export const categoryRouter = Router();
+export const certificateRouter = Router();
 
 /**
- * Endpoint to create category.
+ * Endpoint to create certificate.
  */
-categoryRouter.post(
-  "/",
-  authenticateToken,
-  authorizeRole(["mentor"]),
-  async (request: Request, response: Response) => {
-    const adapter = await expressAdapter(request, createCategoryComposer());
-    response.status(adapter.statusCode).json(adapter.body);
-  }
-);
+// certificateRouter.post(
+//   "/",
+//   authenticateToken,
+//   authorizeRole(["learner"]),
+//   async (request: Request, response: Response) => {
+//     const adapter = await expressAdapter(request, createCertificateComposer());
+//     response.status(adapter.statusCode).json(adapter.body);
+//   }
+// );

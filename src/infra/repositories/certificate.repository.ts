@@ -2,7 +2,10 @@ import { Model } from "mongoose";
 import { ICertificateRepository } from "../../app/repositories";
 import { ICertificate } from "../databases/interfaces";
 import { CertificateEntity } from "../../domain/entities";
-import { ICertificateOutDTO, UserBaseDetails } from "../../domain/dtos";
+import {
+  ICertificateOutDTO,
+  ICertificateOutPopulateDTO,
+} from "../../domain/dtos";
 
 export class CertificateRepository implements ICertificateRepository {
   private model: Model<ICertificate>;
@@ -22,40 +25,12 @@ export class CertificateRepository implements ICertificateRepository {
         issueDate: data.issueDate,
       });
       const savedCertificate = await createData.save(); // Wait for the save operation
-
-      // Populate references in the saved document
-      const populatedCertificate = await this.model
-        .findById(savedCertificate._id)
-        .populate("courseId", "title") // Populate course title
-        .populate("mentorId", "firstName lastName") // Populate mentor details
-        .populate("learnerId", "firstName lastName")
-        .exec(); // Execute the query
-
-      // Extract populated data
-      if (!populatedCertificate) {
-        throw new Error("Certificate not found after creation");
-      }
-
-      const { title, _id: courseId } =
-        populatedCertificate.courseId as unknown as {
-          title: string;
-          _id: string;
-        };
-      const mentor =
-        populatedCertificate.mentorId as unknown as UserBaseDetails;
-      const learner =
-        populatedCertificate.learnerId as unknown as UserBaseDetails;
-
-      // Return the formatted certificate DTO
       return {
         id: savedCertificate._id.toString(),
         progressId: savedCertificate.progressId.toString(),
-        course: {
-          id: courseId,
-          title,
-        },
-        mentor,
-        learner,
+        courseId: savedCertificate.courseId.toString(),
+        mentorId: savedCertificate.mentorId.toString(),
+        learnerId: savedCertificate.learnerId.toString(),
         issueDate: savedCertificate.issueDate.getTime(),
       };
     } catch (error) {
@@ -66,7 +41,7 @@ export class CertificateRepository implements ICertificateRepository {
 
   async findByProgressId(
     progressId: string
-  ): Promise<ICertificateOutDTO | null> {
+  ): Promise<ICertificateOutPopulateDTO | null> {
     try {
       const certificate = await this.model
         .findOne({ progressId })
@@ -80,9 +55,26 @@ export class CertificateRepository implements ICertificateRepository {
         title: string;
         _id: string;
       };
-      const mentor = certificate.mentorId as unknown as UserBaseDetails;
-      const learner = certificate.learnerId as unknown as UserBaseDetails;
+      const {
+        _id: mentorId,
+        firstName: mentorFirst,
+        lastName: mentorLast,
+      } = certificate.mentorId as unknown as {
+        _id: string;
+        firstName: string;
+        lastName: string;
+      };
+      const {
+        _id: learnerId,
+        firstName: learnerFirst,
+        lastName: learnerLast,
+      } = certificate.learnerId as unknown as {
+        _id: string;
+        firstName: string;
+        lastName: string;
+      };
 
+      // Return the formatted certificate DTO
       return {
         id: certificate._id.toString(),
         progressId: certificate.progressId.toString(),
@@ -90,8 +82,16 @@ export class CertificateRepository implements ICertificateRepository {
           id: courseId,
           title,
         },
-        mentor,
-        learner,
+        mentor: {
+          id: mentorId,
+          firstName: mentorFirst,
+          lastName: mentorLast,
+        },
+        learner: {
+          id: learnerId,
+          firstName: learnerFirst,
+          lastName: learnerLast,
+        },
         issueDate: certificate.issueDate.getTime(),
       };
     } catch (error) {

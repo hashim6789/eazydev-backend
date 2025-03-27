@@ -58,7 +58,7 @@ export class CreateMaterialUseCase implements ICreateMaterialUseCase {
       //   createdMaterial.id
       // );
 
-      return { data: { material: createdMaterial }, success: true };
+      return { data: createdMaterial.id, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

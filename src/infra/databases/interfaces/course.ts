@@ -6,7 +6,7 @@ export interface ICourse extends Document {
   title: string;
   mentorId: ObjectId;
   categoryId: ObjectId;
-  description: string | null;
+  description: string;
   thumbnail: string;
   lessons: ObjectId[];
   price: number;

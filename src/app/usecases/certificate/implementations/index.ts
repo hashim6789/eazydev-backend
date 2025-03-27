@@ -1,1 +1,1 @@
-export { CreateCertificateUseCase } from "./create-certificate.usecase";
+export { GetCertificateUseCase } from "./get-certificate.usecase";

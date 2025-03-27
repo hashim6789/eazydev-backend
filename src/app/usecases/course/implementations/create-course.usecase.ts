@@ -52,7 +52,7 @@ export class CreateCourseUseCase implements ICreateCourseUseCase {
         };
       }
 
-      return { data: { course: createdCourse }, success: true };
+      return { data: createdCourse.id, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

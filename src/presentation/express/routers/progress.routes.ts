@@ -7,6 +7,7 @@ import {
   getSingedUrlComposer,
 } from "../../../infra/services/composers/progress";
 import { updateProgressComposer } from "../../../infra/services/composers/progress/update-progress.composer";
+import { getCertificateComposer } from "../../../infra/services/composers/certificate";
 
 /**
  * Router for handling progress-related routes.
@@ -52,6 +53,15 @@ progressRouter.put(
   authorizeRole(["learner"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, updateProgressComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+progressRouter.get(
+  "/:progressId/certificate",
+  authenticateToken,
+  authorizeRole(["learner"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, getCertificateComposer());
     response.status(adapter.statusCode).json(adapter.body);
   }
 );

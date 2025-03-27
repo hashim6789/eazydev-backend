@@ -7,6 +7,7 @@ import {
   IPurchaseOutPopulatedDTO,
 } from "../../domain/dtos";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
+import { MonthlyRevenueData } from "../../domain/types";
 
 export class PurchaseRepository implements IPurchaseRepository {
   private model: Model<IPurchase>;
@@ -104,4 +105,12 @@ export class PurchaseRepository implements IPurchaseRepository {
       throw new Error("Course fetch failed");
     }
   }
+
+  // async analyzeMonthlyRevenue(): Promise<MonthlyRevenueData[]> {
+  //   try {
+  //   } catch (error) {
+  //     console.error("Error while analyzing monthly revenue purchases:", error);
+  //     throw new Error("revenue fetch failed");
+  //   }
+  // }
 }

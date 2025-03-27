@@ -18,12 +18,12 @@ analyzeRouter.get(
   }
 );
 
-// analyzeRouter.post(
-//   "/:meetingId/join",
-//   authenticateToken,
-//   authorizeRole(["mentor", "learner"]),
-//   async (request: Request, response: Response) => {
-//     const adapter = await expressAdapter(request, joinMeetingComposer());
-//     response.status(adapter.statusCode).json(adapter.body);
-//   }
-// );
+analyzeRouter.post(
+  "/admin",
+  authenticateToken,
+  authorizeRole(["admin"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, getMentorAnalysisComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);

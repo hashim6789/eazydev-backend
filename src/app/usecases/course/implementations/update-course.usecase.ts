@@ -1,10 +1,8 @@
 import {
-  ICreateCourseRequestDTO,
   IUpdateCourseRequestDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
-import { CourseEntity } from "../../../../domain/entities";
 import {
   AuthenticateUserErrorType,
   CourseErrorType,

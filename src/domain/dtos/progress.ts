@@ -12,6 +12,7 @@ export interface IProgressOutDTO {
   completedDate: number | null;
 }
 export interface IProgressOutPopulateDTO {
+  id: string;
   userId: string;
   mentor: {
     id: string;

@@ -39,10 +39,15 @@ export class UpdateCourseController implements IController {
       const pathParams = Object.keys(httpRequest.path);
 
       if (
-        pathParams.includes("courseId") &&
-        bodyParams.includes("newStatus") &&
+        bodyParams.includes("title") &&
+        bodyParams.includes("description") &&
+        bodyParams.includes("mentorId") &&
+        bodyParams.includes("categoryId") &&
+        bodyParams.includes("thumbnail") &&
+        bodyParams.includes("price") &&
         bodyParams.includes("userId") &&
-        bodyParams.includes("role")
+        bodyParams.includes("role") &&
+        pathParams.includes("courseId")
       ) {
         const {
           userId,
@@ -53,7 +58,6 @@ export class UpdateCourseController implements IController {
           description,
           thumbnail,
           price,
-          lessons,
         } = httpRequest.body as Payload &
           Omit<IUpdateCourseRequestDTO, "courseId">;
         const { courseId } = httpRequest.path as Pick<
@@ -70,7 +74,6 @@ export class UpdateCourseController implements IController {
             description,
             thumbnail,
             price,
-            lessons,
           },
           { userId, role }
         );

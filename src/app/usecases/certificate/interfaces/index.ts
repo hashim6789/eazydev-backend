@@ -1,1 +1,1 @@
-export { ICreateCertificateUseCase } from "./create-certificate.usecase";
+export { IGetCertificateUseCase } from "./create-certificate.usecase";

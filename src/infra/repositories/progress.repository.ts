@@ -9,9 +9,11 @@ import {
 import { ProgressEntity } from "../../domain/entities/progress";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 import {
+  analyzeAllCoursePerformancePipeline,
   mentorPerformanceAnalyzePipeline,
   ProgressPopulatedPipeline,
 } from "../pipelines";
+import { CoursePerformanceData } from "../../domain/types";
 
 export class ProgressRepository implements IProgressRepository {
   private model: Model<IProgress>;
@@ -180,21 +182,21 @@ export class ProgressRepository implements IProgressRepository {
   ): Promise<IProgressOutDTO | null> {
     try {
       // Step 1: Add materialId to completedMaterials
-      const result = await this.model
-        .findByIdAndUpdate(
-          id,
-          {
-            $addToSet: {
-              completedMaterials: new mongoose.Types.ObjectId(materialId),
-            },
+      const result = await this.model.findByIdAndUpdate(
+        id,
+        {
+          $addToSet: {
+            completedMaterials: new mongoose.Types.ObjectId(materialId),
           },
-          { new: true }
-        )
-        .populate("courseId");
+        },
+        { new: true }
+      );
+      // .populate("courseId");
 
       if (!result) {
         throw new Error("Progress document not found");
       }
+      const courseId = result.courseId;
 
       // Step 2: Populate course and lessons
       const progress = await this.model
@@ -261,7 +263,7 @@ export class ProgressRepository implements IProgressRepository {
         id: updatedProgress._id.toString(),
         userId: updatedProgress.userId.toString(),
         mentorId: updatedProgress.mentorId.toString(),
-        courseId: updatedProgress.courseId.toString(),
+        courseId: courseId.toString(),
         completedLessons: updatedProgress.completedLessons.map((item) =>
           item.toString()
         ),
@@ -290,6 +292,19 @@ export class ProgressRepository implements IProgressRepository {
     } catch (error) {
       console.error("Error while get mentor analyze progresses:", error);
       throw new Error("Progress analysis fetch failed");
+    }
+  }
+
+  async analyzeAllCoursePerformance(): Promise<CoursePerformanceData[]> {
+    try {
+      // Execute the aggregation pipeline
+      const coursePerformanceData = await this.model.aggregate(
+        analyzeAllCoursePerformancePipeline()
+      );
+      return coursePerformanceData as CoursePerformanceData[];
+    } catch (error) {
+      console.error("Error while get admin analyze course performance:", error);
+      throw new Error("Progress analysis course performance failed");
     }
   }
 }

@@ -33,7 +33,7 @@ export class CreateMaterialController implements IController {
       if (
         bodyParams.includes("title") &&
         bodyParams.includes("description") &&
-        bodyParams.includes("mentorId") &&
+        // bodyParams.includes("mentorId") &&
         bodyParams.includes("type") &&
         bodyParams.includes("fileKey") &&
         bodyParams.includes("duration") &&
@@ -46,17 +46,18 @@ export class CreateMaterialController implements IController {
           role,
           title,
           description,
-          mentorId,
+          // mentorId,
           type,
           fileKey,
           duration,
           // lessonId,
-        } = httpRequest.body as Payload & ICreateMaterialRequestDTO;
+        } = httpRequest.body as Payload &
+          Omit<ICreateMaterialRequestDTO, "mentorId">;
         response = await this.createMaterialUseCase.execute(
           {
             title,
             description,
-            mentorId,
+            mentorId: userId,
             type,
             fileKey,
             duration,

@@ -52,7 +52,7 @@ export class CreateLessonUseCase implements ICreateLessonUseCase {
 
       await this.courseRepository.addLessonToCourse(courseId, createdLesson.id);
 
-      return { data: { lesson: createdLesson }, success: true };
+      return { data: createdLesson.id, success: true };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

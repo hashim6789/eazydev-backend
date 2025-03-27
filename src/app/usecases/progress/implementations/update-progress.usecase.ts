@@ -1,21 +1,23 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import {
-  IGetSignedUrlRequestDTO,
-  IUpdateProgressRequestDTO,
-} from "../../../../domain/dtos/progress";
-import { IGetSignedUrlUseCase, IUpdateProgressUseCase } from "../interfaces";
+import { IUpdateProgressRequestDTO } from "../../../../domain/dtos/progress";
+import { IUpdateProgressUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";
-import { IProgressRepository } from "../../../repositories";
+import {
+  ICertificateRepository,
+  IProgressRepository,
+} from "../../../repositories";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
-import { AuthenticateUserErrorType } from "../../../../domain/enums";
-import { IS3ServiceProvider } from "../../../providers";
+import { CertificateEntity } from "../../../../domain/entities";
 
 export class UpdateProgressUseCase implements IUpdateProgressUseCase {
-  constructor(private progressRepository: IProgressRepository) {}
+  constructor(
+    private progressRepository: IProgressRepository,
+    private certificateRepository: ICertificateRepository
+  ) {}
 
   async execute(
     { progressId, materialId }: IUpdateProgressRequestDTO,
-    { userId, role }: Payload
+    { userId }: Payload
   ): Promise<ResponseDTO> {
     try {
       const progress = await this.progressRepository.updateProgress(
@@ -30,10 +32,22 @@ export class UpdateProgressUseCase implements IUpdateProgressUseCase {
         };
       }
 
+      if (progress.isCourseCompleted) {
+        const certificateEntity = CertificateEntity.create({
+          progressId,
+          courseId: progress.courseId,
+          mentorId: progress.mentorId,
+          learnerId: userId,
+          issueDate: Date.now(),
+        });
+
+        await this.certificateRepository.create(certificateEntity);
+      }
+
       return {
         statusCode: 200,
         success: true,
-        data: progress,
+        data: { success: true },
       };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };

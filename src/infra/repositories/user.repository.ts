@@ -8,9 +8,11 @@ import {
   IUserValidDTO,
   QueryUser,
 } from "../../domain/dtos/user";
+import { UserStatusData } from "../../domain/types";
 
 import { IUser } from "../databases/interfaces";
 import { Model } from "mongoose";
+import { userStatusesAnalysisPipeline } from "../pipelines";
 
 export class UserRepository implements IUsersRepository {
   private model: Model<IUser>;
@@ -199,4 +201,46 @@ export class UserRepository implements IUsersRepository {
   async delete(id: string): Promise<void> {
     await this.model.findByIdAndDelete(id);
   }
+
+  async getUsersAnalysis(): Promise<{
+    learnerData: UserStatusData[];
+    mentorData: UserStatusData[];
+  }> {
+    const data = (await this.model.aggregate(
+      userStatusesAnalysisPipeline()
+    )) as unknown as {
+      learnerData: UserStatusData[];
+      mentorData: UserStatusData[];
+    };
+
+    return data;
+  }
+
+  // async getLearnerAnalysis(): Promise<UserStatusData[]> {
+  //   const aggregatePipeline = [
+  //     {
+  //       $group: {
+  //         _id: { isBlocked: "$isBlocked" },
+  //         count: { $sum: 1 },
+  //       },
+  //     },
+  //     {
+  //       $project: {
+  //         _id: 0,
+  //         status: {
+  //           $cond: {
+  //             if: { $eq: ["$_id.isBlocked", true] },
+  //             then: "blocked",
+  //             else: "unblocked",
+  //           },
+  //         },
+  //         count: 1, // Include the count in the output
+  //       },
+  //     },
+  //   ];
+
+  //   const data = await LearnerModel.aggregate(aggregatePipeline);
+
+  //   return data as UserStatusData[];
+  // }
 }

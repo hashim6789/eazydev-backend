@@ -1,6 +1,6 @@
-import { ICreateCertificateUseCase } from "../../../../app/usecases/certificate";
+import { IGetCertificateUseCase } from "../../../../app/usecases/certificate/interfaces/create-certificate.usecase";
 import {
-  ICreateCertificateRequestDTO,
+  IGetCertificateRequestDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
@@ -18,9 +18,9 @@ import { IController } from "../IController";
 /**
  * Controller for handling requests to create a Certificate.
  */
-export class CreateCertificateController implements IController {
+export class GetCertificateController implements IController {
   constructor(
-    private createCertificateUseCase: ICreateCertificateUseCase,
+    private getCertificateUseCase: IGetCertificateUseCase,
     private httpErrors: IHttpErrors = new HttpErrors(),
     private httpSuccess: IHttpSuccess = new HttpSuccess()
   ) {}
@@ -29,20 +29,24 @@ export class CreateCertificateController implements IController {
     let error;
     let response: ResponseDTO;
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
+    if (
+      httpRequest.body &&
+      Object.keys(httpRequest.body).length > 0 &&
+      httpRequest.path &&
+      Object.keys(httpRequest.path).length > 0
+    ) {
       const bodyParams = Object.keys(httpRequest.body);
+      const pathParams = Object.keys(httpRequest.path);
 
       if (
-        bodyParams.includes("learnerId") &&
-        bodyParams.includes("progressId") &&
+        pathParams.includes("progressId") &&
         bodyParams.includes("userId") &&
         bodyParams.includes("role")
       ) {
-        const { userId, role, learnerId, progressId } =
-          httpRequest.body as Payload & ICreateCertificateRequestDTO;
-        response = await this.createCertificateUseCase.execute(
+        const { userId, role } = httpRequest.body as Payload;
+        const { progressId } = httpRequest.path as IGetCertificateRequestDTO;
+        response = await this.getCertificateUseCase.execute(
           {
-            learnerId,
             progressId,
           },
           { userId, role }

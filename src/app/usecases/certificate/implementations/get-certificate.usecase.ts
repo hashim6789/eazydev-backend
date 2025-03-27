@@ -1,41 +1,31 @@
 import {
-  ICreateCertificateRequestDTO,
+  IGetCertificateRequestDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
 import { CertificateEntity } from "../../../../domain/entities";
-import {
-  AuthenticateUserErrorType,
-  CategoryErrorType,
-} from "../../../../domain/enums";
 import { CertificateErrorType } from "../../../../domain/enums/certificate";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
 import {
   ICertificateRepository,
   IProgressRepository,
 } from "../../../repositories";
-import { ICreateCertificateUseCase } from "../interfaces";
+import { IGetCertificateUseCase } from "../interfaces";
 
-export class CreateCertificateUseCase implements ICreateCertificateUseCase {
+export class GetCertificateUseCase implements IGetCertificateUseCase {
   constructor(
     private certificateRepository: ICertificateRepository,
     private progressRepository: IProgressRepository
   ) {}
 
   async execute(
-    { progressId, learnerId }: ICreateCertificateRequestDTO,
-    authData: Payload
+    { progressId }: IGetCertificateRequestDTO,
+    { userId }: Payload
   ): Promise<ResponseDTO> {
     try {
-      if (learnerId !== authData.userId) {
-        return {
-          data: { error: AuthenticateUserErrorType.UserCanNotDoIt },
-          success: false,
-        };
-      }
-
-      const certificate =
-        this.certificateRepository.findByProgressId(progressId);
+      const certificate = await this.certificateRepository.findByProgressId(
+        progressId
+      );
       if (certificate) {
         return {
           data: certificate,
@@ -62,7 +52,7 @@ export class CreateCertificateUseCase implements ICreateCertificateUseCase {
         progressId,
         courseId: progress.courseId,
         mentorId: progress.mentorId,
-        learnerId,
+        learnerId: userId,
         issueDate: Date.now(),
       });
 

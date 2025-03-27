@@ -242,3 +242,34 @@ export const mentorPerformanceAnalyzePipeline = (
     },
   },
 ];
+
+export const analyzeAllCoursePerformancePipeline = (): PipelineStage[] => [
+  // Group progress by courseId
+  {
+    $group: {
+      _id: "$courseId", // Group by courseId
+      performance: { $avg: "$progress" }, // Calculate the average progress
+    },
+  },
+  // Lookup course name from the Courses collection
+  {
+    $lookup: {
+      from: "courses", // Name of the Courses collection
+      localField: "_id", // courseId in the Progress collection
+      foreignField: "_id", // _id in the Courses collection
+      as: "courseDetails", // Alias for the joined data
+    },
+  },
+  // Unwind the course details (flatten the array)
+  {
+    $unwind: "$courseDetails",
+  },
+  // Format the output
+  {
+    $project: {
+      _id: 0, // Exclude _id
+      course: "$courseDetails.title", // Get the course name from the joined data
+      performance: { $round: ["$performance", 0] }, // Round the performance to a whole number
+    },
+  },
+];

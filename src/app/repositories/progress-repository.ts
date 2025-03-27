@@ -5,6 +5,7 @@ import {
 } from "../../domain/dtos";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 import { ProgressEntity } from "../../domain/entities/progress";
+import { CoursePerformanceData } from "../../domain/types/analysis";
 
 export interface IProgressRepository {
   create(data: ProgressEntity): Promise<IProgressOutDTO>;
@@ -16,4 +17,5 @@ export interface IProgressRepository {
     materialId: string
   ): Promise<IProgressOutDTO | null>;
   mentorAnalysis(mentorId: string): Promise<any>;
+  analyzeAllCoursePerformance(): Promise<CoursePerformanceData[]>;
 }

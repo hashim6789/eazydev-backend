@@ -7,6 +7,14 @@ export interface UserBaseDetails {
 export interface ICertificateOutDTO {
   id: string;
   progressId: string;
+  courseId: string;
+  mentorId: string;
+  learnerId: string;
+  issueDate: number;
+}
+export interface ICertificateOutPopulateDTO {
+  id: string;
+  progressId: string;
   course: {
     id: string;
     title: string;
@@ -16,7 +24,6 @@ export interface ICertificateOutDTO {
   issueDate: number;
 }
 
-export interface ICreateCertificateRequestDTO {
+export interface IGetCertificateRequestDTO {
   progressId: string;
-  learnerId: string;
 }
