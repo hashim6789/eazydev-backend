@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
 import { authenticateToken, authorizeRole } from "../middlewares";
 import { getMentorAnalysisComposer } from "../../../infra/services/composers/analyze";
+import { getAdminAnalysisComposer } from "../../../infra/services/composers/analyze/get-admin-analysis.composer";
 
 /**
  * Router for handling analysis-related routes.
@@ -18,12 +19,12 @@ analyzeRouter.get(
   }
 );
 
-analyzeRouter.post(
+analyzeRouter.get(
   "/admin",
   authenticateToken,
   authorizeRole(["admin"]),
   async (request: Request, response: Response) => {
-    const adapter = await expressAdapter(request, getMentorAnalysisComposer());
+    const adapter = await expressAdapter(request, getAdminAnalysisComposer());
     response.status(adapter.statusCode).json(adapter.body);
   }
 );

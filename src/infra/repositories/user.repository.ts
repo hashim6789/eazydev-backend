@@ -208,14 +208,14 @@ export class UserRepository implements IUsersRepository {
     learnerData: UserStatusData[];
     mentorData: UserStatusData[];
   }> {
-    const data = (await this.model.aggregate(
-      userStatusesAnalysisPipeline()
-    )) as unknown as {
-      learnerData: UserStatusData[];
-      mentorData: UserStatusData[];
-    };
+    const learnerData = (await this.model.aggregate(
+      userStatusesAnalysisPipeline("learner")
+    )) as unknown as UserStatusData[];
+    const mentorData = (await this.model.aggregate(
+      userStatusesAnalysisPipeline("mentor")
+    )) as unknown as UserStatusData[];
 
-    return data;
+    return { learnerData, mentorData };
   }
 
   // async getLearnerAnalysis(): Promise<UserStatusData[]> {

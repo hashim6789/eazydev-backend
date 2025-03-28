@@ -1,19 +1,11 @@
-import { Payload } from "../../../../domain/dtos/jwt-payload";
 import { ResponseDTO } from "../../../../domain/dtos/response";
+import { AnalysisErrorType } from "../../../../domain/enums";
 import {
-  AnalysisErrorType,
-  AuthenticateUserErrorType,
-} from "../../../../domain/enums";
-import {
-  ICourseRepository,
   IProgressRepository,
   IPurchaseRepository,
   IUsersRepository,
 } from "../../../repositories";
-import {
-  IGetAdminAnalyzeUseCase,
-  IGetMentorAnalyzeUseCase,
-} from "../interfaces";
+import { IGetAdminAnalyzeUseCase } from "../interfaces";
 
 export class GetAdminAnalyzeUseCase implements IGetAdminAnalyzeUseCase {
   constructor(
@@ -22,19 +14,19 @@ export class GetAdminAnalyzeUseCase implements IGetAdminAnalyzeUseCase {
     private purchaseRepository: IPurchaseRepository
   ) {}
 
-  async execute({ userId, role }: Payload): Promise<ResponseDTO> {
+  async execute(): Promise<ResponseDTO> {
     try {
       const userStatuses = await this.usersRepository.getUsersAnalysis();
       const coursePerformanceData =
         await this.progressRepository.analyzeAllCoursePerformance();
-      // const monthlyRevenueData =
-      //   await this.purchaseRepository.analyzeMonthlyRevenue();
-      // if (!monthlyRevenueData) {
-      //   return {
-      //     data: { error: AnalysisErrorType.AnalysisFetchingFailed },
-      //     success: false,
-      //   };
-      // }
+      const monthlyRevenueData =
+        await this.purchaseRepository.analyzeMonthlyRevenue();
+      if (!monthlyRevenueData) {
+        return {
+          data: { error: AnalysisErrorType.AnalysisFetchingFailed },
+          success: false,
+        };
+      }
 
       return {
         data: {
