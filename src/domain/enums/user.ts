@@ -39,4 +39,5 @@ export enum UserErrorType {
    */
   UserCantUpdate = "User can't be update!",
   UserInvalidRole = "User invalid role!",
+  newPasswordNotValid = "User new password invalid role!",
 }

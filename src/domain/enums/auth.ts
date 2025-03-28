@@ -11,6 +11,7 @@ export enum AuthenticateUserErrorType {
   UserNotVerifiedOrBlocked = "User is not verified or blocked.",
   UserCanNotDoIt = "User is not access to do this activity!",
   TokenInvalid = " token is invalid!.",
+  PasswordNotValid = " the current password is not valid!.",
 }
 
 /**

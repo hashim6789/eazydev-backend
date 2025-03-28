@@ -1,9 +1,11 @@
 import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
 import {
+  ChangePasswordComposer,
   getAllUsersComposer,
   getUserComposer,
   updatePersonalInfoComposer,
+  VerifyPasswordComposer,
 } from "../../../infra/services/composers/user";
 import { blockUserComposer } from "../../../infra/services/composers/user/block-user.composer";
 import { authenticateToken, authorizeRole } from "../middlewares";
@@ -45,6 +47,32 @@ userRouter.put(
   authorizeRole(["learner", "mentor", "admin"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, updatePersonalInfoComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
+/**
+ * Endpoint to verify current password data of mentor and learner.
+ */
+userRouter.post(
+  "/verify-password",
+  authenticateToken,
+  authorizeRole(["learner", "mentor"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, VerifyPasswordComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
+/**
+ * Endpoint to verify current password data of mentor and learner.
+ */
+userRouter.post(
+  "/change-password",
+  authenticateToken,
+  authorizeRole(["learner", "mentor"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(request, ChangePasswordComposer());
     response.status(adapter.statusCode).json(adapter.body);
   }
 );

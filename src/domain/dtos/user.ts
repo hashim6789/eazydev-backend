@@ -27,6 +27,12 @@ export interface IUpdatePersonalInfoRequestDTO {
   firstName: string;
   lastName: string;
 }
+export interface IVerifyPasswordRequestDTO {
+  currentPassword: string;
+}
+export interface IChangePasswordRequestDTO {
+  newPassword: string;
+}
 export interface BlockUserRequestDTO {
   userId: string;
   change: boolean;

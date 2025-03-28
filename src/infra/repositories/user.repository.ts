@@ -88,7 +88,7 @@ export class UserRepository implements IUsersRepository {
    * @param {string} id - The ID of the user to find.
    * @returns {Promise<IUserInRequestDTO | null>} The found user or null.
    */
-  async findById(id: string): Promise<IUserDetailOutDTO | null> {
+  async findById(id: string): Promise<IUserValidDTO | null> {
     const user = await this.model.findById(id).lean();
     if (user) {
       return {
@@ -97,9 +97,11 @@ export class UserRepository implements IUsersRepository {
         firstName: user.firstName,
         lastName: user.lastName,
         role: user.role,
-        profilePicture: user.profilePicture,
+        password: user.password,
         isBlocked: user.isBlocked,
         isVerified: user.isVerified,
+        createdAt: user.createdAt,
+        googleId: user.googleId,
       };
     }
     return null;

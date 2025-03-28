@@ -1,16 +1,11 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
-  IGetPersonalInfoRequestDTO,
   IUpdatePersonalInfoRequestDTO,
-  IUserDetailOutDTO,
   Payload,
 } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums/user";
 import { IUsersRepository } from "../../../repositories/user.repository";
-import {
-  IGetPersonalInfoUseCase,
-  IUpdatePersonalInfoUseCase,
-} from "../interfaces";
+import { IUpdatePersonalInfoUseCase } from "../interfaces";
 
 export class UpdatePersonalInfoUseCase implements IUpdatePersonalInfoUseCase {
   constructor(private userRepository: IUsersRepository) {}

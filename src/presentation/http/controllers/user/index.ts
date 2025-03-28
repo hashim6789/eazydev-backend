@@ -4,3 +4,5 @@ export { GetUserController } from "./get-user.controller";
 export { BlockUserController } from "./block-user.controller";
 export { GetPersonalInfoController } from "./get-personal-info.controller";
 export { UpdatePersonalInfoController } from "./update-personal.controller";
+export { VerifyPasswordController } from "./verify-password.controller";
+export { ChangePasswordController } from "./change-password.controller";
