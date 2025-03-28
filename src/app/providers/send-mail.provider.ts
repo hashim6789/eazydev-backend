@@ -1,5 +1,4 @@
 import { SignupRole } from "../../domain/types/user";
-import { UserEntity } from "../../domain/entities/user";
 import { IUserValidDTO } from "../../domain/dtos";
 
 export interface ISendMailProvider {
