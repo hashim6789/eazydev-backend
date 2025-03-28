@@ -26,7 +26,7 @@ services:
       - "3333:3333" # Map port 3333 for the application
     env_file: .env # Load environment variables from the .env file
     # command: npm run dev # Start the application in development mode
-    command: npm start # Start the application in development mode
+    command: pm2-runtime start ecosystem.config.js # Start the application in development mode
     restart: always # Automatically restart if the container stops
     networks:
       - eazydev-network # Connect to the shared network
