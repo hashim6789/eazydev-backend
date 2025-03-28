@@ -20,7 +20,7 @@ const app = express();
  * CORS options for allowing all origins.
  */
 const corsOptions: cors.CorsOptions = {
-  origin: "http://localhost:5173",
+  origin: ["http://localhost:5173", "https://eazydev-frontend.vercel.app"], // Allow both local and deployed frontend
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
