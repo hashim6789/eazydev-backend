@@ -4,7 +4,6 @@ import {
   IPurchaseOutPopulatedDTO,
 } from "../../domain/dtos";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
-import { MonthlyRevenueData } from "../../domain/types";
 
 export interface IPurchaseRepository {
   create(data: ICreatePurchaseInDTO): Promise<IPurchaseOutDTO>;

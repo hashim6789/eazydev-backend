@@ -1,6 +1,5 @@
 import {
   ICreateMaterialInDTO,
-  ICreateMaterialRequestDTO,
   IMaterialOutDTO,
   IMaterialPopulateMentorDTO,
   IUpdateMaterialInDTO,
