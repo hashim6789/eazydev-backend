@@ -1,12 +1,6 @@
-import {
-  ICreateMaterialUseCase,
-  IUpdateMaterialUseCase,
-} from "../../../../app/usecases/material";
+import { IUpdateMaterialUseCase } from "../../../../app/usecases/material";
 import { Payload } from "../../../../domain/dtos/jwt-payload";
-import {
-  ICreateMaterialRequestDTO,
-  IUpdateMaterialRequestDTO,
-} from "../../../../domain/dtos/material";
+import { IUpdateMaterialRequestDTO } from "../../../../domain/dtos/material";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
   HttpErrors,
