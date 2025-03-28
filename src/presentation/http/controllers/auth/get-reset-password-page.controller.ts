@@ -1,10 +1,6 @@
-import {
-  IGetResetPageUseCase,
-  ILoginUseCase,
-} from "../../../../app/usecases/auth";
+import { IGetResetPageUseCase } from "../../../../app/usecases/auth";
 import { IGetResetPageRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { Role } from "../../../../domain/types/user";
 import {
   HttpErrors,
   HttpResponse,
