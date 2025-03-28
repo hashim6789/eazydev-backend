@@ -217,32 +217,4 @@ export class UserRepository implements IUsersRepository {
 
     return { learnerData, mentorData };
   }
-
-  // async getLearnerAnalysis(): Promise<UserStatusData[]> {
-  //   const aggregatePipeline = [
-  //     {
-  //       $group: {
-  //         _id: { isBlocked: "$isBlocked" },
-  //         count: { $sum: 1 },
-  //       },
-  //     },
-  //     {
-  //       $project: {
-  //         _id: 0,
-  //         status: {
-  //           $cond: {
-  //             if: { $eq: ["$_id.isBlocked", true] },
-  //             then: "blocked",
-  //             else: "unblocked",
-  //           },
-  //         },
-  //         count: 1, // Include the count in the output
-  //       },
-  //     },
-  //   ];
-
-  //   const data = await LearnerModel.aggregate(aggregatePipeline);
-
-  //   return data as UserStatusData[];
-  // }
 }

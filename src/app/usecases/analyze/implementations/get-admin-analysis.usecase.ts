@@ -33,7 +33,7 @@ export class GetAdminAnalyzeUseCase implements IGetAdminAnalyzeUseCase {
           learnerStatusData: userStatuses.learnerData,
           mentorStatusData: userStatuses.mentorData,
           coursePerformanceData,
-          // monthlyRevenueData,
+          monthlyRevenueData,
         },
         success: true,
       };
