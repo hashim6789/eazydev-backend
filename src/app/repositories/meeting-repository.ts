@@ -3,7 +3,6 @@ import {
   IMeetingOutPopulatedDTO,
   Meeting,
 } from "../../domain/dtos";
-import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
 import { MeetingEntity } from "../../domain/entities";
 import { Role } from "../../domain/types";
 
