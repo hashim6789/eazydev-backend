@@ -8,9 +8,6 @@ const { sendEmail } = require("../utils/emailService");
 // Webhook signing secret from Stripe Dashboard
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-/**
- * Handle Stripe webhook events
- */
 exports.handleWebhook = async (req, res) => {
   const sig = req.headers["stripe-signature"];
   let event;
