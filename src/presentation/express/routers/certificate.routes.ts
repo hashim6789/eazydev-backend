@@ -1,7 +1,5 @@
-import { Request, Response, Router } from "express";
-import { expressAdapter } from "../../adapters/express.adapter";
-import { authenticateToken } from "../middlewares/authenticate-user.middleware";
-import { authorizeRole } from "../middlewares";
+import { Router } from "express";
+
 // import { createCertificateComposer } from "../../../infra/services/composers/certificate/get-certificate.composer";
 
 /**
