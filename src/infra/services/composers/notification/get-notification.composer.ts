@@ -8,7 +8,7 @@ import { GetAllNotificationUseCase } from "../../../../app/usecases/notification
 import { IGetAllNotificationUseCase } from "../../../../app/usecases/notification/interfaces";
 import { GetLessonController } from "../../../../presentation/http/controllers";
 import { IController } from "../../../../presentation/http/controllers/IController";
-import { GetAllNotificationController } from "../../../../presentation/http/controllers/notification/get-all-notification.comtroller";
+import { GetAllNotificationController } from "../../../../presentation/http/controllers/notification/get-all-notification.controller";
 import { INotification } from "../../../databases/interfaces";
 import { LessonModel, NotificationModel } from "../../../databases/models";
 import {

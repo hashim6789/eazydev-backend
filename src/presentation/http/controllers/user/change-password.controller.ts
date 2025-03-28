@@ -1,15 +1,5 @@
-import {
-  IChangePasswordUseCase,
-  IGetPersonalInfoUseCase,
-  IUpdatePersonalInfoUseCase,
-  IVerifyPasswordUseCase,
-} from "../../../../app/usecases/user";
-import {
-  IChangePasswordRequestDTO,
-  IUpdatePersonalInfoRequestDTO,
-  IVerifyPasswordRequestDTO,
-  Payload,
-} from "../../../../domain/dtos";
+import { IChangePasswordUseCase } from "../../../../app/usecases/user";
+import { IChangePasswordRequestDTO, Payload } from "../../../../domain/dtos";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
   HttpErrors,

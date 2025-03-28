@@ -1,1 +1,1 @@
-export {} from "./get-all-notification.comtroller";
+export {} from "./get-all-notification.controller";
