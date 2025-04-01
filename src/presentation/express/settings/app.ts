@@ -3,8 +3,6 @@ import express from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 
-// import { authenticateRoutes } from "../routers/authenticate";
-// import { documentsRoutes } from "../routers/documentation";
 import { apiRouter } from "../routers";
 
 /**
