@@ -51,6 +51,42 @@ export interface ICourseOutPopulateDTO {
   price: number;
   status: CourseStatus;
 }
+export interface ICourseOutPopulateDTO {
+  id: string;
+  title: string;
+  mentor: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    profilePicture: string;
+  };
+  category: ICategoryOutDTO;
+  description: string;
+  lessons: {
+    id: string;
+    title: string;
+    description: string;
+    materials: Material[];
+  }[];
+  thumbnail: string;
+  price: number;
+  status: CourseStatus;
+}
+export interface ICourseOutSimplePopulateDTO {
+  id: string;
+  title: string;
+  mentor: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    profilePicture: string;
+  };
+  category: ICategoryOutDTO;
+  description: string;
+  thumbnail: string;
+  price: number;
+  status: CourseStatus;
+}
 
 export interface ICreateCourseRequestDTO {
   title: string;

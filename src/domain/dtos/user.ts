@@ -1,4 +1,5 @@
 import { Role, SignupRole } from "../types";
+import { ICourseOutSimplePopulateDTO } from "./course";
 
 export interface IForgotPasswordRequestDTO {
   email: string;
@@ -18,6 +19,9 @@ export interface ICreateUserRequestDTO {
 export interface IGetUserRequestDTO {
   userId: string;
   role: SignupRole;
+}
+export interface IGetUserDataRequestDTO {
+  id: string;
 }
 export interface IGetPersonalInfoRequestDTO {
   userId: string;
@@ -131,3 +135,12 @@ export interface IUserOut {
 
 export type IUserDetailOutDTO = IUserOut;
 // & PurchasedCourse
+
+export interface UserDataDTO {
+  firstName: string;
+  lastName: string | null;
+  email: string;
+  profilePicture: string | null;
+  courses: ICourseOutSimplePopulateDTO[];
+  isBlocked: boolean | null;
+}

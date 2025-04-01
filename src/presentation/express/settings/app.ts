@@ -19,8 +19,19 @@ const app = express();
 /**
  * CORS options for allowing all origins.
  */
+const allowedOrigins: string[] = ["http://localhost", "http://localhost:5173"];
+
 const corsOptions: cors.CorsOptions = {
-  origin: "*",
+  origin: (
+    origin: string | undefined,
+    callback: (error: Error | null, allow?: boolean | string) => void
+  ) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, origin);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,

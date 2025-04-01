@@ -21,7 +21,7 @@ export const categoryRouter = Router();
 categoryRouter.post(
   "/",
   authenticateToken,
-  authorizeRole(["mentor"]),
+  authorizeRole(["admin"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, createCategoryComposer());
     response.status(adapter.statusCode).json(adapter.body);

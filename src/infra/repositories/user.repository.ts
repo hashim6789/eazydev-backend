@@ -7,6 +7,7 @@ import {
   IUserOutRequestDTO,
   IUserValidDTO,
   QueryUser,
+  UserDataDTO,
 } from "../../domain/dtos/user";
 import { UserStatusData } from "../../domain/types";
 
@@ -217,4 +218,8 @@ export class UserRepository implements IUsersRepository {
 
     return { learnerData, mentorData };
   }
+
+  // async getUserData(id: string): Promise<UserDataDTO | null> {
+
+  // }
 }

@@ -2,6 +2,7 @@ import { ICreateSlotRequestDTO } from "../../../../domain/dtos";
 import { Payload } from "../../../../domain/dtos/jwt-payload";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { SlotEntity } from "../../../../domain/entities";
+import { SlotErrorType } from "../../../../domain/enums";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
 import { MaterialErrorType } from "../../../../domain/enums/material";
 import { ISlotRepository } from "../../../repositories";
@@ -25,6 +26,14 @@ export class CreateSlotUseCase implements ICreateSlotUseCase {
           success: false,
         };
       }
+
+      const slots = await this.slotRepository.findAllByMentorId(mentorId);
+      if (slots.length > 0 && slots.some((slot) => slot.time === time)) {
+        return {
+          data: { error: SlotErrorType.SlotAlreadyExist },
+          success: false,
+        };
+      }
       const slotEntity = SlotEntity.create({
         mentorId,
         time,
@@ -35,7 +44,7 @@ export class CreateSlotUseCase implements ICreateSlotUseCase {
 
       if (!createdSlot) {
         return {
-          data: { error: MaterialErrorType.MaterialCreationFailed },
+          data: { error: SlotErrorType.SlotCreationFailed },
           success: false,
         };
       }

@@ -6,6 +6,7 @@ import {
   IUserDetailOutDTO,
   IUserInRequestDTO,
   IUserOutRequestDTO,
+  UserDataDTO,
 } from "../../domain/dtos";
 import { UserStatusData } from "../../domain/types/analysis";
 
@@ -84,4 +85,6 @@ export interface IUsersRepository {
     learnerData: UserStatusData[];
     mentorData: UserStatusData[];
   }>;
+
+  // getUserData(id: string): Promise<UserDataDTO | null>;
 }

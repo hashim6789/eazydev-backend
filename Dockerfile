@@ -1,11 +1,16 @@
-# Base stage
+# Base image
 FROM node:18 AS base
 WORKDIR /app
-COPY . .  
-RUN ls -l /app && cat /app/package.json
-RUN npm install
+COPY package.json package-lock.json ./
+RUN npm install --frozen-lockfile
 COPY . .
-EXPOSE 3333
-RUN npm run build  
-CMD ["npm", "start"]
 
+# Install PM2 globally
+RUN npm install -g pm2
+
+# Expose backend port
+EXPOSE 3333
+RUN npm run build
+
+# Run app with PM2
+CMD ["pm2-runtime", "start", "npm", "--", "start"]

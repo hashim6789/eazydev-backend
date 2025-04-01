@@ -24,6 +24,14 @@ userRouter.get("/", async (request: Request, response: Response) => {
 
   response.status(adapter.statusCode).json(adapter.body);
 });
+/**
+ * Endpoint to signup for mentor and learner.
+ */
+// userRouter.get("/:userId", async (request: Request, response: Response) => {
+//   const adapter = await expressAdapter(request, getUserComposer());
+
+//   response.status(adapter.statusCode).json(adapter.body);
+// });
 
 /**
  * Endpoint to get personal data of mentor and learner.
