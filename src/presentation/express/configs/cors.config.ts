@@ -1,5 +1,6 @@
 import cors from "cors";
-import { env } from "./env.config";
+// import { env } from "./env.config";
+console.log("hello");
 
 /**
  * List of allowed origins for CORS.
