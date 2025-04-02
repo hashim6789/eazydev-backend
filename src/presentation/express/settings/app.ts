@@ -17,8 +17,12 @@ const app = express();
 /**
  * CORS options for allowing all origins.
  */
-const allowedOrigins: string[] = ["http://localhost", "http://localhost:5173"];
-
+const allowedOrigins: string[] = [
+  "http://localhost",
+  "http://localhost:5173",
+  "http://3.111.35.151", // Add your actual server IP
+  "http://3.111.35.151:5173",
+];
 const corsOptions: cors.CorsOptions = {
   origin: (
     origin: string | undefined,
