@@ -71,7 +71,8 @@ let io: SocketIOServer | undefined;
 export const connectSocket = (server: HttpServer): SocketIOServer => {
   io = new SocketIOServer(server, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: "https://www.muhammedhashim.online",
+      // origin: "http://localhost:5173",
       methods: ["GET", "POST"],
     },
   });
