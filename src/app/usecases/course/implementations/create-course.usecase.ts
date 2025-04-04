@@ -26,6 +26,7 @@ export class CreateCourseUseCase implements ICreateCourseUseCase {
     authData: Payload
   ): Promise<ResponseDTO> {
     try {
+      console.log(authData);
       if (mentorId !== authData.userId) {
         return {
           data: { error: AuthenticateUserErrorType.UserCanNotDoIt },
