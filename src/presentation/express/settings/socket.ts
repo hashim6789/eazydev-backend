@@ -71,10 +71,10 @@ let io: SocketIOServer | undefined;
 export const connectSocket = (server: HttpServer): SocketIOServer => {
   io = new SocketIOServer(server, {
     cors: {
-      origin: "*", // Change this to allow only your frontend domain
+      // origin: "http://localhost:5173",
+      origin: "https://www.muhammedhashim.online",
       methods: ["GET", "POST"],
     },
-    transports: ["websocket"],
   });
 
   io.on("connection", (socket) => {

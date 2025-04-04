@@ -1,4 +1,6 @@
-import { server } from "./app";
+import { app } from "./app";
+import http from "http";
+import { connectSocket } from "./socket";
 import { env } from "../configs/env.config";
 
 /**
@@ -7,6 +9,12 @@ import { env } from "../configs/env.config";
  */
 const PORT = env.PORT || 3333;
 const domain = env.DOMAIN || "localhost";
+
+// Create HTTP server
+const server = http.createServer(app);
+
+// === Initialize Socket.IO ===
+connectSocket(server);
 
 /**
  * Start the server and listen on the specified port.
