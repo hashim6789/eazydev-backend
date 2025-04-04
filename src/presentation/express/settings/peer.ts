@@ -1,5 +1,5 @@
 import express, { Application } from "express";
-import { createServer, Server } from "http";
+import { Server } from "http";
 import { ExpressPeerServer } from "peer";
 import { env } from "../configs/env.config";
 
@@ -26,14 +26,11 @@ import { env } from "../configs/env.config";
 export const initializePeerServer = (app: Application, server: Server) => {
   const peerServer = ExpressPeerServer(server, {
     path: "/peerjs",
-    // debug: true,
-    proxied: true, // Important if behind a reverse proxy (NGINX, Vercel, etc.)
-    allow_discovery: true, // Allow peers to discover each other
+    proxied: true,
+    allow_discovery: true, // Let peers discover each other
+    // debug: true, // Enable debugging logs
   });
 
   app.use("/peerjs", peerServer);
-
-  console.log(
-    `✅ PeerJS running on http://${env.DOMAIN}:${env.PEER_PORT}/peerjs`
-  );
+  console.log(`✅ PeerJS running at /peerjs`);
 };
