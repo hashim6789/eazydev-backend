@@ -9,8 +9,11 @@ import { apiRouter } from "../routers";
 import { connectDB } from "../../../infra/databases/mongoose/connecton";
 import { initializePeerServer } from "./peer";
 import { setupCors } from "../configs";
+import { createServer } from "http";
+import { connectSocket } from "./socket";
 
 const app = express();
+const server = createServer(app);
 
 app.use(morgan("dev"));
 app.use(setupCors);
@@ -22,11 +25,14 @@ app.use(cookieParser());
 connectDB();
 
 // === Initialize PeerJS ===
-initializePeerServer();
+initializePeerServer(app, server);
+
+// === Initialize Socket.IO ===
+connectSocket(server);
 
 /**
  * Mounting routes for documentation, user-related, and authentication endpoints.
  */
 app.use("/api", apiRouter);
 
-export { app };
+export { app, server };
