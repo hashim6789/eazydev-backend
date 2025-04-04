@@ -283,6 +283,8 @@ export class CourseRepository implements ICourseRepository {
       // Count total documents matching query
       const total = await this.model.countDocuments(query);
 
+      console.log("courses", courses);
+
       // Construct the pagination response
       return {
         body: courses.map((course) => {
