@@ -25,7 +25,7 @@ app.use(cookieParser());
 connectDB();
 
 // === Initialize PeerJS ===
-initializePeerServer(app, server);
+// initializePeerServer(app, server);
 
 // === Initialize Socket.IO ===
 connectSocket(server);
