@@ -27,6 +27,16 @@ export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
         };
       }
 
+      const duplicateCategory = await this.categoryRepository.findByTitle(
+        title
+      );
+      if (duplicateCategory) {
+        return {
+          data: { error: CategoryErrorType.CategoryAlreadyExist },
+          success: false,
+        };
+      }
+
       const category = await this.categoryRepository.findById(categoryId);
       if (!category) {
         return {

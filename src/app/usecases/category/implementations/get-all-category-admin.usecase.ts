@@ -8,7 +8,10 @@ export class GetAllCategoryAdminUseCase implements IGetAllCategoryAdminUseCase {
 
   async execute(query: QueryCategory): Promise<ResponseDTO> {
     try {
-      const categories = await this.categoryRepository.findAll(query);
+      const categories = await this.categoryRepository.findAll({
+        ...query,
+        role: "admin",
+      });
       if (categories.total === 0) {
         return {
           success: false,

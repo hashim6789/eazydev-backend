@@ -83,7 +83,7 @@ export class LoginUseCase implements ILoginUseCase {
       // });
 
       return {
-        data: { token, tokenId: refreshToken.id, user },
+        data: { token, refreshTokenId: refreshToken.id, user },
         success: true,
       };
     } catch (error: any) {

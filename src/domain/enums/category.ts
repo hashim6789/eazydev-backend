@@ -9,4 +9,5 @@ export enum CategoryErrorType {
   CategoryUpdateFailed = "Category update is failed!",
   CategoryListUpdateFailed = "Category list update is failed!",
   CategoryNotFound = "Category is not found!",
+  CategoryAlreadyExist = "Category is already exist!",
 }
