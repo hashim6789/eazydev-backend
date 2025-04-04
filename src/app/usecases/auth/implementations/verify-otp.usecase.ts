@@ -63,7 +63,6 @@ export class VerifyOtpUseCase implements IVerifyOtpUseCase {
         statusCode: 200,
         success: true,
         data: {
-          message: OtpErrorType.OtpVerifySuccess,
           user,
         },
       };
