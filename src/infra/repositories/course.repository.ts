@@ -344,7 +344,8 @@ export class CourseRepository implements ICourseRepository {
       // Construct the query
       const query: Record<string, any> = {
         mentorId,
-        categoryId: category !== "all" ? category : { $exists: true },
+
+        status: category !== "all" ? category : { $exists: true },
         title: { $regex: search, $options: "i" }, // Case-insensitive search
       };
 
@@ -375,8 +376,8 @@ export class CourseRepository implements ICourseRepository {
       // Fetch courses with query, pagination, and sorting
       const courses = await this.model
         .find(query)
-        .populate("mentorId", "firstName lastName")
-        .populate("categoryId", "title") // Populate category title
+        // .populate("mentorId", "firstName lastName")
+        // .populate("categoryId", "title") // Populate category title
         .skip(skip)
         .limit(limitParsed)
         // .sort(sortOptions)
@@ -446,7 +447,7 @@ export class CourseRepository implements ICourseRepository {
       };
 
       // Define sorting options
-      const sortOptions: Record<string, number> = {};
+      const sortOptions: { [key: string]: 1 | -1 } = {};
       switch (sort) {
         case "titleAsc":
           sortOptions.title = 1; // Ascending by title
@@ -476,7 +477,7 @@ export class CourseRepository implements ICourseRepository {
         .populate("categoryId", "title") // Populate category title
         .skip(skip)
         .limit(limitParsed)
-        // .sort(sortOptions)
+        .sort(sortOptions)
         .lean(); // Convert mongoose documents to plain objects
 
       // Count total documents matching query
