@@ -4,15 +4,11 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { MaterialEntity } from "../../../../domain/entities";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
 import { MaterialErrorType } from "../../../../domain/enums/material";
-import { ILessonRepository } from "../../../repositories";
 import { IMaterialRepository } from "../../../repositories/material.repository";
 import { ICreateMaterialUseCase } from "../interface";
 
 export class CreateMaterialUseCase implements ICreateMaterialUseCase {
-  constructor(
-    private materialRepository: IMaterialRepository,
-    private lessonRepository: ILessonRepository
-  ) {}
+  constructor(private materialRepository: IMaterialRepository) {}
 
   async execute(
     {
@@ -52,11 +48,6 @@ export class CreateMaterialUseCase implements ICreateMaterialUseCase {
           success: false,
         };
       }
-
-      // await this.lessonRepository.addMaterialToLesson(
-      //   lessonId,
-      //   createdMaterial.id
-      // );
 
       return { data: createdMaterial.id, success: true };
     } catch (error: any) {

@@ -17,4 +17,5 @@ export interface ICategoryRepository {
   ): Promise<ICategoryOutDTO | null>;
   findAll(query?: QueryCategory): Promise<PaginationDTO>;
   fetch(role: Role): Promise<ICategoryOutDTO[]>;
+  findByTitle(title: string): Promise<ICategoryOutDTO | null>;
 }

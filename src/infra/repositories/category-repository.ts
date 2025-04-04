@@ -150,4 +150,21 @@ export class CategoryRepository implements ICategoryRepository {
       throw new Error("Category fetch failed");
     }
   }
+
+  async findByTitle(title: string): Promise<ICategoryOutDTO | null> {
+    try {
+      const category = await this.model.findOne({
+        title: { $regex: `^${title}$`, $options: "i" }, // Case-insensitive match
+      });
+      if (!category) return null;
+      return {
+        id: category._id.toString(),
+        isListed: category.isListed,
+        title: category.title,
+      };
+    } catch (error) {
+      console.error("Error while fetching category:", error);
+      throw new Error("Category fetch failed");
+    }
+  }
 }
