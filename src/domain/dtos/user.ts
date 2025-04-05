@@ -22,6 +22,7 @@ export interface IGetUserRequestDTO {
 }
 export interface IGetUserDataRequestDTO {
   id: string;
+  userRole: SignupRole;
 }
 export interface IGetPersonalInfoRequestDTO {
   userId: string;
@@ -141,6 +142,6 @@ export interface UserDataDTO {
   lastName: string | null;
   email: string;
   profilePicture: string | null;
-  courses: ICourseOutSimplePopulateDTO[];
+  courses: { title: string; thumbnail: string; price: string }[];
   isBlocked: boolean | null;
 }

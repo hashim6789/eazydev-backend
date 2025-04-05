@@ -9,11 +9,15 @@ import {
   QueryUser,
   UserDataDTO,
 } from "../../domain/dtos/user";
-import { UserStatusData } from "../../domain/types";
+import { SignupRole, UserStatusData } from "../../domain/types";
 
 import { IUser } from "../databases/interfaces";
-import { Model } from "mongoose";
-import { userStatusesAnalysisPipeline } from "../pipelines";
+import mongoose, { Model } from "mongoose";
+import {
+  getLearnerAggregationPipeline,
+  getMentorAggregationPipeline,
+  userStatusesAnalysisPipeline,
+} from "../pipelines";
 
 export class UserRepository implements IUsersRepository {
   private model: Model<IUser>;
@@ -219,7 +223,15 @@ export class UserRepository implements IUsersRepository {
     return { learnerData, mentorData };
   }
 
-  // async getUserData(id: string): Promise<UserDataDTO | null> {
+  async getUserData(id: string, role: SignupRole): Promise<UserDataDTO> {
+    let result: UserDataDTO[] = [];
 
-  // }
+    if (role === "mentor") {
+      result = await this.model.aggregate(getMentorAggregationPipeline(id));
+    } else if (role === "learner") {
+      result = await this.model.aggregate(getLearnerAggregationPipeline(id));
+    }
+
+    return result[0] as UserDataDTO;
+  }
 }

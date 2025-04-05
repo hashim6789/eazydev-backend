@@ -3,13 +3,13 @@ import { expressAdapter } from "../../adapters/express.adapter";
 import {
   ChangePasswordComposer,
   getAllUsersComposer,
-  getUserComposer,
   updatePersonalInfoComposer,
   VerifyPasswordComposer,
 } from "../../../infra/services/composers/user";
 import { blockUserComposer } from "../../../infra/services/composers/user/block-user.composer";
 import { authenticateToken, authorizeRole } from "../middlewares";
 import { getPersonalInfoComposer } from "../../../infra/services/composers/user/get-personal-info.composer";
+import { getUserDataComposer } from "../../../infra/services/composers/user/get-user-data.composer";
 
 /**
  * Router for handling auth-related routes.
@@ -85,8 +85,8 @@ userRouter.post(
   }
 );
 
-userRouter.get("/:userId", async (request: Request, response: Response) => {
-  const adapter = await expressAdapter(request, getUserComposer());
+userRouter.get("/:id", async (request: Request, response: Response) => {
+  const adapter = await expressAdapter(request, getUserDataComposer());
 
   response.status(adapter.statusCode).json(adapter.body);
 });

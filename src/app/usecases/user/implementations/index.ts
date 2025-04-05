@@ -5,4 +5,4 @@ export { GetPersonalInfoUseCase } from "./get-personal-infor.usecase";
 export { UpdatePersonalInfoUseCase } from "./update-personal-info.usecase";
 export { VerifyPasswordUseCase } from "./verify-password.usecase";
 export { ChangePasswordUseCase } from "./change-password.usecase";
-// export { GetUserDataUseCase } from "./get-user-data.usecase";
+export { GetUserDataUseCase } from "./get-user-data.usecase";

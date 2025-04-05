@@ -22,7 +22,7 @@ app.use(cookieParser());
 connectDB();
 
 // === Initialize PeerJS ===
-initializePeerServer();
+// initializePeerServer();
 
 /**
  * Mounting routes for documentation, user-related, and authentication endpoints.

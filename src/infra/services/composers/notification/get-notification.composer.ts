@@ -1,20 +1,10 @@
-import {
-  ILessonRepository,
-  INotificationRepository,
-} from "../../../../app/repositories";
-import { GetLessonUseCase } from "../../../../app/usecases/lesson/implementations";
-import { IGetLessonUseCase } from "../../../../app/usecases/lesson/interfaces";
+import { INotificationRepository } from "../../../../app/repositories";
 import { GetAllNotificationUseCase } from "../../../../app/usecases/notification/implementations";
 import { IGetAllNotificationUseCase } from "../../../../app/usecases/notification/interfaces";
-import { GetLessonController } from "../../../../presentation/http/controllers";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { GetAllNotificationController } from "../../../../presentation/http/controllers/notification/get-all-notification.controller";
-import { INotification } from "../../../databases/interfaces";
-import { LessonModel, NotificationModel } from "../../../databases/models";
-import {
-  LessonRepository,
-  NotificationRepository,
-} from "../../../repositories";
+import { NotificationModel } from "../../../databases/models";
+import { NotificationRepository } from "../../../repositories";
 
 export function getNotificationComposer(): IController {
   const repository: INotificationRepository = new NotificationRepository(

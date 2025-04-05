@@ -53,6 +53,14 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
               data: { error: CourseErrorType.RequestStatusFailed },
               success: false,
             };
+          } else if (
+            newStatus === "draft" &&
+            existingCourse.status !== "rejected"
+          ) {
+            return {
+              data: { error: CourseErrorType.RequestStatusFailed },
+              success: false,
+            };
           }
           break;
 
@@ -90,7 +98,7 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
         newStatus
       );
 
-      if (!updatedCourse) {
+      if (!updatedCourse || updatedCourse.status !== newStatus) {
         return {
           data: { error: CourseErrorType.CourseUpdateStatusFailed },
           success: false,
@@ -104,7 +112,8 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
         }" has been updated to ${updatedCourse.status} by the ${
           role === "admin" ? "admin" : "mentor"
         }.`,
-        recipientId: updatedCourse.mentorId,
+        recipientId:
+          role === "admin" ? updatedCourse.mentorId : (env.ADMIN_ID as string),
         createdAt: Date.now(),
       });
 

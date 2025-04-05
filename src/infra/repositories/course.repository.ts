@@ -66,9 +66,13 @@ export class CourseRepository implements ICourseRepository {
     newStatus: CourseStatus
   ): Promise<ICourseSimpleOutDTO | null> {
     try {
-      const course = await this.model.findByIdAndUpdate(courseId, {
-        status: newStatus,
-      });
+      const course = await this.model.findByIdAndUpdate(
+        courseId,
+        {
+          status: newStatus,
+        },
+        { new: true }
+      );
       if (!course) return null;
 
       return {
@@ -247,7 +251,7 @@ export class CourseRepository implements ICourseRepository {
       };
 
       // Define sorting options
-      const sortOptions: Record<string, number> = {};
+      const sortOptions: { [key: string]: 1 | -1 } = {};
       switch (sort) {
         case "titleAsc":
           sortOptions.title = 1; // Ascending by title
@@ -277,7 +281,7 @@ export class CourseRepository implements ICourseRepository {
         .populate("categoryId", "title") // Populate category title
         .skip(skip)
         .limit(limitParsed)
-        // .sort(sortOptions)
+        .sort(sortOptions)
         .lean(); // Convert mongoose documents to plain objects
 
       // Count total documents matching query
@@ -350,7 +354,7 @@ export class CourseRepository implements ICourseRepository {
       };
 
       // Define sorting options
-      const sortOptions: Record<string, number> = {};
+      const sortOptions: { [key: string]: 1 | -1 } = {};
       switch (sort) {
         case "titleAsc":
           sortOptions.title = 1; // Ascending by title
@@ -376,11 +380,11 @@ export class CourseRepository implements ICourseRepository {
       // Fetch courses with query, pagination, and sorting
       const courses = await this.model
         .find(query)
-        // .populate("mentorId", "firstName lastName")
-        // .populate("categoryId", "title") // Populate category title
+        .populate("mentorId", "firstName lastName")
+        .populate("categoryId", "title") // Populate category title
         .skip(skip)
         .limit(limitParsed)
-        // .sort(sortOptions)
+        .sort(sortOptions)
         .lean(); // Convert mongoose documents to plain objects
 
       // Count total documents matching query

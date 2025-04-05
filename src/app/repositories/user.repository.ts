@@ -9,6 +9,7 @@ import {
   UserDataDTO,
 } from "../../domain/dtos";
 import { UserStatusData } from "../../domain/types/analysis";
+import { SignupRole } from "../../domain/types";
 
 /**
  * Interface for the repository handling user data.
@@ -86,5 +87,5 @@ export interface IUsersRepository {
     mentorData: UserStatusData[];
   }>;
 
-  // getUserData(id: string): Promise<UserDataDTO | null>;
+  getUserData(id: string, role: SignupRole): Promise<UserDataDTO>;
 }

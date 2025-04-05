@@ -29,22 +29,22 @@ export class GetUserDataController implements IController {
     let response: ResponseDTO;
 
     if (
-      httpRequest.body &&
       httpRequest.path &&
-      Object.keys(httpRequest.body) &&
-      Object.keys(httpRequest.path).length > 0
+      httpRequest.query &&
+      Object.keys(httpRequest.path).length > 0 &&
+      Object.keys(httpRequest.query).length > 0
     ) {
-      const bodyParams = Object.keys(httpRequest.body);
       const pathParams = Object.keys(httpRequest.path);
+      const queryParams = Object.keys(httpRequest.query);
 
-      if (
-        bodyParams.includes("role") &&
-        bodyParams.includes("userId") &&
-        pathParams.includes("id")
-      ) {
-        const { id } = httpRequest.path as IGetUserDataRequestDTO;
+      if (pathParams.includes("id") && queryParams.includes("userRole")) {
+        const { id } = httpRequest.path as Pick<IGetUserDataRequestDTO, "id">;
+        const { userRole } = httpRequest.query as Pick<
+          IGetUserDataRequestDTO,
+          "userRole"
+        >;
 
-        response = await this.getUserDataCase.execute({ id });
+        response = await this.getUserDataCase.execute({ id, userRole });
       } else {
         error = this.httpErrors.error_422();
         return new HttpResponse(error.statusCode, error.body);
