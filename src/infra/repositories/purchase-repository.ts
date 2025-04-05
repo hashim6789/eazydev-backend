@@ -86,7 +86,7 @@ export class PurchaseRepository implements IPurchaseRepository {
       // Fetch purchases with query, pagination, and sorting
       const purchases = await this.model
         .find({ learnerId: userId })
-
+        .populate("courseId", "title")
         .lean();
       return {
         body: purchases.map((purchase) => {

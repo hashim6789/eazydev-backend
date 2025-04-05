@@ -7,3 +7,4 @@ export { IUpdatePersonalInfoUseCase } from "./update-personal-info.usecase";
 export { IVerifyPasswordUseCase } from "./verify-password.usecase";
 export { IChangePasswordUseCase } from "./change-password.usecase";
 export { IGetUserDataUseCase } from "./get-user-data.usecase";
+export { IUpdateProfilePictureUseCase } from "./update-profile-picture.usecase";

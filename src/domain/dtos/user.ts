@@ -32,6 +32,9 @@ export interface IUpdatePersonalInfoRequestDTO {
   firstName: string;
   lastName: string;
 }
+export interface IUpdateProfilePictureRequestDTO {
+  profilePicture: string;
+}
 export interface IVerifyPasswordRequestDTO {
   currentPassword: string;
 }
@@ -96,6 +99,7 @@ export type IUserValidDTO = Pick<
   | "password"
   | "createdAt"
   | "googleId"
+  | "profilePicture"
 >;
 export type IUserInRequestDTO = Pick<
   IUserDTO,

@@ -4,6 +4,7 @@ import {
   ChangePasswordComposer,
   getAllUsersComposer,
   updatePersonalInfoComposer,
+  updateProfilePictureComposer,
   VerifyPasswordComposer,
 } from "../../../infra/services/composers/user";
 import { blockUserComposer } from "../../../infra/services/composers/user/block-user.composer";
@@ -55,6 +56,22 @@ userRouter.put(
   authorizeRole(["learner", "mentor", "admin"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, updatePersonalInfoComposer());
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
+/**
+ * Endpoint to update profile image of mentor and learner.
+ */
+userRouter.put(
+  "/profile-img",
+  authenticateToken,
+  authorizeRole(["learner", "mentor"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(
+      request,
+      updateProfilePictureComposer()
+    );
     response.status(adapter.statusCode).json(adapter.body);
   }
 );

@@ -477,7 +477,7 @@ export class CourseRepository implements ICourseRepository {
       // Fetch courses with query, pagination, and sorting
       const courses = await this.model
         .find(query)
-        .populate("mentorId", "firstName lastName")
+        .populate("mentorId", "firstName lastName profilePicture")
         .populate("categoryId", "title") // Populate category title
         .skip(skip)
         .limit(limitParsed)
@@ -498,10 +498,12 @@ export class CourseRepository implements ICourseRepository {
             _id: mentorId,
             firstName,
             lastName,
+            profilePicture,
           } = course.mentorId as unknown as {
             firstName: string;
             lastName: string;
             _id: string;
+            profilePicture: string;
           };
 
           return {
@@ -510,6 +512,7 @@ export class CourseRepository implements ICourseRepository {
               id: mentorId,
               firstName,
               lastName,
+              profilePicture,
             },
             title: course.title,
             description: course.description,
