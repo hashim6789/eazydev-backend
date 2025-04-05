@@ -33,3 +33,16 @@ export interface RevenueStream {
   type: "purchase" | "platform_fee";
   total: number;
 }
+
+export interface MentorRevenue {
+  totalEarnings: number;
+  currentMonthEarnings: number;
+  totalStudents: number;
+  monthlyEarnings: MonthlyEarning[];
+}
+
+export interface MonthlyEarning {
+  month: string;
+  year: number;
+  earnings: number;
+}

@@ -4,7 +4,11 @@ import {
   IPurchaseOutPopulatedDTO,
 } from "../../domain/dtos";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
-import { MonthlyRevenueData, RevenueData } from "../../domain/types";
+import {
+  MentorRevenue,
+  MonthlyRevenueData,
+  RevenueData,
+} from "../../domain/types";
 
 export interface IPurchaseRepository {
   create(data: ICreatePurchaseInDTO): Promise<IPurchaseOutDTO>;
@@ -12,4 +16,5 @@ export interface IPurchaseRepository {
   findAllByUser(userId: string): Promise<PaginationDTO | null>;
   analyzeMonthlyRevenue(): Promise<MonthlyRevenueData[]>;
   analyzeAdminRevenue(): Promise<RevenueData>;
+  analyzeMentorRevenue(mentorId: string): Promise<MentorRevenue>;
 }

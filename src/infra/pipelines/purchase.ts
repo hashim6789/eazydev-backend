@@ -1,4 +1,4 @@
-import { PipelineStage } from "mongoose";
+import mongoose, { PipelineStage } from "mongoose";
 
 export const monthlyRevenuePopulatedPipeline = (): PipelineStage[] => [
   {
@@ -148,6 +148,144 @@ export function adminRevenueAnalysisPipeline(): PipelineStage[] {
         totalRevenue: { $arrayElemAt: ["$totalRevenue.totalRevenue", 0] },
         monthlyRevenue: "$monthlyRevenue",
         revenueStreams: "$revenueStreams",
+      },
+    },
+  ];
+}
+
+export function mentorRevenuePipeline(mentorId: string): PipelineStage[] {
+  return [
+    {
+      $match: {
+        status: "completed",
+      },
+    },
+    {
+      $lookup: {
+        from: "courses",
+        localField: "courseId",
+        foreignField: "_id",
+        as: "course",
+      },
+    },
+    {
+      $unwind: "$course",
+    },
+    {
+      $match: {
+        "course.mentorId": new mongoose.Types.ObjectId(mentorId),
+      },
+    },
+    {
+      $addFields: {
+        earning: { $multiply: ["$amount", 0.85] },
+      },
+    },
+    {
+      $facet: {
+        totalEarnings: [
+          {
+            $group: {
+              _id: null,
+              totalEarnings: { $sum: "$earning" },
+            },
+          },
+          {
+            $project: { _id: 0, totalEarnings: 1 },
+          },
+        ],
+        currentMonthEarnings: [
+          {
+            $match: {
+              purchaseDate: {
+                $gte: new Date(
+                  new Date().getFullYear(),
+                  new Date().getMonth(),
+                  1
+                ),
+              },
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              currentMonthEarnings: { $sum: "$earning" },
+            },
+          },
+          {
+            $project: { _id: 0, currentMonthEarnings: 1 },
+          },
+        ],
+        totalStudents: [
+          {
+            $group: {
+              _id: "$learnerId",
+            },
+          },
+          {
+            $count: "totalStudents",
+          },
+        ],
+        monthlyEarnings: [
+          {
+            $group: {
+              _id: {
+                month: { $month: "$purchaseDate" },
+                year: { $year: "$purchaseDate" },
+              },
+              earnings: { $sum: "$earning" },
+            },
+          },
+          {
+            $project: {
+              _id: 0,
+              month: {
+                $let: {
+                  vars: {
+                    months: [
+                      "",
+                      "Jan",
+                      "Feb",
+                      "Mar",
+                      "Apr",
+                      "May",
+                      "Jun",
+                      "Jul",
+                      "Aug",
+                      "Sep",
+                      "Oct",
+                      "Nov",
+                      "Dec",
+                    ],
+                  },
+                  in: {
+                    $arrayElemAt: ["$$months", "$_id.month"],
+                  },
+                },
+              },
+              year: "$_id.year",
+              earnings: 1,
+            },
+          },
+          { $sort: { year: 1, month: 1 } },
+        ],
+      },
+    },
+    {
+      $project: {
+        totalEarnings: {
+          $ifNull: [{ $arrayElemAt: ["$totalEarnings.totalEarnings", 0] }, 0],
+        },
+        currentMonthEarnings: {
+          $ifNull: [
+            { $arrayElemAt: ["$currentMonthEarnings.currentMonthEarnings", 0] },
+            0,
+          ],
+        },
+        totalStudents: {
+          $ifNull: [{ $arrayElemAt: ["$totalStudents.totalStudents", 0] }, 0],
+        },
+        monthlyEarnings: "$monthlyEarnings",
       },
     },
   ];

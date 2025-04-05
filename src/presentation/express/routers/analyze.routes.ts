@@ -4,6 +4,7 @@ import { authenticateToken, authorizeRole } from "../middlewares";
 import {
   getAdminRevenueAnalysisComposer,
   getMentorAnalysisComposer,
+  getMentorRevenueAnalysisComposer,
 } from "../../../infra/services/composers/analyze";
 import { getAdminAnalysisComposer } from "../../../infra/services/composers/analyze/get-admin-analysis.composer";
 
@@ -34,6 +35,20 @@ analyzeRouter.get(
     response.status(adapter.statusCode).json(adapter.body);
   }
 );
+
+analyzeRouter.get(
+  "/mentor/revenue",
+  authenticateToken,
+  authorizeRole(["mentor"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(
+      request,
+      getMentorRevenueAnalysisComposer()
+    );
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
+
 analyzeRouter.get(
   "/admin",
   authenticateToken,
