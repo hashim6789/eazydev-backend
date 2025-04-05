@@ -30,6 +30,6 @@ export interface MonthlyRevenue {
 }
 
 export interface RevenueStream {
-  type: "purchase" | "subscription" | "platform_fee";
+  type: "purchase" | "platform_fee";
   total: number;
 }

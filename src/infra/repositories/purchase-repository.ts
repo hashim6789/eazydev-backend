@@ -7,8 +7,11 @@ import {
   IPurchaseOutPopulatedDTO,
 } from "../../domain/dtos";
 import { PaginationDTO } from "../../domain/dtos/pagination.dtos";
-import { MonthlyRevenueData } from "../../domain/types";
-import { monthlyRevenuePopulatedPipeline } from "../pipelines";
+import { MonthlyRevenueData, RevenueData } from "../../domain/types";
+import {
+  adminRevenueAnalysisPipeline,
+  monthlyRevenuePopulatedPipeline,
+} from "../pipelines";
 
 export class PurchaseRepository implements IPurchaseRepository {
   private model: Model<IPurchase>;
@@ -114,6 +117,17 @@ export class PurchaseRepository implements IPurchaseRepository {
       );
 
       return result as MonthlyRevenueData[];
+    } catch (error) {
+      console.error("Error while analyzing monthly revenue purchases:", error);
+      throw new Error("revenue fetch failed");
+    }
+  }
+
+  async analyzeAdminRevenue(): Promise<RevenueData> {
+    try {
+      const result = await this.model.aggregate(adminRevenueAnalysisPipeline());
+
+      return result[0] as RevenueData;
     } catch (error) {
       console.error("Error while analyzing monthly revenue purchases:", error);
       throw new Error("revenue fetch failed");
