@@ -1,4 +1,4 @@
-import { IGetCertificateUseCase } from "../../../../app/usecases/certificate/interfaces/create-certificate.usecase";
+import { IGetCertificateUseCase } from "../../../../app/usecases/certificate/interfaces/get-certificate.usecase";
 import {
   IGetCertificateRequestDTO,
   Payload,

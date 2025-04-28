@@ -1,1 +1,2 @@
-export { IGetCertificateUseCase } from "./create-certificate.usecase";
+export { IGetCertificateUseCase } from "./get-certificate.usecase";
+export { IGetAllCertificateUseCase } from "./get-all-certificates.usecase";

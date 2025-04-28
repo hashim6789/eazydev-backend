@@ -24,6 +24,9 @@ export enum AuthMessages {
    * Message indicating that the Authorization header is missing in the request.
    */
   AuthorizationHeaderMissing = "Authorization header missing",
+  RefreshTokenMissing = "Refresh token is missing",
+  RefreshTokenExpired = "Refresh token is expired",
+  RefreshTokenCreationFailed = "Refresh token creation failed",
 
   /**
    * Message indicating that the authentication token is either invalid or expired.

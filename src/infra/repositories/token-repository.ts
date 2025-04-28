@@ -63,12 +63,20 @@ export class TokenRepository implements ITokenRepository {
    *
    * @async
    * @param {string} refreshToken - The ID of the refresh token to find.
-   * @returns {Promise<TokenDTO | unknown>} The found refresh token or undefined.
+   * @returns {Promise<TokenDTO | null>} The found refresh token or undefined.
    */
-  async findById(refreshToken: string): Promise<TokenDTO | unknown> {
+  async findById(refreshToken: string): Promise<TokenDTO | null> {
     const token = await this.model.findById(refreshToken).exec();
+    if (!token) return null;
 
-    return token;
+    return {
+      id: token._id.toString(),
+      userId: token.userId.toString(),
+      expiresIn: token.expiresIn,
+      type: token.type,
+      role: token.role,
+      createdAt: token.createdAt,
+    };
   }
 
   /**

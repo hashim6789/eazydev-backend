@@ -7,7 +7,7 @@ export class HttpRequest implements IHttpRequest {
   /**
    * Represents the headers of the HTTP request.
    */
-  header?: unknown;
+  headers?: unknown;
 
   /**
    * Represents the body of the HTTP request.

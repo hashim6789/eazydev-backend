@@ -7,7 +7,7 @@ import { apiRouter } from "../routers";
  * Express connections instance.
  */
 import { connectDB } from "../../../infra/databases/mongoose/connecton";
-import { initializePeerServer } from "./peer";
+// import { initializePeerServer } from "./peer";
 import { setupCors } from "../configs";
 
 const app = express();

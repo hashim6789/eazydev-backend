@@ -8,7 +8,7 @@ export async function expressAdapter(
   apiRoute: IController
 ): Promise<IHttpResponse> {
   const httpRequest = new HttpRequest({
-    header: req.header,
+    headers: req.headers,
     query: req.query,
     body: req.body,
     path: req.params,

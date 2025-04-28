@@ -22,9 +22,9 @@ export interface ITokenRepository {
    *
    * @async
    * @param {string} token - The refresh token identifier.
-   * @returns {Promise<TokenDTO | unknown>} The found refresh token, or undefined if not found.
+   * @returns {Promise<TokenDTO | null>} The found refresh token, or undefined if not found.
    */
-  findById(token: string): Promise<TokenDTO | unknown>;
+  findById(token: string): Promise<TokenDTO | null>;
 
   /**
    * Finds a refresh token by the user's ID.

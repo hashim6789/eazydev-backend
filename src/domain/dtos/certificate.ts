@@ -27,3 +27,8 @@ export interface ICertificateOutPopulateDTO {
 export interface IGetCertificateRequestDTO {
   progressId: string;
 }
+
+export interface QueryCertificate {
+  page: string;
+  limit: string;
+}

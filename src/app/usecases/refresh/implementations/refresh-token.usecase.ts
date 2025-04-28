@@ -1,7 +1,11 @@
+import { error } from "console";
 import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { ITokenUserDTO } from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
+import {
+  AuthenticateUserErrorType,
+  AuthMessages,
+} from "../../../../domain/enums/auth";
 import { IGenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { ITokenManagerProvider } from "../../../providers/token-manager.provider";
 import { ITokenRepository } from "../../../repositories/token.repository";
@@ -51,6 +55,7 @@ export class RefreshTokenUserUseCase implements IRefreshTokenUserUseCase {
       const refreshTokenExpired = this.tokenManager.validateTokenAge(
         refreshToken.expiresIn
       );
+
       const token = await this.generateTokenProvider.generateToken(
         refreshToken.userId,
         { userId: refreshToken.userId, role: refreshToken.role }
@@ -64,12 +69,28 @@ export class RefreshTokenUserUseCase implements IRefreshTokenUserUseCase {
           "refresh"
         );
         return {
-          data: { refreshToken: newToken, token },
-          success: true,
+          data: { error: AuthMessages.RefreshTokenExpired },
+          success: false,
         };
       }
 
-      return { data: { token }, success: true };
+      const newRefreshToken = (await this.refreshTokenRepository.create(
+        refreshToken.userId,
+        refreshToken.role,
+        "refresh"
+      )) as TokenDTO | null;
+
+      if (!newRefreshToken) {
+        return {
+          data: { error: AuthMessages.RefreshTokenCreationFailed },
+          success: false,
+        };
+      }
+
+      return {
+        data: { token, refreshTokenId: newRefreshToken.id },
+        success: true,
+      };
     } catch (error: any) {
       return { data: { error: error.message }, success: false };
     }

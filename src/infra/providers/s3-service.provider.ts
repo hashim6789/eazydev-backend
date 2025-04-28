@@ -5,9 +5,7 @@ import {
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import multer from "multer";
 import dotenv from "dotenv";
-import { Request, Response, NextFunction } from "express";
 import { IS3ServiceProvider } from "../../app/providers";
 import { MaterialType } from "../../domain/types";
 
@@ -75,36 +73,6 @@ export class S3ServiceProvider implements IS3ServiceProvider {
       throw new Error("File deletion failed");
     }
   }
-
-  // public uploadMiddleware() {
-  //   const storage = multer.memoryStorage();
-  //   const upload = multer({ storage });
-
-  //   return upload.single("file");
-  // }
-
-  // public async s3Upload(req: Request, res: Response, next: Function) {
-  //   if (req.file) {
-  //     const params = {
-  //       Bucket: process.env.AWS_BUCKET_NAME as string,
-  //       Key: `uploads/${Date.now()}-${req.file.originalname}`,
-  //       Body: req.file.buffer,
-  //       ContentType: req.file.mimetype,
-  //     };
-
-  //     try {
-  //       await this.s3.send(new PutObjectCommand(params));
-  //       req.file = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${params.Key}`;
-  //       next();
-  //     } catch (error) {
-  //       res
-  //         .status(500)
-  //         .json({ success: false, message: "File upload failed", error });
-  //     }
-  //   } else {
-  //     res.status(400).json({ success: false, message: "No file uploaded" });
-  //   }
-  // }
 }
 
 export default S3ServiceProvider;

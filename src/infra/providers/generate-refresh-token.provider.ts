@@ -28,7 +28,7 @@ export class GenerateTokenProvider implements IGenerateTokenProvider {
 
     const generatedToken = sign({ userId, role }, secretKey, {
       subject: token,
-      expiresIn: "15h",
+      expiresIn: "1m",
     });
 
     return generatedToken;

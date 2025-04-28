@@ -21,5 +21,5 @@ export interface IRefreshTokenUserUseCase {
    * This method is responsible for handling the logic of refreshing a user's
    * authentication token based on the provided refresh token identifier.
    */
-  execute(refreshTokenId: ITokenUserDTO): Promise<ResponseDTO>;
+  execute(data: ITokenUserDTO): Promise<ResponseDTO>;
 }

@@ -40,12 +40,14 @@ export class RefreshTokenUserController implements IController {
     if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
       const bodyParams = Object.keys(httpRequest.body);
 
-      if (bodyParams.includes("refreshTokenId")) {
+      if (bodyParams.includes("tokenId")) {
         // Extract refresh token ID from the request body
-        const refreshTokenId = httpRequest.body as ITokenUserDTO;
+        const { tokenId } = httpRequest.body as ITokenUserDTO;
 
         // Execute the refresh token use case
-        response = await this.refreshTokenUserUserCase.execute(refreshTokenId);
+        response = await this.refreshTokenUserUserCase.execute({
+          tokenId,
+        });
       } else {
         // Invalid request body, return a 422 Unprocessable Entity error
         error = this.httpErrors.error_422();
