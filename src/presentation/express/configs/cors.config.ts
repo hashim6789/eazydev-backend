@@ -8,10 +8,8 @@ console.log("hello");
 const allowedOrigins: string[] = [
   "http://localhost",
   "http://localhost:5173",
-  "http://3.111.35.151",
-  "http://3.111.35.151:5173",
-  "https://www.muhammedhashim.online", // ✅ Add HTTPS domain
-  "https://muhammedhashim.online", // ✅ Also allow non-www
+  "https://www.eazydev.muhammedhashim.online", // ✅ Add HTTPS domain
+  "https://eazydev.muhammedhashim.online", // ✅ Also allow non-www
 ];
 
 const corsOptions: cors.CorsOptions = {
