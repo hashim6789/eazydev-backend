@@ -1,6 +1,5 @@
 import cors from "cors";
 // import { env } from "./env.config";
-console.log("hello");
 
 /**
  * List of allowed origins for CORS.
@@ -8,24 +7,22 @@ console.log("hello");
 const allowedOrigins: string[] = [
   "http://localhost",
   "http://localhost:5173",
-  "https://www.eazydev.muhammedhashim.online", // ✅ Add HTTPS domain
-  "https://eazydev.muhammedhashim.online", // ✅ Also allow non-www
+  "https://www.eazydev.muhammedhashim.online",
+  "https://eazydev.muhammedhashim.online",
 ];
 
 const corsOptions: cors.CorsOptions = {
-  origin: (
-    origin: string | undefined,
-    callback: (error: Error | null, allow?: boolean | string) => void
-  ) => {
+  origin: (origin, callback) => {
+    console.log("Request Origin:", origin);
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, origin); // Allow if origin is undefined (e.g., from a server-side request) or in the allowed list
+      callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS")); // Deny if origin is not in the allowed list
+      callback(new Error(`Blocked by CORS: ${origin}`));
     }
   },
-  methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 export const setupCors = cors(corsOptions);
