@@ -1,4 +1,4 @@
-import { Payload } from "../../domain/dtos/jwt-payload";
+import { Payload } from "../../../domain/dtos/jwt-payload";
 
 /**
  * Interface for the provider responsible for managing and validating tokens.

@@ -1,5 +1,5 @@
-import { SignupRole } from "../../domain/types/user";
-import { IUserValidDTO } from "../../domain/dtos";
+import { SignupRole } from "../../../domain/types/user";
+import { IUserValidDTO } from "../../../domain/dtos";
 
 export interface ISendMailProvider {
   sendOtpMail(email: string, otp: string): Promise<boolean>;

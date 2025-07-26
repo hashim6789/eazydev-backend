@@ -1,3 +1,4 @@
+import { Payload } from "../../../../domain/dtos";
 import { ITokenUserDTO } from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 
@@ -21,5 +22,5 @@ export interface IRefreshTokenUserUseCase {
    * This method is responsible for handling the logic of refreshing a user's
    * authentication token based on the provided refresh token identifier.
    */
-  execute(refreshTokenId: ITokenUserDTO): Promise<ResponseDTO>;
+  execute(authDate: Payload): Promise<ResponseDTO>;
 }

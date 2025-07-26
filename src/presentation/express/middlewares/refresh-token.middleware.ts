@@ -6,39 +6,30 @@ import { CheckUserBlockedUseCase } from "../../../app/usecases/auth/implementati
 import { UserRepository } from "../../../infra/repositories";
 import { UserModel } from "../../../infra/databases/models";
 
-export const authenticateToken = async (
+export const refreshTokenMiddleware = (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
   console.log(request.cookies);
-  const accessToken = request.cookies[env.KEY_OF_ACCESS as string];
+  const refreshToken = request.cookies[env.KEY_OF_REFRESH as string];
 
-  if (!accessToken) {
-    response.status(401).json({
-      message: AuthMessages.AuthorizationHeaderMissing,
+  if (!refreshToken) {
+    response.status(403).json({
+      message: AuthMessages.RefreshTokenMissing,
     });
     return;
   }
 
   const tokenManager = new TokenManagerProvider();
-  const decode = tokenManager.validateToken(accessToken);
+  const decode = tokenManager.validateToken(refreshToken);
   if (!decode) {
-    response.status(401).json({
-      message: AuthMessages.TokenInvalidOrExpired,
+    response.status(403).json({
+      message: AuthMessages.RefreshTokenInvalidOrExpired,
     });
     return;
   }
 
-  const userRepository = new UserRepository(UserModel);
-  const checkUserBlockedUseCase = new CheckUserBlockedUseCase(userRepository);
-  const checkUserBlockedResponse = await checkUserBlockedUseCase.execute(
-    decode
-  );
-
-  if (!checkUserBlockedResponse.success) {
-    response.status(403).json({ message: checkUserBlockedResponse.data.error });
-  }
   // Attach user to request object
   request.body = { ...request.body, ...decode };
 

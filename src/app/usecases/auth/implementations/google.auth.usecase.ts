@@ -25,7 +25,7 @@ interface GoogleApiResponse {
 export class GoogleLoginUseCase implements IGoogleLoginUseCase {
   constructor(
     private userRepository: IUsersRepository,
-    private refreshTokenRepository: ITokenRepository,
+    // private refreshTokenRepository: ITokenRepository,
     private generateTokenProvider: IGenerateTokenProvider
   ) {}
 
@@ -138,21 +138,33 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         return { data: { error: UserErrorType.UserCantCreate }, success: true };
       }
 
-      const token = await this.generateTokenProvider.generateToken(user.id, {
-        userId: user.id,
-        role: user.role,
-      });
-
-      const newToken = await this.refreshTokenRepository.create(
+      const accessToken = await this.generateTokenProvider.generateToken(
         user.id,
-        user.role,
+        {
+          userId: user.id,
+          role: user.role,
+        },
+        "access"
+      );
+      const refreshToken = await this.generateTokenProvider.generateToken(
+        user.id,
+        {
+          userId: user.id,
+          role: user.role,
+        },
         "refresh"
       );
+
+      // const newToken = await this.refreshTokenRepository.create(
+      //   user.id,
+      //   user.role,
+      //   "refresh"
+      // );
 
       const outUser = UserEntity.convert(user);
 
       return {
-        data: { refreshTokenId: newToken.id, token, user: outUser },
+        data: { refreshToken, accessToken, user: outUser },
         success: true,
       };
     } catch (error: unknown) {

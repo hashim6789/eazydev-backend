@@ -1,4 +1,5 @@
 import { IRefreshTokenUserUseCase } from "../../../../app/usecases/refresh/interfaces/refresh-token.usecas";
+import { Payload } from "../../../../domain/dtos";
 import { ITokenUserDTO } from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
@@ -40,12 +41,15 @@ export class RefreshTokenUserController implements IController {
     if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
       const bodyParams = Object.keys(httpRequest.body);
 
-      if (bodyParams.includes("refreshTokenId")) {
+      if (bodyParams.includes("userId") && bodyParams.includes("role")) {
         // Extract refresh token ID from the request body
-        const refreshTokenId = httpRequest.body as ITokenUserDTO;
+        const { userId, role } = httpRequest.body as Payload;
 
         // Execute the refresh token use case
-        response = await this.refreshTokenUserUserCase.execute(refreshTokenId);
+        response = await this.refreshTokenUserUserCase.execute(
+          // { refreshToken },
+          { userId, role }
+        );
       } else {
         // Invalid request body, return a 422 Unprocessable Entity error
         error = this.httpErrors.error_422();

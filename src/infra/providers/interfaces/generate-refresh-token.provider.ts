@@ -1,4 +1,5 @@
-import { Payload } from "../../domain/dtos/jwt-payload";
+import { Payload } from "../../../domain/dtos/jwt-payload";
+import { TokenType } from "../../../domain/types";
 
 /**
  * Interface for the provider responsible for generating refresh tokens.
@@ -13,5 +14,9 @@ export interface IGenerateTokenProvider {
    * @param {string} token - The token used as a basis for generating the refresh token.
    * @returns {Promise<string>} The generated refresh token.
    */
-  generateToken(token: string, payload: Payload): Promise<string>;
+  generateToken(
+    token: string,
+    payload: Payload,
+    type: TokenType
+  ): Promise<string>;
 }

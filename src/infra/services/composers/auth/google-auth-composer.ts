@@ -14,12 +14,9 @@ export function googleLoginComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);
   const generateTokenProvider: IGenerateTokenProvider =
     new GenerateTokenProvider();
-  const refreshTokenRepository: ITokenRepository = new TokenRepository(
-    TokenModel
-  );
+
   const useCase: IGoogleLoginUseCase = new GoogleLoginUseCase(
     repository,
-    refreshTokenRepository,
     generateTokenProvider
   );
   const controller: IController = new GoogleLoginController(useCase);

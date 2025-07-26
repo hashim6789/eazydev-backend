@@ -21,9 +21,9 @@ export class LoginUseCase implements ILoginUseCase {
   constructor(
     private userRepository: IUsersRepository,
     private passwordHasher: IPasswordHasher,
-    private generateTokenProvider: IGenerateTokenProvider,
-    private tokenRepository: ITokenRepository
-  ) {}
+    private generateTokenProvider: IGenerateTokenProvider
+  ) // private tokenRepository: ITokenRepository
+  {}
 
   async execute({
     email,
@@ -60,24 +60,36 @@ export class LoginUseCase implements ILoginUseCase {
         };
       }
 
-      const token = await this.generateTokenProvider.generateToken(user.id, {
-        userId: user.id,
-        role: user.role,
-      });
-      const tokenFounded = (await this.tokenRepository.findByUserIdAndType(
+      const accessToken = await this.generateTokenProvider.generateToken(
         user.id,
-        "refresh"
-      )) as TokenDTO | null;
-
-      if (tokenFounded) {
-        await this.tokenRepository.delete(user.id);
-      }
-
-      const refreshToken = await this.tokenRepository.create(
+        {
+          userId: user.id,
+          role: user.role,
+        },
+        "access"
+      );
+      const refreshToken = await this.generateTokenProvider.generateToken(
         user.id,
-        user.role,
+        {
+          userId: user.id,
+          role: user.role,
+        },
         "refresh"
       );
+      // const tokenFounded = (await this.tokenRepository.findByUserIdAndType(
+      //   user.id,
+      //   "refresh"
+      // )) as TokenDTO | null;
+
+      // if (tokenFounded) {
+      //   await this.tokenRepository.delete(user.id);
+      // }
+
+      // const refreshToken = await this.tokenRepository.create(
+      //   user.id,
+      //   user.role,
+      //   "refresh"
+      // );
 
       // const outUser = UserEntity.convert({
       //   email: user.email,
@@ -88,7 +100,7 @@ export class LoginUseCase implements ILoginUseCase {
       // });
 
       return {
-        data: { token, refreshTokenId: refreshToken.id, user },
+        data: { accessToken, refreshToken, user },
         success: true,
       };
     } catch (error: unknown) {

@@ -1,4 +1,4 @@
-import { MaterialType } from "../../domain/types";
+import { MaterialType } from "../../../domain/types";
 
 export interface IS3ServiceProvider {
   /**

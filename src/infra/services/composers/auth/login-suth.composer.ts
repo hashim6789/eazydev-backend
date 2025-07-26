@@ -17,14 +17,11 @@ export function loginComposer(): IController {
   const passwordHasher: IPasswordHasher = new PasswordHasher();
   const generateTokenProvider: IGenerateTokenProvider =
     new GenerateTokenProvider();
-  const refreshTokenRepository: ITokenRepository = new TokenRepository(
-    TokenModel
-  );
+
   const useCase: ILoginUseCase = new LoginUseCase(
     repository,
     passwordHasher,
-    generateTokenProvider,
-    refreshTokenRepository
+    generateTokenProvider
   );
   const controller: IController = new LoginController(useCase);
   return controller;

@@ -1,1 +1,1 @@
-export type TokenType = "refresh" | "reset";
+export type TokenType = "refresh" | "access" | "reset";

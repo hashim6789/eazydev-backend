@@ -19,17 +19,17 @@ import { TokenRepository } from "../../../repositories/implementations/token-rep
  * @returns {IController} The configured refresh token controller.
  */
 export function refreshTokenUserComposer(): IController {
-  const refreshTokenRepository: ITokenRepository = new TokenRepository(
-    TokenModel
-  );
+  // const refreshTokenRepository: ITokenRepository = new TokenRepository(
+  //   TokenModel
+  // );
   const generateTokenProvider: IGenerateTokenProvider =
     new GenerateTokenProvider();
-  const tokenManagerProvider: ITokenManagerProvider =
-    new TokenManagerProvider();
+  // const tokenManagerProvider: ITokenManagerProvider =
+  //   new TokenManagerProvider();
   const useCase: IRefreshTokenUserUseCase = new RefreshTokenUserUseCase(
-    generateTokenProvider,
-    refreshTokenRepository,
-    tokenManagerProvider
+    generateTokenProvider
+    // refreshTokenRepository,
+    // tokenManagerProvider
   );
   const controller: IController = new RefreshTokenUserController(useCase);
   return controller;

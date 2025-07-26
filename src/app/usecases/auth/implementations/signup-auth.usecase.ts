@@ -90,21 +90,33 @@ export class SignupUseCase implements ISignupUseCase {
       const otpDoc = await this.otpRepository.create(user.id, hashedOtp);
       await this.sendMailProvider.sendOtpMail(user.email, otp);
 
-      const token = await this.generateTokenProvider.generateToken(user.id, {
-        userId: user.id,
-        role: user.role,
-      });
-
-      const newToken = await this.tokenRepository.create(
+      const accessToken = await this.generateTokenProvider.generateToken(
         user.id,
-        user.role,
+        {
+          userId: user.id,
+          role: user.role,
+        },
+        "access"
+      );
+      const refreshToken = await this.generateTokenProvider.generateToken(
+        user.id,
+        {
+          userId: user.id,
+          role: user.role,
+        },
         "refresh"
       );
+
+      // const newToken = await this.tokenRepository.create(
+      //   user.id,
+      //   user.role,
+      //   "refresh"
+      // );
 
       const outUser = UserEntity.convert(user);
 
       return {
-        data: { refreshTokenId: newToken.id, token, user: outUser },
+        data: { refreshToken, accessToken, user: outUser },
         success: true,
       };
     } catch (error: unknown) {
