@@ -1,8 +1,6 @@
 import { IGetUserDataUseCase } from "../../../../app/usecases/user";
-import { IGetUserUseCase } from "../../../../app/usecases/user/interfaces/get-user.uscase";
 import { IGetUserDataRequestDTO } from "../../../../domain/dtos";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { SignupRole } from "../../../../domain/types/user";
 import {
   HttpErrors,
   HttpResponse,

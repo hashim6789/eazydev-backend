@@ -4,16 +4,8 @@ import { UserRepository } from "../../../repositories/implementations/user.repos
 import {
   ChangePasswordUseCase,
   IChangePasswordUseCase,
-  IUpdatePersonalInfoUseCase,
-  IVerifyPasswordUseCase,
-  UpdatePersonalInfoUseCase,
-  VerifyPasswordUseCase,
 } from "../../../../app/usecases/user";
-import {
-  ChangePasswordController,
-  UpdatePersonalInfoController,
-  VerifyPasswordController,
-} from "../../../../presentation/http/controllers";
+import { ChangePasswordController } from "../../../../presentation/http/controllers";
 import { UserModel } from "../../../databases/models";
 import { PasswordHasher } from "../../../providers/implementations";
 import { IPasswordHasher } from "../../../providers";

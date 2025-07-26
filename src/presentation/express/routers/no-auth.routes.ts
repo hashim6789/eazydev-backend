@@ -1,6 +1,5 @@
 import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
-
 import { getCourseComposer } from "../../../infra/services/composers/course";
 
 /**

@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Role } from "../../../domain/types/user";
 
-// Authorization middleware to check the user role
 export const authorizeRole = (allowedRoles: Role[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     const userRole = req.body?.role ?? "learner";
@@ -10,7 +9,7 @@ export const authorizeRole = (allowedRoles: Role[]) => {
     }
 
     if (allowedRoles.includes(userRole)) {
-      return next(); // User has the required role, proceed to the next middleware or controller
+      return next();
     }
 
     res.status(403).json({

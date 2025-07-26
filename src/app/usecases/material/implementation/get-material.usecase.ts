@@ -12,7 +12,6 @@ export class GetMaterialUseCase implements IGetMaterialUseCase {
   constructor(private materialRepository: IMaterialRepository) {}
 
   async execute({
-    userId,
     role,
     materialId,
   }: IGetMaterialRequestDTO): Promise<ResponseDTO> {

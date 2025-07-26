@@ -1,27 +1,18 @@
 import {
-  ICreatePurchaseRequestDTO,
   IGetPurchaseRequestDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
-import { PurchaseEntity } from "../../../../domain/entities/purchase";
 import {
   AuthenticateUserErrorType,
-  CourseErrorType,
   PurchaseErrorType,
 } from "../../../../domain/enums";
-import {
-  ICourseRepository,
-  IPurchaseRepository,
-} from "../../../../infra/repositories";
-import { ICreatePurchaseUseCase, IGetPurchaseUseCase } from "../interfaces";
+import { IPurchaseRepository } from "../../../../infra/repositories";
+import { IGetPurchaseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetPurchaseUseCases implements IGetPurchaseUseCase {
-  constructor(
-    private purchaseRepository: IPurchaseRepository,
-    private courseRepository: ICourseRepository
-  ) {}
+  constructor(private purchaseRepository: IPurchaseRepository) {}
 
   async execute(
     { id }: IGetPurchaseRequestDTO,

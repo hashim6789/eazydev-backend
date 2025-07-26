@@ -2,7 +2,6 @@ import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
 import {
   ICreateUserRequestDTO,
   IUpdateUserRequestDTO,
-  IUserDetailOutDTO,
   IUserOutRequestDTO,
   IUserValidDTO,
   QueryUser,
@@ -11,7 +10,7 @@ import {
 import { SignupRole, UserStatusData } from "../../../domain/types";
 
 import { IUser } from "../../databases/interfaces";
-import mongoose, { Model } from "mongoose";
+import { Model } from "mongoose";
 import {
   getLearnerAggregationPipeline,
   getMentorAggregationPipeline,

@@ -1,5 +1,4 @@
 import {
-  ICreatePurchaseRequestDTO,
   IGetPurchaseRequestDTO,
   Payload,
   ResponseDTO,

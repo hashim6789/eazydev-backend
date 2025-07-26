@@ -40,7 +40,7 @@ export const authenticateToken = async (
     response.status(403).json({ message: checkUserBlockedResponse.data.error });
     return;
   }
-  // Attach user to request object
+
   request.body = { ...request.body, ...decode };
 
   next();

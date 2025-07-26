@@ -1,10 +1,5 @@
+import { IUpdateProfilePictureUseCase } from "../../../../app/usecases/user";
 import {
-  IGetPersonalInfoUseCase,
-  IUpdatePersonalInfoUseCase,
-  IUpdateProfilePictureUseCase,
-} from "../../../../app/usecases/user";
-import {
-  IUpdatePersonalInfoRequestDTO,
   IUpdateProfilePictureRequestDTO,
   Payload,
 } from "../../../../domain/dtos";

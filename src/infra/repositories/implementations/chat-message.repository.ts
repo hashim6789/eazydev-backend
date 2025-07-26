@@ -3,7 +3,6 @@ import { IChatMessage } from "../../databases/interfaces";
 import {
   IChatMessageOutDTO,
   IChatMessagePopulatedDTO,
-  Sender,
 } from "../../../domain/dtos";
 import { ChatMessageEntity } from "../../../domain/entities";
 import { IChatMessageRepository } from "../interfaces";

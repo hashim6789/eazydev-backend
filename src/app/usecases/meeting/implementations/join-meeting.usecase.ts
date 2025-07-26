@@ -5,11 +5,8 @@ import {
 import { Payload } from "../../../../domain/dtos/jwt-payload";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { MeetingErrorType } from "../../../../domain/enums/meeting";
-import {
-  IMeetingRepository,
-  ISlotRepository,
-} from "../../../../infra/repositories";
-import { IGetAllMeetingUseCase, IJoinMeetingUseCase } from "../interfaces";
+import { IMeetingRepository } from "../../../../infra/repositories";
+import { IJoinMeetingUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class JoinMeetingUseCase implements IJoinMeetingUseCase {

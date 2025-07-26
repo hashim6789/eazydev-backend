@@ -1,31 +1,20 @@
 import { ResponseDTO } from "../../../../domain/dtos";
 import { PaymentErrorType } from "../../../../domain/enums";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
-import {
-  ICourseRepository,
-  IPaymentRepository,
-} from "../../../../infra/repositories";
+import { ICourseRepository } from "../../../../infra/repositories";
 import { ICreatePaymentIntentUseCase } from "../interfaces";
 import Stripe from "stripe";
 
 export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
   constructor(
-    private courseRepository: ICourseRepository, // Repository abstraction for payment-related operations
-    private stripe: Stripe // Injected Stripe instance
+    private courseRepository: ICourseRepository,
+    private stripe: Stripe
   ) {}
 
   async execute(courseId: string): Promise<ResponseDTO> {
     try {
       console.log("courseId", courseId);
-      // Validate input data
-      //   if (!amount || !currency) {
-      //     return {
-      //       success: false,
-      //       data: { error: PaymentErrorType.InvalidPaymentDetails },
-      //     };
-      //   }
 
-      // Fetch course details from the repository (to confirm price or availability)
       const course = await this.courseRepository.findById(courseId);
       if (!course) {
         return {
@@ -34,7 +23,6 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         };
       }
 
-      // Ensure the course is available for purchase
       if (course.status !== "published") {
         return {
           success: false,
@@ -42,9 +30,8 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         };
       }
 
-      // Create the Payment Intent via Stripe
       const paymentIntent = await this.stripe.paymentIntents.create({
-        amount: course.price * 100, // Stripe expects amount in the smallest currency unit (e.g., cents for USD)
+        amount: course.price * 100,
         currency: "usd",
         metadata: {
           courseId,
@@ -52,7 +39,6 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         },
       });
 
-      // Return the client secret and payment intent information
       return {
         success: true,
         data: {

@@ -139,7 +139,6 @@ export interface IUserOut {
 }
 
 export type IUserDetailOutDTO = IUserOut;
-// & PurchasedCourse
 
 export interface UserDataDTO {
   firstName: string;

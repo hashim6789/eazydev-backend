@@ -1,10 +1,7 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { UserEntity } from "../../../../domain/entities/user";
 import { UserErrorType } from "../../../../domain/enums/user";
-import {
-  ITokenRepository,
-  IUsersRepository,
-} from "../../../../infra/repositories";
+import { IUsersRepository } from "../../../../infra/repositories";
 import { IGoogleRequestDTO } from "../../../../domain/dtos/auth/google-auth.dto";
 import { IGoogleLoginUseCase } from "../interfaces/google-login.usecase";
 import axios from "axios";
@@ -25,7 +22,6 @@ interface GoogleApiResponse {
 export class GoogleLoginUseCase implements IGoogleLoginUseCase {
   constructor(
     private userRepository: IUsersRepository,
-    // private refreshTokenRepository: ITokenRepository,
     private generateTokenProvider: IGenerateTokenProvider
   ) {}
 
@@ -50,12 +46,6 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         data: { error: UserErrorType.UserInvalidRole },
         success: false,
       };
-
-      // } else if (!fetchedUser.isVerified) {
-      //   return {
-      //     data: { error: UserErrorType.UserNotVerified },
-      //     success: false,
-      //   };
     }
     return null;
   }
@@ -119,21 +109,6 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         }
       }
 
-      // const passwordHashed = await this.passwordHasher.hashPassword(password);
-      // const user = await this.userRepository.create({
-      //   email: userEntity.email.address,
-      //   firstName: userEntity.firstName,
-      //   lastName: userEntity.lastName,
-      //   role: userEntity.role,
-      //   password: passwordHashed,
-      // });
-
-      // const otp = await this.otpRepository.create(
-      //   user.id,
-      //   await this.generateOtpProvider.generateOtp()
-      // );
-      // await this.sendMailProvider.sendOtpMail(user.email, otp.otp);
-
       if (!user) {
         return { data: { error: UserErrorType.UserCantCreate }, success: true };
       }
@@ -154,12 +129,6 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         },
         "refresh"
       );
-
-      // const newToken = await this.refreshTokenRepository.create(
-      //   user.id,
-      //   user.role,
-      //   "refresh"
-      // );
 
       const outUser = UserEntity.convert(user);
 

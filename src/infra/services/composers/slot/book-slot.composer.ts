@@ -8,14 +8,9 @@ import { ProgressModel, SlotModel } from "../../../databases/models";
 import { SlotRepository } from "../../../repositories/implementations/slot.repository";
 import {
   BookSlotUseCase,
-  GetAllSlotUseCase,
   IBookSlotUseCase,
-  IGetAllSlotUseCase,
 } from "../../../../app/usecases/slot";
-import {
-  BookSlotController,
-  GetSlotsLearnerController,
-} from "../../../../presentation/http/controllers/slot";
+import { BookSlotController } from "../../../../presentation/http/controllers/slot";
 import { ProgressRepository } from "../../../repositories/implementations";
 import { MeetingRepository } from "../../../repositories/implementations/meeting-repository";
 import { MeetingModel } from "../../../databases/models/meeting.model";

@@ -1,6 +1,5 @@
 import Stripe from "stripe";
 import { ICourseRepository } from "../../../repositories";
-
 import { CreatePaymentIntentUseCase } from "../../../../app/usecases/payment/implementations/create-payment-intent.usecase";
 import { ICreatePaymentIntentUseCase } from "../../../../app/usecases/payment/interfaces";
 import {

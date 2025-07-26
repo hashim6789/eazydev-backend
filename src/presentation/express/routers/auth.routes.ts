@@ -2,7 +2,6 @@ import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
 import { signupComposer } from "../../../infra/services/composers/auth/signup-auth.composer";
 import { loginComposer } from "../../../infra/services/composers/auth/login-suth.composer";
-// import { logoutComposer } from "../../../infra/services/composers/auth/logout-auth-composer";
 import { googleLoginComposer } from "../../../infra/services/composers/auth/google-auth-composer";
 import {
   forgotPasswordComposer,
@@ -45,6 +44,7 @@ authRouter.post("/signup", async (request: Request, response: Response) => {
     .status(adapter.statusCode)
     .json(adapter.statusCode === 400 ? adapter.body : adapter.body.user);
 });
+
 /**
  * Endpoint to login the users.
  */
@@ -73,6 +73,7 @@ authRouter.post("/logout", (req: Request, res: Response) => {
   res.clearCookie(env.KEY_OF_REFRESH as string);
   res.status(200).json({ success: true });
 });
+
 /**
  * Endpoint to login using google for mentor and learner.
  */
@@ -90,6 +91,7 @@ authRouter.post("/google", async (request: Request, response: Response) => {
   }
   response.status(adapter.statusCode).json(adapter.body);
 });
+
 /**
  * Endpoint to verify the otp.
  */
@@ -99,6 +101,7 @@ authRouter.post("/otp-verify", async (request: Request, response: Response) => {
     .status(adapter.statusCode)
     .json(adapter.statusCode === 200 ? adapter.body.user : adapter.body);
 });
+
 /**
  * Endpoint to resend the otp.
  */
@@ -111,6 +114,7 @@ authRouter.post(
     response.status(adapter.statusCode).json(adapter.body);
   }
 );
+
 /**
  * Endpoint to send the forgot password request.
  */
@@ -121,6 +125,7 @@ authRouter.post(
     response.status(adapter.statusCode).json(adapter.body);
   }
 );
+
 /**
  * Endpoint to get the reset password page.
  */
@@ -139,6 +144,7 @@ authRouter.get(
       .json({ success: adapter.statusCode === 200 });
   }
 );
+
 /**
  * Endpoint to reset password.
  */

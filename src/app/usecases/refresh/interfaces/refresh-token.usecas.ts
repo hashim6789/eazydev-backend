@@ -1,5 +1,4 @@
 import { Payload } from "../../../../domain/dtos";
-import { ITokenUserDTO } from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 
 /**

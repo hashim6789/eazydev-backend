@@ -1,8 +1,6 @@
 import { ISlotRepository } from "../../../repositories";
-
 import { IController } from "../../../../presentation/http/controllers";
 import { SlotModel } from "../../../databases/models";
-
 import { SlotRepository } from "../../../repositories/implementations/slot.repository";
 import {
   CreateSlotUseCase,

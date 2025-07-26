@@ -1,7 +1,4 @@
-import {
-  IGetPersonalInfoUseCase,
-  IUpdatePersonalInfoUseCase,
-} from "../../../../app/usecases/user";
+import { IUpdatePersonalInfoUseCase } from "../../../../app/usecases/user";
 import {
   IUpdatePersonalInfoRequestDTO,
   Payload,

@@ -1,9 +1,6 @@
 import { Payload, ResponseDTO } from "../../../../domain/dtos";
 import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
-import {
-  AuthenticateUserErrorType,
-  PurchaseErrorType,
-} from "../../../../domain/enums";
+import { PurchaseErrorType } from "../../../../domain/enums";
 import { IPurchaseRepository } from "../../../../infra/repositories";
 import { IGetAllPurchaseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";

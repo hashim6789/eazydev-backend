@@ -1,10 +1,5 @@
 import { IGetMentorRevenueAnalyzeUseCase } from "../../../../app/usecases/analyze";
-import { ICreateCategoryUseCase } from "../../../../app/usecases/category";
-import {
-  ICreateCategoryRequestDTO,
-  Payload,
-  ResponseDTO,
-} from "../../../../domain/dtos";
+import { Payload, ResponseDTO } from "../../../../domain/dtos";
 import {
   HttpErrors,
   HttpResponse,

@@ -11,7 +11,6 @@ import { ICourse } from "../../databases/interfaces";
 import { CourseStatus, MaterialType } from "../../../domain/types";
 import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
 import { mentorRevenueAnalysisPipeline } from "../../pipelines/course";
-import { Material } from "../../../domain/dtos/material";
 import { ICourseRepository } from "../interfaces";
 
 export class CourseRepository implements ICourseRepository {

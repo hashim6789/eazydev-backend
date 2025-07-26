@@ -7,10 +7,7 @@ import { formatErrorResponse } from "../../../../presentation/http/utils";
 export class GetAllSlotUseCase implements IGetAllSlotUseCase {
   constructor(private slotRepository: ISlotRepository) {}
 
-  async execute(
-    // { mentorId }: IGetAllSlotRequestDTO,
-    { role, userId }: Payload
-  ): Promise<ResponseDTO> {
+  async execute({ userId }: Payload): Promise<ResponseDTO> {
     try {
       const slots = await this.slotRepository.findAllByMentorId(userId);
 

@@ -25,7 +25,6 @@ export class SignupUseCase implements ISignupUseCase {
   constructor(
     private userRepository: IUsersRepository,
     private passwordHasher: IPasswordHasher,
-    private tokenRepository: ITokenRepository,
     private generateTokenProvider: IGenerateTokenProvider,
     private otpRepository: IOtpRepository,
     private generateOtpProvider: IGenerateOtpProvider,
@@ -106,12 +105,6 @@ export class SignupUseCase implements ISignupUseCase {
         },
         "refresh"
       );
-
-      // const newToken = await this.tokenRepository.create(
-      //   user.id,
-      //   user.role,
-      //   "refresh"
-      // );
 
       const outUser = UserEntity.convert(user);
 

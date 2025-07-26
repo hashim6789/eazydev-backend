@@ -1,13 +1,6 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
-import {
-  IGetLearningContentRequestDTO,
-  QueryProgress,
-} from "../../../../domain/dtos/progress";
-import {
-  IGetAllProgressUseCase,
-  IGetLearningContentsUseCase,
-} from "../interfaces";
+import { IGetLearningContentRequestDTO } from "../../../../domain/dtos/progress";
+import { IGetLearningContentsUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";
 import { IProgressRepository } from "../../../../infra/repositories";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
@@ -19,7 +12,7 @@ export class GetLearningContentUseCase implements IGetLearningContentsUseCase {
 
   async execute(
     { progressId }: IGetLearningContentRequestDTO,
-    { userId, role }: Payload
+    { userId }: Payload
   ): Promise<ResponseDTO> {
     try {
       const progress = await this.progressRepository.findByIdPopulate(

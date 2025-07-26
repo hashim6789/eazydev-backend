@@ -1,13 +1,9 @@
 import { ITokenRepository, IUsersRepository } from "../../../repositories";
 import {
-  GetResetPageUseCase,
   IResetPasswordUseCase,
   ResetPasswordUseCase,
 } from "../../../../app/usecases/auth";
-import {
-  GetResetPasswordPageController,
-  ResetPasswordController,
-} from "../../../../presentation/http/controllers";
+import { ResetPasswordController } from "../../../../presentation/http/controllers";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { TokenModel, UserModel } from "../../../databases/models";
 import { IPasswordHasher } from "../../../providers";

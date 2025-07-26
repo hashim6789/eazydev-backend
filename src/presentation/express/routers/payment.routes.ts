@@ -1,6 +1,5 @@
 import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
-
 import { authenticateToken, authorizeRole } from "../middlewares";
 import { createPaymentIntendComposer } from "../../../infra/services/composers/payment";
 

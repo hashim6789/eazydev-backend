@@ -2,13 +2,11 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
   IChangePasswordRequestDTO,
   IUserValidDTO,
-  IVerifyPasswordRequestDTO,
   Payload,
 } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums/user";
 import { IUsersRepository } from "../../../../infra/repositories";
-import { IChangePasswordUseCase, IVerifyPasswordUseCase } from "../interfaces";
-import { AuthenticateUserErrorType } from "../../../../domain/enums";
+import { IChangePasswordUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { IPasswordHasher } from "../../../../infra/providers";
 

@@ -26,17 +26,4 @@ uploadRouter.post(
   }
 );
 
-/**
- * Endpoint to create upload.
- */
-// uploadRouter.get(
-//   "/",
-//   authenticateToken,
-//   authorizeRole(["mentor"]),
-//   async (request: Request, response: Response) => {
-//     const adapter = await expressAdapter(request, getAllUploadComposer());
-//     response.status(adapter.statusCode).json(adapter.body);
-//   }
-// );
-
 export { uploadRouter };

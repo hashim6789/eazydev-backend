@@ -1,13 +1,7 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import {
-  IGetAllChatGroupUseCase,
-  IGetAllChatMessageUseCase,
-} from "../interfaces";
+import { IGetAllChatMessageUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";
-import {
-  IChatGroupRepository,
-  IChatMessageRepository,
-} from "../../../../infra/repositories";
+import { IChatMessageRepository } from "../../../../infra/repositories";
 import { IGetAllChatMessagesRequestDTO } from "../../../../domain/dtos/chat-group";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

@@ -4,7 +4,6 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { SlotEntity } from "../../../../domain/entities";
 import { SlotErrorType } from "../../../../domain/enums";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
-import { MaterialErrorType } from "../../../../domain/enums/material";
 import { ISlotRepository } from "../../../../infra/repositories";
 import { ICreateSlotUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
@@ -13,11 +12,7 @@ export class CreateSlotUseCase implements ICreateSlotUseCase {
   constructor(private slotRepository: ISlotRepository) {}
 
   async execute(
-    {
-      mentorId,
-      time,
-    }: // lessonId,
-    ICreateSlotRequestDTO,
+    { mentorId, time }: ICreateSlotRequestDTO,
     { role, userId }: Payload
   ): Promise<ResponseDTO> {
     try {

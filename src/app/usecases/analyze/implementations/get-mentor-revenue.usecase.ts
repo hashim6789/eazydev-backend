@@ -1,4 +1,3 @@
-import { error } from "console";
 import { IUserValidDTO } from "../../../../domain/dtos";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import {

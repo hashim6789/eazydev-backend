@@ -8,7 +8,6 @@ import {
 import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
 import { IMaterial } from "../../databases/interfaces";
 import { Model } from "mongoose";
-import { IUserDetailsDTO } from "../../../domain/dtos";
 import { IMaterialRepository } from "../interfaces";
 
 export class MaterialRepository implements IMaterialRepository {

@@ -5,7 +5,6 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { MeetingEntity } from "../../../../domain/entities/meeting";
 import {
   AuthenticateUserErrorType,
-  MaterialErrorType,
   SlotErrorType,
 } from "../../../../domain/enums";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
@@ -14,7 +13,7 @@ import {
   IProgressRepository,
   ISlotRepository,
 } from "../../../../infra/repositories";
-import { IBookSlotUseCase, IGetAllSlotUseCase } from "../interfaces";
+import { IBookSlotUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class BookSlotUseCase implements IBookSlotUseCase {
@@ -26,7 +25,7 @@ export class BookSlotUseCase implements IBookSlotUseCase {
 
   async execute(
     { progressId, slotId, learnerId }: IBookSlotRequestDTO,
-    { role, userId }: Payload
+    { userId }: Payload
   ): Promise<ResponseDTO> {
     try {
       if (learnerId !== userId) {

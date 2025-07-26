@@ -2,9 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { AuthMessages } from "../../../domain/enums/auth";
 import { TokenManagerProvider } from "../../../infra/providers/implementations/token-manager.provider";
 import { env } from "../configs/env.config";
-import { CheckUserBlockedUseCase } from "../../../app/usecases/auth/implementations";
-import { UserRepository } from "../../../infra/repositories";
-import { UserModel } from "../../../infra/databases/models";
 
 export const refreshTokenMiddleware = (
   request: Request,
@@ -30,7 +27,6 @@ export const refreshTokenMiddleware = (
     return;
   }
 
-  // Attach user to request object
   request.body = { ...request.body, ...decode };
 
   next();

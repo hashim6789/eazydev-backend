@@ -1,4 +1,4 @@
-import mongoose, { Model, ObjectId, PipelineStage } from "mongoose";
+import mongoose, { Model, ObjectId } from "mongoose";
 import { IProgress } from "../../databases/interfaces";
 import {
   IProgressOutDTO,

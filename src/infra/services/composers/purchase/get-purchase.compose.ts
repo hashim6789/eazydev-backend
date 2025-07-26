@@ -1,26 +1,14 @@
-import { ICourseRepository, IPurchaseRepository } from "../../../repositories";
+import { IPurchaseRepository } from "../../../repositories";
 import { GetPurchaseUseCases } from "../../../../app/usecases/purchase/implementations";
-import { CreatePurchaseUseCases } from "../../../../app/usecases/purchase/implementations/create-purchase.usecase";
-import {
-  ICreatePurchaseUseCase,
-  IGetPurchaseUseCase,
-} from "../../../../app/usecases/purchase/interfaces";
+import { IGetPurchaseUseCase } from "../../../../app/usecases/purchase/interfaces";
 import { IController } from "../../../../presentation/http/controllers/IController";
-import {
-  CreatePurchaseController,
-  GetPurchaseController,
-} from "../../../../presentation/http/controllers/purchase";
-import { CourseModel, PurchaseModel } from "../../../databases/models";
-import { CourseRepository } from "../../../repositories/implementations";
+import { GetPurchaseController } from "../../../../presentation/http/controllers/purchase";
+import { PurchaseModel } from "../../../databases/models";
 import { PurchaseRepository } from "../../../repositories/implementations/purchase-repository";
 
 export function getPurchaseComposer(): IController {
   const repository: IPurchaseRepository = new PurchaseRepository(PurchaseModel);
-  const courseRepository: ICourseRepository = new CourseRepository(CourseModel);
-  const useCase: IGetPurchaseUseCase = new GetPurchaseUseCases(
-    repository,
-    courseRepository
-  );
+  const useCase: IGetPurchaseUseCase = new GetPurchaseUseCases(repository);
   const controller: IController = new GetPurchaseController(useCase);
   return controller;
 }

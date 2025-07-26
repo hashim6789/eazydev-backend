@@ -1,9 +1,6 @@
 import { Payload } from "../../../../domain/dtos/jwt-payload";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import {
-  IMeetingRepository,
-  ISlotRepository,
-} from "../../../../infra/repositories";
+import { IMeetingRepository } from "../../../../infra/repositories";
 import { IGetAllMeetingUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

@@ -35,8 +35,8 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
     const timestamp = Date.now();
 
     const purchaseId = `EZD${learnerFragment}${courseFragment}${timestamp}`
-      .replace(/[^A-Za-z0-9]/g, "") // Remove non-alphanumeric characters
-      .toUpperCase(); // Convert to uppercase
+      .replace(/[^A-Za-z0-9]/g, "")
+      .toUpperCase();
 
     return purchaseId;
   }
@@ -104,7 +104,6 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
         };
       }
 
-      //create the progress of the course of the corresponding learner is created
       await this.progressRepository.create(progress);
 
       return { data: createdPurchase, success: true };

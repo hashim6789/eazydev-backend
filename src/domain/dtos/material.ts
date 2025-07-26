@@ -17,20 +17,16 @@ export interface Material {
   type: MaterialType;
   duration: number;
   fileKey: string;
-  // createdAt: number;
-  // updatedAt: number;
 }
 
 export type ICreateMaterialRequestDTO = Omit<
   Material,
   "id" | "createdAt" | "updatedAt"
 >;
-//  & { lessonId: string };
 export type ICreateMaterialInDTO = Omit<ICreateMaterialRequestDTO, "lessonId">;
 
 export type IMaterialOutDTO = Omit<Material, "createdAt" | "updatedAt">;
 
-// IMaterialDetailOutDTO,
 export type IUpdateMaterialRequestDTO = {
   materialId: string;
   title: string;

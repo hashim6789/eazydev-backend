@@ -1,12 +1,7 @@
 import { ICategoryRepository } from "../../../repositories";
-import {
-  CreateCategoryUseCase,
-  ICreateCategoryUseCase,
-  IUpdateCategoryUseCase,
-} from "../../../../app/usecases/category";
+import { IUpdateCategoryUseCase } from "../../../../app/usecases/category";
 import { UpdateCategoryUseCase } from "../../../../app/usecases/category/implementations/update-category.usecase";
 import {
-  CreateCategoryController,
   IController,
   updateCategoryController,
 } from "../../../../presentation/http/controllers";

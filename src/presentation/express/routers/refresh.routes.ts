@@ -30,14 +30,4 @@ refreshRouter.get(
   }
 );
 
-// refreshRouter.get(
-//   "/",
-//   refreshTokenMiddleware,
-//   async (request: Request, response: Response) => {
-//     const adapter = await expressAdapter(request, refreshTokenUserComposer());
-
-//     response.status(adapter.statusCode).json(adapter.body);
-//   }
-// );
-
 export { refreshRouter };

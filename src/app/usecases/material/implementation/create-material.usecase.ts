@@ -19,8 +19,7 @@ export class CreateMaterialUseCase implements ICreateMaterialUseCase {
       description,
       fileKey,
       duration,
-    }: // lessonId,
-    ICreateMaterialRequestDTO,
+    }: ICreateMaterialRequestDTO,
     authData: Payload
   ): Promise<ResponseDTO> {
     try {
