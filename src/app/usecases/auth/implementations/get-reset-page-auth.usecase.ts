@@ -1,5 +1,5 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { ITokenRepository } from "../../../repositories/token.repository";
+import { ITokenRepository } from "../../../../infra/repositories";
 import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { IGetResetPageUseCase } from "../interfaces";
 import { IGetResetPageRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";

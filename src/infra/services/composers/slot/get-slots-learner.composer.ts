@@ -1,7 +1,7 @@
-import { ISlotRepository } from "../../../../app/repositories";
+import { ISlotRepository } from "../../../repositories";
 import { IController } from "../../../../presentation/http/controllers";
 import { SlotModel } from "../../../databases/models";
-import { SlotRepository } from "../../../repositories/slot.repository";
+import { SlotRepository } from "../../../repositories/implementations/slot.repository";
 import {
   GetAllSlotUseCase,
   IGetAllSlotUseCase,

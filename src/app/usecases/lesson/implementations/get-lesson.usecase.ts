@@ -1,6 +1,6 @@
 import { Payload, ResponseDTO } from "../../../../domain/dtos";
 import { LessonErrorType } from "../../../../domain/enums";
-import { ILessonRepository } from "../../../repositories";
+import { ILessonRepository } from "../../../../infra/repositories";
 import { IGetLessonUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

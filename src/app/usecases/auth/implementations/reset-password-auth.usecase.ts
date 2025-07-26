@@ -1,5 +1,8 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { ITokenRepository } from "../../../repositories/token.repository";
+import {
+  ITokenRepository,
+  IUsersRepository,
+} from "../../../../infra/repositories";
 import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { IGetResetPageUseCase, IResetPasswordUseCase } from "../interfaces";
 import {
@@ -7,7 +10,6 @@ import {
   IResetPasswordRequestDTO,
 } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
 import { TokenErrorType } from "../../../../domain/enums/token";
-import { IUsersRepository } from "../../../repositories";
 import { IUserValidDTO } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums";
 import { formatErrorResponse } from "../../../../presentation/http/utils";

@@ -1,8 +1,10 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IUsersRepository } from "../../../repositories/user.repository";
 import { UserEntity } from "../../../../domain/entities/user";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { ITokenRepository } from "../../../repositories/token.repository";
+import {
+  ITokenRepository,
+  IUsersRepository,
+} from "../../../../infra/repositories";
 import { IGoogleRequestDTO } from "../../../../domain/dtos/auth/google-auth.dto";
 import { IGoogleLoginUseCase } from "../interfaces/google-login.usecase";
 import axios from "axios";

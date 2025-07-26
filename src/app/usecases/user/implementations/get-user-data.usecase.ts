@@ -1,7 +1,7 @@
 import { IGetUserDataRequestDTO } from "../../../../domain/dtos";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IUsersRepository } from "../../../repositories/user.repository";
+import { IUsersRepository } from "../../../../infra/repositories";
 import { IGetUserDataUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

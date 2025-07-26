@@ -4,7 +4,7 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { MaterialEntity } from "../../../../domain/entities";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
 import { MaterialErrorType } from "../../../../domain/enums/material";
-import { IMaterialRepository } from "../../../repositories/material.repository";
+import { IMaterialRepository } from "../../../../infra/repositories";
 import { ICreateMaterialUseCase } from "../interface";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

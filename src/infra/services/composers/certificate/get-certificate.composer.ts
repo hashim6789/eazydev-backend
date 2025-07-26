@@ -1,7 +1,7 @@
 import {
   ICertificateRepository,
   IProgressRepository,
-} from "../../../../app/repositories";
+} from "../../../repositories";
 import {
   GetCertificateUseCase,
   IGetCertificateUseCase,
@@ -9,8 +9,8 @@ import {
 import { IController } from "../../../../presentation/http/controllers";
 import { GetCertificateController } from "../../../../presentation/http/controllers/certificate";
 import { CertificateModel, ProgressModel } from "../../../databases/models";
-import { ProgressRepository } from "../../../repositories";
-import { CertificateRepository } from "../../../repositories/certificate.repository";
+import { ProgressRepository } from "../../../repositories/implementations";
+import { CertificateRepository } from "../../../repositories/implementations/certificate.repository";
 
 export function getCertificateComposer(): IController {
   const repository: ICertificateRepository = new CertificateRepository(

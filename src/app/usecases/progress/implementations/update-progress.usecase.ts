@@ -5,7 +5,7 @@ import { Payload } from "../../../../domain/dtos";
 import {
   ICertificateRepository,
   IProgressRepository,
-} from "../../../repositories";
+} from "../../../../infra/repositories";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
 import { CertificateEntity } from "../../../../domain/entities";
 import { formatErrorResponse } from "../../../../presentation/http/utils";

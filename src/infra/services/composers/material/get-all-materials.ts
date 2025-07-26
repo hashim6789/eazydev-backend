@@ -1,4 +1,4 @@
-import { IMaterialRepository } from "../../../../app/repositories/material.repository";
+import { IMaterialRepository } from "../../../repositories";
 import {
   GetAllMaterialUseCase,
   IGetAllMaterialUseCase,
@@ -6,7 +6,7 @@ import {
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { GetAllMaterialController } from "../../../../presentation/http/controllers/material/get-all-material.controller";
 import { MaterialModel } from "../../../databases/models";
-import MaterialRepository from "../../../repositories/material.repository";
+import MaterialRepository from "../../../repositories/implementations/material.repository";
 
 export function getAllMaterialComposer(): IController {
   const repository: IMaterialRepository = new MaterialRepository(MaterialModel);

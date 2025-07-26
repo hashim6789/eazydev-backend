@@ -1,5 +1,5 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { ITokenRepository } from "../../../repositories/token.repository";
+import { ITokenRepository } from "../../../../infra/repositories";
 
 import { ILogoutRequestDTO } from "../../../../domain/dtos/auth/logut-auth-dto";
 import { ILogoutUseCase } from "../interfaces/logout-auth.usecase";

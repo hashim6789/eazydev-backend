@@ -4,7 +4,7 @@ import {
   Payload,
 } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IUsersRepository } from "../../../repositories/user.repository";
+import { IUsersRepository } from "../../../../infra/repositories";
 import { IUpdatePersonalInfoUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

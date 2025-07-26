@@ -1,9 +1,9 @@
-import {
-  ICourseRepository,
-  IProgressRepository,
-} from "../../../../app/repositories";
+import { ICourseRepository, IProgressRepository } from "../../../repositories";
 import { IController } from "../../../../presentation/http/controllers";
-import { CourseRepository, ProgressRepository } from "../../../repositories";
+import {
+  CourseRepository,
+  ProgressRepository,
+} from "../../../repositories/implementations";
 import { CourseModel, ProgressModel } from "../../../databases/models";
 import {
   GetMentorAnalyzeUseCase,

@@ -1,6 +1,6 @@
-import { IMeetingRepository } from "../../../../app/repositories";
+import { IMeetingRepository } from "../../../repositories";
 import { IController } from "../../../../presentation/http/controllers";
-import { MeetingRepository } from "../../../repositories/meeting-repository";
+import { MeetingRepository } from "../../../repositories/implementations/meeting-repository";
 import { MeetingModel } from "../../../databases/models/meeting.model";
 import {
   IGetAllMeetingUseCase,

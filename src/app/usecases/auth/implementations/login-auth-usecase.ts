@@ -1,8 +1,10 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IUsersRepository } from "../../../repositories/user.repository";
 import { ILoginRequestDTO } from "../../../../domain/dtos/auth/login-auth.dto";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
-import { ITokenRepository } from "../../../repositories/token.repository";
+import {
+  ITokenRepository,
+  IUsersRepository,
+} from "../../../../infra/repositories";
 import { IUserValidDTO } from "../../../../domain/dtos";
 import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { formatErrorResponse } from "../../../../presentation/http/utils";

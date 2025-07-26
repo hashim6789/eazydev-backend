@@ -1,7 +1,7 @@
 import { Payload, QueryCourse, ResponseDTO } from "../../../../domain/dtos";
 import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
 import { CourseErrorType } from "../../../../domain/enums";
-import { ICourseRepository } from "../../../repositories";
+import { ICourseRepository } from "../../../../infra/repositories";
 import { IGetAllCourseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

@@ -3,7 +3,7 @@ import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
 import { QueryProgress } from "../../../../domain/dtos/progress";
 import { IGetAllProgressUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";
-import { IProgressRepository } from "../../../repositories";
+import { IProgressRepository } from "../../../../infra/repositories";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

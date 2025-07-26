@@ -1,4 +1,4 @@
-import { ITokenRepository } from "../../../../app/repositories/token.repository";
+import { ITokenRepository } from "../../../repositories";
 import {
   GetResetPageUseCase,
   IGetResetPageUseCase,
@@ -6,7 +6,7 @@ import {
 import { GetResetPasswordPageController } from "../../../../presentation/http/controllers";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { TokenModel } from "../../../databases/models";
-import { TokenRepository } from "../../../repositories";
+import { TokenRepository } from "../../../repositories/implementations";
 
 export function getResetPageComposer(): IController {
   const repository: ITokenRepository = new TokenRepository(TokenModel);

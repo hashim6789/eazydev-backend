@@ -1,9 +1,9 @@
-import {
-  IPurchaseRepository,
-  IUsersRepository,
-} from "../../../../app/repositories";
+import { IPurchaseRepository, IUsersRepository } from "../../../repositories";
 import { IController } from "../../../../presentation/http/controllers";
-import { PurchaseRepository, UserRepository } from "../../../repositories";
+import {
+  PurchaseRepository,
+  UserRepository,
+} from "../../../repositories/implementations";
 import { PurchaseModel, UserModel } from "../../../databases/models";
 import {
   GetMentorRevenueAnalyzeUseCase,

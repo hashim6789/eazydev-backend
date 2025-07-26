@@ -1,9 +1,9 @@
-import { IUsersRepository } from "../../../../app/repositories/user.repository";
+import { IUsersRepository } from "../../../repositories";
 import { IGetAllUserUseCase } from "../../../../app/usecases/user/interfaces/get-all-user.usecase";
 import { GetAllUserUseCase } from "../../../../app/usecases/user/implementations/get-all-user.usecase";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { GetAllUserController } from "../../../../presentation/http/controllers/user/get-all-user.controller";
-import { UserRepository } from "../../../repositories/user.repository";
+import { UserRepository } from "../../../repositories/implementations/user.repository";
 import { UserModel } from "../../../databases/models";
 
 export function getAllUsersComposer(): IController {

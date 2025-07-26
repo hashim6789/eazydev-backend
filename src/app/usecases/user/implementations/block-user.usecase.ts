@@ -2,7 +2,7 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { BlockUserRequestDTO } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums/user";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
-import { IUsersRepository } from "../../../repositories/user.repository";
+import { IUsersRepository } from "../../../../infra/repositories";
 import { IBlockUserUseCase } from "../interfaces/block-user.usecase";
 
 export class BlockUserUseCase implements IBlockUserUseCase {

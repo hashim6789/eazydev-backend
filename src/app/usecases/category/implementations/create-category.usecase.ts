@@ -9,7 +9,7 @@ import {
   CategoryErrorType,
 } from "../../../../domain/enums";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
-import { ICategoryRepository } from "../../../repositories";
+import { ICategoryRepository } from "../../../../infra/repositories";
 import { ICreateCategoryUseCase } from "../interfaces";
 
 export class CreateCategoryUseCase implements ICreateCategoryUseCase {

@@ -7,7 +7,7 @@ import {
   AuthenticateUserErrorType,
   CategoryErrorType,
 } from "../../../../domain/enums";
-import { ICategoryRepository } from "../../../repositories";
+import { ICategoryRepository } from "../../../../infra/repositories";
 import { IUpdateListCategoryUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

@@ -1,13 +1,12 @@
-import { ITokenRepository } from "../../../../app/repositories/token.repository";
-import { IUsersRepository } from "../../../../app/repositories/user.repository";
+import { ITokenRepository, IUsersRepository } from "../../../repositories";
 import { ILoginUseCase } from "../../../../app/usecases/auth/interfaces";
 import { LoginUseCase } from "../../../../app/usecases/auth/implementations";
 import { LoginController } from "../../../../presentation/http/controllers/auth/login.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { GenerateTokenProvider } from "../../../providers/implementations/generate-refresh-token.provider";
 import { PasswordHasher } from "../../../providers/implementations/password-hasher.provider";
-import { TokenRepository } from "../../../repositories/token-repository";
-import { UserRepository } from "../../../repositories/user.repository";
+import { TokenRepository } from "../../../repositories/implementations/token-repository";
+import { UserRepository } from "../../../repositories/implementations/user.repository";
 import { TokenModel, UserModel } from "../../../databases/models";
 import { IGenerateTokenProvider, IPasswordHasher } from "../../../providers";
 

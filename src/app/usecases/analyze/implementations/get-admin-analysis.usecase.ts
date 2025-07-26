@@ -5,7 +5,7 @@ import {
   IProgressRepository,
   IPurchaseRepository,
   IUsersRepository,
-} from "../../../repositories";
+} from "../../../../infra/repositories";
 import { IGetAdminAnalyzeUseCase } from "../interfaces";
 
 export class GetAdminAnalyzeUseCase implements IGetAdminAnalyzeUseCase {

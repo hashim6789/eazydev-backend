@@ -2,13 +2,13 @@ import {
   IProgressRepository,
   IPurchaseRepository,
   IUsersRepository,
-} from "../../../../app/repositories";
+} from "../../../repositories";
 import { IController } from "../../../../presentation/http/controllers";
 import {
   ProgressRepository,
   PurchaseRepository,
   UserRepository,
-} from "../../../repositories";
+} from "../../../repositories/implementations";
 import {
   ProgressModel,
   PurchaseModel,

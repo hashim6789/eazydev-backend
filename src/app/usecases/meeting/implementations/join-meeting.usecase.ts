@@ -5,7 +5,10 @@ import {
 import { Payload } from "../../../../domain/dtos/jwt-payload";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { MeetingErrorType } from "../../../../domain/enums/meeting";
-import { IMeetingRepository, ISlotRepository } from "../../../repositories";
+import {
+  IMeetingRepository,
+  ISlotRepository,
+} from "../../../../infra/repositories";
 import { IGetAllMeetingUseCase, IJoinMeetingUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

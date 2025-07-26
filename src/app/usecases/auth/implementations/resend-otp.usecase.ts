@@ -1,6 +1,8 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IUsersRepository } from "../../../repositories/user.repository";
-import { IOtpRepository } from "../../../repositories/otp.repository";
+import {
+  IOtpRepository,
+  IUsersRepository,
+} from "../../../../infra/repositories";
 import { IResendOtpUseCase } from "../interfaces/resend-otp-usecase";
 import { IResendOtpRequestDTO } from "../../../../domain/dtos/auth/resend-otp-auth.dto";
 import { IUserDetailOutDTO } from "../../../../domain/dtos";

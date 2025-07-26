@@ -1,6 +1,6 @@
-import { IUsersRepository } from "../../../../app/repositories/user.repository";
+import { IUsersRepository } from "../../../repositories";
 import { IController } from "../../../../presentation/http/controllers/IController";
-import { UserRepository } from "../../../repositories/user.repository";
+import { UserRepository } from "../../../repositories/implementations/user.repository";
 import {
   IVerifyPasswordUseCase,
   VerifyPasswordUseCase,

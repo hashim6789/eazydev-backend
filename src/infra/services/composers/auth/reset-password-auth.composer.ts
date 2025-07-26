@@ -1,5 +1,4 @@
-import { IUsersRepository } from "../../../../app/repositories";
-import { ITokenRepository } from "../../../../app/repositories/token.repository";
+import { ITokenRepository, IUsersRepository } from "../../../repositories";
 import {
   GetResetPageUseCase,
   IResetPasswordUseCase,
@@ -13,7 +12,10 @@ import { IController } from "../../../../presentation/http/controllers/IControll
 import { TokenModel, UserModel } from "../../../databases/models";
 import { IPasswordHasher } from "../../../providers";
 import { PasswordHasher } from "../../../providers/implementations";
-import { TokenRepository, UserRepository } from "../../../repositories";
+import {
+  TokenRepository,
+  UserRepository,
+} from "../../../repositories/implementations";
 
 export function resetPasswordComposer(): IController {
   const repository: ITokenRepository = new TokenRepository(TokenModel);

@@ -6,7 +6,7 @@ import {
   Payload,
 } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IUsersRepository } from "../../../repositories/user.repository";
+import { IUsersRepository } from "../../../../infra/repositories";
 import { IChangePasswordUseCase, IVerifyPasswordUseCase } from "../interfaces";
 import { AuthenticateUserErrorType } from "../../../../domain/enums";
 import { formatErrorResponse } from "../../../../presentation/http/utils";

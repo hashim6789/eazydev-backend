@@ -3,7 +3,7 @@ import {
   IGetMaterialRequestDTO,
   IMaterialPopulateMentorDTO,
 } from "../../../../domain/dtos/material";
-import { IMaterialRepository } from "../../../repositories/material.repository";
+import { IMaterialRepository } from "../../../../infra/repositories";
 import { MaterialErrorType } from "../../../../domain/enums/material";
 import { IGetMaterialUseCase } from "../interface/get-material.usecase";
 import { formatErrorResponse } from "../../../../presentation/http/utils";

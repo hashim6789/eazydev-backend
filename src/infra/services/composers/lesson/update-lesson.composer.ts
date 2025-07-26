@@ -1,4 +1,4 @@
-import { ILessonRepository } from "../../../../app/repositories";
+import { ILessonRepository } from "../../../repositories";
 import {
   GetLessonUseCase,
   UpdateLessonUseCase,
@@ -13,7 +13,7 @@ import {
 } from "../../../../presentation/http/controllers";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { LessonModel } from "../../../databases/models";
-import { LessonRepository } from "../../../repositories";
+import { LessonRepository } from "../../../repositories/implementations";
 
 export function updateLessonComposer(): IController {
   const repository: ILessonRepository = new LessonRepository(LessonModel);

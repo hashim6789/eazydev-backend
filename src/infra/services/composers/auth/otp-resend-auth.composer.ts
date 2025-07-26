@@ -1,5 +1,4 @@
-import { IOtpRepository } from "../../../../app/repositories/otp.repository";
-import { IUsersRepository } from "../../../../app/repositories/user.repository";
+import { IOtpRepository, IUsersRepository } from "../../../repositories";
 import { ResendOtpUseCase } from "../../../../app/usecases/auth/implementations/resend-otp.usecase";
 import { IResendOtpUseCase } from "../../../../app/usecases/auth/interfaces/resend-otp-usecase";
 import { ResendOtpController } from "../../../../presentation/http/controllers/auth/resend-otp.controller";
@@ -13,8 +12,8 @@ import {
 import { GenerateOtpProvider } from "../../../providers/implementations/generate-otp.provider";
 import { PasswordHasher } from "../../../providers/implementations/password-hasher.provider";
 import { SendMailProvider } from "../../../providers/implementations/send-mail.provider";
-import { OtpRepository } from "../../../repositories/otp.repository";
-import { UserRepository } from "../../../repositories/user.repository";
+import { OtpRepository } from "../../../repositories/implementations/otp.repository";
+import { UserRepository } from "../../../repositories/implementations/user.repository";
 
 export function resendOtpComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);

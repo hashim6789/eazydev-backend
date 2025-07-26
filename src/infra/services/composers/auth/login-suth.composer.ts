@@ -1,5 +1,4 @@
-import { ITokenRepository } from "../../../../app/repositories/token.repository";
-import { IUsersRepository } from "../../../../app/repositories/user.repository";
+import { ITokenRepository, IUsersRepository } from "../../../repositories";
 import { LoginUseCase } from "../../../../app/usecases/auth/implementations/login-auth-usecase";
 import { ILoginUseCase } from "../../../../app/usecases/auth/interfaces/login-auth.usecase";
 import { LoginController } from "../../../../presentation/http/controllers/auth/login.controller";
@@ -8,7 +7,10 @@ import { TokenModel, UserModel } from "../../../databases/models";
 import { IGenerateTokenProvider, IPasswordHasher } from "../../../providers";
 import { GenerateTokenProvider } from "../../../providers/implementations/generate-refresh-token.provider";
 import { PasswordHasher } from "../../../providers/implementations/password-hasher.provider";
-import { TokenRepository, UserRepository } from "../../../repositories";
+import {
+  TokenRepository,
+  UserRepository,
+} from "../../../repositories/implementations";
 
 export function loginComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);

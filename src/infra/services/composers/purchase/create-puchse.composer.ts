@@ -3,7 +3,7 @@ import {
   ICourseRepository,
   IProgressRepository,
   IPurchaseRepository,
-} from "../../../../app/repositories";
+} from "../../../repositories";
 import { CreatePurchaseUseCases } from "../../../../app/usecases/purchase/implementations/create-purchase.usecase";
 import { ICreatePurchaseUseCase } from "../../../../app/usecases/purchase/interfaces";
 import { IController } from "../../../../presentation/http/controllers/IController";
@@ -18,8 +18,8 @@ import {
   ChatGroupRepository,
   CourseRepository,
   ProgressRepository,
-} from "../../../repositories";
-import { PurchaseRepository } from "../../../repositories/purchase-repository";
+} from "../../../repositories/implementations";
+import { PurchaseRepository } from "../../../repositories/implementations/purchase-repository";
 
 export function createPurchaseComposer(): IController {
   const repository: IPurchaseRepository = new PurchaseRepository(PurchaseModel);

@@ -2,7 +2,7 @@ import {
   IGetAllNotificationRequestDTO,
   ResponseDTO,
 } from "../../../../domain/dtos";
-import { INotificationRepository } from "../../../repositories";
+import { INotificationRepository } from "../../../../infra/repositories";
 import { IGetAllNotificationUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

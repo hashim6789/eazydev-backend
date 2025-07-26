@@ -16,7 +16,7 @@ import {
   ICourseRepository,
   IProgressRepository,
   IPurchaseRepository,
-} from "../../../repositories";
+} from "../../../../infra/repositories";
 import { ICreatePurchaseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

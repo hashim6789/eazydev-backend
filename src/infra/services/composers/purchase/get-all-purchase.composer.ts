@@ -1,10 +1,10 @@
-import { IPurchaseRepository } from "../../../../app/repositories";
+import { IPurchaseRepository } from "../../../repositories";
 import { GetAllPurchaseUseCases } from "../../../../app/usecases/purchase/implementations";
 import { IGetAllPurchaseUseCase } from "../../../../app/usecases/purchase/interfaces";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { GetAllPurchaseController } from "../../../../presentation/http/controllers/purchase";
 import { PurchaseModel } from "../../../databases/models";
-import { PurchaseRepository } from "../../../repositories/purchase-repository";
+import { PurchaseRepository } from "../../../repositories/implementations/purchase-repository";
 
 export function getAllPurchaseComposer(): IController {
   const repository: IPurchaseRepository = new PurchaseRepository(PurchaseModel);

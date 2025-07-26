@@ -1,7 +1,7 @@
 import { ResponseDTO } from "../../../../domain/dtos";
 import { Role } from "../../../../domain/types";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
-import { ICategoryRepository } from "../../../repositories";
+import { ICategoryRepository } from "../../../../infra/repositories";
 import { IGetAllCategoryUseCase } from "../interfaces";
 
 export class GetAllCategoryUseCase implements IGetAllCategoryUseCase {

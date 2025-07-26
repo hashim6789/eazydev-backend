@@ -1,4 +1,4 @@
-import { ICourseRepository } from "../../../../app/repositories";
+import { ICourseRepository } from "../../../repositories";
 import {
   IUpdateCourseUseCase,
   UpdateCourseUseCase,
@@ -8,7 +8,7 @@ import {
   UpdateCourseController,
 } from "../../../../presentation/http/controllers";
 import { CourseModel } from "../../../databases/models";
-import { CourseRepository } from "../../../repositories";
+import { CourseRepository } from "../../../repositories/implementations";
 
 export function updateCourseComposer(): IController {
   const repository: ICourseRepository = new CourseRepository(CourseModel);

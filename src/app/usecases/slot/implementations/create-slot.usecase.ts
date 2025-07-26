@@ -5,7 +5,7 @@ import { SlotEntity } from "../../../../domain/entities";
 import { SlotErrorType } from "../../../../domain/enums";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
 import { MaterialErrorType } from "../../../../domain/enums/material";
-import { ISlotRepository } from "../../../repositories";
+import { ISlotRepository } from "../../../../infra/repositories";
 import { ICreateSlotUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

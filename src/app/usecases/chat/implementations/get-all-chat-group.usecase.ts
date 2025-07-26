@@ -1,7 +1,7 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IGetAllChatGroupUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";
-import { IChatGroupRepository } from "../../../repositories";
+import { IChatGroupRepository } from "../../../../infra/repositories";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllChatGroupUseCase implements IGetAllChatGroupUseCase {

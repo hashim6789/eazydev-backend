@@ -1,6 +1,6 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
-import { IPurchaseRepository } from "../../../repositories";
+import { IPurchaseRepository } from "../../../../infra/repositories";
 import { IGetAdminAnalyzeUseCase } from "../interfaces";
 
 export class GetAdminRevenueAnalyzeUseCase implements IGetAdminAnalyzeUseCase {

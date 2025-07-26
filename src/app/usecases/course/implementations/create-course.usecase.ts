@@ -8,7 +8,7 @@ import {
   AuthenticateUserErrorType,
   CourseErrorType,
 } from "../../../../domain/enums";
-import { ICourseRepository } from "../../../repositories";
+import { ICourseRepository } from "../../../../infra/repositories";
 import { ICreateCourseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

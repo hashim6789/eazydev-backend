@@ -1,7 +1,4 @@
-import {
-  ICourseRepository,
-  IPurchaseRepository,
-} from "../../../../app/repositories";
+import { ICourseRepository, IPurchaseRepository } from "../../../repositories";
 import { GetPurchaseUseCases } from "../../../../app/usecases/purchase/implementations";
 import { CreatePurchaseUseCases } from "../../../../app/usecases/purchase/implementations/create-purchase.usecase";
 import {
@@ -14,8 +11,8 @@ import {
   GetPurchaseController,
 } from "../../../../presentation/http/controllers/purchase";
 import { CourseModel, PurchaseModel } from "../../../databases/models";
-import { CourseRepository } from "../../../repositories";
-import { PurchaseRepository } from "../../../repositories/purchase-repository";
+import { CourseRepository } from "../../../repositories/implementations";
+import { PurchaseRepository } from "../../../repositories/implementations/purchase-repository";
 
 export function getPurchaseComposer(): IController {
   const repository: IPurchaseRepository = new PurchaseRepository(PurchaseModel);

@@ -1,6 +1,6 @@
-import { IPurchaseRepository } from "../../../../app/repositories";
+import { IPurchaseRepository } from "../../../repositories";
 import { IController } from "../../../../presentation/http/controllers";
-import { PurchaseRepository } from "../../../repositories";
+import { PurchaseRepository } from "../../../repositories/implementations";
 import { PurchaseModel } from "../../../databases/models";
 import {
   GetAdminRevenueAnalyzeUseCase,

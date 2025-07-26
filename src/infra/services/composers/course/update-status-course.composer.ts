@@ -2,7 +2,7 @@ import {
   IChatGroupRepository,
   ICourseRepository,
   INotificationRepository,
-} from "../../../../app/repositories";
+} from "../../../repositories";
 import {
   IUpdateStatusCourseUseCase,
   UpdateStatusCourseUseCase,
@@ -20,7 +20,7 @@ import {
   ChatGroupRepository,
   CourseRepository,
   NotificationRepository,
-} from "../../../repositories";
+} from "../../../repositories/implementations";
 
 export function updateStatusCourseComposer(): IController {
   const repository: ICourseRepository = new CourseRepository(CourseModel);

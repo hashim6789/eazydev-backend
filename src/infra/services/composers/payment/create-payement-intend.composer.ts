@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { ICourseRepository } from "../../../../app/repositories";
+import { ICourseRepository } from "../../../repositories";
 
 import { CreatePaymentIntentUseCase } from "../../../../app/usecases/payment/implementations/create-payment-intent.usecase";
 import { ICreatePaymentIntentUseCase } from "../../../../app/usecases/payment/interfaces";
@@ -8,7 +8,7 @@ import {
   IController,
 } from "../../../../presentation/http/controllers";
 import { CourseModel } from "../../../databases/models";
-import { CourseRepository } from "../../../repositories";
+import { CourseRepository } from "../../../repositories/implementations";
 import { env } from "../../../../presentation/express/configs/env.config";
 
 export function createPaymentIntendComposer(): IController {

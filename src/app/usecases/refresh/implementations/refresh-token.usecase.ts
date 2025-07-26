@@ -2,7 +2,7 @@ import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { ITokenUserDTO } from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
-import { ITokenRepository } from "../../../repositories/token.repository";
+import { ITokenRepository } from "../../../../infra/repositories";
 import { IRefreshTokenUserUseCase } from "../interfaces/refresh-token.usecas";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 import {

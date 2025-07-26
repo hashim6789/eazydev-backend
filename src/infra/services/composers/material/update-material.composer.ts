@@ -1,4 +1,4 @@
-import { IMaterialRepository } from "../../../../app/repositories/material.repository";
+import { IMaterialRepository } from "../../../repositories";
 import {
   IUpdateMaterialUseCase,
   UpdateMaterialUseCase,
@@ -6,7 +6,7 @@ import {
 import { UpdateMaterialController } from "../../../../presentation/http/controllers";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { MaterialModel } from "../../../databases/models";
-import MaterialRepository from "../../../repositories/material.repository";
+import MaterialRepository from "../../../repositories/implementations/material.repository";
 
 export function updateMaterialComposer(): IController {
   const repository: IMaterialRepository = new MaterialRepository(MaterialModel);

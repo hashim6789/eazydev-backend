@@ -1,5 +1,4 @@
-import { ITokenRepository } from "../../../../app/repositories/token.repository";
-import { IUsersRepository } from "../../../../app/repositories/user.repository";
+import { ITokenRepository, IUsersRepository } from "../../../repositories";
 import { RecoverUserInformationUserUseCase } from "../../../../app/usecases/refresh/implementations/recover-user-info.usecase";
 import { IRecoverUserInformationUseCase } from "../../../../app/usecases/refresh/interfaces/recover-user-info.usecase";
 import { IController } from "../../../../presentation/http/controllers/IController";
@@ -7,8 +6,8 @@ import { RecoverUserInformationUserController } from "../../../../presentation/h
 import { TokenModel, UserModel } from "../../../databases/models";
 import { ITokenManagerProvider } from "../../../providers";
 import { TokenManagerProvider } from "../../../providers/implementations/token-manager.provider";
-import { TokenRepository } from "../../../repositories/token-repository";
-import { UserRepository } from "../../../repositories/user.repository";
+import { TokenRepository } from "../../../repositories/implementations/token-repository";
+import { UserRepository } from "../../../repositories/implementations/user.repository";
 
 /**
  * Composer function for creating and configuring the components required for recovering user information.

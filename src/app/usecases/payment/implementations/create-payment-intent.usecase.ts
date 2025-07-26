@@ -1,7 +1,10 @@
 import { ResponseDTO } from "../../../../domain/dtos";
 import { PaymentErrorType } from "../../../../domain/enums";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
-import { ICourseRepository, IPaymentRepository } from "../../../repositories";
+import {
+  ICourseRepository,
+  IPaymentRepository,
+} from "../../../../infra/repositories";
 import { ICreatePaymentIntentUseCase } from "../interfaces";
 import Stripe from "stripe";
 

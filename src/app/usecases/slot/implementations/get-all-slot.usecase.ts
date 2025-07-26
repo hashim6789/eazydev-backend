@@ -1,6 +1,6 @@
 import { Payload } from "../../../../domain/dtos/jwt-payload";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { ISlotRepository } from "../../../repositories";
+import { ISlotRepository } from "../../../../infra/repositories";
 import { IGetAllSlotUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

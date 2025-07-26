@@ -1,4 +1,4 @@
-import { IProgressRepository } from "../../../../app/repositories";
+import { IProgressRepository } from "../../../repositories";
 import {
   GetAllProgressUseCase,
   IGetAllProgressUseCase,
@@ -6,7 +6,7 @@ import {
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { GetAllProgressController } from "../../../../presentation/http/controllers/progress";
 import { ProgressModel } from "../../../databases/models";
-import { ProgressRepository } from "../../../repositories";
+import { ProgressRepository } from "../../../repositories/implementations";
 
 export function getAllProgressComposer(): IController {
   const repository: IProgressRepository = new ProgressRepository(ProgressModel);

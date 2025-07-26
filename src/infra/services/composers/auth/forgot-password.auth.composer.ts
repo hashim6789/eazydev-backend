@@ -1,5 +1,3 @@
-import { ITokenRepository } from "../../../../app/repositories/token.repository";
-import { IUsersRepository } from "../../../../app/repositories/user.repository";
 import {
   ForgotPasswordUseCase,
   IForgotPasswordUseCase,
@@ -9,8 +7,9 @@ import { IController } from "../../../../presentation/http/controllers/IControll
 import { TokenModel, UserModel } from "../../../databases/models";
 import { ISendMailProvider } from "../../../providers";
 import { SendMailProvider } from "../../../providers/implementations";
-import { TokenRepository } from "../../../repositories/token-repository";
-import { UserRepository } from "../../../repositories/user.repository";
+import { ITokenRepository, IUsersRepository } from "../../../repositories";
+import { TokenRepository } from "../../../repositories/implementations/token-repository";
+import { UserRepository } from "../../../repositories/implementations/user.repository";
 
 export function forgotPasswordComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);

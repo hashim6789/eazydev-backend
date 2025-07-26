@@ -4,7 +4,7 @@ import {
   AuthenticateUserErrorType,
   PurchaseErrorType,
 } from "../../../../domain/enums";
-import { IPurchaseRepository } from "../../../repositories";
+import { IPurchaseRepository } from "../../../../infra/repositories";
 import { IGetAllPurchaseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

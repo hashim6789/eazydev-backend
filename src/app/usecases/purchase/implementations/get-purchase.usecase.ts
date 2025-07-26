@@ -10,7 +10,10 @@ import {
   CourseErrorType,
   PurchaseErrorType,
 } from "../../../../domain/enums";
-import { ICourseRepository, IPurchaseRepository } from "../../../repositories";
+import {
+  ICourseRepository,
+  IPurchaseRepository,
+} from "../../../../infra/repositories";
 import { ICreatePurchaseUseCase, IGetPurchaseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

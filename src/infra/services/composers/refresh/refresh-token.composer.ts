@@ -1,4 +1,4 @@
-import { ITokenRepository } from "../../../../app/repositories/token.repository";
+import { ITokenRepository } from "../../../repositories";
 import { RefreshTokenUserUseCase } from "../../../../app/usecases/refresh/implementations/refresh-token.usecase";
 import { IRefreshTokenUserUseCase } from "../../../../app/usecases/refresh/interfaces/refresh-token.usecas";
 import { IController } from "../../../../presentation/http/controllers/IController";
@@ -10,7 +10,7 @@ import {
 } from "../../../providers";
 import { GenerateTokenProvider } from "../../../providers/implementations/generate-refresh-token.provider";
 import { TokenManagerProvider } from "../../../providers/implementations/token-manager.provider";
-import { TokenRepository } from "../../../repositories/token-repository";
+import { TokenRepository } from "../../../repositories/implementations/token-repository";
 
 /**
  * Composer function for creating and configuring the components required for refreshing authentication tokens.

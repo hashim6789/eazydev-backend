@@ -9,7 +9,7 @@ import { ProgressErrorType } from "../../../../domain/enums/progress";
 import {
   ICertificateRepository,
   IProgressRepository,
-} from "../../../repositories";
+} from "../../../../infra/repositories";
 import { IGetCertificateUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

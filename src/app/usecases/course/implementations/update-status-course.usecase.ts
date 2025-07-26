@@ -15,7 +15,7 @@ import {
   IChatGroupRepository,
   ICourseRepository,
   INotificationRepository,
-} from "../../../repositories";
+} from "../../../../infra/repositories";
 import { IUpdateStatusCourseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

@@ -1,0 +1,16 @@
+export { IMaterialRepository } from "./material.repository";
+export { IOtpRepository } from "./otp.repository";
+export { ITokenRepository } from "./token.repository";
+export { IUsersRepository } from "./user.repository";
+export { ICourseRepository } from "./course.repository";
+export { ILessonRepository } from "./lesson.repository";
+export { ICategoryRepository } from "./category-repository";
+export { INotificationRepository } from "./notification.repository";
+export { IChatGroupRepository } from "./chat-group-repository";
+export { IPaymentRepository } from "./payment-repository";
+export { IPurchaseRepository } from "./purchase.repository";
+export { IProgressRepository } from "./progress-repository";
+export { ISlotRepository } from "./slot.repository";
+export { IMeetingRepository } from "./meeting-repository";
+export { IChatMessageRepository } from "./chat-message.repository";
+export { ICertificateRepository } from "./certificate.repository";

@@ -5,7 +5,10 @@ import {
   AuthenticateUserErrorType,
 } from "../../../../domain/enums";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
-import { ICourseRepository, IProgressRepository } from "../../../repositories";
+import {
+  ICourseRepository,
+  IProgressRepository,
+} from "../../../../infra/repositories";
 import { IGetMentorAnalyzeUseCase } from "../interfaces";
 
 export class GetMentorAnalyzeUseCase implements IGetMentorAnalyzeUseCase {

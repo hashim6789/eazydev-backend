@@ -1,6 +1,8 @@
-import { IOtpRepository } from "../../../../app/repositories/otp.repository";
-import { ITokenRepository } from "../../../../app/repositories/token.repository";
-import { IUsersRepository } from "../../../../app/repositories/user.repository";
+import {
+  IOtpRepository,
+  ITokenRepository,
+  IUsersRepository,
+} from "../../../repositories";
 import { SignupUseCase } from "../../../../app/usecases/auth/implementations/signup-auth.usecase";
 import { ISignupUseCase } from "../../../../app/usecases/auth/interfaces/signup-auth.usecase";
 import { SignupController } from "../../../../presentation/http/controllers/auth/signup.controller";
@@ -16,9 +18,9 @@ import { GenerateOtpProvider } from "../../../providers/implementations/generate
 import { GenerateTokenProvider } from "../../../providers/implementations/generate-refresh-token.provider";
 import { PasswordHasher } from "../../../providers/implementations/password-hasher.provider";
 import { SendMailProvider } from "../../../providers/implementations/send-mail.provider";
-import { TokenRepository } from "../../../repositories";
-import { OtpRepository } from "../../../repositories/otp.repository";
-import { UserRepository } from "../../../repositories/user.repository";
+import { TokenRepository } from "../../../repositories/implementations";
+import { OtpRepository } from "../../../repositories/implementations/otp.repository";
+import { UserRepository } from "../../../repositories/implementations/user.repository";
 
 export function signupComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);

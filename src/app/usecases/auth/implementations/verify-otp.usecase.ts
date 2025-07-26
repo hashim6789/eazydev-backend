@@ -1,7 +1,9 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IUsersRepository } from "../../../repositories/user.repository";
 import { IVerifyOtpUseCase } from "../interfaces/verify-otp.usecase";
-import { IOtpRepository } from "../../../repositories/otp.repository";
+import {
+  IOtpRepository,
+  IUsersRepository,
+} from "../../../../infra/repositories";
 import { OtpDTO } from "../../../../domain/dtos/auth/otp-auth-dto";
 import { OtpErrorType } from "../../../../domain/enums/otp";
 import { UserErrorType } from "../../../../domain/enums/user";

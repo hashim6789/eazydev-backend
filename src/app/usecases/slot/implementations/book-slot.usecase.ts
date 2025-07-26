@@ -13,7 +13,7 @@ import {
   IMeetingRepository,
   IProgressRepository,
   ISlotRepository,
-} from "../../../repositories";
+} from "../../../../infra/repositories";
 import { IBookSlotUseCase, IGetAllSlotUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

@@ -1,5 +1,4 @@
-import { IOtpRepository } from "../../../../app/repositories/otp.repository";
-import { IUsersRepository } from "../../../../app/repositories/user.repository";
+import { IOtpRepository, IUsersRepository } from "../../../repositories";
 import { VerifyOtpUseCase } from "../../../../app/usecases/auth/implementations/verify-otp.usecase";
 import { IVerifyOtpUseCase } from "../../../../app/usecases/auth/interfaces/verify-otp.usecase";
 import { VerifyOtpController } from "../../../../presentation/http/controllers/auth/verify-otp.controller";
@@ -7,8 +6,8 @@ import { IController } from "../../../../presentation/http/controllers/IControll
 import { OtpModel, UserModel } from "../../../databases/models";
 import { IPasswordHasher } from "../../../providers";
 import { PasswordHasher } from "../../../providers/implementations/password-hasher.provider";
-import { OtpRepository } from "../../../repositories/otp.repository";
-import { UserRepository } from "../../../repositories/user.repository";
+import { OtpRepository } from "../../../repositories/implementations/otp.repository";
+import { UserRepository } from "../../../repositories/implementations/user.repository";
 
 export function otpVerifyComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);

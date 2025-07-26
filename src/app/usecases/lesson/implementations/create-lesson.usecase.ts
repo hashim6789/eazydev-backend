@@ -8,7 +8,10 @@ import {
   AuthenticateUserErrorType,
   LessonErrorType,
 } from "../../../../domain/enums";
-import { ICourseRepository, ILessonRepository } from "../../../repositories";
+import {
+  ICourseRepository,
+  ILessonRepository,
+} from "../../../../infra/repositories";
 import { ICreateLessonUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

@@ -5,7 +5,7 @@ import { MaterialEntity } from "../../../../domain/entities";
 import { UserErrorType } from "../../../../domain/enums";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
 import { MaterialErrorType } from "../../../../domain/enums/material";
-import { IMaterialRepository } from "../../../repositories/material.repository";
+import { IMaterialRepository } from "../../../../infra/repositories";
 import { ICreateMaterialUseCase, IUpdateMaterialUseCase } from "../interface";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

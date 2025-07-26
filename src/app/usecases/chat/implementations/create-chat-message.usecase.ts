@@ -1,6 +1,6 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { ICreateChatMessageRequestDTO, Payload } from "../../../../domain/dtos";
-import { IChatMessageRepository } from "../../../repositories";
+import { IChatMessageRepository } from "../../../../infra/repositories";
 import { ICreateChatMessageUseCase } from "../interfaces/post-chat-message.usecase";
 import { ChatMessageEntity } from "../../../../domain/entities";
 import { formatErrorResponse } from "../../../../presentation/http/utils";

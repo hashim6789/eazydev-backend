@@ -7,7 +7,7 @@ import { Payload } from "../../../../domain/dtos";
 import {
   IChatGroupRepository,
   IChatMessageRepository,
-} from "../../../repositories";
+} from "../../../../infra/repositories";
 import { IGetAllChatMessagesRequestDTO } from "../../../../domain/dtos/chat-group";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

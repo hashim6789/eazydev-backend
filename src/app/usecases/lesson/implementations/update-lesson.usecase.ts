@@ -4,7 +4,7 @@ import {
   ResponseDTO,
 } from "../../../../domain/dtos";
 import { LessonErrorType, UserErrorType } from "../../../../domain/enums";
-import { ILessonRepository } from "../../../repositories";
+import { ILessonRepository } from "../../../../infra/repositories";
 import { IUpdateLessonUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
