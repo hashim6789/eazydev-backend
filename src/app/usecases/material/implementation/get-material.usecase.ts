@@ -6,6 +6,7 @@ import {
 import { IMaterialRepository } from "../../../repositories/material.repository";
 import { MaterialErrorType } from "../../../../domain/enums/material";
 import { IGetMaterialUseCase } from "../interface/get-material.usecase";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetMaterialUseCase implements IGetMaterialUseCase {
   constructor(private materialRepository: IMaterialRepository) {}
@@ -33,8 +34,8 @@ export class GetMaterialUseCase implements IGetMaterialUseCase {
         success: true,
         data: fetchedData,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

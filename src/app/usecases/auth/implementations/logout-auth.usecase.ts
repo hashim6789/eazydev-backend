@@ -3,6 +3,7 @@ import { ITokenRepository } from "../../../repositories/token.repository";
 
 import { ILogoutRequestDTO } from "../../../../domain/dtos/auth/logut-auth-dto";
 import { ILogoutUseCase } from "../interfaces/logout-auth.usecase";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class LogoutUseCase implements ILogoutUseCase {
   constructor(private refreshTokenRepository: ITokenRepository) {}
@@ -20,8 +21,8 @@ export class LogoutUseCase implements ILogoutUseCase {
       }
 
       return { data: { token: refreshTokenFounded }, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

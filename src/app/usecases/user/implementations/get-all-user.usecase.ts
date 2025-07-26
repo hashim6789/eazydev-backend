@@ -4,6 +4,7 @@ import { UserErrorType } from "../../../../domain/enums/user";
 
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IGetAllUserUseCase } from "../interfaces/get-all-user.usecase";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllUserUseCase implements IGetAllUserUseCase {
   constructor(private userRepository: IUsersRepository) {}
@@ -16,8 +17,8 @@ export class GetAllUserUseCase implements IGetAllUserUseCase {
       }
 
       return { success: true, data: users };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

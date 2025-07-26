@@ -15,6 +15,7 @@ import {
   ISlotRepository,
 } from "../../../repositories";
 import { IBookSlotUseCase, IGetAllSlotUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class BookSlotUseCase implements IBookSlotUseCase {
   constructor(
@@ -66,8 +67,8 @@ export class BookSlotUseCase implements IBookSlotUseCase {
       await this.meetingRepository.create(meetingEntity);
 
       return { data: slot, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

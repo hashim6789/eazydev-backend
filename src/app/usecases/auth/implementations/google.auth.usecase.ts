@@ -9,6 +9,7 @@ import { IGoogleLoginUseCase } from "../interfaces/google-login.usecase";
 import axios from "axios";
 import { IUserOutRequestDTO, IUserValidDTO } from "../../../../domain/dtos";
 import { SignupRole } from "../../../../domain/types/user";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 interface GoogleApiResponse {
   email: string;
@@ -152,9 +153,8 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         data: { refreshTokenId: newToken.id, token, user: outUser },
         success: true,
       };
-    } catch (error: any) {
-      console.log(error);
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

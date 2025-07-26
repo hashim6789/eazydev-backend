@@ -7,6 +7,7 @@ import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
 import { MaterialErrorType } from "../../../../domain/enums/material";
 import { ISlotRepository } from "../../../repositories";
 import { ICreateSlotUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class CreateSlotUseCase implements ICreateSlotUseCase {
   constructor(private slotRepository: ISlotRepository) {}
@@ -50,8 +51,8 @@ export class CreateSlotUseCase implements ICreateSlotUseCase {
       }
 
       return { data: { slot: createdSlot }, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

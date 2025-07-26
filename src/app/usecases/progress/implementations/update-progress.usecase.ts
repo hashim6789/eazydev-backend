@@ -8,6 +8,7 @@ import {
 } from "../../../repositories";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
 import { CertificateEntity } from "../../../../domain/entities";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class UpdateProgressUseCase implements IUpdateProgressUseCase {
   constructor(
@@ -49,8 +50,8 @@ export class UpdateProgressUseCase implements IUpdateProgressUseCase {
         success: true,
         data: { success: true },
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

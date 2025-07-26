@@ -6,6 +6,7 @@ import {
 import { UserErrorType } from "../../../../domain/enums/user";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IUpdateProfilePictureUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class UpdateProfilePictureUseCase
   implements IUpdateProfilePictureUseCase
@@ -25,8 +26,8 @@ export class UpdateProfilePictureUseCase
       }
 
       return { success: true, data: user };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

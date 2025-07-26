@@ -1,5 +1,6 @@
 import { ResponseDTO } from "../../../../domain/dtos";
 import { PaymentErrorType } from "../../../../domain/enums";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { ICourseRepository, IPaymentRepository } from "../../../repositories";
 import { ICreatePaymentIntentUseCase } from "../interfaces";
 import Stripe from "stripe";
@@ -56,13 +57,8 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
           paymentIntentId: paymentIntent.id,
         },
       };
-    } catch (error: any) {
-      // Log the error if needed, and return structured error response
-      console.error("Error while creating Payment Intent:", error);
-      return {
-        success: false,
-        data: { error: error.message || PaymentErrorType.InternalError },
-      };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

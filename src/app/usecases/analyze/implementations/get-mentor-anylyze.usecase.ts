@@ -50,8 +50,8 @@ export class GetMentorAnalyzeUseCase implements IGetMentorAnalyzeUseCase {
         },
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

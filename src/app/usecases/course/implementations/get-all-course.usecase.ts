@@ -3,6 +3,7 @@ import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
 import { CourseErrorType } from "../../../../domain/enums";
 import { ICourseRepository } from "../../../repositories";
 import { IGetAllCourseUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllCourseUseCase implements IGetAllCourseUseCase {
   constructor(private courseRepository: ICourseRepository) {}
@@ -26,8 +27,8 @@ export class GetAllCourseUseCase implements IGetAllCourseUseCase {
       }
 
       return { success: true, data: courses };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

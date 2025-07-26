@@ -4,6 +4,7 @@ import { IMaterialRepository } from "../../../repositories/material.repository";
 import { MaterialErrorType } from "../../../../domain/enums/material";
 import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
 import { IGetAllMaterialRequestDTO } from "../../../../domain/dtos/material";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllMaterialUseCase implements IGetAllMaterialUseCase {
   constructor(private materialRepository: IMaterialRepository) {}
@@ -39,8 +40,8 @@ export class GetAllMaterialUseCase implements IGetAllMaterialUseCase {
         success: true,
         data: fetchedData,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

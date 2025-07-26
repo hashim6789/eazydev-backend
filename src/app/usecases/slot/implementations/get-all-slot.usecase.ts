@@ -2,6 +2,7 @@ import { Payload } from "../../../../domain/dtos/jwt-payload";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { ISlotRepository } from "../../../repositories";
 import { IGetAllSlotUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllSlotUseCase implements IGetAllSlotUseCase {
   constructor(private slotRepository: ISlotRepository) {}
@@ -14,8 +15,8 @@ export class GetAllSlotUseCase implements IGetAllSlotUseCase {
       const slots = await this.slotRepository.findAllByMentorId(userId);
 
       return { data: slots, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

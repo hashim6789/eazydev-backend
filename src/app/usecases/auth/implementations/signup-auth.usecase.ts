@@ -10,6 +10,7 @@ import { IGenerateOtpProvider } from "../../../providers/generate-otp.provider";
 import { ISendMailProvider } from "../../../providers/send-mail.provider";
 import { ITokenRepository } from "../../../repositories";
 import { IUserInRequestDTO } from "../../../../domain/dtos";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export interface ISignupUseCase {
   execute(data: ISignupRequestDTO): Promise<ResponseDTO>;
@@ -101,8 +102,8 @@ export class SignupUseCase implements ISignupUseCase {
         data: { refreshTokenId: newToken.id, token, user: outUser },
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

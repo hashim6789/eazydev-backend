@@ -7,6 +7,7 @@ import { IGenerateTokenProvider } from "../../../providers/generate-refresh-toke
 import { ITokenRepository } from "../../../repositories/token.repository";
 import { IUserValidDTO } from "../../../../domain/dtos";
 import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export interface ILoginUseCase {
   execute(data: ILoginRequestDTO): Promise<ResponseDTO>;
@@ -86,8 +87,8 @@ export class LoginUseCase implements ILoginUseCase {
         data: { token, refreshTokenId: refreshToken.id, user },
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

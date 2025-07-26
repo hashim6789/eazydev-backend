@@ -4,6 +4,7 @@ import {
 } from "../../../../domain/dtos";
 import { INotificationRepository } from "../../../repositories";
 import { IGetAllNotificationUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllNotificationUseCase implements IGetAllNotificationUseCase {
   constructor(private notificationRepository: INotificationRepository) {}
@@ -16,8 +17,8 @@ export class GetAllNotificationUseCase implements IGetAllNotificationUseCase {
         );
 
       return { data: notifications, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

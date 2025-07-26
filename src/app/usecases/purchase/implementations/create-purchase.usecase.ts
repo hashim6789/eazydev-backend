@@ -18,6 +18,7 @@ import {
   IPurchaseRepository,
 } from "../../../repositories";
 import { ICreatePurchaseUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
   constructor(
@@ -107,8 +108,8 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
       await this.progressRepository.create(progress);
 
       return { data: createdPurchase, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

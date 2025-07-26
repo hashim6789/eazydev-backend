@@ -5,6 +5,7 @@ import { IGetAllProgressUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";
 import { IProgressRepository } from "../../../repositories";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllProgressUseCase implements IGetAllProgressUseCase {
   constructor(private progressRepository: IProgressRepository) {}
@@ -34,8 +35,8 @@ export class GetAllProgressUseCase implements IGetAllProgressUseCase {
         success: true,
         data: paginatedProgresses,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

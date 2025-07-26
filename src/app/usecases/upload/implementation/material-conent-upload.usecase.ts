@@ -3,6 +3,7 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUploadMaterialRequestDTO } from "../../../../domain/dtos/upload";
 import { UploadErrorType } from "../../../../domain/enums/upload";
 import { IS3ServiceProvider } from "../../../providers";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 import { IMaterialContentUploadUseCase } from "../interface/material-conent-upload.usecase";
 
@@ -32,8 +33,8 @@ export class MaterialContentUploadUseCase
       }
 
       return { data: { signedUrl: url, fileKey: fileName }, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

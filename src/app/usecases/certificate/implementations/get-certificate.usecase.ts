@@ -11,6 +11,7 @@ import {
   IProgressRepository,
 } from "../../../repositories";
 import { IGetCertificateUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetCertificateUseCase implements IGetCertificateUseCase {
   constructor(
@@ -66,8 +67,8 @@ export class GetCertificateUseCase implements IGetCertificateUseCase {
       }
 
       return { data: createdCertificate, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

@@ -1,5 +1,6 @@
 import { ResponseDTO } from "../../../../domain/dtos";
 import { Role } from "../../../../domain/types";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { ICategoryRepository } from "../../../repositories";
 import { IGetAllCategoryUseCase } from "../interfaces";
 
@@ -11,8 +12,8 @@ export class GetAllCategoryUseCase implements IGetAllCategoryUseCase {
       const categories = await this.categoryRepository.fetch(role);
 
       return { success: true, data: categories };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

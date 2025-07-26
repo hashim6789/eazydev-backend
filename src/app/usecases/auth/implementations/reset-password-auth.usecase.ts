@@ -11,6 +11,7 @@ import { IUsersRepository } from "../../../repositories";
 import { IUserValidDTO } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums";
 import { IPasswordHasher } from "../../../providers";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class ResetPasswordUseCase implements IResetPasswordUseCase {
   constructor(
@@ -72,8 +73,8 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
         data: { tokenId },
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

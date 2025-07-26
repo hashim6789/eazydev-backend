@@ -7,6 +7,7 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { MeetingErrorType } from "../../../../domain/enums/meeting";
 import { IMeetingRepository, ISlotRepository } from "../../../repositories";
 import { IGetAllMeetingUseCase, IJoinMeetingUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class JoinMeetingUseCase implements IJoinMeetingUseCase {
   constructor(private meetingRepository: IMeetingRepository) {}
@@ -47,8 +48,8 @@ export class JoinMeetingUseCase implements IJoinMeetingUseCase {
       }
 
       return { data: { otherPeerId }, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

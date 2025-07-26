@@ -7,6 +7,7 @@ import { IResendOtpRequestDTO } from "../../../../domain/dtos/auth/resend-otp-au
 import { IGenerateOtpProvider } from "../../../providers/generate-otp.provider";
 import { ISendMailProvider } from "../../../providers/send-mail.provider";
 import { IUserDetailOutDTO } from "../../../../domain/dtos";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class ResendOtpUseCase implements IResendOtpUseCase {
   constructor(
@@ -40,8 +41,8 @@ export class ResendOtpUseCase implements IResendOtpUseCase {
           role: user.role,
         },
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

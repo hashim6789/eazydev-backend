@@ -31,8 +31,8 @@ export class GetMentorRevenueAnalyzeUseCase
         data: monthlyRevenueData,
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

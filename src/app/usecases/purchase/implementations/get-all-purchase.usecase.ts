@@ -6,6 +6,7 @@ import {
 } from "../../../../domain/enums";
 import { IPurchaseRepository } from "../../../repositories";
 import { IGetAllPurchaseUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllPurchaseUseCases implements IGetAllPurchaseUseCase {
   constructor(private purchaseRepository: IPurchaseRepository) {}
@@ -24,8 +25,8 @@ export class GetAllPurchaseUseCases implements IGetAllPurchaseUseCase {
       }
 
       return { data: purchases.body, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

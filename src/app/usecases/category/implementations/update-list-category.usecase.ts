@@ -9,6 +9,7 @@ import {
 } from "../../../../domain/enums";
 import { ICategoryRepository } from "../../../repositories";
 import { IUpdateListCategoryUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class UpdateListCategoryUseCase implements IUpdateListCategoryUseCase {
   constructor(private categoryRepository: ICategoryRepository) {}
@@ -38,8 +39,8 @@ export class UpdateListCategoryUseCase implements IUpdateListCategoryUseCase {
       }
 
       return { data: { success: true }, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

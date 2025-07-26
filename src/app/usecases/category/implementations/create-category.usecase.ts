@@ -8,6 +8,7 @@ import {
   AuthenticateUserErrorType,
   CategoryErrorType,
 } from "../../../../domain/enums";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { ICategoryRepository } from "../../../repositories";
 import { ICreateCategoryUseCase } from "../interfaces";
 
@@ -53,8 +54,8 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
       }
 
       return { data: { category: createdCategory }, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

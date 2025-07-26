@@ -7,6 +7,7 @@ import { ITokenManagerProvider } from "../../../providers/token-manager.provider
 import { ITokenRepository } from "../../../repositories/token.repository";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IRecoverUserInformationUseCase } from "../interfaces/recover-user-info.usecase";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 /**
  * Use case for recovering user information based on a refresh token.
@@ -69,8 +70,8 @@ export class RecoverUserInformationUserUseCase
       )) as IUserInRequestDTO | null;
 
       return { data: user, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

@@ -12,6 +12,7 @@ import {
 } from "../../../../domain/enums";
 import { ICourseRepository, IPurchaseRepository } from "../../../repositories";
 import { ICreatePurchaseUseCase, IGetPurchaseUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetPurchaseUseCases implements IGetPurchaseUseCase {
   constructor(
@@ -40,8 +41,8 @@ export class GetPurchaseUseCases implements IGetPurchaseUseCase {
       }
 
       return { data: purchase, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

@@ -6,6 +6,7 @@ import {
 import { LessonErrorType, UserErrorType } from "../../../../domain/enums";
 import { ILessonRepository } from "../../../repositories";
 import { IUpdateLessonUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class UpdateLessonUseCase implements IUpdateLessonUseCase {
   constructor(private lessonRepository: ILessonRepository) {}
@@ -38,8 +39,8 @@ export class UpdateLessonUseCase implements IUpdateLessonUseCase {
       }
 
       return { data: updatedLesson.id, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

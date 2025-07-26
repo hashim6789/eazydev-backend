@@ -1,5 +1,6 @@
 import { QueryCategory, ResponseDTO } from "../../../../domain/dtos";
 import { CategoryErrorType } from "../../../../domain/enums";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { ICategoryRepository } from "../../../repositories";
 import { IGetAllCategoryAdminUseCase } from "../interfaces";
 
@@ -20,8 +21,8 @@ export class GetAllCategoryAdminUseCase implements IGetAllCategoryAdminUseCase {
       }
 
       return { success: true, data: categories };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

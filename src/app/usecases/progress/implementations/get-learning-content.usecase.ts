@@ -12,6 +12,7 @@ import { Payload } from "../../../../domain/dtos";
 import { IProgressRepository } from "../../../repositories";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
 import { AuthenticateUserErrorType } from "../../../../domain/enums";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetLearningContentUseCase implements IGetLearningContentsUseCase {
   constructor(private progressRepository: IProgressRepository) {}
@@ -44,8 +45,8 @@ export class GetLearningContentUseCase implements IGetLearningContentsUseCase {
         success: true,
         data: progress,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

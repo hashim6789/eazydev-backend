@@ -8,6 +8,7 @@ import { IForgotPasswordUseCase } from "../interfaces";
 import { IForgotPasswordRequestDTO } from "../../../../domain/dtos";
 import { ISendMailProvider } from "../../../providers";
 import { SignupRole } from "../../../../domain/types";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class ForgotPasswordUseCase implements IForgotPasswordUseCase {
   constructor(
@@ -64,8 +65,8 @@ export class ForgotPasswordUseCase implements IForgotPasswordUseCase {
         data: { tokenId: resetToken.id },
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

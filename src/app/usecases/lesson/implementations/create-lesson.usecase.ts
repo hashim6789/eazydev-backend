@@ -10,6 +10,7 @@ import {
 } from "../../../../domain/enums";
 import { ICourseRepository, ILessonRepository } from "../../../repositories";
 import { ICreateLessonUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class CreateLessonUseCase implements ICreateLessonUseCase {
   constructor(
@@ -53,8 +54,8 @@ export class CreateLessonUseCase implements ICreateLessonUseCase {
       await this.courseRepository.addLessonToCourse(courseId, createdLesson.id);
 
       return { data: createdLesson.id, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

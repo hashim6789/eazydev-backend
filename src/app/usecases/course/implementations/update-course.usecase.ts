@@ -9,6 +9,7 @@ import {
 } from "../../../../domain/enums";
 import { ICourseRepository } from "../../../repositories";
 import { IUpdateCourseUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class UpdateCourseUseCase implements IUpdateCourseUseCase {
   constructor(private courseRepository: ICourseRepository) {}
@@ -54,8 +55,8 @@ export class UpdateCourseUseCase implements IUpdateCourseUseCase {
       }
 
       return { data: updatedCourse.id, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

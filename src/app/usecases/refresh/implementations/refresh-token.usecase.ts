@@ -6,6 +6,7 @@ import { IGenerateTokenProvider } from "../../../providers/generate-refresh-toke
 import { ITokenManagerProvider } from "../../../providers/token-manager.provider";
 import { ITokenRepository } from "../../../repositories/token.repository";
 import { IRefreshTokenUserUseCase } from "../interfaces/refresh-token.usecas";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 /**
  * Use case for refreshing a user's authentication token.
@@ -70,8 +71,8 @@ export class RefreshTokenUserUseCase implements IRefreshTokenUserUseCase {
       }
 
       return { data: { token }, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

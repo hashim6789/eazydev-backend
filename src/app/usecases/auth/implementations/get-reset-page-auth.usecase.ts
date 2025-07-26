@@ -4,6 +4,7 @@ import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { IGetResetPageUseCase } from "../interfaces";
 import { IGetResetPageRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
 import { TokenErrorType } from "../../../../domain/enums/token";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetResetPageUseCase implements IGetResetPageUseCase {
   constructor(private tokenRepository: ITokenRepository) {}
@@ -37,8 +38,8 @@ export class GetResetPageUseCase implements IGetResetPageUseCase {
         data: { tokenId },
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }
