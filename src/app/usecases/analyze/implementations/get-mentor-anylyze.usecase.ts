@@ -4,6 +4,7 @@ import {
   AnalysisErrorType,
   AuthenticateUserErrorType,
 } from "../../../../domain/enums";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { ICourseRepository, IProgressRepository } from "../../../repositories";
 import { IGetMentorAnalyzeUseCase } from "../interfaces";
 

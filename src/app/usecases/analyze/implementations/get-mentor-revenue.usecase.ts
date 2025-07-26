@@ -4,6 +4,7 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IPurchaseRepository, IUsersRepository } from "../../../repositories";
 import { IGetMentorRevenueAnalyzeUseCase } from "../interfaces";
 import { UserErrorType } from "../../../../domain/enums";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetMentorRevenueAnalyzeUseCase
   implements IGetMentorRevenueAnalyzeUseCase

@@ -3,13 +3,13 @@ import { IUsersRepository } from "../../../repositories/user.repository";
 import { UserEntity } from "../../../../domain/entities/user";
 import { UserErrorType } from "../../../../domain/enums/user";
 import { ITokenRepository } from "../../../repositories/token.repository";
-import { IGenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { IGoogleRequestDTO } from "../../../../domain/dtos/auth/google-auth.dto";
 import { IGoogleLoginUseCase } from "../interfaces/google-login.usecase";
 import axios from "axios";
 import { IUserOutRequestDTO, IUserValidDTO } from "../../../../domain/dtos";
 import { SignupRole } from "../../../../domain/types/user";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IGenerateTokenProvider } from "../../../../infra/providers";
 
 interface GoogleApiResponse {
   email: string;

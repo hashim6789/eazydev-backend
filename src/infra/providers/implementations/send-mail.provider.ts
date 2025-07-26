@@ -1,9 +1,9 @@
 import nodemailer from "nodemailer";
-import { ISendMailProvider } from "../../app/providers/send-mail.provider";
-import { SignupRole } from "../../domain/types/user";
-import { mailConfig } from "../../presentation/express/configs/mail.configs";
-import { env } from "../../presentation/express/configs";
-import { IUserValidDTO } from "../../domain/dtos";
+import { SignupRole } from "../../../domain/types/user";
+import { mailConfig } from "../../../presentation/express/configs/mail.configs";
+import { env } from "../../../presentation/express/configs";
+import { IUserValidDTO } from "../../../domain/dtos";
+import { ISendMailProvider } from "../interfaces";
 
 export class SendMailProvider implements ISendMailProvider {
   async sendOtpMail(email: string, otp: string): Promise<boolean> {

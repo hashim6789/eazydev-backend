@@ -6,9 +6,9 @@ import { IUserValidDTO } from "../../../../domain/dtos";
 import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { IForgotPasswordUseCase } from "../interfaces";
 import { IForgotPasswordRequestDTO } from "../../../../domain/dtos";
-import { ISendMailProvider } from "../../../providers";
 import { SignupRole } from "../../../../domain/types";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { ISendMailProvider } from "../../../../infra/providers";
 
 export class ForgotPasswordUseCase implements IForgotPasswordUseCase {
   constructor(

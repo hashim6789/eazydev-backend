@@ -15,8 +15,8 @@ import {
   VerifyPasswordController,
 } from "../../../../presentation/http/controllers";
 import { UserModel } from "../../../databases/models";
-import { IPasswordHasher } from "../../../../app/providers";
-import { PasswordHasher } from "../../../providers";
+import { PasswordHasher } from "../../../providers/implementations";
+import { IPasswordHasher } from "../../../providers";
 
 export function ChangePasswordComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);

@@ -1,7 +1,3 @@
-import { IGenerateOtpProvider } from "../../../../app/providers/generate-otp.provider";
-import { IGenerateTokenProvider } from "../../../../app/providers/generate-refresh-token.provider";
-import { IPasswordHasher } from "../../../../app/providers/password-hasher.provider";
-import { ISendMailProvider } from "../../../../app/providers/send-mail.provider";
 import { IOtpRepository } from "../../../../app/repositories/otp.repository";
 import { ITokenRepository } from "../../../../app/repositories/token.repository";
 import { IUsersRepository } from "../../../../app/repositories/user.repository";
@@ -10,10 +6,16 @@ import { ISignupUseCase } from "../../../../app/usecases/auth/interfaces/signup-
 import { SignupController } from "../../../../presentation/http/controllers/auth/signup.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { OtpModel, TokenModel, UserModel } from "../../../databases/models";
-import { GenerateOtpProvider } from "../../../providers/generate-otp.provider";
-import { GenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
-import { PasswordHasher } from "../../../providers/password-hasher.provider";
-import { SendMailProvider } from "../../../providers/send-mail.provider";
+import {
+  IGenerateOtpProvider,
+  IGenerateTokenProvider,
+  IPasswordHasher,
+  ISendMailProvider,
+} from "../../../providers";
+import { GenerateOtpProvider } from "../../../providers/implementations/generate-otp.provider";
+import { GenerateTokenProvider } from "../../../providers/implementations/generate-refresh-token.provider";
+import { PasswordHasher } from "../../../providers/implementations/password-hasher.provider";
+import { SendMailProvider } from "../../../providers/implementations/send-mail.provider";
 import { TokenRepository } from "../../../repositories";
 import { OtpRepository } from "../../../repositories/otp.repository";
 import { UserRepository } from "../../../repositories/user.repository";

@@ -2,7 +2,7 @@ import { Payload } from "../../../../domain/dtos/jwt-payload";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUploadMaterialRequestDTO } from "../../../../domain/dtos/upload";
 import { UploadErrorType } from "../../../../domain/enums/upload";
-import { IS3ServiceProvider } from "../../../providers";
+import { IS3ServiceProvider } from "../../../../infra/providers";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 import { IMaterialContentUploadUseCase } from "../interface/material-conent-upload.usecase";

@@ -1,5 +1,3 @@
-import { IGenerateTokenProvider } from "../../../../app/providers/generate-refresh-token.provider";
-import { IPasswordHasher } from "../../../../app/providers/password-hasher.provider";
 import { ITokenRepository } from "../../../../app/repositories/token.repository";
 import { IUsersRepository } from "../../../../app/repositories/user.repository";
 import { LoginUseCase } from "../../../../app/usecases/auth/implementations/login-auth-usecase";
@@ -7,8 +5,9 @@ import { ILoginUseCase } from "../../../../app/usecases/auth/interfaces/login-au
 import { LoginController } from "../../../../presentation/http/controllers/auth/login.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { TokenModel, UserModel } from "../../../databases/models";
-import { GenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
-import { PasswordHasher } from "../../../providers/password-hasher.provider";
+import { IGenerateTokenProvider, IPasswordHasher } from "../../../providers";
+import { GenerateTokenProvider } from "../../../providers/implementations/generate-refresh-token.provider";
+import { PasswordHasher } from "../../../providers/implementations/password-hasher.provider";
 import { TokenRepository, UserRepository } from "../../../repositories";
 
 export function loginComposer(): IController {

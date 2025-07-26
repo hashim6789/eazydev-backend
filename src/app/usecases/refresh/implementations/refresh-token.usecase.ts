@@ -2,11 +2,13 @@ import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { ITokenUserDTO } from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
-import { IGenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
-import { ITokenManagerProvider } from "../../../providers/token-manager.provider";
 import { ITokenRepository } from "../../../repositories/token.repository";
 import { IRefreshTokenUserUseCase } from "../interfaces/refresh-token.usecas";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import {
+  IGenerateTokenProvider,
+  ITokenManagerProvider,
+} from "../../../../infra/providers";
 
 /**
  * Use case for refreshing a user's authentication token.

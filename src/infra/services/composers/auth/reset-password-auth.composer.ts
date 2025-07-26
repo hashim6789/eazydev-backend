@@ -1,4 +1,3 @@
-import { IPasswordHasher } from "../../../../app/providers";
 import { IUsersRepository } from "../../../../app/repositories";
 import { ITokenRepository } from "../../../../app/repositories/token.repository";
 import {
@@ -12,7 +11,8 @@ import {
 } from "../../../../presentation/http/controllers";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { TokenModel, UserModel } from "../../../databases/models";
-import { PasswordHasher } from "../../../providers";
+import { IPasswordHasher } from "../../../providers";
+import { PasswordHasher } from "../../../providers/implementations";
 import { TokenRepository, UserRepository } from "../../../repositories";
 
 export function resetPasswordComposer(): IController {

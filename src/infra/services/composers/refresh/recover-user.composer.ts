@@ -1,4 +1,3 @@
-import { ITokenManagerProvider } from "../../../../app/providers/token-manager.provider";
 import { ITokenRepository } from "../../../../app/repositories/token.repository";
 import { IUsersRepository } from "../../../../app/repositories/user.repository";
 import { RecoverUserInformationUserUseCase } from "../../../../app/usecases/refresh/implementations/recover-user-info.usecase";
@@ -6,7 +5,8 @@ import { IRecoverUserInformationUseCase } from "../../../../app/usecases/refresh
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { RecoverUserInformationUserController } from "../../../../presentation/http/controllers/refresh/recover-user-info.controller";
 import { TokenModel, UserModel } from "../../../databases/models";
-import { TokenManagerProvider } from "../../../providers/token-manager.provider";
+import { ITokenManagerProvider } from "../../../providers";
+import { TokenManagerProvider } from "../../../providers/implementations/token-manager.provider";
 import { TokenRepository } from "../../../repositories/token-repository";
 import { UserRepository } from "../../../repositories/user.repository";
 

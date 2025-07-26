@@ -1,16 +1,18 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { ISignupRequestDTO } from "../../../../domain/dtos/auth";
 import { IUsersRepository } from "../../../repositories/user.repository";
-import { IPasswordHasher } from "../../../providers/password-hasher.provider";
 import { UserEntity } from "../../../../domain/entities/user";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IGenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
 import { IOtpRepository } from "../../../repositories/otp.repository";
-import { IGenerateOtpProvider } from "../../../providers/generate-otp.provider";
-import { ISendMailProvider } from "../../../providers/send-mail.provider";
 import { ITokenRepository } from "../../../repositories";
 import { IUserInRequestDTO } from "../../../../domain/dtos";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import {
+  IGenerateOtpProvider,
+  IGenerateTokenProvider,
+  IPasswordHasher,
+  ISendMailProvider,
+} from "../../../../infra/providers";
 
 export interface ISignupUseCase {
   execute(data: ISignupRequestDTO): Promise<ResponseDTO>;

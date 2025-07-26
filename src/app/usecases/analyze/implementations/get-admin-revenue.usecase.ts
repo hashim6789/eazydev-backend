@@ -1,4 +1,5 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { IPurchaseRepository } from "../../../repositories";
 import { IGetAdminAnalyzeUseCase } from "../interfaces";
 

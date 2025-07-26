@@ -8,9 +8,9 @@ import {
 import { UserErrorType } from "../../../../domain/enums/user";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IChangePasswordUseCase, IVerifyPasswordUseCase } from "../interfaces";
-import { IPasswordHasher } from "../../../providers";
 import { AuthenticateUserErrorType } from "../../../../domain/enums";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IPasswordHasher } from "../../../../infra/providers";
 
 export class ChangePasswordUseCase implements IChangePasswordUseCase {
   constructor(

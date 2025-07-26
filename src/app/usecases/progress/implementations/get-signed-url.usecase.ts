@@ -5,8 +5,8 @@ import { Payload } from "../../../../domain/dtos";
 import { IProgressRepository } from "../../../repositories";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
 import { AuthenticateUserErrorType } from "../../../../domain/enums";
-import { IS3ServiceProvider } from "../../../providers";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IS3ServiceProvider } from "../../../../infra/providers";
 
 export class GetSignedUrlUseCase implements IGetSignedUrlUseCase {
   constructor(

@@ -1,6 +1,3 @@
-import { IGenerateOtpProvider } from "../../../../app/providers/generate-otp.provider";
-import { IPasswordHasher } from "../../../../app/providers/password-hasher.provider";
-import { ISendMailProvider } from "../../../../app/providers/send-mail.provider";
 import { IOtpRepository } from "../../../../app/repositories/otp.repository";
 import { IUsersRepository } from "../../../../app/repositories/user.repository";
 import { ResendOtpUseCase } from "../../../../app/usecases/auth/implementations/resend-otp.usecase";
@@ -8,9 +5,14 @@ import { IResendOtpUseCase } from "../../../../app/usecases/auth/interfaces/rese
 import { ResendOtpController } from "../../../../presentation/http/controllers/auth/resend-otp.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { OtpModel, UserModel } from "../../../databases/models";
-import { GenerateOtpProvider } from "../../../providers/generate-otp.provider";
-import { PasswordHasher } from "../../../providers/password-hasher.provider";
-import { SendMailProvider } from "../../../providers/send-mail.provider";
+import {
+  IGenerateOtpProvider,
+  IPasswordHasher,
+  ISendMailProvider,
+} from "../../../providers";
+import { GenerateOtpProvider } from "../../../providers/implementations/generate-otp.provider";
+import { PasswordHasher } from "../../../providers/implementations/password-hasher.provider";
+import { SendMailProvider } from "../../../providers/implementations/send-mail.provider";
 import { OtpRepository } from "../../../repositories/otp.repository";
 import { UserRepository } from "../../../repositories/user.repository";
 

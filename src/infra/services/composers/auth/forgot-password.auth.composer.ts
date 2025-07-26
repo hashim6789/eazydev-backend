@@ -1,4 +1,3 @@
-import { ISendMailProvider } from "../../../../app/providers";
 import { ITokenRepository } from "../../../../app/repositories/token.repository";
 import { IUsersRepository } from "../../../../app/repositories/user.repository";
 import {
@@ -8,7 +7,8 @@ import {
 import { ForgotPasswordController } from "../../../../presentation/http/controllers";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { TokenModel, UserModel } from "../../../databases/models";
-import { SendMailProvider } from "../../../providers";
+import { ISendMailProvider } from "../../../providers";
+import { SendMailProvider } from "../../../providers/implementations";
 import { TokenRepository } from "../../../repositories/token-repository";
 import { UserRepository } from "../../../repositories/user.repository";
 

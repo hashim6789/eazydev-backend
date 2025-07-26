@@ -7,9 +7,9 @@ import {
 import { UserErrorType } from "../../../../domain/enums/user";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IVerifyPasswordUseCase } from "../interfaces";
-import { IPasswordHasher } from "../../../providers";
 import { AuthenticateUserErrorType } from "../../../../domain/enums";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IPasswordHasher } from "../../../../infra/providers";
 
 export class VerifyPasswordUseCase implements IVerifyPasswordUseCase {
   constructor(

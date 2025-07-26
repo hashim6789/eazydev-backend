@@ -1,6 +1,5 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUsersRepository } from "../../../repositories/user.repository";
-import { IPasswordHasher } from "../../../providers/password-hasher.provider";
 import { IVerifyOtpUseCase } from "../interfaces/verify-otp.usecase";
 import { IOtpRepository } from "../../../repositories/otp.repository";
 import { OtpDTO } from "../../../../domain/dtos/auth/otp-auth-dto";
@@ -9,6 +8,7 @@ import { UserErrorType } from "../../../../domain/enums/user";
 import { IVerifyOtpRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
 import { UserEntity } from "../../../../domain/entities/user";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IPasswordHasher } from "../../../../infra/providers";
 
 export class VerifyOtpUseCase implements IVerifyOtpUseCase {
   constructor(

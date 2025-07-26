@@ -1,5 +1,5 @@
 import * as bcrypt from "bcryptjs";
-import { IPasswordHasher } from "../../app/providers/password-hasher.provider";
+import { IPasswordHasher } from "../interfaces";
 
 /**
  * Implementation of the password hashing provider using bcrypt.

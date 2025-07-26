@@ -10,8 +10,8 @@ import { TokenErrorType } from "../../../../domain/enums/token";
 import { IUsersRepository } from "../../../repositories";
 import { IUserValidDTO } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums";
-import { IPasswordHasher } from "../../../providers";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IPasswordHasher } from "../../../../infra/providers";
 
 export class ResetPasswordUseCase implements IResetPasswordUseCase {
   constructor(

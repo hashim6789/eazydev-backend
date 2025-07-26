@@ -3,11 +3,11 @@ import { IRecoveryUserDTO } from "../../../../domain/dtos/refresh";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IUserInRequestDTO } from "../../../../domain/dtos";
 import { AuthMessages } from "../../../../domain/enums/auth";
-import { ITokenManagerProvider } from "../../../providers/token-manager.provider";
 import { ITokenRepository } from "../../../repositories/token.repository";
 import { IUsersRepository } from "../../../repositories/user.repository";
 import { IRecoverUserInformationUseCase } from "../interfaces/recover-user-info.usecase";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { ITokenManagerProvider } from "../../../../infra/providers";
 
 /**
  * Use case for recovering user information based on a refresh token.

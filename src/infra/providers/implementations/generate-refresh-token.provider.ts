@@ -1,7 +1,7 @@
 import { sign } from "jsonwebtoken";
-import { IGenerateTokenProvider } from "../../app/providers/generate-refresh-token.provider";
-import { Payload } from "../../domain/dtos/jwt-payload";
-import { env } from "../../presentation/express/configs/env.config";
+import { Payload } from "../../../domain/dtos/jwt-payload";
+import { env } from "../../../presentation/express/configs/env.config";
+import { IGenerateTokenProvider } from "../interfaces";
 
 /**
  * Implementation of the refresh token generation provider.

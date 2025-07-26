@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 import { verify } from "jsonwebtoken";
 
-import { ITokenManagerProvider } from "../../app/providers/token-manager.provider";
-import { Payload } from "../../domain/dtos/jwt-payload";
-import { env } from "../../presentation/express/configs/env.config";
+import { Payload } from "../../../domain/dtos/jwt-payload";
+import { env } from "../../../presentation/express/configs/env.config";
+import { ITokenManagerProvider } from "../interfaces";
 
 /**
  * Provider for managing and validating authentication tokens.

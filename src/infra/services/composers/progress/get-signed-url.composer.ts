@@ -1,4 +1,3 @@
-import { IS3ServiceProvider } from "../../../../app/providers";
 import { IProgressRepository } from "../../../../app/repositories";
 import {
   GetSignedUrlUseCase,
@@ -7,7 +6,8 @@ import {
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { GetSignedUrlController } from "../../../../presentation/http/controllers/progress/get-signed-url.controller";
 import { ProgressModel } from "../../../databases/models";
-import { S3ServiceProvider } from "../../../providers";
+import { IS3ServiceProvider } from "../../../providers";
+import { S3ServiceProvider } from "../../../providers/implementations";
 import { ProgressRepository } from "../../../repositories";
 
 export function getSingedUrlComposer(): IController {

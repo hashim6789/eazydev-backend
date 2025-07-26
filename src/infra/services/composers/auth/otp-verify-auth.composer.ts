@@ -1,4 +1,3 @@
-import { IPasswordHasher } from "../../../../app/providers/password-hasher.provider";
 import { IOtpRepository } from "../../../../app/repositories/otp.repository";
 import { IUsersRepository } from "../../../../app/repositories/user.repository";
 import { VerifyOtpUseCase } from "../../../../app/usecases/auth/implementations/verify-otp.usecase";
@@ -6,7 +5,8 @@ import { IVerifyOtpUseCase } from "../../../../app/usecases/auth/interfaces/veri
 import { VerifyOtpController } from "../../../../presentation/http/controllers/auth/verify-otp.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { OtpModel, UserModel } from "../../../databases/models";
-import { PasswordHasher } from "../../../providers/password-hasher.provider";
+import { IPasswordHasher } from "../../../providers";
+import { PasswordHasher } from "../../../providers/implementations/password-hasher.provider";
 import { OtpRepository } from "../../../repositories/otp.repository";
 import { UserRepository } from "../../../repositories/user.repository";
 

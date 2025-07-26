@@ -1,4 +1,4 @@
-import { IGenerateOtpProvider } from "../../app/providers/generate-otp.provider";
+import { IGenerateOtpProvider } from "../interfaces";
 
 export class GenerateOtpProvider implements IGenerateOtpProvider {
   async generateOtp(): Promise<string> {

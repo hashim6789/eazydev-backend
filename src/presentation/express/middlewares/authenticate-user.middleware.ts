@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { AuthMessages } from "../../../domain/enums/auth";
-import { TokenManagerProvider } from "../../../infra/providers/token-manager.provider";
+import { TokenManagerProvider } from "../../../infra/providers/implementations/token-manager.provider";
 import { env } from "../configs/env.config";
 
 export const authenticateToken = (
