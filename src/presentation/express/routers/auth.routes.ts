@@ -64,14 +64,14 @@ authRouter.post("/login", async (request: Request, response: Response) => {
     .status(adapter.statusCode)
     .json(adapter.statusCode === 400 ? adapter.body : adapter.body.user);
 });
-/**
- * Endpoint to logout users.
- */
-authRouter.post("/logout", (request: Request, response: Response) => {
-  response.clearCookie(env.KEY_OF_ACCESS as string);
-  response.clearCookie(env.KEY_OF_REFRESH as string);
-  response.status(200).json({ success: true });
-  return;
+
+// /**
+//  * Endpoint to logout users.
+//  */
+authRouter.post("/logout", (req: Request, res: Response) => {
+  res.clearCookie(env.KEY_OF_ACCESS as string);
+  res.clearCookie(env.KEY_OF_REFRESH as string);
+  res.status(200).json({ success: true });
 });
 /**
  * Endpoint to login using google for mentor and learner.
