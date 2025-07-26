@@ -67,10 +67,11 @@ authRouter.post("/login", async (request: Request, response: Response) => {
 /**
  * Endpoint to logout users.
  */
-authRouter.post("/logout", async (request: Request, response: Response) => {
+authRouter.post("/logout", (request: Request, response: Response) => {
   response.clearCookie(env.KEY_OF_ACCESS as string);
   response.clearCookie(env.KEY_OF_REFRESH as string);
   response.status(200).json({ success: true });
+  return;
 });
 /**
  * Endpoint to login using google for mentor and learner.
