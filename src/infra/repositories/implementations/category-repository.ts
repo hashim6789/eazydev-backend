@@ -1,14 +1,11 @@
 import { Model } from "mongoose";
 import { ICategory } from "../../databases/interfaces";
-import {
-  ICategoryOutDTO,
-  QueryCategory,
-  mapCategoryToDTO,
-} from "../../../domain/dtos";
+import { ICategoryOutDTO, QueryCategory } from "../../../domain/dtos";
 import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
 import { Role } from "../../../domain/types";
 import { ICategoryRepository } from "../interfaces";
 import { BaseRepository } from "./base-repository";
+import { mapCategoryToDTO } from "../../databases/mappers";
 
 export class CategoryRepository
   extends BaseRepository<ICategory>

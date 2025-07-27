@@ -1,7 +1,6 @@
 import {
   ICategoryOutDTO,
   ICreateCategoryRequestDTO,
-  mapCategoryToDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
@@ -13,6 +12,7 @@ import {
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { ICategoryRepository } from "../../../../infra/repositories";
 import { ICreateCategoryUseCase } from "../interfaces";
+import { mapCategoryToDTO } from "../../../../infra/databases/mappers";
 
 export class CreateCategoryUseCase implements ICreateCategoryUseCase {
   constructor(private categoryRepository: ICategoryRepository) {}

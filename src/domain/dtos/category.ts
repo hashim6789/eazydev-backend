@@ -1,4 +1,3 @@
-import { ICategory } from "../../infra/databases/interfaces";
 import { Role } from "../types";
 import { CategoryStatus } from "../types/category";
 
@@ -36,12 +35,4 @@ export interface QueryCategory {
   page: string;
   limit: string;
   status: CategoryStatus | "all";
-}
-
-export function mapCategoryToDTO(category: ICategory): ICategoryOutDTO {
-  return {
-    id: category._id.toString(),
-    title: category.title,
-    isListed: category.isListed,
-  };
 }

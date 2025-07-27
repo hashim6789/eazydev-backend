@@ -1,8 +1,8 @@
 import { Model } from "mongoose";
 import {
-  ICreateCourseInDTO,
-  ICourseOutDTO,
-  IUpdateCourseInDTO,
+  // ICreateCourseInDTO,
+  // ICourseOutDTO,
+  // IUpdateCourseInDTO,
   QueryCourse,
   ICourseOutPopulateDTO,
   ICourseSimpleOutDTO,
@@ -12,42 +12,47 @@ import { CourseStatus, MaterialType } from "../../../domain/types";
 import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
 import { mentorRevenueAnalysisPipeline } from "../../pipelines/course";
 import { ICourseRepository } from "../interfaces";
+import { BaseRepository } from "./base-repository";
 
-export class CourseRepository implements ICourseRepository {
-  private model: Model<ICourse>;
+export class CourseRepository
+  extends BaseRepository<ICourse>
+  implements ICourseRepository
+{
+  // private model: Model<ICourse>;
 
   constructor(model: Model<ICourse>) {
-    this.model = model;
+    super(model);
+    // this.model = model;
   }
-  async create(data: ICreateCourseInDTO): Promise<ICourseOutDTO> {
-    try {
-      const createData = new this.model({
-        title: data.title,
-        mentorId: data.mentorId,
-        categoryId: data.categoryId,
-        description: data.description,
-        thumbnail: data.thumbnail,
-        price: data.price,
-        status: data.status,
-      });
-      const course = await createData.save();
+  // async create(data: ICreateCourseInDTO): Promise<ICourseOutDTO> {
+  //   try {
+  //     const createData = new this.model({
+  //       title: data.title,
+  //       mentorId: data.mentorId,
+  //       categoryId: data.categoryId,
+  //       description: data.description,
+  //       thumbnail: data.thumbnail,
+  //       price: data.price,
+  //       status: data.status,
+  //     });
+  //     const course = await createData.save();
 
-      return {
-        id: course._id.toString(),
-        title: course.title,
-        mentorId: course.mentorId.toString(),
-        categoryId: course.categoryId.toString(),
-        description: course.description,
-        lessons: [],
-        thumbnail: course.thumbnail,
-        price: course.price,
-        status: course.status,
-      };
-    } catch (error) {
-      console.error("Error while creating course:", error);
-      throw new Error("Course creation failed");
-    }
-  }
+  //     return {
+  //       id: course._id.toString(),
+  //       title: course.title,
+  //       mentorId: course.mentorId.toString(),
+  //       categoryId: course.categoryId.toString(),
+  //       description: course.description,
+  //       lessons: [],
+  //       thumbnail: course.thumbnail,
+  //       price: course.price,
+  //       status: course.status,
+  //     };
+  //   } catch (error) {
+  //     console.error("Error while creating course:", error);
+  //     throw new Error("Course creation failed");
+  //   }
+  // }
 
   async addLessonToCourse(courseId: string, lessonId: string): Promise<void> {
     try {
@@ -86,28 +91,28 @@ export class CourseRepository implements ICourseRepository {
     }
   }
 
-  async findById(id: string): Promise<ICourseOutDTO | null> {
-    try {
-      const course = await this.model.findById(id);
+  // async findById(id: string): Promise<ICourseOutDTO | null> {
+  //   try {
+  //     const course = await this.model.findById(id);
 
-      if (!course) return null;
+  //     if (!course) return null;
 
-      return {
-        id: course._id.toString(),
-        title: course.title,
-        mentorId: course.mentorId.toString(),
-        categoryId: course.categoryId.toString(),
-        description: course.description,
-        lessons: course.lessons.map((item) => item.toString()),
-        thumbnail: course.thumbnail,
-        price: course.price,
-        status: course.status,
-      };
-    } catch (error) {
-      console.error("Error while find the course:", error);
-      throw new Error("Course fetch failed");
-    }
-  }
+  //     return {
+  //       id: course._id.toString(),
+  //       title: course.title,
+  //       mentorId: course.mentorId.toString(),
+  //       categoryId: course.categoryId.toString(),
+  //       description: course.description,
+  //       lessons: course.lessons.map((item) => item.toString()),
+  //       thumbnail: course.thumbnail,
+  //       price: course.price,
+  //       status: course.status,
+  //     };
+  //   } catch (error) {
+  //     console.error("Error while find the course:", error);
+  //     throw new Error("Course fetch failed");
+  //   }
+  // }
   async findByIdPopulate(id: string): Promise<ICourseOutPopulateDTO | null> {
     try {
       const course = await this.model
@@ -211,29 +216,29 @@ export class CourseRepository implements ICourseRepository {
     }
   }
 
-  async update(
-    id: string,
-    data: IUpdateCourseInDTO
-  ): Promise<ICourseOutDTO | null> {
-    try {
-      const course = await this.model.findByIdAndUpdate(id, data);
-      if (!course) return null;
-      return {
-        id: course._id.toString(),
-        title: course.title,
-        mentorId: course.mentorId.toString(),
-        categoryId: course.categoryId.toString(),
-        description: course.description,
-        lessons: course.lessons.map(toString),
-        thumbnail: course.thumbnail,
-        price: course.price,
-        status: course.status,
-      };
-    } catch (error) {
-      console.error("Error while find the course:", error);
-      throw new Error("Course fetch failed");
-    }
-  }
+  // async update(
+  //   id: string,
+  //   data: IUpdateCourseInDTO
+  // ): Promise<ICourseOutDTO | null> {
+  //   try {
+  //     const course = await this.model.findByIdAndUpdate(id, data);
+  //     if (!course) return null;
+  //     return {
+  //       id: course._id.toString(),
+  //       title: course.title,
+  //       mentorId: course.mentorId.toString(),
+  //       categoryId: course.categoryId.toString(),
+  //       description: course.description,
+  //       lessons: course.lessons.map(toString),
+  //       thumbnail: course.thumbnail,
+  //       price: course.price,
+  //       status: course.status,
+  //     };
+  //   } catch (error) {
+  //     console.error("Error while find the course:", error);
+  //     throw new Error("Course fetch failed");
+  //   }
+  // }
 
   async findAll({
     category = "all",

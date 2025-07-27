@@ -11,6 +11,10 @@ import {
 import { ICourseRepository } from "../../../../infra/repositories";
 import { ICreateCourseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import {
+  mapCourseToDocument,
+  mapCourseToDTO,
+} from "../../../../infra/databases/mappers";
 
 export class CreateCourseUseCase implements ICreateCourseUseCase {
   constructor(private courseRepository: ICourseRepository) {}
@@ -45,7 +49,9 @@ export class CreateCourseUseCase implements ICreateCourseUseCase {
         status: "draft",
       });
 
-      const createdCourse = await this.courseRepository.create(courseEntity);
+      const createdCourse = await this.courseRepository.create(
+        mapCourseToDocument(courseEntity)
+      );
 
       if (!createdCourse) {
         return {
@@ -54,7 +60,9 @@ export class CreateCourseUseCase implements ICreateCourseUseCase {
         };
       }
 
-      return { data: createdCourse.id, success: true };
+      const mappedCourse = mapCourseToDTO(createdCourse);
+
+      return { data: mappedCourse.id, success: true };
     } catch (error: unknown) {
       return formatErrorResponse(error);
     }

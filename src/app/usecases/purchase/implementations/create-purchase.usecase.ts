@@ -19,6 +19,7 @@ import {
 } from "../../../../infra/repositories";
 import { ICreatePurchaseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { mapCourseToDTO } from "../../../../infra/databases/mappers";
 
 export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
   constructor(
@@ -61,7 +62,9 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
         };
       }
 
-      if (course.price * 100 !== amount) {
+      const mappedCourse = mapCourseToDTO(course);
+
+      if (mappedCourse.price * 100 !== amount) {
         return {
           data: { error: PurchaseErrorType.InvalidPurchaseDetails },
           success: false,
@@ -84,7 +87,7 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
       const progress = ProgressEntity.create({
         userId: learnerId,
         courseId,
-        mentorId: course.mentorId,
+        mentorId: mappedCourse.mentorId,
         completedLessons: [],
         completedMaterials: [],
         isCourseCompleted: false,

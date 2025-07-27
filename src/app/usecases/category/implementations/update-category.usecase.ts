@@ -1,7 +1,6 @@
 import {
   ICategoryOutDTO,
   IUpdateCategoryRequestDTO,
-  mapCategoryToDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
@@ -12,6 +11,7 @@ import {
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { ICategoryRepository } from "../../../../infra/repositories";
 import { IUpdateCategoryUseCase } from "../interfaces";
+import { mapCategoryToDTO } from "../../../../infra/databases/mappers";
 
 export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
   constructor(private categoryRepository: ICategoryRepository) {}
