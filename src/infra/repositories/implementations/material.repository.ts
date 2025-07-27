@@ -1,62 +1,69 @@
 import {
-  ICreateMaterialRequestDTO,
-  IMaterialOutDTO,
+  // ICreateMaterialRequestDTO,
+  // IMaterialOutDTO,
+  // IUpdateMaterialInDTO,
   IMaterialPopulateMentorDTO,
-  IUpdateMaterialInDTO,
   QueryMaterial,
 } from "../../../domain/dtos/material";
 import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
 import { IMaterial } from "../../databases/interfaces";
 import { Model } from "mongoose";
 import { IMaterialRepository } from "../interfaces";
+import { BaseRepository } from "./base-repository";
 
-export class MaterialRepository implements IMaterialRepository {
-  private model: Model<IMaterial>;
+export class MaterialRepository
+  extends BaseRepository<IMaterial>
+  implements IMaterialRepository
+{
+  // private model: Model<IMaterial>;
 
   constructor(model: Model<IMaterial>) {
-    this.model = model;
+    super(model);
+    // this.model = model;
   }
   /**
    * Creates a new material in the database.
    * @param data The data for the new material.
    * @returns The created material.
    */
-  async create({
-    title,
-    description,
-    mentorId,
-    type,
-    duration,
-    fileKey,
-  }: ICreateMaterialRequestDTO): Promise<IMaterialOutDTO> {
-    const material = new this.model({
-      title,
-      description,
-      mentorId,
-      type,
-      duration,
-      fileKey,
-    });
+  // async create({
+  //   title,
+  //   description,
+  //   mentorId,
+  //   type,
+  //   duration,
+  //   fileKey,
+  // }: ICreateMaterialRequestDTO): Promise<IMaterialOutDTO> {
+  //   const material = new this.model({
+  //     title,
+  //     description,
+  //     mentorId,
+  //     type,
+  //     duration,
+  //     fileKey,
+  //   });
 
-    await material.save();
+  //   await material.save();
 
-    return {
-      id: material._id.toString(),
-      title: material.title,
-      mentorId: material.mentorId.toString(),
-      description: material.description,
-      type: material.type,
-      duration: material.duration,
-      fileKey: material.fileKey,
-    };
-  }
+  //   return {
+  //     id: material._id.toString(),
+  //     title: material.title,
+  //     mentorId: material.mentorId.toString(),
+  //     description: material.description,
+  //     type: material.type,
+  //     duration: material.duration,
+  //     fileKey: material.fileKey,
+  //   };
+  // }
 
   /**
    * Finds a material by its ID.
    * @param id The ID of the material to find.
    * @returns The found material or null if not found.
    */
-  async findById(id: string): Promise<IMaterialPopulateMentorDTO | null> {
+  async findByIdPopulate(
+    id: string
+  ): Promise<IMaterialPopulateMentorDTO | null> {
     const material = await this.model.findById(id).populate("mentorId").exec();
     if (!material) return null;
 
@@ -134,47 +141,47 @@ export class MaterialRepository implements IMaterialRepository {
     };
   }
 
-  /**
-   * Updates an existing material by its ID.
-   * @param materialId The ID of the material to update.
-   * @param data The data to update the material with.
-   * @returns The updated material or null if not found.
-   */
-  async update(
-    materialId: string,
-    data: IUpdateMaterialInDTO
-  ): Promise<IMaterialOutDTO | null> {
-    const materialUpdated = await this.model
-      .findByIdAndUpdate(
-        materialId,
-        { $set: data },
-        { new: true } // Return the updated document
-      )
-      .lean(); // Use lean() for a plain JavaScript object instead of a mongoose document
+  // /**
+  //  * Updates an existing material by its ID.
+  //  * @param materialId The ID of the material to update.
+  //  * @param data The data to update the material with.
+  //  * @returns The updated material or null if not found.
+  //  */
+  // async update(
+  //   materialId: string,
+  //   data: IUpdateMaterialInDTO
+  // ): Promise<IMaterialOutDTO | null> {
+  //   const materialUpdated = await this.model
+  //     .findByIdAndUpdate(
+  //       materialId,
+  //       { $set: data },
+  //       { new: true } // Return the updated document
+  //     )
+  //     .lean(); // Use lean() for a plain JavaScript object instead of a mongoose document
 
-    if (!materialUpdated) {
-      return null;
-    }
+  //   if (!materialUpdated) {
+  //     return null;
+  //   }
 
-    return {
-      id: materialUpdated._id.toString(),
-      title: materialUpdated.title,
-      mentorId: materialUpdated.mentorId.toString(),
-      description: materialUpdated.description,
-      type: materialUpdated.type,
-      duration: materialUpdated.duration,
-      fileKey: materialUpdated.fileKey,
-    };
-  }
+  //   return {
+  //     id: materialUpdated._id.toString(),
+  //     title: materialUpdated.title,
+  //     mentorId: materialUpdated.mentorId.toString(),
+  //     description: materialUpdated.description,
+  //     type: materialUpdated.type,
+  //     duration: materialUpdated.duration,
+  //     fileKey: materialUpdated.fileKey,
+  //   };
+  // }
 
-  /**
-   * Deletes a material by its ID.
-   * @param id The ID of the material to delete.
-   * @returns A promise that resolves when the deletion is complete.
-   */
-  async delete(id: string): Promise<void> {
-    await this.model.findByIdAndDelete(id).exec();
-  }
+  // /**
+  //  * Deletes a material by its ID.
+  //  * @param id The ID of the material to delete.
+  //  * @returns A promise that resolves when the deletion is complete.
+  //  */
+  // async delete(id: string): Promise<void> {
+  //   await this.model.findByIdAndDelete(id).exec();
+  // }
 }
 
 export default MaterialRepository;

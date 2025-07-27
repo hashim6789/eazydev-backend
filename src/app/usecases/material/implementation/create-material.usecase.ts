@@ -7,6 +7,7 @@ import { MaterialErrorType } from "../../../../domain/enums/material";
 import { IMaterialRepository } from "../../../../infra/repositories";
 import { ICreateMaterialUseCase } from "../interface";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { mapMaterialToDocument } from "../../../../infra/databases/mappers";
 
 export class CreateMaterialUseCase implements ICreateMaterialUseCase {
   constructor(private materialRepository: IMaterialRepository) {}
@@ -39,7 +40,7 @@ export class CreateMaterialUseCase implements ICreateMaterialUseCase {
       });
 
       const createdMaterial = await this.materialRepository.create(
-        materialEntity
+        mapMaterialToDocument(materialEntity)
       );
 
       if (!createdMaterial) {
