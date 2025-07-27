@@ -8,34 +8,39 @@ import { IChatGroup } from "../../databases/interfaces";
 import { Role } from "../../../domain/types";
 import { findAllChatGroupByUserAndRolePipeline } from "../../pipelines";
 import { IChatGroupRepository } from "../interfaces";
+import { BaseRepository } from "./base-repository";
 
-export class ChatGroupRepository implements IChatGroupRepository {
-  private model: Model<IChatGroup>;
+export class ChatGroupRepository
+  extends BaseRepository<IChatGroup>
+  implements IChatGroupRepository
+{
+  // private model: Model<IChatGroup>;
 
   constructor(model: Model<IChatGroup>) {
-    this.model = model;
+    super(model);
+    // this.model = model;
   }
-  async create(data: ICreateChatGroupInDTO): Promise<IChatGroupOutDTO> {
-    try {
-      const createData = new this.model({
-        course: data.course,
-        mentor: data.mentor,
-        learners: [],
-      });
-      const chatGroup = await createData.save();
+  // async create(data: ICreateChatGroupInDTO): Promise<IChatGroupOutDTO> {
+  //   try {
+  //     const createData = new this.model({
+  //       course: data.course,
+  //       mentor: data.mentor,
+  //       learners: [],
+  //     });
+  //     const chatGroup = await createData.save();
 
-      return {
-        id: chatGroup._id.toString(),
-        course: chatGroup.course.toString(),
-        mentor: chatGroup.mentor.toString(),
-        learners: chatGroup.learners.map((item) => item.toString()),
-        createdAt: chatGroup.createdAt.getTime(),
-      };
-    } catch (error) {
-      console.error("Error while creating chatGroup:", error);
-      throw new Error("Lesson creation failed");
-    }
-  }
+  //     return {
+  //       id: chatGroup._id.toString(),
+  //       course: chatGroup.course.toString(),
+  //       mentor: chatGroup.mentor.toString(),
+  //       learners: chatGroup.learners.map((item) => item.toString()),
+  //       createdAt: chatGroup.createdAt.getTime(),
+  //     };
+  //   } catch (error) {
+  //     console.error("Error while creating chatGroup:", error);
+  //     throw new Error("Lesson creation failed");
+  //   }
+  // }
 
   async findAllByUserAndRole(
     userId: string,

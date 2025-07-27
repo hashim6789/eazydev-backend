@@ -1,12 +1,14 @@
 import {
-  IChatGroupOutDTO,
+  // IChatGroupOutDTO,
   IChatGroupOutPopulatedDTO,
-  ICreateChatGroupInDTO,
+  // ICreateChatGroupInDTO,
 } from "../../../domain/dtos/chat-group";
 import { Role } from "../../../domain/types";
+import { IChatGroup } from "../../databases/interfaces";
+import { BaseRepository } from "../implementations";
 
-export interface IChatGroupRepository {
-  create(data: ICreateChatGroupInDTO): Promise<IChatGroupOutDTO>;
+export interface IChatGroupRepository extends BaseRepository<IChatGroup> {
+  // create(data: ICreateChatGroupInDTO): Promise<IChatGroupOutDTO>;
   findAllByUserAndRole(
     userId: string,
     role: Role

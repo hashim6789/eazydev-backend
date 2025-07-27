@@ -18,6 +18,7 @@ import {
 } from "../../../../infra/repositories";
 import { IUpdateStatusCourseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { mapChatGroupToDocument } from "../../../../infra/databases/mappers";
 
 export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
   constructor(
@@ -156,7 +157,7 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
           learners: [],
           createdAt: Date.now(),
         });
-        await this.chatGroupRepository.create(group);
+        await this.chatGroupRepository.create(mapChatGroupToDocument(group));
       }
 
       return { data: { course: updatedCourse }, success: true };
