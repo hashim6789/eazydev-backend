@@ -19,8 +19,8 @@ import { IController } from "../IController";
 export class UpdateProgressController implements IController {
   constructor(
     private updateProgressUseCase: IUpdateProgressUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {

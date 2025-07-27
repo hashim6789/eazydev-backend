@@ -10,6 +10,12 @@ import {
   IGetMentorAnalyzeUseCase,
 } from "../../../../app/usecases/analyze";
 import { GetMentorAnalyzeController } from "../../../../presentation/http/controllers/analyze";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function getMentorAnalysisComposer(): IController {
   const progressRepository: IProgressRepository = new ProgressRepository(
@@ -21,6 +27,12 @@ export function getMentorAnalysisComposer(): IController {
     progressRepository,
     courseRepository
   );
-  const controller: IController = new GetMentorAnalyzeController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new GetMentorAnalyzeController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

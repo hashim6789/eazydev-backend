@@ -24,8 +24,8 @@ export class RefreshTokenUserController implements IController {
    */
   constructor(
     private refreshTokenUserUserCase: IRefreshTokenUserUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   /**

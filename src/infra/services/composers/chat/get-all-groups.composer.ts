@@ -5,6 +5,12 @@ import { GetAllChatGroupController } from "../../../../presentation/http/control
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { ChatGroupModel } from "../../../databases/models";
 import { ChatGroupRepository } from "../../../repositories/implementations";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function getAllChatGroupComposer(): IController {
   const repository: IChatGroupRepository = new ChatGroupRepository(
@@ -13,6 +19,12 @@ export function getAllChatGroupComposer(): IController {
   const useCase: IGetAllChatGroupUseCase = new GetAllChatGroupUseCase(
     repository
   );
-  const controller: IController = new GetAllChatGroupController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new GetAllChatGroupController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

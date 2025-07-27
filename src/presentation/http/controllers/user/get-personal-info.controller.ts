@@ -18,8 +18,8 @@ import { IController } from "../IController";
 export class GetPersonalInfoController implements IController {
   constructor(
     private getPersonalInfoUseCase: IGetPersonalInfoUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {

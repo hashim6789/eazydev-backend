@@ -24,8 +24,8 @@ export class RecoverUserInformationUserController implements IController {
    */
   constructor(
     private recoverUserInformationUserUserCase: IRecoverUserInformationUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   /**

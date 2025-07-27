@@ -20,6 +20,12 @@ import {
   ProgressRepository,
 } from "../../../repositories/implementations";
 import { PurchaseRepository } from "../../../repositories/implementations/purchase-repository";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function createPurchaseComposer(): IController {
   const repository: IPurchaseRepository = new PurchaseRepository(PurchaseModel);
@@ -36,6 +42,12 @@ export function createPurchaseComposer(): IController {
     progressRepository,
     chatGroupRepository
   );
-  const controller: IController = new CreatePurchaseController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new CreatePurchaseController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

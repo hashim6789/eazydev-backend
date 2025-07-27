@@ -21,8 +21,8 @@ import { IController } from "../IController";
 export class UpdateStatusCourseController implements IController {
   constructor(
     private updateStatusCourseUseCase: IUpdateStatusCourseUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {

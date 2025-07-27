@@ -8,6 +8,12 @@ import { ITokenManagerProvider } from "../../../providers";
 import { TokenManagerProvider } from "../../../providers/implementations/token-manager.provider";
 import { TokenRepository } from "../../../repositories/implementations/token-repository";
 import { UserRepository } from "../../../repositories/implementations/user.repository";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 /**
  * Composer function for creating and configuring the components required for recovering user information.
@@ -28,8 +34,12 @@ export function recoverUserInformationUserComposer(): IController {
       userRepository,
       tokenManagerProvider
     );
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
   const controller: IController = new RecoverUserInformationUserController(
-    useCase
+    useCase,
+    httpErrors,
+    httpSuccess
   );
   return controller;
 }

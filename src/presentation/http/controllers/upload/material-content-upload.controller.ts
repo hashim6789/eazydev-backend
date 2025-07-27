@@ -19,8 +19,8 @@ import { IController } from "../IController";
 export class UploadMaterialContentController implements IController {
   constructor(
     private materialContentUploadUseCase: IMaterialContentUploadUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {

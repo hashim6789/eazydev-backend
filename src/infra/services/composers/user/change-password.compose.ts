@@ -9,6 +9,12 @@ import { ChangePasswordController } from "../../../../presentation/http/controll
 import { UserModel } from "../../../databases/models";
 import { PasswordHasher } from "../../../providers/implementations";
 import { IPasswordHasher } from "../../../providers";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function ChangePasswordComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);
@@ -17,6 +23,12 @@ export function ChangePasswordComposer(): IController {
     repository,
     passwordHasher
   );
-  const controller: IController = new ChangePasswordController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new ChangePasswordController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

@@ -14,6 +14,12 @@ import { PasswordHasher } from "../../../providers/implementations/password-hash
 import { SendMailProvider } from "../../../providers/implementations/send-mail.provider";
 import { OtpRepository } from "../../../repositories/implementations/otp.repository";
 import { UserRepository } from "../../../repositories/implementations/user.repository";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function resendOtpComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);
@@ -29,6 +35,12 @@ export function resendOtpComposer(): IController {
     generateOtpProvider,
     sendMailProvider
   );
-  const controller: IController = new ResendOtpController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new ResendOtpController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

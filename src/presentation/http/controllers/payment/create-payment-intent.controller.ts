@@ -18,8 +18,8 @@ import {
 export class CreatePaymentIntentController implements IController {
   constructor(
     private createPaymentIntentUseCase: ICreatePaymentIntentUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {

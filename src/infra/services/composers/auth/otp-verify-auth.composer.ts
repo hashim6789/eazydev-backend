@@ -8,6 +8,12 @@ import { IPasswordHasher } from "../../../providers";
 import { PasswordHasher } from "../../../providers/implementations/password-hasher.provider";
 import { OtpRepository } from "../../../repositories/implementations/otp.repository";
 import { UserRepository } from "../../../repositories/implementations/user.repository";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function otpVerifyComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);
@@ -19,6 +25,12 @@ export function otpVerifyComposer(): IController {
     otpRepository,
     passwordHasher
   );
-  const controller: IController = new VerifyOtpController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new VerifyOtpController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

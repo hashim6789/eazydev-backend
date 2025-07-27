@@ -9,6 +9,12 @@ import { ProgressModel } from "../../../databases/models";
 import { IS3ServiceProvider } from "../../../providers";
 import { S3ServiceProvider } from "../../../providers/implementations";
 import { ProgressRepository } from "../../../repositories/implementations";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function getSingedUrlComposer(): IController {
   const repository: IProgressRepository = new ProgressRepository(ProgressModel);
@@ -17,6 +23,12 @@ export function getSingedUrlComposer(): IController {
     repository,
     s3ServiceProvider
   );
-  const controller: IController = new GetSignedUrlController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new GetSignedUrlController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

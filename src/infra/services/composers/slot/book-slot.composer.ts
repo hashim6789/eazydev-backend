@@ -14,6 +14,12 @@ import { BookSlotController } from "../../../../presentation/http/controllers/sl
 import { ProgressRepository } from "../../../repositories/implementations";
 import { MeetingRepository } from "../../../repositories/implementations/meeting-repository";
 import { MeetingModel } from "../../../databases/models/meeting.model";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function bookSlotComposer(): IController {
   const repository: ISlotRepository = new SlotRepository(SlotModel);
@@ -28,6 +34,12 @@ export function bookSlotComposer(): IController {
     progressRepository,
     meetingRepository
   );
-  const controller: IController = new BookSlotController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new BookSlotController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

@@ -5,10 +5,22 @@ import { IController } from "../../../../presentation/http/controllers/IControll
 import { GetAllUserController } from "../../../../presentation/http/controllers/user/get-all-user.controller";
 import { UserRepository } from "../../../repositories/implementations/user.repository";
 import { UserModel } from "../../../databases/models";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function getAllUsersComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);
   const useCase: IGetAllUserUseCase = new GetAllUserUseCase(repository);
-  const controller: IController = new GetAllUserController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new GetAllUserController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

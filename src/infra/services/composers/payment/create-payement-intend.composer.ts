@@ -9,6 +9,12 @@ import {
 import { CourseModel } from "../../../databases/models";
 import { CourseRepository } from "../../../repositories/implementations";
 import { env } from "../../../../presentation/express/configs/env.config";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function createPaymentIntendComposer(): IController {
   const repository: ICourseRepository = new CourseRepository(CourseModel);
@@ -20,6 +26,12 @@ export function createPaymentIntendComposer(): IController {
     repository,
     stripe
   );
-  const controller: IController = new CreatePaymentIntentController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new CreatePaymentIntentController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

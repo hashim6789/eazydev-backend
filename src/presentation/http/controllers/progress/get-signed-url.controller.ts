@@ -19,8 +19,8 @@ import {
 export class GetSignedUrlController implements IController {
   constructor(
     private getSignedUrlUseCase: IGetSignedUrlUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {

@@ -18,8 +18,8 @@ import { IController } from "../IController";
 export class ForgotPasswordController implements IController {
   constructor(
     private forgotPasswordCase: IForgotPasswordUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {

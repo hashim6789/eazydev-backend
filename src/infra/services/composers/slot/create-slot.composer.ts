@@ -7,11 +7,23 @@ import {
   ICreateSlotUseCase,
 } from "../../../../app/usecases/slot";
 import { CreateSlotController } from "../../../../presentation/http/controllers/slot";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function createSlotComposer(): IController {
   const repository: ISlotRepository = new SlotRepository(SlotModel);
 
   const useCase: ICreateSlotUseCase = new CreateSlotUseCase(repository);
-  const controller: IController = new CreateSlotController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new CreateSlotController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

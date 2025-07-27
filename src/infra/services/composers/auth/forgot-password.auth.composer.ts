@@ -10,6 +10,12 @@ import { SendMailProvider } from "../../../providers/implementations";
 import { ITokenRepository, IUsersRepository } from "../../../repositories";
 import { TokenRepository } from "../../../repositories/implementations/token-repository";
 import { UserRepository } from "../../../repositories/implementations/user.repository";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function forgotPasswordComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);
@@ -22,6 +28,12 @@ export function forgotPasswordComposer(): IController {
     resetTokenRepository,
     sentMailProvider
   );
-  const controller: IController = new ForgotPasswordController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new ForgotPasswordController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

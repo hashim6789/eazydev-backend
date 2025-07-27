@@ -5,6 +5,12 @@ import { GetAllChatMessageController } from "../../../../presentation/http/contr
 import { IController } from "../../../../presentation/http/controllers/IController";
 import ChatMessageModel from "../../../databases/models/chat-message.model";
 import { ChatMessageRepository } from "../../../repositories/implementations/chat-message.repository";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function getAllMessagesComposer(): IController {
   const repository: IChatMessageRepository = new ChatMessageRepository(
@@ -13,6 +19,12 @@ export function getAllMessagesComposer(): IController {
   const useCase: IGetAllChatMessageUseCase = new GetAllChatMessageUseCase(
     repository
   );
-  const controller: IController = new GetAllChatMessageController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new GetAllChatMessageController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

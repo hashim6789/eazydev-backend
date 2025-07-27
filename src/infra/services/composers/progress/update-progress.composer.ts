@@ -11,6 +11,12 @@ import { UpdateProgressController } from "../../../../presentation/http/controll
 import { CertificateModel, ProgressModel } from "../../../databases/models";
 import { ProgressRepository } from "../../../repositories/implementations";
 import { CertificateRepository } from "../../../repositories/implementations/certificate.repository";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function updateProgressComposer(): IController {
   const repository: IProgressRepository = new ProgressRepository(ProgressModel);
@@ -20,6 +26,12 @@ export function updateProgressComposer(): IController {
     repository,
     certificateRepository
   );
-  const controller: IController = new UpdateProgressController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new UpdateProgressController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

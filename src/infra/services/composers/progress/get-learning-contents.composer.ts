@@ -5,12 +5,24 @@ import { IController } from "../../../../presentation/http/controllers/IControll
 import { GetLearningContentController } from "../../../../presentation/http/controllers/progress";
 import { ProgressModel } from "../../../databases/models";
 import { ProgressRepository } from "../../../repositories/implementations";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function getLearningContentsComposer(): IController {
   const repository: IProgressRepository = new ProgressRepository(ProgressModel);
   const useCase: IGetLearningContentsUseCase = new GetLearningContentUseCase(
     repository
   );
-  const controller: IController = new GetLearningContentController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new GetLearningContentController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

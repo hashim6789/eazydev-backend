@@ -11,6 +11,12 @@ import { GetCertificateController } from "../../../../presentation/http/controll
 import { CertificateModel, ProgressModel } from "../../../databases/models";
 import { ProgressRepository } from "../../../repositories/implementations";
 import { CertificateRepository } from "../../../repositories/implementations/certificate.repository";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function getCertificateComposer(): IController {
   const repository: ICertificateRepository = new CertificateRepository(
@@ -23,6 +29,12 @@ export function getCertificateComposer(): IController {
     repository,
     progressRepository
   );
-  const controller: IController = new GetCertificateController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new GetCertificateController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

@@ -8,6 +8,12 @@ import { PasswordHasher } from "../../../providers/implementations/password-hash
 import { UserRepository } from "../../../repositories/implementations/user.repository";
 import { UserModel } from "../../../databases/models";
 import { IGenerateTokenProvider, IPasswordHasher } from "../../../providers";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function loginComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);
@@ -19,6 +25,12 @@ export function loginComposer(): IController {
     passwordHasher,
     generateTokenProvider
   );
-  const controller: IController = new LoginController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new LoginController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

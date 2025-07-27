@@ -21,8 +21,8 @@ import { IController } from "../IController";
 export class CreateCategoryController implements IController {
   constructor(
     private createCategoryUseCase: ICreateCategoryUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {

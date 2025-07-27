@@ -24,8 +24,8 @@ import { IController } from "../IController";
 export class UpdateLessonController implements IController {
   constructor(
     private updateLessonUseCase: IUpdateLessonUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {

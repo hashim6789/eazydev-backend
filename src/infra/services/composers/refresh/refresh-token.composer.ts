@@ -4,6 +4,12 @@ import { IController } from "../../../../presentation/http/controllers/IControll
 import { RefreshTokenUserController } from "../../../../presentation/http/controllers/refresh/refresh.controller";
 import { IGenerateTokenProvider } from "../../../providers";
 import { GenerateTokenProvider } from "../../../providers/implementations/generate-refresh-token.provider";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 /**
  * Composer function for creating and configuring the components required for refreshing authentication tokens.
@@ -12,18 +18,17 @@ import { GenerateTokenProvider } from "../../../providers/implementations/genera
  * @returns {IController} The configured refresh token controller.
  */
 export function refreshTokenUserComposer(): IController {
-  // const refreshTokenRepository: ITokenRepository = new TokenRepository(
-  //   TokenModel
-  // );
   const generateTokenProvider: IGenerateTokenProvider =
     new GenerateTokenProvider();
-  // const tokenManagerProvider: ITokenManagerProvider =
-  //   new TokenManagerProvider();
   const useCase: IRefreshTokenUserUseCase = new RefreshTokenUserUseCase(
     generateTokenProvider
-    // refreshTokenRepository,
-    // tokenManagerProvider
   );
-  const controller: IController = new RefreshTokenUserController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new RefreshTokenUserController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

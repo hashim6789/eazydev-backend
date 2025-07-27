@@ -7,10 +7,22 @@ import {
   IGetAllSlotUseCase,
 } from "../../../../app/usecases/slot";
 import { GetSlotsLearnerController } from "../../../../presentation/http/controllers/slot";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function getSlotsForLearnerComposer(): IController {
   const repository: ISlotRepository = new SlotRepository(SlotModel);
   const useCase: IGetAllSlotUseCase = new GetAllSlotUseCase(repository);
-  const controller: IController = new GetSlotsLearnerController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new GetSlotsLearnerController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

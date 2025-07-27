@@ -12,6 +12,12 @@ import {
   TokenRepository,
   UserRepository,
 } from "../../../repositories/implementations";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function resetPasswordComposer(): IController {
   const repository: ITokenRepository = new TokenRepository(TokenModel);
@@ -22,6 +28,12 @@ export function resetPasswordComposer(): IController {
     userRepository,
     passwordHasher
   );
-  const controller: IController = new ResetPasswordController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new ResetPasswordController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

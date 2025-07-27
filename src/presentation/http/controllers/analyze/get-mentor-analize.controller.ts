@@ -17,8 +17,8 @@ import { IController } from "../IController";
 export class GetMentorAnalyzeController implements IController {
   constructor(
     private getMentorAnalyzeUseCase: IGetMentorAnalyzeUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {

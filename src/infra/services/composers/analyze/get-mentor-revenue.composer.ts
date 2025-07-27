@@ -10,6 +10,12 @@ import {
   IGetMentorRevenueAnalyzeUseCase,
 } from "../../../../app/usecases/analyze";
 import { GetMentorRevenueAnalysisController } from "../../../../presentation/http/controllers/analyze";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function getMentorRevenueAnalysisComposer(): IController {
   const purchaseRepository: IPurchaseRepository = new PurchaseRepository(
@@ -18,8 +24,12 @@ export function getMentorRevenueAnalysisComposer(): IController {
   const userRepository: IUsersRepository = new UserRepository(UserModel);
   const useCase: IGetMentorRevenueAnalyzeUseCase =
     new GetMentorRevenueAnalyzeUseCase(purchaseRepository, userRepository);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
   const controller: IController = new GetMentorRevenueAnalysisController(
-    useCase
+    useCase,
+    httpErrors,
+    httpSuccess
   );
   return controller;
 }

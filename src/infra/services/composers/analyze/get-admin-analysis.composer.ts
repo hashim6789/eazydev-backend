@@ -19,6 +19,12 @@ import {
   IGetAdminAnalyzeUseCase,
 } from "../../../../app/usecases/analyze";
 import { GetAdminAnalyzeController } from "../../../../presentation/http/controllers/analyze";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function getAdminAnalysisComposer(): IController {
   const progressRepository: IProgressRepository = new ProgressRepository(
@@ -33,6 +39,12 @@ export function getAdminAnalysisComposer(): IController {
     progressRepository,
     purchaseRepository
   );
-  const controller: IController = new GetAdminAnalyzeController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new GetAdminAnalyzeController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

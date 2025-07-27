@@ -8,6 +8,12 @@ import {
   CourseRepository,
   LessonRepository,
 } from "../../../repositories/implementations";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function createLessonComposer(): IController {
   const repository: ILessonRepository = new LessonRepository(LessonModel);
@@ -16,6 +22,12 @@ export function createLessonComposer(): IController {
     repository,
     courseRepository
   );
-  const controller: IController = new CreateLessonController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new CreateLessonController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }
