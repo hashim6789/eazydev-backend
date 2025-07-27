@@ -1,4 +1,4 @@
-import mongoose, { Model, ObjectId } from "mongoose";
+import mongoose, { Model, Types } from "mongoose";
 import { IProgress } from "../../databases/interfaces";
 import {
   IProgressOutDTO,
@@ -14,44 +14,49 @@ import {
 } from "../../pipelines";
 import { CoursePerformanceData } from "../../../domain/types";
 import { IProgressRepository } from "../interfaces";
+import { BaseRepository } from "./base-repository";
 
-export class ProgressRepository implements IProgressRepository {
-  private model: Model<IProgress>;
+export class ProgressRepository
+  extends BaseRepository<IProgress>
+  implements IProgressRepository
+{
+  // private model: Model<IProgress>;
 
   constructor(model: Model<IProgress>) {
-    this.model = model;
+    // this.model = model;
+    super(model);
   }
 
-  async create(data: ProgressEntity): Promise<IProgressOutDTO> {
-    try {
-      const createData = new this.model({
-        userId: data.userId,
-        courseId: data.courseId,
-        mentorId: data.mentorId,
-        completedLessons: data.completedLessons,
-        completedMaterials: data.completedMaterials,
-        isCourseCompleted: data.isCourseCompleted,
-        progress: data.progress,
-        completedDate: data.completedDate,
-      });
-      const progress = await createData.save();
+  // async create(data: ProgressEntity): Promise<IProgressOutDTO> {
+  //   try {
+  //     const createData = new this.model({
+  //       userId: data.userId,
+  //       courseId: data.courseId,
+  //       mentorId: data.mentorId,
+  //       completedLessons: data.completedLessons,
+  //       completedMaterials: data.completedMaterials,
+  //       isCourseCompleted: data.isCourseCompleted,
+  //       progress: data.progress,
+  //       completedDate: data.completedDate,
+  //     });
+  //     const progress = await createData.save();
 
-      return {
-        id: progress._id.toString(),
-        userId: progress.userId.toString(),
-        mentorId: progress.mentorId.toString(),
-        courseId: progress.courseId.toString(),
-        completedLessons: [],
-        completedMaterials: [],
-        isCourseCompleted: progress.isCourseCompleted,
-        progress: progress.progress,
-        completedDate: null,
-      };
-    } catch (error) {
-      console.error("Error while creating progress:", error);
-      throw new Error("Purchase creation failed");
-    }
-  }
+  //     return {
+  //       id: progress._id.toString(),
+  //       userId: progress.userId.toString(),
+  //       mentorId: progress.mentorId.toString(),
+  //       courseId: progress.courseId.toString(),
+  //       completedLessons: [],
+  //       completedMaterials: [],
+  //       isCourseCompleted: progress.isCourseCompleted,
+  //       progress: progress.progress,
+  //       completedDate: null,
+  //     };
+  //   } catch (error) {
+  //     console.error("Error while creating progress:", error);
+  //     throw new Error("Purchase creation failed");
+  //   }
+  // }
 
   async findAllByUserId(
     { page = "1", limit = "5" }: QueryProgress,
@@ -148,33 +153,33 @@ export class ProgressRepository implements IProgressRepository {
     }
   }
 
-  async findById(id: string): Promise<IProgressOutDTO | null> {
-    try {
-      const progress = await this.model.findById(id);
-      if (!progress) return null;
+  // async findById(id: string): Promise<IProgressOutDTO | null> {
+  //   try {
+  //     const progress = await this.model.findById(id);
+  //     if (!progress) return null;
 
-      return {
-        id: progress._id.toString(),
-        userId: progress.userId.toString(),
-        mentorId: progress.mentorId.toString(),
-        courseId: progress.courseId.toString(),
-        completedLessons: progress.completedLessons.map((item) =>
-          item.toString()
-        ),
-        completedMaterials: progress.completedMaterials.map((item) =>
-          item.toString()
-        ),
-        isCourseCompleted: progress.isCourseCompleted,
-        progress: progress.progress,
-        completedDate: progress.completedDate
-          ? progress.completedDate.getTime()
-          : null,
-      };
-    } catch (error) {
-      console.error("Error while fetching progresses:", error);
-      throw new Error("Course fetch failed");
-    }
-  }
+  //     return {
+  //       id: progress._id.toString(),
+  //       userId: progress.userId.toString(),
+  //       mentorId: progress.mentorId.toString(),
+  //       courseId: progress.courseId.toString(),
+  //       completedLessons: progress.completedLessons.map((item) =>
+  //         item.toString()
+  //       ),
+  //       completedMaterials: progress.completedMaterials.map((item) =>
+  //         item.toString()
+  //       ),
+  //       isCourseCompleted: progress.isCourseCompleted,
+  //       progress: progress.progress,
+  //       completedDate: progress.completedDate
+  //         ? progress.completedDate.getTime()
+  //         : null,
+  //     };
+  //   } catch (error) {
+  //     console.error("Error while fetching progresses:", error);
+  //     throw new Error("Course fetch failed");
+  //   }
+  // }
 
   async updateProgress(
     id: string,
@@ -219,7 +224,8 @@ export class ProgressRepository implements IProgressRepository {
       }
 
       const course = progress.courseId as any; // Assuming courseId is populated as a Course type
-      const completedMaterials = progress.completedMaterials as ObjectId[];
+      const completedMaterials =
+        progress.completedMaterials as Types.ObjectId[];
 
       // Step 3: Check if lessons are completed
       const completedLessons = new Set(
@@ -239,10 +245,7 @@ export class ProgressRepository implements IProgressRepository {
       }
       // Step 4: Update completedLessons in Progress document
       progress.completedLessons = Array.from(completedLessons).map(
-        (id) =>
-          new mongoose.Types.ObjectId(
-            id
-          ) as any as mongoose.Schema.Types.ObjectId
+        (id) => new Types.ObjectId(id) as any as Types.ObjectId
       );
 
       // Step 5: Update course completion status

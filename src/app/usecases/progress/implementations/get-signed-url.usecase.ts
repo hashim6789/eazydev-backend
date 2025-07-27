@@ -7,6 +7,7 @@ import { ProgressErrorType } from "../../../../domain/enums/progress";
 import { AuthenticateUserErrorType } from "../../../../domain/enums";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { IS3ServiceProvider } from "../../../../infra/providers";
+import { mapProgressToDTO } from "../../../../infra/databases/mappers";
 
 export class GetSignedUrlUseCase implements IGetSignedUrlUseCase {
   constructor(
@@ -28,7 +29,9 @@ export class GetSignedUrlUseCase implements IGetSignedUrlUseCase {
         };
       }
 
-      if (progress.userId !== userId) {
+      const mappedData = mapProgressToDTO(progress);
+
+      if (mappedData.userId !== userId) {
         return {
           success: false,
           data: { error: AuthenticateUserErrorType.UserCanNotDoIt },

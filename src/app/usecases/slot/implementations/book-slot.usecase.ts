@@ -16,6 +16,7 @@ import {
 import { IBookSlotUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { mapMeetingToDocument } from "../../../../infra/databases/mappers/meeting";
+import { mapProgressToDTO } from "../../../../infra/databases/mappers";
 
 export class BookSlotUseCase implements IBookSlotUseCase {
   constructor(
@@ -37,9 +38,16 @@ export class BookSlotUseCase implements IBookSlotUseCase {
       }
 
       const progress = await this.progressRepository.findById(progressId);
-      if (!progress || progress.userId !== userId) {
+      if (!progress) {
         return {
           data: { error: ProgressErrorType.ProgressNotFound },
+          success: false,
+        };
+      }
+      const mappedData = mapProgressToDTO(progress);
+      if (mappedData.userId !== userId) {
+        return {
+          data: { error: AuthenticateUserErrorType.UserCanNotDoIt },
           success: false,
         };
       }
@@ -54,9 +62,9 @@ export class BookSlotUseCase implements IBookSlotUseCase {
       }
 
       const meetingEntity = MeetingEntity.create({
-        courseId: progress.courseId,
+        courseId: mappedData.courseId,
         learnerId,
-        mentorId: progress.mentorId,
+        mentorId: mappedData.mentorId,
         roomId: uuidv4(),
         slotId,
         learnerPeerId: null,

@@ -19,7 +19,10 @@ import {
 } from "../../../../infra/repositories";
 import { ICreatePurchaseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
-import { mapCourseToDTO } from "../../../../infra/databases/mappers";
+import {
+  mapCourseToDTO,
+  mapProgressToDocument,
+} from "../../../../infra/databases/mappers";
 
 export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
   constructor(
@@ -107,7 +110,9 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
         };
       }
 
-      await this.progressRepository.create(progress);
+      const mappedDocument = mapProgressToDocument(progress);
+
+      await this.progressRepository.create(mappedDocument);
 
       return { data: createdPurchase, success: true };
     } catch (error: unknown) {

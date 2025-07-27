@@ -12,7 +12,10 @@ import {
 } from "../../../../infra/repositories";
 import { IGetCertificateUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
-import { mapCertificateToDocument } from "../../../../infra/databases/mappers";
+import {
+  mapCertificateToDocument,
+  mapProgressToDTO,
+} from "../../../../infra/databases/mappers";
 
 export class GetCertificateUseCase implements IGetCertificateUseCase {
   constructor(
@@ -50,10 +53,12 @@ export class GetCertificateUseCase implements IGetCertificateUseCase {
         };
       }
 
+      const mappedData = mapProgressToDTO(progress);
+
       const certificateEntity = CertificateEntity.create({
         progressId,
-        courseId: progress.courseId,
-        mentorId: progress.mentorId,
+        courseId: mappedData.courseId,
+        mentorId: mappedData.mentorId,
         learnerId: userId,
         issueDate: Date.now(),
       });
