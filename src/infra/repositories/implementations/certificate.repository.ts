@@ -6,38 +6,43 @@ import {
   ICertificateOutPopulateDTO,
 } from "../../../domain/dtos";
 import { ICertificateRepository } from "../interfaces";
+import { BaseRepository } from "./base-repository";
 
-export class CertificateRepository implements ICertificateRepository {
-  private model: Model<ICertificate>;
+export class CertificateRepository
+  extends BaseRepository<ICertificate>
+  implements ICertificateRepository
+{
+  // private model: Model<ICertificate>;
 
   constructor(model: Model<ICertificate>) {
-    this.model = model;
+    super(model);
+    // this.model = model;
   }
 
-  async create(data: CertificateEntity): Promise<ICertificateOutDTO> {
-    try {
-      // Save the certificate to the database
-      const createData = new this.model({
-        progressId: data.progressId,
-        courseId: data.courseId,
-        mentorId: data.mentorId,
-        learnerId: data.learnerId,
-        issueDate: data.issueDate,
-      });
-      const savedCertificate = await createData.save(); // Wait for the save operation
-      return {
-        id: savedCertificate._id.toString(),
-        progressId: savedCertificate.progressId.toString(),
-        courseId: savedCertificate.courseId.toString(),
-        mentorId: savedCertificate.mentorId.toString(),
-        learnerId: savedCertificate.learnerId.toString(),
-        issueDate: savedCertificate.issueDate.getTime(),
-      };
-    } catch (error) {
-      console.error("Error while creating certificate:", error);
-      throw new Error("Certificate creation failed");
-    }
-  }
+  // async create(data: CertificateEntity): Promise<ICertificateOutDTO> {
+  //   try {
+  //     // Save the certificate to the database
+  //     const createData = new this.model({
+  //       progressId: data.progressId,
+  //       courseId: data.courseId,
+  //       mentorId: data.mentorId,
+  //       learnerId: data.learnerId,
+  //       issueDate: data.issueDate,
+  //     });
+  //     const savedCertificate = await createData.save(); // Wait for the save operation
+  //     return {
+  //       id: savedCertificate._id.toString(),
+  //       progressId: savedCertificate.progressId.toString(),
+  //       courseId: savedCertificate.courseId.toString(),
+  //       mentorId: savedCertificate.mentorId.toString(),
+  //       learnerId: savedCertificate.learnerId.toString(),
+  //       issueDate: savedCertificate.issueDate.getTime(),
+  //     };
+  //   } catch (error) {
+  //     console.error("Error while creating certificate:", error);
+  //     throw new Error("Certificate creation failed");
+  //   }
+  // }
 
   async findByProgressId(
     progressId: string

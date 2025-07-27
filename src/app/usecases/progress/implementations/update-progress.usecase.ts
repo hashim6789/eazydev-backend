@@ -9,6 +9,7 @@ import {
 import { ProgressErrorType } from "../../../../domain/enums/progress";
 import { CertificateEntity } from "../../../../domain/entities";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { mapCertificateToDocument } from "../../../../infra/databases/mappers/certificates";
 
 export class UpdateProgressUseCase implements IUpdateProgressUseCase {
   constructor(
@@ -42,7 +43,9 @@ export class UpdateProgressUseCase implements IUpdateProgressUseCase {
           issueDate: Date.now(),
         });
 
-        await this.certificateRepository.create(certificateEntity);
+        await this.certificateRepository.create(
+          mapCertificateToDocument(certificateEntity)
+        );
       }
 
       return {

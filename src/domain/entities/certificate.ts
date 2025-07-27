@@ -43,6 +43,16 @@ export class CertificateEntity {
     Object.assign(this, updatedData);
   }
 
+  toObject(): CertificateInterface {
+    return {
+      progressId: this._progressId,
+      courseId: this._courseId,
+      mentorId: this._mentorId,
+      learnerId: this._learnerId,
+      issueDate: this._issueDate,
+    };
+  }
+
   /**
    * Gets the certificate's progress ID.
    * @readonly
@@ -66,19 +76,30 @@ export class CertificateEntity {
   get mentorId(): string {
     return this._mentorId;
   }
-
   /**
-   * Gets the certificate's learner ID.
+   * Gets the certificate's mentor ID.
    * @readonly
    */
   get learnerId(): string {
     return this._learnerId;
   }
-
   /**
-   * Gets the certificate's issue date.
+   * Gets the certificate's mentor ID.
    * @readonly
    */
+  get issueDate(): number {
+    return this._issueDate;
+  }
+
+  /**
+   * Gets the certificate's learner ID.
+   * @readonly{
+    this._progressId = props.progressId;
+    this._courseId = props.courseId;
+    this._mentorId = props.mentorId;
+    this._learnerId = props.learnerId;
+    this._issueDate = props.issueDate;
+  }
   get issueDate(): number {
     return this._issueDate;
   }

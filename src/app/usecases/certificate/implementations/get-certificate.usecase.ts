@@ -12,6 +12,7 @@ import {
 } from "../../../../infra/repositories";
 import { IGetCertificateUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { mapCertificateToDocument } from "../../../../infra/databases/mappers";
 
 export class GetCertificateUseCase implements IGetCertificateUseCase {
   constructor(
@@ -57,8 +58,9 @@ export class GetCertificateUseCase implements IGetCertificateUseCase {
         issueDate: Date.now(),
       });
 
-      const createdCertificate =
-        this.certificateRepository.create(certificateEntity);
+      const createdCertificate = this.certificateRepository.create(
+        mapCertificateToDocument(certificateEntity)
+      );
       if (!createdCertificate) {
         return {
           data: { error: CertificateErrorType.CertificateCreationFailed },
