@@ -1,10 +1,12 @@
 import {
-  IChatMessageOutDTO,
+  // IChatMessageOutDTO,
   IChatMessagePopulatedDTO,
 } from "../../../domain/dtos";
-import { ChatMessageEntity } from "../../../domain/entities";
+// import { ChatMessageEntity } from "../../../domain/entities";
+import { IChatMessage } from "../../databases/interfaces";
+import { IBaseRepository } from "./base.repository";
 
-export interface IChatMessageRepository {
-  create(data: ChatMessageEntity): Promise<IChatMessageOutDTO>;
+export interface IChatMessageRepository extends IBaseRepository<IChatMessage> {
+  // create(data: ChatMessageEntity): Promise<IChatMessageOutDTO>;
   findAllByGroup(groupId: string): Promise<IChatMessagePopulatedDTO[]>;
 }

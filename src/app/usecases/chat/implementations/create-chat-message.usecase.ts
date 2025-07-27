@@ -4,6 +4,7 @@ import { IChatMessageRepository } from "../../../../infra/repositories";
 import { ICreateChatMessageUseCase } from "../interfaces/post-chat-message.usecase";
 import { ChatMessageEntity } from "../../../../domain/entities";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { mapChatMessageToDocument } from "../../../../infra/databases/mappers";
 
 export class CreateChatMessageUseCase implements ICreateChatMessageUseCase {
   constructor(private chatMessageRepository: IChatMessageRepository) {}
@@ -21,7 +22,7 @@ export class CreateChatMessageUseCase implements ICreateChatMessageUseCase {
       });
 
       const createdMessage = await this.chatMessageRepository.create(
-        chatMessage
+        mapChatMessageToDocument(chatMessage)
       );
 
       return {
