@@ -12,3 +12,4 @@ export { ProgressRepository } from "./progress.repository";
 export { PurchaseRepository } from "./purchase-repository";
 export { SlotRepository } from "./slot.repository";
 export { MeetingRepository } from "./meeting-repository";
+export { BaseRepository } from "./base-repository";

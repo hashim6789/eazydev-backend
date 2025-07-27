@@ -14,3 +14,4 @@ export { ISlotRepository } from "./slot.repository";
 export { IMeetingRepository } from "./meeting-repository";
 export { IChatMessageRepository } from "./chat-message.repository";
 export { ICertificateRepository } from "./certificate.repository";
+export { IBaseRepository } from "./base.repository";
