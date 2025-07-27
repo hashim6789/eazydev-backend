@@ -11,7 +11,6 @@ export const authenticateToken = async (
   response: Response,
   next: NextFunction
 ) => {
-  console.log(request.cookies);
   const accessToken = request.cookies[env.KEY_OF_ACCESS as string];
 
   if (!accessToken) {

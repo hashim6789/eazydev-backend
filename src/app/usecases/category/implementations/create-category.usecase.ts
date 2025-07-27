@@ -1,5 +1,7 @@
 import {
+  ICategoryOutDTO,
   ICreateCategoryRequestDTO,
+  mapCategoryToDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
@@ -43,7 +45,7 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
       });
 
       const createdCategory = await this.categoryRepository.create(
-        courseEntity
+        courseEntity.toObject()
       );
 
       if (!createdCategory) {
@@ -53,7 +55,9 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
         };
       }
 
-      return { data: { category: createdCategory }, success: true };
+      const mappedData: ICategoryOutDTO = mapCategoryToDTO(createdCategory);
+
+      return { data: { category: mappedData }, success: true };
     } catch (error: unknown) {
       return formatErrorResponse(error);
     }

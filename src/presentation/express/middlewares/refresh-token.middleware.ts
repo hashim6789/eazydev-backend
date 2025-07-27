@@ -8,7 +8,6 @@ export const refreshTokenMiddleware = (
   response: Response,
   next: NextFunction
 ) => {
-  console.log(request.cookies);
   const refreshToken = request.cookies[env.KEY_OF_REFRESH as string];
 
   if (!refreshToken) {

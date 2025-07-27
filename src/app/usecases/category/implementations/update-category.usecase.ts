@@ -1,5 +1,7 @@
 import {
+  ICategoryOutDTO,
   IUpdateCategoryRequestDTO,
+  mapCategoryToDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
@@ -58,7 +60,9 @@ export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
         };
       }
 
-      return { data: { category: updatedCategory }, success: true };
+      const mappedData: ICategoryOutDTO = mapCategoryToDTO(updatedCategory);
+
+      return { data: { category: mappedData }, success: true };
     } catch (error: unknown) {
       return formatErrorResponse(error);
     }

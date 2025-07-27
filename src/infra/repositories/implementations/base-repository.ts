@@ -6,8 +6,11 @@ export abstract class BaseRepository<T extends Document>
 {
   constructor(protected readonly model: Model<T>) {}
   async create(data: Partial<T>): Promise<T> {
+    console.log("data", data);
     const document = new this.model(data);
-    return document.save();
+    console.log(document);
+    const result = await document.save();
+    return result;
   }
 
   async update(

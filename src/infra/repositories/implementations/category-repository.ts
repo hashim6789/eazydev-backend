@@ -1,39 +1,21 @@
 import { Model } from "mongoose";
 import { ICategory } from "../../databases/interfaces";
 import {
-  ICreateCategoryInDTO,
   ICategoryOutDTO,
-  IUpdateCategoryIntDTO,
   QueryCategory,
+  mapCategoryToDTO,
 } from "../../../domain/dtos";
 import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
 import { Role } from "../../../domain/types";
 import { ICategoryRepository } from "../interfaces";
+import { BaseRepository } from "./base-repository";
 
-export class CategoryRepository implements ICategoryRepository {
-  private model: Model<ICategory>;
-
+export class CategoryRepository
+  extends BaseRepository<ICategory>
+  implements ICategoryRepository
+{
   constructor(model: Model<ICategory>) {
-    this.model = model;
-  }
-
-  async create(data: ICreateCategoryInDTO): Promise<ICategoryOutDTO> {
-    try {
-      const createData = new this.model({
-        title: data.title,
-        isListed: data.isListed,
-      });
-      const category = await createData.save();
-
-      return {
-        id: category._id.toString(),
-        title: category.title,
-        isListed: category.isListed,
-      };
-    } catch (error) {
-      console.error("Error while creating category:", error);
-      throw new Error("Lesson creation failed");
-    }
+    super(model);
   }
 
   async updateListOfCategory(
@@ -49,41 +31,6 @@ export class CategoryRepository implements ICategoryRepository {
     } catch (error) {
       console.error("Error while update status of category:", error);
       throw new Error("Course status update failed");
-    }
-  }
-
-  async findById(id: string): Promise<ICategoryOutDTO | null> {
-    try {
-      const category = await this.model.findById(id);
-      if (!category) return null;
-      return {
-        id: category._id.toString(),
-        title: category.title,
-        isListed: category.isListed,
-      };
-    } catch (error) {
-      console.error("Error while find the category:", error);
-      throw new Error("Course fetch failed");
-    }
-  }
-
-  async update(
-    id: string,
-    data: Partial<IUpdateCategoryIntDTO>
-  ): Promise<ICategoryOutDTO | null> {
-    try {
-      const category = await this.model.findByIdAndUpdate(id, data, {
-        new: true,
-      });
-      if (!category) return null;
-      return {
-        id: category._id.toString(),
-        title: category.title,
-        isListed: category.isListed,
-      };
-    } catch (error) {
-      console.error("Error while find the category:", error);
-      throw new Error("Course fetch failed");
     }
   }
 
@@ -107,23 +54,16 @@ export class CategoryRepository implements ICategoryRepository {
         title: { $regex: search, $options: "i" },
       };
       const categories = await this.model
-        .find(
-          query
-          // { email: 1, name: 1, createdAt: 1 }
-        )
+        .find(query)
         .skip((parseInt(page, 10) - 1) * parseInt(limit, 10))
         .limit(parseInt(limit, 10))
-        .sort({ name: 1 })
+        .sort({ updatedAt: -1 })
         .lean();
 
       const total = await this.model.countDocuments(query);
 
       return {
-        body: categories.map((category) => ({
-          id: category._id.toString(),
-          isListed: category.isListed,
-          title: category.title,
-        })),
+        body: categories.map(mapCategoryToDTO),
         total,
         page: parseInt(page, 10),
         last_page: Math.ceil(total / parseInt(limit)),
@@ -139,12 +79,8 @@ export class CategoryRepository implements ICategoryRepository {
       const query = {
         isListed: role === "admin" ? { $exists: true } : true,
       };
-      const categories = await this.model.find(query);
-      return categories.map((category) => ({
-        id: category._id.toString(),
-        isListed: category.isListed,
-        title: category.title,
-      }));
+      const categories = await this.model.find(query).sort({ updatedAt: -1 });
+      return categories.map(mapCategoryToDTO);
     } catch (error) {
       console.error("Error while fetch all category:", error);
       throw new Error("Category fetch failed");
@@ -157,11 +93,7 @@ export class CategoryRepository implements ICategoryRepository {
         title: { $regex: `^${title}$`, $options: "i" }, // Case-insensitive match
       });
       if (!category) return null;
-      return {
-        id: category._id.toString(),
-        isListed: category.isListed,
-        title: category.title,
-      };
+      return mapCategoryToDTO(category);
     } catch (error) {
       console.error("Error while fetching category:", error);
       throw new Error("Category fetch failed");
