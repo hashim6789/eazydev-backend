@@ -3,3 +3,4 @@ export * from "./chat-group";
 export * from "./chat-message";
 export * from "./course";
 export * from "./category";
+export * from "./lesson";

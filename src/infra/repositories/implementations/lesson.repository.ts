@@ -1,42 +1,47 @@
-import mongoose, { Model } from "mongoose";
+import { Model } from "mongoose";
 import {
-  ICreateLessonInDTO,
-  ILessonOutDTO,
+  // ICreateLessonInDTO,
+  // ILessonOutDTO,
+  // IUpdateLessonRequestDTO,
   ILessonOutPopulateDTO,
-  IUpdateLessonRequestDTO,
 } from "../../../domain/dtos";
 import { ILesson } from "../../databases/interfaces";
 import { MaterialType } from "../../../domain/types";
 import { ILessonRepository } from "../interfaces";
+import { BaseRepository } from "./base-repository";
 
-export class LessonRepository implements ILessonRepository {
-  private model: Model<ILesson>;
+export class LessonRepository
+  extends BaseRepository<ILesson>
+  implements ILessonRepository
+{
+  // private model: Model<ILesson>;
 
   constructor(model: Model<ILesson>) {
-    this.model = model;
+    super(model);
+    // this.model = model;
   }
-  async create(data: ICreateLessonInDTO): Promise<ILessonOutDTO> {
-    try {
-      const createData = new this.model({
-        title: data.title,
-        description: data.description,
-        mentorId: data.mentorId,
-        materials: data.materials,
-      });
-      const lesson = await createData.save();
+  // async create(data: ICreateLessonInDTO): Promise<ILessonOutDTO> {
+  //   try {
+  //     const createData = new this.model({
+  //       title: data.title,
+  //       description: data.description,
+  //       mentorId: data.mentorId,
+  //       materials: data.materials,
+  //     });
+  //     const lesson = await createData.save();
 
-      return {
-        id: lesson._id.toString(),
-        title: lesson.title,
-        mentorId: lesson.mentorId.toString(),
-        description: lesson.description,
-        materials: lesson.materials.map((item) => item.toString()),
-      };
-    } catch (error) {
-      console.error("Error while creating lesson:", error);
-      throw new Error("Lesson creation failed");
-    }
-  }
+  //     return {
+  //       id: lesson._id.toString(),
+  //       title: lesson.title,
+  //       mentorId: lesson.mentorId.toString(),
+  //       description: lesson.description,
+  //       materials: lesson.materials.map((item) => item.toString()),
+  //     };
+  //   } catch (error) {
+  //     console.error("Error while creating lesson:", error);
+  //     throw new Error("Lesson creation failed");
+  //   }
+  // }
 
   async addMaterialToLesson(
     lessonId: string,
@@ -96,29 +101,29 @@ export class LessonRepository implements ILessonRepository {
     }
   }
 
-  async update(
-    id: string,
-    data: IUpdateLessonRequestDTO
-  ): Promise<ILessonOutDTO | null> {
-    try {
-      const lesson = await this.model.findByIdAndUpdate(id, {
-        ...data,
-        materials: data.materials.map(
-          (item) => new mongoose.Types.ObjectId(item)
-        ),
-      });
-      if (!lesson) return null;
+  // async update(
+  //   id: string,
+  //   data: IUpdateLessonRequestDTO
+  // ): Promise<ILessonOutDTO | null> {
+  //   try {
+  //     const lesson = await this.model.findByIdAndUpdate(id, {
+  //       ...data,
+  //       materials: data.materials.map(
+  //         (item) => new mongoose.Types.ObjectId(item)
+  //       ),
+  //     });
+  //     if (!lesson) return null;
 
-      return {
-        id: lesson._id.toString(),
-        title: lesson.title,
-        mentorId: lesson.mentorId.toString(),
-        description: lesson.description,
-        materials: lesson.materials.map((item) => item.toString()),
-      };
-    } catch (error) {
-      console.error("Error while creating lesson:", error);
-      throw new Error("Lesson creation failed");
-    }
-  }
+  //     return {
+  //       id: lesson._id.toString(),
+  //       title: lesson.title,
+  //       mentorId: lesson.mentorId.toString(),
+  //       description: lesson.description,
+  //       materials: lesson.materials.map((item) => item.toString()),
+  //     };
+  //   } catch (error) {
+  //     console.error("Error while creating lesson:", error);
+  //     throw new Error("Lesson creation failed");
+  //   }
+  // }
 }

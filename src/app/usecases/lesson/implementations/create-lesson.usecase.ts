@@ -14,6 +14,10 @@ import {
 } from "../../../../infra/repositories";
 import { ICreateLessonUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import {
+  mapLessonToDocument,
+  mapLessonToDTO,
+} from "../../../../infra/databases/mappers";
 
 export class CreateLessonUseCase implements ICreateLessonUseCase {
   constructor(
@@ -45,7 +49,9 @@ export class CreateLessonUseCase implements ICreateLessonUseCase {
         materials,
       });
 
-      const createdLesson = await this.lessonRepository.create(lessonEntity);
+      const createdLesson = await this.lessonRepository.create(
+        mapLessonToDocument(lessonEntity)
+      );
 
       if (!createdLesson) {
         return {
@@ -54,9 +60,11 @@ export class CreateLessonUseCase implements ICreateLessonUseCase {
         };
       }
 
-      await this.courseRepository.addLessonToCourse(courseId, createdLesson.id);
+      const mappedData = mapLessonToDTO(createdLesson);
 
-      return { data: createdLesson.id, success: true };
+      await this.courseRepository.addLessonToCourse(courseId, mappedData.id);
+
+      return { data: mappedData.id, success: true };
     } catch (error: unknown) {
       return formatErrorResponse(error);
     }
