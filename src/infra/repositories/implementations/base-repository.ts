@@ -28,4 +28,11 @@ export abstract class BaseRepository<T extends Document>
     if (!isValidObjectId(id)) throw new Error("Invalid ID format");
     return this.model.findById(id);
   }
+
+  async delete(filter: FilterQuery<T>): Promise<void> {
+    const result = await this.model.deleteOne(filter);
+    if (result.deletedCount === 0) {
+      throw new Error("Document not found or already deleted");
+    }
+  }
 }

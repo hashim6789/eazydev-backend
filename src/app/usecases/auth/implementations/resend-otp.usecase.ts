@@ -12,6 +12,8 @@ import {
   IPasswordHasher,
   ISendMailProvider,
 } from "../../../../infra/providers";
+import dayjs from "dayjs";
+import { mapOtpToDocument } from "../../../../infra/databases/mappers";
 
 export class ResendOtpUseCase implements IResendOtpUseCase {
   constructor(
@@ -24,7 +26,7 @@ export class ResendOtpUseCase implements IResendOtpUseCase {
 
   async execute({ userId }: IResendOtpRequestDTO): Promise<ResponseDTO> {
     try {
-      const deleteExistingOtp = await this.otpRepository.delete(userId);
+      await this.otpRepository.delete({ userId });
 
       const user = (await this.userRepository.findById(
         userId
@@ -32,10 +34,16 @@ export class ResendOtpUseCase implements IResendOtpUseCase {
 
       const otp = await this.generateOtpProvider.generateOtp();
       console.log("otp =", otp);
+      const expiresIn = dayjs().add(5, "minute").unix();
 
       const hashedOtp = await this.passwordHasher.hash(otp);
+      const mappedDocument = mapOtpToDocument({
+        userId,
+        otp: hashedOtp,
+        expiresIn,
+      });
 
-      const otpDoc = await this.otpRepository.create(userId, hashedOtp);
+      await this.otpRepository.create(mappedDocument);
       await this.sendMailProvider.sendOtpMail(user.email, otp);
 
       return {

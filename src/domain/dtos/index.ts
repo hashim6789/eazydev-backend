@@ -11,3 +11,4 @@ export * from "./meeting";
 export * from "./chat-message";
 export * from "./user";
 export * from "./certificate";
+export * from "./otp";

@@ -16,6 +16,8 @@ import {
   IPasswordHasher,
   ISendMailProvider,
 } from "../../../../infra/providers";
+import { mapOtpToDocument } from "../../../../infra/databases/mappers";
+import dayjs from "dayjs";
 
 export interface ISignupUseCase {
   execute(data: ISignupRequestDTO): Promise<ResponseDTO>;
@@ -82,11 +84,19 @@ export class SignupUseCase implements ISignupUseCase {
       });
 
       const otp = await this.generateOtpProvider.generateOtp();
+      const expiresIn = dayjs().add(5, "minute").unix();
+
       console.log("otp =", otp);
 
       const hashedOtp = await this.passwordHasher.hash(otp);
 
-      const otpDoc = await this.otpRepository.create(user.id, hashedOtp);
+      const mappedDocument = mapOtpToDocument({
+        otp: hashedOtp,
+        userId: user.id,
+        expiresIn,
+      });
+
+      const otpDoc = await this.otpRepository.create(mappedDocument);
       await this.sendMailProvider.sendOtpMail(user.email, otp);
 
       const accessToken = await this.generateTokenProvider.generateToken(

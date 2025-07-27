@@ -5,3 +5,6 @@ export * from "./course";
 export * from "./category";
 export * from "./lesson";
 export * from "./material";
+export * from "./meeting";
+export * from "./notification";
+export * from "./otp";

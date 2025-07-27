@@ -5,4 +5,5 @@ export interface IBaseRepository<T> {
   update(id: string | Types.ObjectId, data: Partial<T>): Promise<T | null>;
   findById(id: string | Types.ObjectId): Promise<T | null>;
   findOne(filter: FilterQuery<T>): Promise<T | null>;
+  delete(filter: FilterQuery<T>): Promise<void>;
 }

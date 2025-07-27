@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { OtpDTO } from "../../../domain/dtos/auth/otp-auth-dto";
 import { IOtp } from "../../databases/interfaces";
 import { IOtpRepository } from "../interfaces";
+import { BaseRepository } from "./base-repository";
 
 /**
  * Mongoose implementation of the refresh token repository.
@@ -10,8 +11,11 @@ import { IOtpRepository } from "../interfaces";
  * @class
  * @implements {IOtpRepository}
  */
-export class OtpRepository implements IOtpRepository {
-  private model: Model<IOtp>;
+export class OtpRepository
+  extends BaseRepository<IOtp>
+  implements IOtpRepository
+{
+  // private model: Model<IOtp>;
 
   /**
    * Creates an instance of OtpMongooseRepository.
@@ -20,7 +24,8 @@ export class OtpRepository implements IOtpRepository {
    * @param {Model<Document>} OtpModel - The Mongoose model instance.
    */
   constructor(model: Model<IOtp>) {
-    this.model = model;
+    // this.model = model;
+    super(model);
   }
 
   /**
@@ -30,23 +35,23 @@ export class OtpRepository implements IOtpRepository {
    * @param {string} userId - The ID of the user for whom the refresh token is created.
    * @returns {Promise<OtpDTO>} The generated refresh token.
    */
-  async create(userId: string, otp: string): Promise<OtpDTO> {
-    const expiresIn = dayjs().add(5, "minute").unix();
+  // async create(userId: string, otp: string): Promise<OtpDTO> {
+  //   const expiresIn = dayjs().add(5, "minute").unix();
 
-    const generateOtp = new this.model({
-      userId,
-      expiresIn,
-      otp,
-    });
-    await generateOtp.save();
+  //   const generateOtp = new this.model({
+  //     userId,
+  //     expiresIn,
+  //     otp,
+  //   });
+  //   await generateOtp.save();
 
-    return {
-      id: generateOtp._id.toString(),
-      userId: generateOtp.userId.toString(),
-      expiresIn: generateOtp.expiresIn.getTime(),
-      otp: generateOtp.otp,
-    };
-  }
+  //   return {
+  //     id: generateOtp._id.toString(),
+  //     userId: generateOtp.userId.toString(),
+  //     expiresIn: generateOtp.expiresIn.getTime(),
+  //     otp: generateOtp.otp,
+  //   };
+  // }
 
   /**
    * Finds a refresh token by its ID.
@@ -55,11 +60,11 @@ export class OtpRepository implements IOtpRepository {
    * @param {string} refreshToken - The ID of the refresh token to find.
    * @returns {Promise<OtpDTO | unknown>} The found refresh token or undefined.
    */
-  async findById(refreshToken: string): Promise<OtpDTO | unknown> {
-    const token = await this.model.findById(refreshToken).exec();
+  // async findById(refreshToken: string): Promise<OtpDTO | unknown> {
+  //   const token = await this.model.findById(refreshToken).exec();
 
-    return token;
-  }
+  //   return token;
+  // }
 
   /**
    * Finds a refresh token by user ID.
@@ -74,14 +79,14 @@ export class OtpRepository implements IOtpRepository {
     return token;
   }
 
-  /**
-   * Deletes a refresh token associated with the specified user ID.
-   *
-   * @async
-   * @param {string} userId - The ID of the user for whom to delete the refresh token.
-   * @returns {Promise<void>} A Promise that resolves once the refresh token is deleted.
-   */
-  async delete(userId: string): Promise<void> {
-    await this.model.deleteOne({ userId }).exec();
-  }
+  // /**
+  //  * Deletes a refresh token associated with the specified user ID.
+  //  *
+  //  * @async
+  //  * @param {string} userId - The ID of the user for whom to delete the refresh token.
+  //  * @returns {Promise<void>} A Promise that resolves once the refresh token is deleted.
+  //  */
+  // async delete(userId: string): Promise<void> {
+  //   await this.model.deleteOne({ userId }).exec();
+  // }
 }
