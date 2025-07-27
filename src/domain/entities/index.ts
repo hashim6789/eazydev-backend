@@ -8,3 +8,4 @@ export * from "./meeting";
 export * from "./chat-message";
 export * from "./chat-group";
 export * from "./certificate";
+export * from "./notification";

@@ -1,9 +1,9 @@
-import { ObjectId } from "mongoose";
+import { Types, Document } from "mongoose";
 
 export interface INotification extends Document {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   title: string;
   message: string;
-  recipientId: ObjectId;
+  recipientId: Types.ObjectId;
   createdAt: Date;
 }
