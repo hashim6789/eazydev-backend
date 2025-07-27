@@ -15,6 +15,7 @@ import {
 } from "../../../../infra/repositories";
 import { IBookSlotUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { mapMeetingToDocument } from "../../../../infra/databases/mappers/meeting";
 
 export class BookSlotUseCase implements IBookSlotUseCase {
   constructor(
@@ -63,7 +64,7 @@ export class BookSlotUseCase implements IBookSlotUseCase {
       });
 
       //created the meeting
-      await this.meetingRepository.create(meetingEntity);
+      await this.meetingRepository.create(mapMeetingToDocument(meetingEntity));
 
       return { data: slot, success: true };
     } catch (error: unknown) {

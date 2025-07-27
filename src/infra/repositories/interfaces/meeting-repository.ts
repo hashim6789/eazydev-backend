@@ -1,20 +1,22 @@
 import {
-  IMeetingOutDTO,
+  // IMeetingOutDTO,
+  // Meeting,
   IMeetingOutPopulatedDTO,
-  Meeting,
 } from "../../../domain/dtos";
-import { MeetingEntity } from "../../../domain/entities";
+// import { MeetingEntity } from "../../../domain/entities";
 import { Role } from "../../../domain/types";
+import { IMeeting } from "../../databases/interfaces";
+import { IBaseRepository } from "./base.repository";
 
-export interface IMeetingRepository {
-  create(data: MeetingEntity): Promise<IMeetingOutDTO>;
+export interface IMeetingRepository extends IBaseRepository<IMeeting> {
+  // create(data: MeetingEntity): Promise<IMeetingOutDTO>;
   findAllByUserAndRole(
     userId: string,
     role: Role
   ): Promise<IMeetingOutPopulatedDTO[]>;
-  findById(id: string): Promise<IMeetingOutDTO | null>;
-  updateById(
-    id: string,
-    data: Partial<Meeting>
-  ): Promise<IMeetingOutDTO | null>;
+  // findById(id: string): Promise<IMeetingOutDTO | null>;
+  // updateById(
+  //   id: string,
+  //   data: Partial<Meeting>
+  // ): Promise<IMeetingOutDTO | null>;
 }
