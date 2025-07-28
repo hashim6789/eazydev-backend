@@ -1,16 +1,16 @@
 import { IGetLearningContentsUseCase } from "../../../../app/usecases/progress";
-import { Payload } from "../../../../domain/dtos/jwt-payload";
-import { IGetLearningContentRequestDTO } from "../../../../domain/dtos/progress";
-import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
-  HttpErrors,
+  LearningContentBodySchema,
+  LearningContentPathSchema,
+} from "../../../../domain/dtos/progress";
+import {
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -24,49 +24,39 @@ export class GetLearningContentController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = LearningContentBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
+    const pathValidation = LearningContentPathSchema.safeParse(
+      httpRequest.path ?? {}
+    );
 
-    if (
-      httpRequest.path &&
-      Object.keys(httpRequest.path).length > 0 &&
-      httpRequest.body &&
-      Object.keys(httpRequest.body).length > 0
-    ) {
-      const pathParams = Object.keys(httpRequest.path);
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (
-        pathParams.includes("progressId") &&
-        bodyParams.includes("role") &&
-        bodyParams.includes("userId")
-      ) {
-        const { progressId } =
-          httpRequest.path as IGetLearningContentRequestDTO;
-
-        const { userId, role } = httpRequest.body as Payload;
-        response = await this.getLearningContentUseCase.execute(
-          { progressId },
-          {
-            userId,
-            role,
-          }
-        );
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success || !pathValidation.success) {
+      const firstBodyError = !bodyValidation.success
+        ? extractFirstZodMessage(bodyValidation.error)
+        : null;
+      const firstPathError = !pathValidation.success
+        ? extractFirstZodMessage(pathValidation.error)
+        : null;
+      const errorMessage = firstBodyError ?? firstPathError ?? "Invalid input";
+      const error = this.httpErrors.error_422(errorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { userId, role } = bodyValidation.data;
+    const { progressId } = pathValidation.data;
+
+    const response = await this.getLearningContentUseCase.execute(
+      { progressId },
+      { userId, role }
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

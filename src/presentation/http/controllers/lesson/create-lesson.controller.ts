@@ -1,18 +1,13 @@
 import { ICreateLessonUseCase } from "../../../../app/usecases/lesson";
+import { CreateLessonSchema } from "../../../../domain/dtos";
 import {
-  ICreateLessonRequestDTO,
-  Payload,
-  ResponseDTO,
-} from "../../../../domain/dtos";
-import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -26,55 +21,28 @@ export class CreateLessonController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = CreateLessonSchema.safeParse(httpRequest.body ?? {});
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (
-        bodyParams.includes("title") &&
-        bodyParams.includes("description") &&
-        bodyParams.includes("mentorId") &&
-        bodyParams.includes("courseId") &&
-        bodyParams.includes("materials") &&
-        bodyParams.includes("userId") &&
-        bodyParams.includes("role")
-      ) {
-        const {
-          userId,
-          role,
-          title,
-          description,
-          mentorId,
-          materials,
-          courseId,
-        } = httpRequest.body as Payload & ICreateLessonRequestDTO;
-        response = await this.createLessonUseCase.execute(
-          {
-            title,
-            description,
-            mentorId,
-            courseId,
-            materials,
-          },
-          { userId, role }
-        );
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_201(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success) {
+      const firstError = extractFirstZodMessage(bodyValidation.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { userId, role, title, description, mentorId, materials, courseId } =
+      bodyValidation.data;
+
+    const response = await this.createLessonUseCase.execute(
+      { title, description, mentorId, courseId, materials },
+      { userId, role }
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_201(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

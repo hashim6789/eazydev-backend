@@ -1,15 +1,13 @@
 import { IChangePasswordUseCase } from "../../../../app/usecases/user";
-import { IChangePasswordRequestDTO, Payload } from "../../../../domain/dtos";
-import { ResponseDTO } from "../../../../domain/dtos/response";
+import { ChangePasswordRequestSchema } from "../../../../domain/dtos";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -23,39 +21,30 @@ export class ChangePasswordController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = ChangePasswordRequestSchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (
-        bodyParams.includes("role") &&
-        bodyParams.includes("userId") &&
-        bodyParams.includes("newPassword")
-      ) {
-        const { userId, role, newPassword } = httpRequest.body as Payload &
-          IChangePasswordRequestDTO;
-
-        response = await this.changePasswordUseCase.execute(
-          { newPassword },
-          { userId, role }
-        );
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success) {
+      const errorMessage =
+        extractFirstZodMessage(bodyValidation.error) || "Invalid input";
+      const error = this.httpErrors.error_422(errorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { userId, role, newPassword } = bodyValidation.data;
+
+    const response = await this.changePasswordUseCase.execute(
+      { newPassword },
+      { userId, role }
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

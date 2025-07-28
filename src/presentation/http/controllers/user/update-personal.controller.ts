@@ -1,18 +1,13 @@
 import { IUpdatePersonalInfoUseCase } from "../../../../app/usecases/user";
+import { UpdatePersonalInfoBodySchema } from "../../../../domain/dtos";
 import {
-  IUpdatePersonalInfoRequestDTO,
-  Payload,
-} from "../../../../domain/dtos";
-import { ResponseDTO } from "../../../../domain/dtos/response";
-import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -26,40 +21,30 @@ export class UpdatePersonalInfoController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = UpdatePersonalInfoBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (
-        bodyParams.includes("role") &&
-        bodyParams.includes("userId") &&
-        bodyParams.includes("firstName") &&
-        bodyParams.includes("lastName")
-      ) {
-        const { userId, role, firstName, lastName } =
-          httpRequest.body as Payload & IUpdatePersonalInfoRequestDTO;
-
-        response = await this.updatePersonalInfoUseCase.execute(
-          { firstName, lastName },
-          { userId, role }
-        );
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success) {
+      const errorMessage =
+        extractFirstZodMessage(bodyValidation.error) || "Invalid input";
+      const error = this.httpErrors.error_422(errorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { userId, role, firstName, lastName } = bodyValidation.data;
+
+    const response = await this.updatePersonalInfoUseCase.execute(
+      { firstName, lastName },
+      { userId, role }
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

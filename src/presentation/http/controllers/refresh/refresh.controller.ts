@@ -1,15 +1,13 @@
 import { IRefreshTokenUserUseCase } from "../../../../app/usecases/refresh/interfaces/refresh-token.usecas";
-import { Payload } from "../../../../domain/dtos";
-import { ResponseDTO } from "../../../../domain/dtos/response";
+import { RefreshTokenPayloadSchema } from "../../../../domain/dtos";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -34,40 +32,30 @@ export class RefreshTokenUserController implements IController {
    * @returns A promise that resolves to an HTTP response.
    */
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = RefreshTokenPayloadSchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (bodyParams.includes("userId") && bodyParams.includes("role")) {
-        // Extract refresh token ID from the request body
-        const { userId, role } = httpRequest.body as Payload;
-
-        // Execute the refresh token use case
-        response = await this.refreshTokenUserUserCase.execute(
-          // { refreshToken },
-          { userId, role }
-        );
-      } else {
-        // Invalid request body, return a 422 Unprocessable Entity error
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        // Token refresh failed, return a 400 Bad Request error
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      // Token refresh succeeded, return a 200 OK response
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success) {
+      const errorMessage =
+        extractFirstZodMessage(bodyValidation.error) || "Invalid input";
+      const error = this.httpErrors.error_422(errorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    // Invalid request body, return a 500 Internal Server Error
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { userId, role } = bodyValidation.data;
+
+    const response = await this.refreshTokenUserUserCase.execute({
+      userId,
+      role,
+    });
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

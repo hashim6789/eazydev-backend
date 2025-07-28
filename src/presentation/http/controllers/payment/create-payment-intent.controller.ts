@@ -1,16 +1,15 @@
 import { ICreatePaymentIntentUseCase } from "../../../../app/usecases/payment/interfaces";
-import { ResponseDTO } from "../../../../domain/dtos";
+import { CreatePaymentIntentSchema } from "../../../../domain/dtos";
 import { IController } from "../IController";
 
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 
 /**
  * Controller for handling requests to getAll category.
@@ -23,34 +22,26 @@ export class CreatePaymentIntentController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const validationResult = CreatePaymentIntentSchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (bodyParams.includes("courseId") && bodyParams.includes("type")) {
-        const { courseId, type } = httpRequest.body as {
-          courseId: string;
-          type: string;
-        };
-
-        response = await this.createPaymentIntentUseCase.execute(courseId);
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!validationResult.success) {
+      const firstError = extractFirstZodMessage(validationResult.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { courseId } = validationResult.data;
+
+    const response = await this.createPaymentIntentUseCase.execute(courseId);
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

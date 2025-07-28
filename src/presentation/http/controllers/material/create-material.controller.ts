@@ -1,17 +1,13 @@
 import { ICreateMaterialUseCase } from "../../../../app/usecases/material";
-import { Payload } from "../../../../domain/dtos";
-// import { Payload } from "../../../../domain/dtos/jwt-payload";
-import { ICreateMaterialRequestDTO } from "../../../../domain/dtos/material";
-import { ResponseDTO } from "../../../../domain/dtos/response";
+import { CreateMaterialBodySchema } from "../../../../domain/dtos/material";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -25,62 +21,46 @@ export class CreateMaterialController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = CreateMaterialBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (
-        bodyParams.includes("title") &&
-        bodyParams.includes("description") &&
-        // bodyParams.includes("mentorId") &&
-        bodyParams.includes("type") &&
-        bodyParams.includes("fileKey") &&
-        bodyParams.includes("duration") &&
-        // bodyParams.includes("lessonId") &&
-        bodyParams.includes("userId") &&
-        bodyParams.includes("role")
-      ) {
-        const {
-          userId,
-          role,
-          title,
-          description,
-          // mentorId,
-          type,
-          fileKey,
-          duration,
-          // lessonId,
-        } = httpRequest.body as Payload &
-          Omit<ICreateMaterialRequestDTO, "mentorId">;
-        response = await this.createMaterialUseCase.execute(
-          {
-            title,
-            description,
-            mentorId: userId,
-            type,
-            fileKey,
-            duration,
-            // lessonId,
-          },
-          { userId, role }
-        );
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_201(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success) {
+      const firstError = extractFirstZodMessage(bodyValidation.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const {
+      userId,
+      role,
+      title,
+      description,
+      type,
+      fileKey,
+      duration,
+      // lessonId, // optional
+    } = bodyValidation.data;
+
+    const response = await this.createMaterialUseCase.execute(
+      {
+        title,
+        description,
+        mentorId: userId, // derived
+        type,
+        fileKey,
+        duration,
+        // lessonId,
+      },
+      { userId, role }
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_201(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

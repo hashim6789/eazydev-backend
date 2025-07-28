@@ -8,3 +8,9 @@ export enum MaterialErrorType {
   MaterialCreationFailed = "Material creation is failed!",
   MaterialNotFound = "Material is not found!",
 }
+
+export enum MaterialTypes {
+  VIDEO = "video",
+  READING = "reading",
+  ALL = "all",
+}

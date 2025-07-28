@@ -1,20 +1,13 @@
 import { IGetAllMeetingUseCase } from "../../../../app/usecases/meeting/interfaces";
-import {
-  ICreateSlotRequestDTO,
-  Payload,
-  ResponseDTO,
-} from "../../../../domain/dtos";
+import { GetAllMeetingsBodySchema } from "../../../../domain/dtos";
 import {
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
-import {
-  HttpErrors,
-  HttpResponse,
-  HttpSuccess,
-} from "../../helpers/implementations";
+import { HttpResponse } from "../../helpers/implementations";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -28,32 +21,26 @@ export class GetAllMeetingController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = GetAllMeetingsBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (bodyParams.includes("userId") && bodyParams.includes("role")) {
-        const { userId, role, time, mentorId } = httpRequest.body as Payload &
-          ICreateSlotRequestDTO;
-
-        response = await this.getAllMeetingUseCase.execute({ userId, role });
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_201(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success) {
+      const firstError = extractFirstZodMessage(bodyValidation.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { userId, role } = bodyValidation.data;
+
+    const response = await this.getAllMeetingUseCase.execute({ userId, role });
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_201(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

@@ -67,3 +67,14 @@ export const VerifyOtpRequestSchema = z.object({
 });
 
 export type IVerifyOtpRequestDTO = z.infer<typeof VerifyOtpRequestSchema>;
+
+//
+export const ResendOtpBodySchema = z.object({
+  userId: ObjectIdSchema,
+});
+
+//
+export const RefreshTokenPayloadSchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+});

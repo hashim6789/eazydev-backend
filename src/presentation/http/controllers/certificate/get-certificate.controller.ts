@@ -1,18 +1,16 @@
 import { IGetCertificateUseCase } from "../../../../app/usecases/certificate/interfaces/create-certificate.usecase";
 import {
-  IGetCertificateRequestDTO,
-  Payload,
-  ResponseDTO,
+  GetCertificateBodySchema,
+  GetCertificatePathSchema,
 } from "../../../../domain/dtos";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -26,46 +24,39 @@ export class GetCertificateController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = GetCertificateBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
+    const pathValidation = GetCertificatePathSchema.safeParse(
+      httpRequest.path ?? {}
+    );
 
-    if (
-      httpRequest.body &&
-      Object.keys(httpRequest.body).length > 0 &&
-      httpRequest.path &&
-      Object.keys(httpRequest.path).length > 0
-    ) {
-      const bodyParams = Object.keys(httpRequest.body);
-      const pathParams = Object.keys(httpRequest.path);
-
-      if (
-        pathParams.includes("progressId") &&
-        bodyParams.includes("userId") &&
-        bodyParams.includes("role")
-      ) {
-        const { userId, role } = httpRequest.body as Payload;
-        const { progressId } = httpRequest.path as IGetCertificateRequestDTO;
-        response = await this.getCertificateUseCase.execute(
-          {
-            progressId,
-          },
-          { userId, role }
-        );
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_201(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success) {
+      const firstError = extractFirstZodMessage(bodyValidation.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    if (!pathValidation.success) {
+      const firstError = extractFirstZodMessage(pathValidation.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
+    }
+
+    const { userId, role } = bodyValidation.data;
+    const { progressId } = pathValidation.data;
+
+    const response = await this.getCertificateUseCase.execute(
+      { progressId },
+      { userId, role }
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_201(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

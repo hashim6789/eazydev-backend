@@ -1,16 +1,13 @@
 import { IMaterialContentUploadUseCase } from "../../../../app/usecases/upload/interface/material-conent-upload.usecase";
-import { Payload } from "../../../../domain/dtos/jwt-payload";
-import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IUploadMaterialRequestDTO } from "../../../../domain/dtos/upload";
+import { UploadMaterialRequestSchema } from "../../../../domain/dtos/upload";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -24,41 +21,31 @@ export class UploadMaterialContentController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = UploadMaterialRequestSchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (
-        bodyParams.includes("fileName") &&
-        bodyParams.includes("fileType") &&
-        bodyParams.includes("materialType") &&
-        bodyParams.includes("userId") &&
-        bodyParams.includes("role")
-      ) {
-        const { fileName, fileType, materialType, userId, role } =
-          httpRequest.body as IUploadMaterialRequestDTO & Payload;
-
-        response = await this.materialContentUploadUseCase.execute(
-          { fileName, fileType, materialType },
-          { userId, role }
-        );
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success) {
+      const errorMessage =
+        extractFirstZodMessage(bodyValidation.error) || "Invalid input";
+      const error = this.httpErrors.error_422(errorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { fileName, fileType, materialType, userId, role } =
+      bodyValidation.data;
+
+    const response = await this.materialContentUploadUseCase.execute(
+      { fileName, fileType, materialType },
+      { userId, role }
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

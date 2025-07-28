@@ -1,15 +1,16 @@
 import { IBlockUserUseCase } from "../../../../app/usecases/user/interfaces/block-user.usecase";
-import { ResponseDTO } from "../../../../domain/dtos/response";
-
 import {
-  HttpErrors,
+  BlockUserBodySchema,
+  BlockUserPathSchema,
+} from "../../../../domain/dtos";
+import {
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -23,38 +24,36 @@ export class BlockUserController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = BlockUserBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
+    const pathValidation = BlockUserPathSchema.safeParse(
+      httpRequest.path ?? {}
+    );
 
-    if (
-      httpRequest.body &&
-      httpRequest.path &&
-      Object.keys(httpRequest.body) &&
-      Object.keys(httpRequest.path).length > 0
-    ) {
-      const bodyParams = Object.keys(httpRequest.body);
-      const pathParams = Object.keys(httpRequest.path);
-
-      if (bodyParams.includes("change") && pathParams.includes("userId")) {
-        const { userId } = httpRequest.path as { userId: string };
-        const { change } = httpRequest.body as { change: boolean };
-
-        response = await this.blockUserCase.execute({ userId, change });
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success || !pathValidation.success) {
+      const bodyMsg = bodyValidation.success
+        ? null
+        : extractFirstZodMessage(bodyValidation.error);
+      const pathMsg = pathValidation.success
+        ? null
+        : extractFirstZodMessage(pathValidation.error);
+      const errorMessage = bodyMsg ?? pathMsg ?? "Invalid input";
+      const error = this.httpErrors.error_422(errorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { change } = bodyValidation.data;
+    const { userId } = pathValidation.data;
+
+    const response = await this.blockUserCase.execute({ userId, change });
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

@@ -1,16 +1,16 @@
 import { IGetAllProgressUseCase } from "../../../../app/usecases/progress";
-import { Payload } from "../../../../domain/dtos/jwt-payload";
-import { QueryProgress } from "../../../../domain/dtos/progress";
-import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
-  HttpErrors,
+  GetProgressBodySchema,
+  QueryProgress,
+} from "../../../../domain/dtos/progress";
+import {
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -24,35 +24,30 @@ export class GetAllProgressController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = GetProgressBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (bodyParams.includes("userId") && bodyParams.includes("role")) {
-        const query = httpRequest.query as QueryProgress;
-
-        const { userId, role } = httpRequest.body as Payload;
-        response = await this.getAllProgressUseCase.execute(query, {
-          userId,
-          role,
-        });
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success) {
+      const firstError = extractFirstZodMessage(bodyValidation.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const query = httpRequest.query as QueryProgress;
+    const { userId, role } = bodyValidation.data;
+
+    const response = await this.getAllProgressUseCase.execute(query, {
+      userId,
+      role,
+    });
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

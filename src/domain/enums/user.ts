@@ -41,3 +41,13 @@ export enum UserErrorType {
   UserInvalidRole = "User invalid role!",
   newPasswordNotValid = "User new password invalid role!",
 }
+
+export enum UserSorts {
+  ASC = "ASC",
+  DESC = "DEC",
+}
+export enum UserStatuses {
+  BLOCKED = "blocked",
+  UNBLOCKED = "unblocked",
+  ALL = "all",
+}

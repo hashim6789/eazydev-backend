@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { ObjectIdSchema } from "./common";
+import { RoleTypes } from "../enums";
 export interface INotificationOutDTO {
   id: string;
   title: string;
@@ -11,3 +14,10 @@ export type IGetAllNotificationRequestDTO = Pick<
   ICreateNotificationInDTO,
   "recipientId"
 >;
+
+//
+
+export const GetNotificationsBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+});

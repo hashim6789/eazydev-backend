@@ -1,18 +1,16 @@
 import { IUpdateStatusCourseUseCase } from "../../../../app/usecases/course";
 import {
-  IUpdateStatusCourseRequestDTO,
-  Payload,
-  ResponseDTO,
+  UpdateCourseStatusBodySchema,
+  UpdateCourseStatusPathSchema,
 } from "../../../../domain/dtos";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -26,53 +24,39 @@ export class UpdateStatusCourseController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const pathValidation = UpdateCourseStatusPathSchema.safeParse(
+      httpRequest.path ?? {}
+    );
+    const bodyValidation = UpdateCourseStatusBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (
-      httpRequest.body &&
-      httpRequest.path &&
-      Object.keys(httpRequest.body).length > 0 &&
-      Object.keys(httpRequest.path).length > 0
-    ) {
-      const bodyParams = Object.keys(httpRequest.body);
-      const pathParams = Object.keys(httpRequest.path);
-
-      if (
-        pathParams.includes("courseId") &&
-        bodyParams.includes("newStatus") &&
-        bodyParams.includes("userId") &&
-        bodyParams.includes("role")
-      ) {
-        const { userId, role, newStatus } = httpRequest.body as Payload &
-          Pick<IUpdateStatusCourseRequestDTO, "newStatus">;
-        const { courseId } = httpRequest.path as Omit<
-          IUpdateStatusCourseRequestDTO,
-          "newStatus"
-        >;
-
-        response = await this.updateStatusCourseUseCase.execute(
-          {
-            courseId,
-            newStatus,
-          },
-          { userId, role }
-        );
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!pathValidation.success || !bodyValidation.success) {
+      const pathError = !pathValidation.success
+        ? extractFirstZodMessage(pathValidation.error)
+        : null;
+      const bodyError = !bodyValidation.success
+        ? extractFirstZodMessage(bodyValidation.error)
+        : null;
+      const errorMessage = pathError || bodyError || "Invalid input";
+      const error = this.httpErrors.error_422(errorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { courseId } = pathValidation.data;
+    const { userId, role, newStatus } = bodyValidation.data;
+
+    const response = await this.updateStatusCourseUseCase.execute(
+      { courseId, newStatus },
+      { userId, role }
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

@@ -1,14 +1,18 @@
 import { IGetAllSlotUseCase } from "../../../../app/usecases/slot";
-import { Payload, ResponseDTO } from "../../../../domain/dtos";
 import {
-  HttpErrors,
+  GetAllSlotByMentorBodySchema,
+  GetAllSlotByMentorPathSchema,
+  Payload,
+  ResponseDTO,
+} from "../../../../domain/dtos";
+import {
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -22,45 +26,39 @@ export class GetSlotsLearnerController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = GetAllSlotByMentorBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
+    const pathValidation = GetAllSlotByMentorPathSchema.safeParse(
+      httpRequest.path ?? {}
+    );
 
-    if (
-      httpRequest.body &&
-      Object.keys(httpRequest.body).length > 0 &&
-      httpRequest.path &&
-      Object.keys(httpRequest.path).length > 0
-    ) {
-      const bodyParams = Object.keys(httpRequest.body);
-      const pathParams = Object.keys(httpRequest.path);
-
-      if (
-        bodyParams.includes("userId") &&
-        bodyParams.includes("role") &&
-        pathParams.includes("mentorId")
-      ) {
-        const { userId, role } = httpRequest.body as Payload;
-        const { mentorId } = httpRequest.path as { mentorId: string };
-
-        response = await this.getAllSlotUseCase.execute({
-          userId: mentorId,
-          role,
-        });
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success || !pathValidation.success) {
+      const bodyMsg = bodyValidation.success
+        ? null
+        : extractFirstZodMessage(bodyValidation.error);
+      const pathMsg = pathValidation.success
+        ? null
+        : extractFirstZodMessage(pathValidation.error);
+      const errorMessage = bodyMsg ?? pathMsg ?? "Invalid input";
+      const error = this.httpErrors.error_422(errorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { userId, role } = bodyValidation.data;
+    const { mentorId } = pathValidation.data;
+
+    const response = await this.getAllSlotUseCase.execute({
+      userId: mentorId, // still mapped intentionally as per original logic
+      role,
+    });
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }
