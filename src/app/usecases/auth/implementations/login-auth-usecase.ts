@@ -1,8 +1,7 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { ILoginRequestDTO } from "../../../../domain/dtos/auth/login-auth.dto";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
 import { IUsersRepository } from "../../../../infra/repositories";
-import { IUserValidDTO } from "../../../../domain/dtos";
+import { ILoginRequestDTO, IUserValidDTO } from "../../../../domain/dtos";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 import {
   IGenerateTokenProvider,

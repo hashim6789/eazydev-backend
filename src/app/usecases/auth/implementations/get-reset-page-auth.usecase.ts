@@ -2,9 +2,9 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { ITokenRepository } from "../../../../infra/repositories";
 import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { IGetResetPageUseCase } from "../interfaces";
-import { IGetResetPageRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
 import { TokenErrorType } from "../../../../domain/enums/token";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IGetResetPageRequestDTO } from "../../../../domain/dtos";
 
 export class GetResetPageUseCase implements IGetResetPageUseCase {
   constructor(private tokenRepository: ITokenRepository) {}

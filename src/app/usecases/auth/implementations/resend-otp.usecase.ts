@@ -4,8 +4,10 @@ import {
   IUsersRepository,
 } from "../../../../infra/repositories";
 import { IResendOtpUseCase } from "../interfaces/resend-otp-usecase";
-import { IResendOtpRequestDTO } from "../../../../domain/dtos/auth/resend-otp-auth.dto";
-import { IUserDetailOutDTO } from "../../../../domain/dtos";
+import {
+  IResendOtpRequestDTO,
+  IUserDetailOutDTO,
+} from "../../../../domain/dtos";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 import {
   IGenerateOtpProvider,

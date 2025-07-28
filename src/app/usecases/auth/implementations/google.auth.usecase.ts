@@ -2,10 +2,13 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { UserEntity } from "../../../../domain/entities/user";
 import { UserErrorType } from "../../../../domain/enums/user";
 import { IUsersRepository } from "../../../../infra/repositories";
-import { IGoogleRequestDTO } from "../../../../domain/dtos/auth/google-auth.dto";
 import { IGoogleLoginUseCase } from "../interfaces/google-login.usecase";
 import axios from "axios";
-import { IUserOutRequestDTO, IUserValidDTO } from "../../../../domain/dtos";
+import {
+  IGoogleLoginRequestDTO,
+  IUserOutRequestDTO,
+  IUserValidDTO,
+} from "../../../../domain/dtos";
 import { SignupRole } from "../../../../domain/types/user";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { IGenerateTokenProvider } from "../../../../infra/providers";
@@ -53,7 +56,7 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
   async execute({
     googleToken,
     role,
-  }: IGoogleRequestDTO): Promise<ResponseDTO> {
+  }: IGoogleLoginRequestDTO): Promise<ResponseDTO> {
     console.log("usecase");
     try {
       const data = await this.getGoogleUserData(googleToken);

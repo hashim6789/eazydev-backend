@@ -1,14 +1,12 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { ISignupRequestDTO } from "../../../../domain/dtos/auth";
 import { UserEntity } from "../../../../domain/entities/user";
 import { UserErrorType } from "../../../../domain/enums/user";
 import {
-  ITokenRepository,
   IUsersRepository,
   IOtpRepository,
 } from "../../../../infra/repositories";
 
-import { IUserInRequestDTO } from "../../../../domain/dtos";
+import { ISignupRequestDTO, IUserInRequestDTO } from "../../../../domain/dtos";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 import {
   IGenerateOtpProvider,

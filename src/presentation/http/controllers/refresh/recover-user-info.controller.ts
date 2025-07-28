@@ -1,10 +1,9 @@
 import { IRecoverUserInformationUseCase } from "../../../../app/usecases/refresh/interfaces/recover-user-info.usecase";
-import { IResendOtpRequestDTO } from "../../../../domain/dtos/auth/resend-otp-auth.dto";
+import { IResendOtpRequestDTO } from "../../../../domain/dtos";
+
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,

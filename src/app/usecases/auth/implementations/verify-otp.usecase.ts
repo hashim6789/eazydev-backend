@@ -7,10 +7,10 @@ import {
 import { OtpDTO } from "../../../../domain/dtos/auth/otp-auth-dto";
 import { OtpErrorType } from "../../../../domain/enums/otp";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IVerifyOtpRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
 import { UserEntity } from "../../../../domain/entities/user";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { IPasswordHasher } from "../../../../infra/providers";
+import { IVerifyOtpRequestDTO } from "../../../../domain/dtos";
 
 export class VerifyOtpUseCase implements IVerifyOtpUseCase {
   constructor(

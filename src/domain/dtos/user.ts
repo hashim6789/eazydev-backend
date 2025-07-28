@@ -1,10 +1,4 @@
 import { Role, SignupRole } from "../types";
-import { ICourseOutSimplePopulateDTO } from "./course";
-
-export interface IForgotPasswordRequestDTO {
-  email: string;
-  role: Role;
-}
 
 export interface ICreateUserRequestDTO {
   firstName: string;

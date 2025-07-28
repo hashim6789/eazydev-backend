@@ -1,15 +1,13 @@
 import { IResetPasswordUseCase } from "../../../../app/usecases/auth";
-import { IResetPasswordRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
-import { ResponseDTO } from "../../../../domain/dtos/response";
+import { ResetPasswordRequestSchema } from "../../../../domain/dtos/auth";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -23,40 +21,25 @@ export class ResetPasswordController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const validation = ResetPasswordRequestSchema.safeParse(httpRequest.body);
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (
-        bodyParams.includes("tokenId") &&
-        bodyParams.includes("role") &&
-        bodyParams.includes("password")
-      ) {
-        const { tokenId, role, password } =
-          httpRequest.body as IResetPasswordRequestDTO;
-
-        response = await this.resetPasswordUseCase.execute({
-          tokenId,
-          role,
-          password,
-        });
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!validation.success) {
+      const firstErrorMessage = extractFirstZodMessage(validation.error); // your utility
+      const error = this.httpErrors.error_422(firstErrorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const resetPasswordRequestDTO = validation.data;
+    const response = await this.resetPasswordUseCase.execute(
+      resetPasswordRequestDTO
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

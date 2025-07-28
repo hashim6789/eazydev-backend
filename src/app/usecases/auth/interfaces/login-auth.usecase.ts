@@ -1,4 +1,4 @@
-import { ILoginRequestDTO } from "../../../../domain/dtos/auth/login-auth.dto";
+import { ILoginRequestDTO } from "../../../../domain/dtos";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 
 export interface ILoginUseCase {

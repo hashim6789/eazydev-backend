@@ -5,7 +5,7 @@ import {
 } from "../../../../infra/repositories";
 import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { IResetPasswordUseCase } from "../interfaces";
-import { IResetPasswordRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
+import { IResetPasswordRequestDTO } from "../../../../domain/dtos/auth";
 import { TokenErrorType } from "../../../../domain/enums/token";
 import { IUserValidDTO } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums";

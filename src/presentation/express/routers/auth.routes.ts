@@ -62,7 +62,7 @@ authRouter.post("/login", async (request: Request, response: Response) => {
   }
   response
     .status(adapter.statusCode)
-    .json(adapter.statusCode === 400 ? adapter.body : adapter.body.user);
+    .json(adapter.statusCode === 200 ? adapter.body.user : adapter.body);
 });
 
 // /**
