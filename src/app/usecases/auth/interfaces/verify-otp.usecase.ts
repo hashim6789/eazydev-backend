@@ -1,4 +1,4 @@
-import { IVerifyOtpRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
+import { IVerifyOtpRequestDTO } from "../../../../domain/dtos";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 
 export interface IVerifyOtpUseCase {

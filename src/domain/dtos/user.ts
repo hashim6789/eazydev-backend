@@ -201,6 +201,8 @@ export const UpdatePersonalInfoBodySchema = z.object({
 
 //
 export const UpdateProfilePictureBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.enum(["learner", "mentor"]),
   profilePicture: z.string().url("profilePicture must be a valid URL"),
 });
 

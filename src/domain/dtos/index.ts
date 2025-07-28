@@ -14,3 +14,4 @@ export * from "./user";
 export * from "./certificate";
 export * from "./otp";
 export * from "./common";
+export * from "./upload";

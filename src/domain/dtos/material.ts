@@ -68,7 +68,7 @@ export const CreateMaterialBodySchema = z.object({
   role: z.nativeEnum(RoleTypes),
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  type: z.nativeEnum(MaterialTypes),
+  type: z.enum(["video", "reading"]),
   fileKey: z.string().min(1, "File key is required"),
   duration: z.number().min(5).max(60, "Duration must be between 5 and 60"),
   // lessonId: ObjectIdSchema.optional(), // include if needed

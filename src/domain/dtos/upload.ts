@@ -1,6 +1,7 @@
-import { z } from "zod";
+import { string, z } from "zod";
 import { ObjectIdSchema } from "./common";
 import { RoleTypes } from "../enums";
+import { MaterialType } from "../types";
 
 export const UploadMaterialRequestSchema = z.object({
   fileName: z.string().min(1, "Filename is required"),
@@ -9,3 +10,9 @@ export const UploadMaterialRequestSchema = z.object({
   userId: ObjectIdSchema,
   role: z.nativeEnum(RoleTypes),
 });
+
+export interface IUploadMaterialRequestDTO {
+  fileName: string;
+  fileType: string;
+  materialType: MaterialType;
+}
