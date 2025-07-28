@@ -3,6 +3,8 @@ import {
   IUpdateCategoryRequestDTO,
   Payload,
   ResponseDTO,
+  UpdateCategoryBodySchema,
+  UpdateCategoryPathSchema,
 } from "../../../../domain/dtos";
 import {
   HttpErrors,
@@ -13,6 +15,7 @@ import {
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -26,51 +29,40 @@ export class updateCategoryController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const bodyValidation = UpdateCategoryBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
+    const pathValidation = UpdateCategoryPathSchema.safeParse(
+      httpRequest.path ?? {}
+    );
 
-    if (
-      httpRequest.body &&
-      httpRequest.path &&
-      Object.keys(httpRequest.path).length > 0 &&
-      Object.keys(httpRequest.body).length > 0
-    ) {
-      const bodyParams = Object.keys(httpRequest.body);
-      const pathParams = Object.keys(httpRequest.path);
-
-      if (
-        pathParams.includes("categoryId") &&
-        bodyParams.includes("title") &&
-        bodyParams.includes("adminId") &&
-        bodyParams.includes("userId") &&
-        bodyParams.includes("role")
-      ) {
-        const { userId, role, title, adminId } = httpRequest.body as Payload &
-          IUpdateCategoryRequestDTO;
-        const { categoryId } = httpRequest.path as { categoryId: string };
-        response = await this.updateCategoryUseCase.execute(
-          {
-            title,
-            adminId,
-            categoryId,
-          },
-          { userId, role }
-        );
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!bodyValidation.success) {
+      const firstError = extractFirstZodMessage(bodyValidation.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    if (!pathValidation.success) {
+      const firstError = extractFirstZodMessage(pathValidation.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
+    }
+
+    const { title, adminId, userId, role } = bodyValidation.data;
+
+    const { categoryId } = pathValidation.data;
+
+    const response = await this.updateCategoryUseCase.execute(
+      { title, adminId, categoryId },
+      { userId, role }
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

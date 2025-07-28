@@ -11,3 +11,9 @@ export enum CategoryErrorType {
   CategoryNotFound = "Category is not found!",
   CategoryAlreadyExist = "Category is already exist!",
 }
+
+export enum CategoryTypes {
+  LISTED = "listed",
+  UNLISTED = "unlisted",
+  ALL = "all",
+}

@@ -1,8 +1,6 @@
 import { IGetAdminAnalyzeUseCase } from "../../../../app/usecases/analyze";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,

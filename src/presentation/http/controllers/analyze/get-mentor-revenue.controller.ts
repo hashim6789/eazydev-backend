@@ -1,14 +1,13 @@
 import { IGetMentorRevenueAnalyzeUseCase } from "../../../../app/usecases/analyze";
-import { Payload, ResponseDTO } from "../../../../domain/dtos";
+import { PayloadSchema } from "../../../../domain/dtos";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -22,30 +21,23 @@ export class GetMentorRevenueAnalysisController implements IController {
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const validation = PayloadSchema.safeParse(httpRequest.body);
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (bodyParams.includes("userId") && bodyParams.includes("role")) {
-        const { userId, role } = httpRequest.body as Payload;
-        response = await this.getMentorRevenueAnalyzeUseCase.execute(userId);
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_201(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!validation.success) {
+      const firstError = extractFirstZodMessage(validation.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { userId } = validation.data;
+    const response = await this.getMentorRevenueAnalyzeUseCase.execute(userId);
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_201(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }
