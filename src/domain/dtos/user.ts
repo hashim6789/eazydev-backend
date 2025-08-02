@@ -48,7 +48,7 @@ export interface QueryUser {
   status: "blocked" | "unblocked" | "all";
   search: string;
   page: string;
-  sort: "ASC" | "DEC";
+  // sort: "ASC" | "DEC";
   limit: string;
 }
 
@@ -167,7 +167,7 @@ export const ChangePasswordRequestSchema = z.object({
 // Optional: z.enum([...]) if roles/status are predefined
 export const GetAllUserQuerySchema = z.object({
   role: z.nativeEnum(RoleTypes),
-  sort: z.nativeEnum(UserSorts),
+  // sort: z.nativeEnum(UserSorts),
   status: z.nativeEnum(UserStatuses),
   search: z.string(),
   page: zStringPositiveInteger("Page"),
