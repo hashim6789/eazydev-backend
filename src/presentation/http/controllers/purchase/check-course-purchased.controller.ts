@@ -1,5 +1,9 @@
-import { IGetAllPurchaseUseCase } from "../../../../app/usecases/purchase/interfaces";
 import {
+  ICheckCoursePurchasedUseCase,
+  IGetAllPurchaseUseCase,
+} from "../../../../app/usecases/purchase/interfaces";
+import {
+  CheckCoursePurchasedPathSchema,
   GetAllPurchasesBodySchema,
   PaginationSchema,
   PayloadSchema,
@@ -17,20 +21,22 @@ import { IController } from "../IController";
 /**
  * Controller for handling requests to create a user.
  */
-export class GetAllPurchaseController implements IController {
+export class CheckCoursePurchasedController implements IController {
   constructor(
-    private getAllPurchaseUseCase: IGetAllPurchaseUseCase,
+    private checkCoursePurchasedUseCase: ICheckCoursePurchasedUseCase,
     private httpErrors: IHttpErrors,
     private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    const queryValidation = PaginationSchema.safeParse(httpRequest.query ?? {});
+    const pathValidation = CheckCoursePurchasedPathSchema.safeParse(
+      httpRequest.path ?? {}
+    );
     const userValidation = PayloadSchema.safeParse(httpRequest.body ?? {});
 
-    if (!queryValidation.success || !userValidation.success) {
-      const queryError = !queryValidation.success
-        ? extractFirstZodMessage(queryValidation.error)
+    if (!pathValidation.success || !userValidation.success) {
+      const queryError = !pathValidation.success
+        ? extractFirstZodMessage(pathValidation.error)
         : null;
       const userError = !userValidation.success
         ? extractFirstZodMessage(userValidation.error)
@@ -40,10 +46,10 @@ export class GetAllPurchaseController implements IController {
       return new HttpResponse(error.statusCode, error.body);
     }
 
-    const query = queryValidation.data;
+    const { courseId } = pathValidation.data;
     const { userId, role } = userValidation.data;
 
-    const response = await this.getAllPurchaseUseCase.execute(query, {
+    const response = await this.checkCoursePurchasedUseCase.execute(courseId, {
       userId,
       role,
     });

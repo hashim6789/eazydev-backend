@@ -40,6 +40,9 @@ export const GetCertificateBodySchema = z.object({
 export const GetCertificatePathSchema = z.object({
   progressId: ObjectIdSchema,
 });
+export const GetPreviewCertificatePathSchema = z.object({
+  certificateId: ObjectIdSchema,
+});
 
 export type GetCertificateBodyDTO = z.infer<typeof GetCertificateBodySchema>;
 export type GetCertificatePathDTO = z.infer<typeof GetCertificatePathSchema>;

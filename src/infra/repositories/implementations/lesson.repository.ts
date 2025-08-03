@@ -1,10 +1,5 @@
 import { Model } from "mongoose";
-import {
-  // ICreateLessonInDTO,
-  // ILessonOutDTO,
-  // IUpdateLessonRequestDTO,
-  ILessonOutPopulateDTO,
-} from "../../../domain/dtos";
+import { ILessonOutPopulateDTO } from "../../../domain/dtos";
 import { ILesson } from "../../databases/interfaces";
 import { MaterialType } from "../../../domain/types";
 import { ILessonRepository } from "../interfaces";
@@ -14,34 +9,9 @@ export class LessonRepository
   extends BaseRepository<ILesson>
   implements ILessonRepository
 {
-  // private model: Model<ILesson>;
-
   constructor(model: Model<ILesson>) {
     super(model);
-    // this.model = model;
   }
-  // async create(data: ICreateLessonInDTO): Promise<ILessonOutDTO> {
-  //   try {
-  //     const createData = new this.model({
-  //       title: data.title,
-  //       description: data.description,
-  //       mentorId: data.mentorId,
-  //       materials: data.materials,
-  //     });
-  //     const lesson = await createData.save();
-
-  //     return {
-  //       id: lesson._id.toString(),
-  //       title: lesson.title,
-  //       mentorId: lesson.mentorId.toString(),
-  //       description: lesson.description,
-  //       materials: lesson.materials.map((item) => item.toString()),
-  //     };
-  //   } catch (error) {
-  //     console.error("Error while creating lesson:", error);
-  //     throw new Error("Lesson creation failed");
-  //   }
-  // }
 
   async addMaterialToLesson(
     lessonId: string,
@@ -82,12 +52,6 @@ export class LessonRepository
         };
       });
 
-      // const { firstName, lastName, profilePicture } =
-      //   course.mentorId as unknown as {
-      //     firstName: string;
-      //     lastName: string;
-      //     profilePicture: string;
-      //   };
       return {
         id: lesson._id.toString(),
         title: lesson.title,
@@ -100,30 +64,4 @@ export class LessonRepository
       throw new Error("Course fetch failed");
     }
   }
-
-  // async update(
-  //   id: string,
-  //   data: IUpdateLessonRequestDTO
-  // ): Promise<ILessonOutDTO | null> {
-  //   try {
-  //     const lesson = await this.model.findByIdAndUpdate(id, {
-  //       ...data,
-  //       materials: data.materials.map(
-  //         (item) => new mongoose.Types.ObjectId(item)
-  //       ),
-  //     });
-  //     if (!lesson) return null;
-
-  //     return {
-  //       id: lesson._id.toString(),
-  //       title: lesson.title,
-  //       mentorId: lesson.mentorId.toString(),
-  //       description: lesson.description,
-  //       materials: lesson.materials.map((item) => item.toString()),
-  //     };
-  //   } catch (error) {
-  //     console.error("Error while creating lesson:", error);
-  //     throw new Error("Lesson creation failed");
-  //   }
-  // }
 }

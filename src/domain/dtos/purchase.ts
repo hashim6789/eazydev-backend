@@ -67,3 +67,6 @@ export const GetPurchaseBodySchema = z.object({
 });
 
 //
+export const CheckCoursePurchasedPathSchema = z.object({
+  courseId: ObjectIdSchema,
+});

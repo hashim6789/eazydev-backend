@@ -1,4 +1,4 @@
-import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
+import { PaginationDTO } from "../../../domain/dtos";
 import {
   ICreateUserRequestDTO,
   QueryUser,

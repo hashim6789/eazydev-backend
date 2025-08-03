@@ -6,7 +6,7 @@ import {
   ICourseSimpleOutDTO,
   QueryCourse,
 } from "../../../domain/dtos/course";
-import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
+import { PaginationDTO } from "../../../domain/dtos";
 import { CourseStatus } from "../../../domain/types";
 import { ICourse } from "../../databases/interfaces";
 import { IBaseRepository } from "./base.repository";

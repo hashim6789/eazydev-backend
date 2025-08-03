@@ -4,6 +4,7 @@ import {
   ICreatePurchaseInDTO,
   IPurchaseOutDTO,
   IPurchaseOutPopulatedDTO,
+  SimplePagination,
 } from "../../../domain/dtos";
 import { PaginationDTO } from "../../../domain/dtos";
 import {
@@ -17,6 +18,7 @@ import {
 } from "../../pipelines";
 import { mentorRevenuePipeline } from "../../pipelines/purchase";
 import { IPurchaseRepository } from "../interfaces";
+import { mapDocumentToPurchase } from "../../databases/mappers";
 
 export class PurchaseRepository implements IPurchaseRepository {
   private model: Model<IPurchase>;
@@ -81,33 +83,27 @@ export class PurchaseRepository implements IPurchaseRepository {
     }
   }
 
-  async findAllByUser(userId: string): Promise<PaginationDTO | null> {
+  async findAllByUser(
+    userId: string,
+    { page = "1", limit = "5" }: SimplePagination
+  ): Promise<PaginationDTO | null> {
     try {
+      const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+      const limitParsed = parseInt(limit, 10);
+
       // Fetch purchases with query, pagination, and sorting
       const purchases = await this.model
         .find({ learnerId: userId })
         .populate("courseId", "title")
-        .lean();
+        .skip(skip)
+        .limit(limitParsed);
+      if (!purchases) return null;
+      const total = await this.model.countDocuments({ learnerId: userId });
       return {
-        body: purchases.map((purchase) => {
-          const { title, _id: courseId } = purchase.courseId as unknown as {
-            title: string;
-            _id: string;
-          };
-          return {
-            id: purchase._id.toString(),
-            learnerId: purchase.learnerId.toString(),
-            course: { title, id: courseId },
-            purchaseId: purchase.purchaseId,
-            paymentIntentId: purchase.paymentIntentId,
-            status: purchase.status,
-            amount: purchase.amount,
-            purchaseDate: purchase.purchaseDate.getTime(),
-          };
-        }),
-        total: 0,
-        page: 0,
-        last_page: 0,
+        body: purchases.map(mapDocumentToPurchase),
+        total,
+        page: parseInt(page, 10),
+        last_page: Math.ceil(total / limitParsed),
       };
     } catch (error) {
       console.error("Error while fetching purchases:", error);
@@ -149,6 +145,21 @@ export class PurchaseRepository implements IPurchaseRepository {
     } catch (error) {
       console.error("Error while analyzing monthly revenue purchases:", error);
       throw new Error("revenue fetch failed");
+    }
+  }
+
+  async findOne(
+    filter: Partial<ICreatePurchaseInDTO>
+  ): Promise<IPurchase | null> {
+    try {
+      const purchase = await this.model.findOne(filter);
+      if (!purchase) return null;
+
+      if (!purchase) return null;
+      return purchase;
+    } catch (error) {
+      console.error("Error while creating purchase:", error);
+      throw new Error("Purchase creation failed");
     }
   }
 }

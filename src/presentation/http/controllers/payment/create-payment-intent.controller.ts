@@ -1,5 +1,8 @@
 import { ICreatePaymentIntentUseCase } from "../../../../app/usecases/payment/interfaces";
-import { CreatePaymentIntentSchema } from "../../../../domain/dtos";
+import {
+  CreatePaymentIntentSchema,
+  PayloadSchema,
+} from "../../../../domain/dtos";
 import { IController } from "../IController";
 
 import {
@@ -26,15 +29,27 @@ export class CreatePaymentIntentController implements IController {
       httpRequest.body ?? {}
     );
 
-    if (!validationResult.success) {
-      const firstError = extractFirstZodMessage(validationResult.error);
-      const error = this.httpErrors.error_422(firstError);
+    const userValidation = PayloadSchema.safeParse(httpRequest.body ?? {});
+
+    if (!validationResult.success || !userValidation.success) {
+      const queryError = !validationResult.success
+        ? extractFirstZodMessage(validationResult.error)
+        : null;
+      const userError = !userValidation.success
+        ? extractFirstZodMessage(userValidation.error)
+        : null;
+      const errorMessage = queryError || userError || "Invalid request";
+      const error = this.httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
+    const { userId, role } = userValidation.data;
     const { courseId } = validationResult.data;
 
-    const response = await this.createPaymentIntentUseCase.execute(courseId);
+    const response = await this.createPaymentIntentUseCase.execute(courseId, {
+      userId,
+      role,
+    });
 
     if (!response.success) {
       const error = this.httpErrors.error_400();

@@ -1,19 +1,48 @@
-import { ResponseDTO } from "../../../../domain/dtos";
-import { PaymentErrorType } from "../../../../domain/enums";
+import { IUserOut, Payload, ResponseDTO } from "../../../../domain/dtos";
+import {
+  AuthenticateUserErrorType,
+  PaymentErrorType,
+} from "../../../../domain/enums";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
-import { ICourseRepository } from "../../../../infra/repositories";
+import {
+  ICourseRepository,
+  IProgressRepository,
+  IUsersRepository,
+} from "../../../../infra/repositories";
 import { ICreatePaymentIntentUseCase } from "../interfaces";
 import Stripe from "stripe";
 
 export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
   constructor(
     private courseRepository: ICourseRepository,
+    private userRepository: IUsersRepository,
+    private progressRepository: IProgressRepository,
     private stripe: Stripe
   ) {}
 
-  async execute(courseId: string): Promise<ResponseDTO> {
+  async execute(
+    courseId: string,
+    { userId, role }: Payload
+  ): Promise<ResponseDTO> {
     try {
       console.log("courseId", courseId);
+
+      if (role !== "learner") {
+        return {
+          success: false,
+          data: { error: AuthenticateUserErrorType.UserCanNotDoIt },
+        };
+      }
+
+      const learner = (await this.userRepository.findById(
+        userId
+      )) as IUserOut | null;
+      if (!learner) {
+        return {
+          success: false,
+          data: { error: AuthenticateUserErrorType.UserCanNotDoIt },
+        };
+      }
 
       const course = await this.courseRepository.findById(courseId);
       if (!course) {
@@ -27,6 +56,18 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         return {
           success: false,
           data: { error: PaymentErrorType.CourseUnavailable },
+        };
+      }
+
+      const existingProgress = await this.progressRepository.findOne({
+        userId,
+        courseId,
+      });
+
+      if (existingProgress) {
+        return {
+          success: false,
+          data: { error: PaymentErrorType.CourseAlreadyPurchased },
         };
       }
 

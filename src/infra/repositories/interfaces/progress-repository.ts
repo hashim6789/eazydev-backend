@@ -3,7 +3,7 @@ import {
   PopulatedProgressLearningsDTO,
   QueryProgress,
 } from "../../../domain/dtos";
-import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
+import { PaginationDTO } from "../../../domain/dtos";
 // import { ProgressEntity } from "../../../domain/entities/progress";
 import { CoursePerformanceData } from "../../../domain/types/analysis";
 import { IProgress } from "../../databases/interfaces";
