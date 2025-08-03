@@ -5,7 +5,7 @@ import {
   IMaterialPopulateMentorDTO,
   QueryMaterial,
 } from "../../../domain/dtos/material";
-import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
+import { PaginationDTO } from "../../../domain/dtos";
 import { IMaterial } from "../../databases/interfaces";
 import { Model } from "mongoose";
 import { IMaterialRepository } from "../interfaces";

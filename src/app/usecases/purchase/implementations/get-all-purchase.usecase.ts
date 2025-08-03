@@ -1,5 +1,5 @@
 import { Payload, ResponseDTO } from "../../../../domain/dtos";
-import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
+import { PaginationDTO } from "../../../../domain/dtos";
 import { PurchaseErrorType } from "../../../../domain/enums";
 import { IPurchaseRepository } from "../../../../infra/repositories";
 import { IGetAllPurchaseUseCase } from "../interfaces";

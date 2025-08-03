@@ -2,7 +2,7 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IGetAllMaterialUseCase } from "../interface/get-all-material.usecase";
 import { IMaterialRepository } from "../../../../infra/repositories";
 import { MaterialErrorType } from "../../../../domain/enums/material";
-import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
+import { PaginationDTO } from "../../../../domain/dtos";
 import { IGetAllMaterialRequestDTO } from "../../../../domain/dtos/material";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 

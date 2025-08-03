@@ -1,5 +1,5 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
+import { PaginationDTO } from "../../../../domain/dtos";
 import { QueryProgress } from "../../../../domain/dtos/progress";
 import { IGetAllProgressUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";

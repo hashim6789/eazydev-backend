@@ -18,3 +18,17 @@ export const RoleSchema = z.object({
 });
 
 export type RolePayload = z.infer<typeof RoleSchema>;
+
+export const PaginationSchema = z.object({
+  page: z.string().regex(/^\d+$/, "Page must be a number"), // or use z.coerce.number()
+  limit: z.string().regex(/^\d+$/, "Limit must be a number"), // if coming as string from query
+});
+
+export type SimplePagination = z.infer<typeof PaginationSchema>;
+
+export interface PaginationDTO {
+  body: unknown[];
+  total: number;
+  page: number;
+  last_page: number;
+}

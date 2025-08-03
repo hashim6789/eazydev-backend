@@ -5,7 +5,7 @@ import {
   IPurchaseOutDTO,
   IPurchaseOutPopulatedDTO,
 } from "../../../domain/dtos";
-import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
+import { PaginationDTO } from "../../../domain/dtos";
 import {
   MentorRevenue,
   MonthlyRevenueData,

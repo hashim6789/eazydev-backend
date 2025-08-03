@@ -6,7 +6,7 @@ import {
   QueryProgress,
 } from "../../../domain/dtos";
 import { ProgressEntity } from "../../../domain/entities/progress";
-import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
+import { PaginationDTO } from "../../../domain/dtos";
 import {
   analyzeAllCoursePerformancePipeline,
   mentorPerformanceAnalyzePipeline,

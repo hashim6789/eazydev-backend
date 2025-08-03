@@ -1,7 +1,6 @@
 import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
 import {
-  getAllCourseComposer,
   getAllCourseNoAuthComposer,
   getCourseComposer,
 } from "../../../infra/services/composers/course";

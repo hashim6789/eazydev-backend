@@ -9,7 +9,7 @@ import {
 } from "../../../domain/dtos";
 import { ICourse } from "../../databases/interfaces";
 import { CourseStatus, MaterialType } from "../../../domain/types";
-import { PaginationDTO } from "../../../domain/dtos/pagination.dtos";
+import { PaginationDTO } from "../../../domain/dtos";
 import { mentorRevenueAnalysisPipeline } from "../../pipelines/course";
 import { ICourseRepository } from "../interfaces";
 import { BaseRepository } from "./base-repository";
