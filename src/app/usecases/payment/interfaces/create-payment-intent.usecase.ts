@@ -1,9 +1,5 @@
-import { ResponseDTO } from "../../../../domain/dtos";
+import { Payload, ResponseDTO } from "../../../../domain/dtos";
 
 export interface ICreatePaymentIntentUseCase {
-  execute(
-    // amount: number,
-    // currency: string,
-    courseId: string
-  ): Promise<ResponseDTO>;
+  execute(courseId: string, authData: Payload): Promise<ResponseDTO>;
 }

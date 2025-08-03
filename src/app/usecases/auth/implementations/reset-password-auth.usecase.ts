@@ -1,16 +1,16 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { ITokenRepository } from "../../../repositories/token.repository";
-import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
-import { IGetResetPageUseCase, IResetPasswordUseCase } from "../interfaces";
 import {
-  IGetResetPageRequestDTO,
-  IResetPasswordRequestDTO,
-} from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
+  ITokenRepository,
+  IUsersRepository,
+} from "../../../../infra/repositories";
+import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
+import { IResetPasswordUseCase } from "../interfaces";
+import { IResetPasswordRequestDTO } from "../../../../domain/dtos/auth";
 import { TokenErrorType } from "../../../../domain/enums/token";
-import { IUsersRepository } from "../../../repositories";
 import { IUserValidDTO } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums";
-import { IPasswordHasher } from "../../../providers";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IPasswordHasher } from "../../../../infra/providers";
 
 export class ResetPasswordUseCase implements IResetPasswordUseCase {
   constructor(
@@ -72,8 +72,8 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
         data: { tokenId },
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

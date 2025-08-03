@@ -1,13 +1,16 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IUsersRepository } from "../../../repositories/user.repository";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
-import { ITokenRepository } from "../../../repositories/token.repository";
 import { IUserValidDTO } from "../../../../domain/dtos";
 import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
 import { IForgotPasswordUseCase } from "../interfaces";
 import { IForgotPasswordRequestDTO } from "../../../../domain/dtos";
-import { ISendMailProvider } from "../../../providers";
 import { SignupRole } from "../../../../domain/types";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { ISendMailProvider } from "../../../../infra/providers";
+import {
+  ITokenRepository,
+  IUsersRepository,
+} from "../../../../infra/repositories";
 
 export class ForgotPasswordUseCase implements IForgotPasswordUseCase {
   constructor(
@@ -64,8 +67,8 @@ export class ForgotPasswordUseCase implements IForgotPasswordUseCase {
         data: { tokenId: resetToken.id },
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

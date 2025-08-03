@@ -1,14 +1,17 @@
 import { IGetAllCategoryAdminUseCase } from "../../../../app/usecases/category";
-import { QueryCategory, ResponseDTO } from "../../../../domain/dtos";
 import {
-  HttpErrors,
+  CategoryQuerySchema,
+  QueryCategory,
+  ResponseDTO,
+} from "../../../../domain/dtos";
+import {
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -17,42 +20,28 @@ import { IController } from "../IController";
 export class GetAllCategoryAdminController implements IController {
   constructor(
     private getAllCategoryAdminCase: IGetAllCategoryAdminUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const validation = CategoryQuerySchema.safeParse(httpRequest.query);
 
-    if (httpRequest.query && Object.keys(httpRequest.query).length > 0) {
-      const queryParams = Object.keys(httpRequest.query);
-
-      if (
-        // queryParams.includes("role") &&
-        queryParams.includes("status") &&
-        queryParams.includes("search") &&
-        queryParams.includes("page") &&
-        queryParams.includes("limit")
-      ) {
-        const query = httpRequest.query as QueryCategory;
-
-        response = await this.getAllCategoryAdminCase.execute(query);
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!validation.success) {
+      const firstError = extractFirstZodMessage(validation.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const query = validation.data;
+    const response = await this.getAllCategoryAdminCase.execute(query);
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

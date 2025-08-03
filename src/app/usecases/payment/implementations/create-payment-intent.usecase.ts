@@ -1,27 +1,49 @@
-import { ResponseDTO } from "../../../../domain/dtos";
-import { PaymentErrorType } from "../../../../domain/enums";
-import { ICourseRepository, IPaymentRepository } from "../../../repositories";
+import { IUserOut, Payload, ResponseDTO } from "../../../../domain/dtos";
+import {
+  AuthenticateUserErrorType,
+  PaymentErrorType,
+} from "../../../../domain/enums";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import {
+  ICourseRepository,
+  IProgressRepository,
+  IUsersRepository,
+} from "../../../../infra/repositories";
 import { ICreatePaymentIntentUseCase } from "../interfaces";
 import Stripe from "stripe";
 
 export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
   constructor(
-    private courseRepository: ICourseRepository, // Repository abstraction for payment-related operations
-    private stripe: Stripe // Injected Stripe instance
+    private courseRepository: ICourseRepository,
+    private userRepository: IUsersRepository,
+    private progressRepository: IProgressRepository,
+    private stripe: Stripe
   ) {}
 
-  async execute(courseId: string): Promise<ResponseDTO> {
+  async execute(
+    courseId: string,
+    { userId, role }: Payload
+  ): Promise<ResponseDTO> {
     try {
       console.log("courseId", courseId);
-      // Validate input data
-      //   if (!amount || !currency) {
-      //     return {
-      //       success: false,
-      //       data: { error: PaymentErrorType.InvalidPaymentDetails },
-      //     };
-      //   }
 
-      // Fetch course details from the repository (to confirm price or availability)
+      if (role !== "learner") {
+        return {
+          success: false,
+          data: { error: AuthenticateUserErrorType.UserCanNotDoIt },
+        };
+      }
+
+      const learner = (await this.userRepository.findById(
+        userId
+      )) as IUserOut | null;
+      if (!learner) {
+        return {
+          success: false,
+          data: { error: AuthenticateUserErrorType.UserCanNotDoIt },
+        };
+      }
+
       const course = await this.courseRepository.findById(courseId);
       if (!course) {
         return {
@@ -30,7 +52,6 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         };
       }
 
-      // Ensure the course is available for purchase
       if (course.status !== "published") {
         return {
           success: false,
@@ -38,9 +59,20 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         };
       }
 
-      // Create the Payment Intent via Stripe
+      const existingProgress = await this.progressRepository.findOne({
+        userId,
+        courseId,
+      });
+
+      if (existingProgress) {
+        return {
+          success: false,
+          data: { error: PaymentErrorType.CourseAlreadyPurchased },
+        };
+      }
+
       const paymentIntent = await this.stripe.paymentIntents.create({
-        amount: course.price * 100, // Stripe expects amount in the smallest currency unit (e.g., cents for USD)
+        amount: course.price * 100,
         currency: "usd",
         metadata: {
           courseId,
@@ -48,7 +80,6 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         },
       });
 
-      // Return the client secret and payment intent information
       return {
         success: true,
         data: {
@@ -56,13 +87,8 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
           paymentIntentId: paymentIntent.id,
         },
       };
-    } catch (error: any) {
-      // Log the error if needed, and return structured error response
-      console.error("Error while creating Payment Intent:", error);
-      return {
-        success: false,
-        data: { error: error.message || PaymentErrorType.InternalError },
-      };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

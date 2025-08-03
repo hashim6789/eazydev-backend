@@ -1,7 +1,9 @@
 import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
-
-import { getCourseComposer } from "../../../infra/services/composers/course";
+import {
+  getAllCourseNoAuthComposer,
+  getCourseComposer,
+} from "../../../infra/services/composers/course";
 
 /**
  * Router for handling notification-related routes.
@@ -15,3 +17,7 @@ noAuthRouter.get(
     response.status(adapter.statusCode).json(adapter.body);
   }
 );
+noAuthRouter.get("/courses", async (request: Request, response: Response) => {
+  const adapter = await expressAdapter(request, getAllCourseNoAuthComposer());
+  response.status(adapter.statusCode).json(adapter.body);
+});

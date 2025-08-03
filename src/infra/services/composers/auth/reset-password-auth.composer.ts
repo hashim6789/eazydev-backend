@@ -1,19 +1,23 @@
-import { IPasswordHasher } from "../../../../app/providers";
-import { IUsersRepository } from "../../../../app/repositories";
-import { ITokenRepository } from "../../../../app/repositories/token.repository";
+import { ITokenRepository, IUsersRepository } from "../../../repositories";
 import {
-  GetResetPageUseCase,
   IResetPasswordUseCase,
   ResetPasswordUseCase,
 } from "../../../../app/usecases/auth";
-import {
-  GetResetPasswordPageController,
-  ResetPasswordController,
-} from "../../../../presentation/http/controllers";
+import { ResetPasswordController } from "../../../../presentation/http/controllers";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { TokenModel, UserModel } from "../../../databases/models";
-import { PasswordHasher } from "../../../providers";
-import { TokenRepository, UserRepository } from "../../../repositories";
+import { IPasswordHasher } from "../../../providers";
+import { PasswordHasher } from "../../../providers/implementations";
+import {
+  TokenRepository,
+  UserRepository,
+} from "../../../repositories/implementations";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function resetPasswordComposer(): IController {
   const repository: ITokenRepository = new TokenRepository(TokenModel);
@@ -24,6 +28,12 @@ export function resetPasswordComposer(): IController {
     userRepository,
     passwordHasher
   );
-  const controller: IController = new ResetPasswordController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new ResetPasswordController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

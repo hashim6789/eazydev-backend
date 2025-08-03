@@ -28,6 +28,13 @@ export class CategoryEntity {
     return new CategoryEntity(data);
   }
 
+  toObject(): CategoryInterface {
+    return {
+      title: this._title,
+      isListed: this._isListed,
+    };
+  }
+
   /**
    * Updates the category instance with the provided data.
    *

@@ -1,14 +1,13 @@
 import { IGetCourseUseCase } from "../../../../app/usecases/course";
-import { ResponseDTO } from "../../../../domain/dtos";
+import { GetCoursePathSchema } from "../../../../domain/dtos";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -17,36 +16,30 @@ import { IController } from "../IController";
 export class GetCourseController implements IController {
   constructor(
     private getCourseCase: IGetCourseUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const pathValidation = GetCoursePathSchema.safeParse(
+      httpRequest.path ?? {}
+    );
 
-    if (httpRequest.path && Object.keys(httpRequest.path).length > 0) {
-      const pathParams = Object.keys(httpRequest.path);
-
-      if (pathParams.includes("courseId")) {
-        const { courseId } = httpRequest.path as { courseId: string };
-
-        response = await this.getCourseCase.execute(courseId);
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!pathValidation.success) {
+      const firstError = extractFirstZodMessage(pathValidation.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { courseId } = pathValidation.data;
+    const response = await this.getCourseCase.execute(courseId);
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

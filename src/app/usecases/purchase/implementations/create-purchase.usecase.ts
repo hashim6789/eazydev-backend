@@ -16,8 +16,13 @@ import {
   ICourseRepository,
   IProgressRepository,
   IPurchaseRepository,
-} from "../../../repositories";
+} from "../../../../infra/repositories";
 import { ICreatePurchaseUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import {
+  mapCourseToDTO,
+  mapProgressToDocument,
+} from "../../../../infra/databases/mappers";
 
 export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
   constructor(
@@ -34,8 +39,8 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
     const timestamp = Date.now();
 
     const purchaseId = `EZD${learnerFragment}${courseFragment}${timestamp}`
-      .replace(/[^A-Za-z0-9]/g, "") // Remove non-alphanumeric characters
-      .toUpperCase(); // Convert to uppercase
+      .replace(/[^A-Za-z0-9]/g, "")
+      .toUpperCase();
 
     return purchaseId;
   }
@@ -60,7 +65,9 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
         };
       }
 
-      if (course.price * 100 !== amount) {
+      const mappedCourse = mapCourseToDTO(course);
+
+      if (mappedCourse.price * 100 !== amount) {
         return {
           data: { error: PurchaseErrorType.InvalidPurchaseDetails },
           success: false,
@@ -83,7 +90,7 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
       const progress = ProgressEntity.create({
         userId: learnerId,
         courseId,
-        mentorId: course.mentorId,
+        mentorId: mappedCourse.mentorId,
         completedLessons: [],
         completedMaterials: [],
         isCourseCompleted: false,
@@ -103,12 +110,13 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
         };
       }
 
-      //create the progress of the course of the corresponding learner is created
-      await this.progressRepository.create(progress);
+      const mappedDocument = mapProgressToDocument(progress);
+
+      await this.progressRepository.create(mappedDocument);
 
       return { data: createdPurchase, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

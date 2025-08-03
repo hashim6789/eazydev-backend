@@ -2,14 +2,13 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
   IChangePasswordRequestDTO,
   IUserValidDTO,
-  IVerifyPasswordRequestDTO,
   Payload,
 } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IUsersRepository } from "../../../repositories/user.repository";
-import { IChangePasswordUseCase, IVerifyPasswordUseCase } from "../interfaces";
-import { IPasswordHasher } from "../../../providers";
-import { AuthenticateUserErrorType } from "../../../../domain/enums";
+import { IUsersRepository } from "../../../../infra/repositories";
+import { IChangePasswordUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IPasswordHasher } from "../../../../infra/providers";
 
 export class ChangePasswordUseCase implements IChangePasswordUseCase {
   constructor(
@@ -47,8 +46,8 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
       }
 
       return { success: true, data: user };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

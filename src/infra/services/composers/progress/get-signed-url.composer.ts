@@ -1,5 +1,4 @@
-import { IS3ServiceProvider } from "../../../../app/providers";
-import { IProgressRepository } from "../../../../app/repositories";
+import { IProgressRepository } from "../../../repositories";
 import {
   GetSignedUrlUseCase,
   IGetSignedUrlUseCase,
@@ -7,8 +6,15 @@ import {
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { GetSignedUrlController } from "../../../../presentation/http/controllers/progress/get-signed-url.controller";
 import { ProgressModel } from "../../../databases/models";
-import { S3ServiceProvider } from "../../../providers";
-import { ProgressRepository } from "../../../repositories";
+import { IS3ServiceProvider } from "../../../providers";
+import { S3ServiceProvider } from "../../../providers/implementations";
+import { ProgressRepository } from "../../../repositories/implementations";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function getSingedUrlComposer(): IController {
   const repository: IProgressRepository = new ProgressRepository(ProgressModel);
@@ -17,6 +23,12 @@ export function getSingedUrlComposer(): IController {
     repository,
     s3ServiceProvider
   );
-  const controller: IController = new GetSignedUrlController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new GetSignedUrlController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

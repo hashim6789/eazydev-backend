@@ -1,8 +1,9 @@
 import { IGetUserDataRequestDTO } from "../../../../domain/dtos";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IUsersRepository } from "../../../repositories/user.repository";
+import { IUsersRepository } from "../../../../infra/repositories";
 import { IGetUserDataUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetUserDataUseCase implements IGetUserDataUseCase {
   constructor(private userRepository: IUsersRepository) {}
@@ -22,8 +23,8 @@ export class GetUserDataUseCase implements IGetUserDataUseCase {
       }
 
       return { success: true, data: userData };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

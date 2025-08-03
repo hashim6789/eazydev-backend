@@ -14,3 +14,17 @@ export enum CourseErrorType {
   ApproveStatusFailed = "Only requested courses can be approved!",
   PublishStatusFailed = "Only approved courses can be published!",
 }
+
+export enum CourseSorts {
+  PRICE_ASC = "priceAsc",
+  PRICE_DEC = "priceDesc",
+  TITLE_DEC = "titleAsc",
+  TITLE_ASC = "titleDesc",
+}
+export enum CourseStatuses {
+  DRAFT = "draft",
+  REQUESTED = "requested",
+  PUBLISHED = "published",
+  APPROVED = "approved",
+  REJECTED = "rejected",
+}

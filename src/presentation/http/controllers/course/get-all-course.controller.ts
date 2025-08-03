@@ -1,14 +1,16 @@
 import { IGetAllCourseUseCase } from "../../../../app/usecases/course";
-import { Payload, QueryCourse, ResponseDTO } from "../../../../domain/dtos";
 import {
-  HttpErrors,
+  GetCoursesQuerySchema,
+  GetCoursesUserSchema,
+} from "../../../../domain/dtos";
+import {
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -17,45 +19,44 @@ import { IController } from "../IController";
 export class GetAllCourseController implements IController {
   constructor(
     private getAllCourseCase: IGetAllCourseUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const queryValidation = GetCoursesQuerySchema.safeParse(
+      httpRequest.query ?? {}
+    );
+    const userValidation = GetCoursesUserSchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (httpRequest.query && Object.keys(httpRequest.query).length > 0) {
-      const queryParams = Object.keys(httpRequest.query);
-
-      if (
-        // queryParams.includes("role") &&
-        queryParams.includes("category") &&
-        queryParams.includes("search") &&
-        queryParams.includes("sort") &&
-        queryParams.includes("page") &&
-        queryParams.includes("limit")
-      ) {
-        const { role, userId } = httpRequest.body as Payload;
-
-        const query = httpRequest.query as QueryCourse;
-
-        response = await this.getAllCourseCase.execute(query, { userId, role });
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!queryValidation.success || !userValidation.success) {
+      const queryError = !queryValidation.success
+        ? extractFirstZodMessage(queryValidation.error)
+        : null;
+      const userError = !userValidation.success
+        ? extractFirstZodMessage(userValidation.error)
+        : null;
+      const errorMessage = queryError || userError || "Invalid request";
+      const error = this.httpErrors.error_422(errorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const query = queryValidation.data;
+    const { userId, role } = userValidation.data;
+
+    const response = await this.getAllCourseCase.execute(query, {
+      userId,
+      role,
+    });
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

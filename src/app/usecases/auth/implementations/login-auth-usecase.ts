@@ -1,12 +1,12 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IUsersRepository } from "../../../repositories/user.repository";
-import { IPasswordHasher } from "../../../providers/password-hasher.provider";
-import { ILoginRequestDTO } from "../../../../domain/dtos/auth/login-auth.dto";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
-import { IGenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
-import { ITokenRepository } from "../../../repositories/token.repository";
-import { IUserValidDTO } from "../../../../domain/dtos";
-import { TokenDTO } from "../../../../domain/dtos/auth/refresh-token-dto";
+import { IUsersRepository } from "../../../../infra/repositories";
+import { ILoginRequestDTO, IUserValidDTO } from "../../../../domain/dtos";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import {
+  IGenerateTokenProvider,
+  IPasswordHasher,
+} from "../../../../infra/providers";
 
 export interface ILoginUseCase {
   execute(data: ILoginRequestDTO): Promise<ResponseDTO>;
@@ -16,8 +16,7 @@ export class LoginUseCase implements ILoginUseCase {
   constructor(
     private userRepository: IUsersRepository,
     private passwordHasher: IPasswordHasher,
-    private generateTokenProvider: IGenerateTokenProvider,
-    private tokenRepository: ITokenRepository
+    private generateTokenProvider: IGenerateTokenProvider // private tokenRepository: ITokenRepository
   ) {}
 
   async execute({
@@ -55,39 +54,28 @@ export class LoginUseCase implements ILoginUseCase {
         };
       }
 
-      const token = await this.generateTokenProvider.generateToken(user.id, {
-        userId: user.id,
-        role: user.role,
-      });
-      const tokenFounded = (await this.tokenRepository.findByUserIdAndType(
+      const accessToken = await this.generateTokenProvider.generateToken(
         user.id,
-        "refresh"
-      )) as TokenDTO | null;
-
-      if (tokenFounded) {
-        await this.tokenRepository.delete(user.id);
-      }
-
-      const refreshToken = await this.tokenRepository.create(
+        {
+          userId: user.id,
+          role: user.role,
+        },
+        "access"
+      );
+      const refreshToken = await this.generateTokenProvider.generateToken(
         user.id,
-        user.role,
+        {
+          userId: user.id,
+          role: user.role,
+        },
         "refresh"
       );
-
-      // const outUser = UserEntity.convert({
-      //   email: user.email,
-      //   firstName: user.firstName,
-      //   lastName: user.lastName,
-      //   profilePicture: user.profilePicture,
-      //   role: user.role,
-      // });
-
       return {
-        data: { token, refreshTokenId: refreshToken.id, user },
+        data: { accessToken, refreshToken, user },
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

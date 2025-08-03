@@ -1,7 +1,7 @@
 import {
   ICertificateRepository,
   IProgressRepository,
-} from "../../../../app/repositories";
+} from "../../../repositories";
 import {
   IUpdateProgressUseCase,
   UpdateProgressUseCase,
@@ -9,8 +9,14 @@ import {
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { UpdateProgressController } from "../../../../presentation/http/controllers/progress";
 import { CertificateModel, ProgressModel } from "../../../databases/models";
-import { ProgressRepository } from "../../../repositories";
-import { CertificateRepository } from "../../../repositories/certificate.repository";
+import { ProgressRepository } from "../../../repositories/implementations";
+import { CertificateRepository } from "../../../repositories/implementations/certificate.repository";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function updateProgressComposer(): IController {
   const repository: IProgressRepository = new ProgressRepository(ProgressModel);
@@ -20,6 +26,12 @@ export function updateProgressComposer(): IController {
     repository,
     certificateRepository
   );
-  const controller: IController = new UpdateProgressController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new UpdateProgressController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

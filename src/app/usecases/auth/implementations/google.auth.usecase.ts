@@ -1,14 +1,17 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IUsersRepository } from "../../../repositories/user.repository";
 import { UserEntity } from "../../../../domain/entities/user";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { ITokenRepository } from "../../../repositories/token.repository";
-import { IGenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
-import { IGoogleRequestDTO } from "../../../../domain/dtos/auth/google-auth.dto";
+import { IUsersRepository } from "../../../../infra/repositories";
 import { IGoogleLoginUseCase } from "../interfaces/google-login.usecase";
 import axios from "axios";
-import { IUserOutRequestDTO, IUserValidDTO } from "../../../../domain/dtos";
+import {
+  IGoogleLoginRequestDTO,
+  IUserOutRequestDTO,
+  IUserValidDTO,
+} from "../../../../domain/dtos";
 import { SignupRole } from "../../../../domain/types/user";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IGenerateTokenProvider } from "../../../../infra/providers";
 
 interface GoogleApiResponse {
   email: string;
@@ -22,7 +25,6 @@ interface GoogleApiResponse {
 export class GoogleLoginUseCase implements IGoogleLoginUseCase {
   constructor(
     private userRepository: IUsersRepository,
-    private refreshTokenRepository: ITokenRepository,
     private generateTokenProvider: IGenerateTokenProvider
   ) {}
 
@@ -47,12 +49,6 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         data: { error: UserErrorType.UserInvalidRole },
         success: false,
       };
-
-      // } else if (!fetchedUser.isVerified) {
-      //   return {
-      //     data: { error: UserErrorType.UserNotVerified },
-      //     success: false,
-      //   };
     }
     return null;
   }
@@ -60,7 +56,7 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
   async execute({
     googleToken,
     role,
-  }: IGoogleRequestDTO): Promise<ResponseDTO> {
+  }: IGoogleLoginRequestDTO): Promise<ResponseDTO> {
     console.log("usecase");
     try {
       const data = await this.getGoogleUserData(googleToken);
@@ -116,45 +112,35 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         }
       }
 
-      // const passwordHashed = await this.passwordHasher.hashPassword(password);
-      // const user = await this.userRepository.create({
-      //   email: userEntity.email.address,
-      //   firstName: userEntity.firstName,
-      //   lastName: userEntity.lastName,
-      //   role: userEntity.role,
-      //   password: passwordHashed,
-      // });
-
-      // const otp = await this.otpRepository.create(
-      //   user.id,
-      //   await this.generateOtpProvider.generateOtp()
-      // );
-      // await this.sendMailProvider.sendOtpMail(user.email, otp.otp);
-
       if (!user) {
         return { data: { error: UserErrorType.UserCantCreate }, success: true };
       }
 
-      const token = await this.generateTokenProvider.generateToken(user.id, {
-        userId: user.id,
-        role: user.role,
-      });
-
-      const newToken = await this.refreshTokenRepository.create(
+      const accessToken = await this.generateTokenProvider.generateToken(
         user.id,
-        user.role,
+        {
+          userId: user.id,
+          role: user.role,
+        },
+        "access"
+      );
+      const refreshToken = await this.generateTokenProvider.generateToken(
+        user.id,
+        {
+          userId: user.id,
+          role: user.role,
+        },
         "refresh"
       );
 
       const outUser = UserEntity.convert(user);
 
       return {
-        data: { refreshTokenId: newToken.id, token, user: outUser },
+        data: { refreshToken, accessToken, user: outUser },
         success: true,
       };
-    } catch (error: any) {
-      console.log(error);
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

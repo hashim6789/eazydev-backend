@@ -1,10 +1,11 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
+import { PaginationDTO } from "../../../../domain/dtos";
 import { QueryProgress } from "../../../../domain/dtos/progress";
 import { IGetAllProgressUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";
-import { IProgressRepository } from "../../../repositories";
+import { IProgressRepository } from "../../../../infra/repositories";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllProgressUseCase implements IGetAllProgressUseCase {
   constructor(private progressRepository: IProgressRepository) {}
@@ -34,8 +35,8 @@ export class GetAllProgressUseCase implements IGetAllProgressUseCase {
         success: true,
         data: paginatedProgresses,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

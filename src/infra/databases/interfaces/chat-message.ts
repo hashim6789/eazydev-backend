@@ -1,8 +1,9 @@
-import { ObjectId } from "mongoose";
+import { Types, Document } from "mongoose";
 
 export interface IChatMessage extends Document {
-  group: ObjectId;
-  sender: ObjectId;
+  _id: Types.ObjectId;
+  group: Types.ObjectId;
+  sender: Types.ObjectId;
   message: string;
   createdAt: Date;
 }

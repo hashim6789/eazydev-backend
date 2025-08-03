@@ -1,6 +1,3 @@
-import { ISendMailProvider } from "../../../../app/providers";
-import { ITokenRepository } from "../../../../app/repositories/token.repository";
-import { IUsersRepository } from "../../../../app/repositories/user.repository";
 import {
   ForgotPasswordUseCase,
   IForgotPasswordUseCase,
@@ -8,9 +5,17 @@ import {
 import { ForgotPasswordController } from "../../../../presentation/http/controllers";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { TokenModel, UserModel } from "../../../databases/models";
-import { SendMailProvider } from "../../../providers";
-import { TokenRepository } from "../../../repositories/token-repository";
-import { UserRepository } from "../../../repositories/user.repository";
+import { ISendMailProvider } from "../../../providers";
+import { SendMailProvider } from "../../../providers/implementations";
+import { ITokenRepository, IUsersRepository } from "../../../repositories";
+import { TokenRepository } from "../../../repositories/implementations/token-repository";
+import { UserRepository } from "../../../repositories/implementations/user.repository";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function forgotPasswordComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);
@@ -23,6 +28,12 @@ export function forgotPasswordComposer(): IController {
     resetTokenRepository,
     sentMailProvider
   );
-  const controller: IController = new ForgotPasswordController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new ForgotPasswordController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

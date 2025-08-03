@@ -1,24 +1,18 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
-import {
-  IGetLearningContentRequestDTO,
-  QueryProgress,
-} from "../../../../domain/dtos/progress";
-import {
-  IGetAllProgressUseCase,
-  IGetLearningContentsUseCase,
-} from "../interfaces";
+import { IGetLearningContentRequestDTO } from "../../../../domain/dtos/progress";
+import { IGetLearningContentsUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";
-import { IProgressRepository } from "../../../repositories";
+import { IProgressRepository } from "../../../../infra/repositories";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
 import { AuthenticateUserErrorType } from "../../../../domain/enums";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetLearningContentUseCase implements IGetLearningContentsUseCase {
   constructor(private progressRepository: IProgressRepository) {}
 
   async execute(
     { progressId }: IGetLearningContentRequestDTO,
-    { userId, role }: Payload
+    { userId }: Payload
   ): Promise<ResponseDTO> {
     try {
       const progress = await this.progressRepository.findByIdPopulate(
@@ -44,8 +38,8 @@ export class GetLearningContentUseCase implements IGetLearningContentsUseCase {
         success: true,
         data: progress,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

@@ -1,9 +1,12 @@
-import { error } from "console";
 import { IUserValidDTO } from "../../../../domain/dtos";
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IPurchaseRepository, IUsersRepository } from "../../../repositories";
+import {
+  IPurchaseRepository,
+  IUsersRepository,
+} from "../../../../infra/repositories";
 import { IGetMentorRevenueAnalyzeUseCase } from "../interfaces";
 import { UserErrorType } from "../../../../domain/enums";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetMentorRevenueAnalyzeUseCase
   implements IGetMentorRevenueAnalyzeUseCase
@@ -31,8 +34,8 @@ export class GetMentorRevenueAnalyzeUseCase
         data: monthlyRevenueData,
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

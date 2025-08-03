@@ -1,13 +1,16 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IUsersRepository } from "../../../repositories/user.repository";
-import { IPasswordHasher } from "../../../providers/password-hasher.provider";
 import { IVerifyOtpUseCase } from "../interfaces/verify-otp.usecase";
-import { IOtpRepository } from "../../../repositories/otp.repository";
+import {
+  IOtpRepository,
+  IUsersRepository,
+} from "../../../../infra/repositories";
 import { OtpDTO } from "../../../../domain/dtos/auth/otp-auth-dto";
 import { OtpErrorType } from "../../../../domain/enums/otp";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IVerifyOtpRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
 import { UserEntity } from "../../../../domain/entities/user";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IPasswordHasher } from "../../../../infra/providers";
+import { IVerifyOtpRequestDTO } from "../../../../domain/dtos";
 
 export class VerifyOtpUseCase implements IVerifyOtpUseCase {
   constructor(
@@ -66,8 +69,8 @@ export class VerifyOtpUseCase implements IVerifyOtpUseCase {
           user,
         },
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

@@ -1,12 +1,12 @@
-import { ObjectId } from "mongoose";
+import { Types, Document } from "mongoose";
 
-export interface IMeeting {
-  _id: ObjectId;
-  courseId: ObjectId;
-  mentorId: ObjectId;
-  learnerId: ObjectId;
+export interface IMeeting extends Document {
+  _id: Types.ObjectId;
+  courseId: Types.ObjectId;
+  mentorId: Types.ObjectId;
+  learnerId: Types.ObjectId;
   roomId: string;
-  slotId: ObjectId;
+  slotId: Types.ObjectId;
   mentorPeerId: string | null;
   learnerPeerId: string | null;
 }

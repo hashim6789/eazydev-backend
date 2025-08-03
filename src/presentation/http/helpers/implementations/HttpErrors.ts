@@ -8,10 +8,10 @@ export class HttpErrors implements IHttpErrors {
    * Returns a 422 Unprocessable Entity HTTP error response.
    * @returns The HTTP error response.
    */
-  error_422(): IHttpResponse {
+  error_422(message?: string): IHttpResponse {
     return {
       statusCode: 422,
-      body: { error: "Unprocessable Entity" },
+      body: { error: message ?? "Unprocessable Entity" },
     };
   }
 

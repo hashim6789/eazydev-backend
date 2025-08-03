@@ -1,8 +1,12 @@
-import { Payload, QueryCourse, ResponseDTO } from "../../../../domain/dtos";
-import { PaginationDTO } from "../../../../domain/dtos/pagination.dtos";
-import { CourseErrorType } from "../../../../domain/enums";
-import { ICourseRepository } from "../../../repositories";
+import {
+  PaginationDTO,
+  Payload,
+  QueryCourse,
+  ResponseDTO,
+} from "../../../../domain/dtos";
+import { ICourseRepository } from "../../../../infra/repositories";
 import { IGetAllCourseUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllCourseUseCase implements IGetAllCourseUseCase {
   constructor(private courseRepository: ICourseRepository) {}
@@ -18,16 +22,16 @@ export class GetAllCourseUseCase implements IGetAllCourseUseCase {
       } else {
         courses = await this.courseRepository.findAllPublished(query);
       }
-      if (!courses || courses.total === 0) {
-        return {
-          success: false,
-          data: { error: CourseErrorType.CourseNotFound },
-        };
-      }
+      // if (!courses || courses.total === 0) {
+      //   return {
+      //     success: false,
+      //     data: { error: CourseErrorType.CourseNotFound },
+      //   };
+      // }
 
-      return { success: true, data: courses };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+      return { success: true, data: courses ?? [] };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

@@ -1,16 +1,16 @@
 import { IUpdateMaterialUseCase } from "../../../../app/usecases/material";
-import { Payload } from "../../../../domain/dtos/jwt-payload";
-import { IUpdateMaterialRequestDTO } from "../../../../domain/dtos/material";
-import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
-  HttpErrors,
+  UpdateMaterialBodySchema,
+  UpdateMaterialPathSchema,
+} from "../../../../domain/dtos/material";
+import {
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -19,68 +19,54 @@ import { IController } from "../IController";
 export class UpdateMaterialController implements IController {
   constructor(
     private updateMaterialUseCase: IUpdateMaterialUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const pathValidation = UpdateMaterialPathSchema.safeParse(
+      httpRequest.path ?? {}
+    );
+    const bodyValidation = UpdateMaterialBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (
-      httpRequest.body &&
-      Object.keys(httpRequest.body).length > 0 &&
-      httpRequest.path &&
-      Object.keys(httpRequest.path).length > 0
-    ) {
-      const bodyParams = Object.keys(httpRequest.body);
-      const pathParams = Object.keys(httpRequest.path);
+    if (!pathValidation.success || !bodyValidation.success) {
+      const pathError = !pathValidation.success
+        ? extractFirstZodMessage(pathValidation.error)
+        : null;
+      const bodyError = !bodyValidation.success
+        ? extractFirstZodMessage(bodyValidation.error)
+        : null;
 
-      if (
-        pathParams.includes("materialId") &&
-        bodyParams.includes("title") &&
-        bodyParams.includes("description") &&
-        bodyParams.includes("type") &&
-        bodyParams.includes("fileKey") &&
-        bodyParams.includes("duration") &&
-        bodyParams.includes("userId") &&
-        bodyParams.includes("role")
-      ) {
-        const { userId, role, title, description, type, fileKey, duration } =
-          httpRequest.body as Payload &
-            Omit<IUpdateMaterialRequestDTO, "mentorId" | "materialId">;
-        const { materialId } = httpRequest.path as Pick<
-          IUpdateMaterialRequestDTO,
-          "materialId"
-        >;
-
-        response = await this.updateMaterialUseCase.execute(
-          {
-            title,
-            description,
-            mentorId: userId,
-            type,
-            fileKey,
-            duration,
-            materialId,
-          },
-          { userId, role }
-        );
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+      const errorMessage = pathError || bodyError || "Invalid input";
+      const error = this.httpErrors.error_422(errorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { materialId } = pathValidation.data;
+    const { userId, role, title, description, type, fileKey, duration } =
+      bodyValidation.data;
+
+    const response = await this.updateMaterialUseCase.execute(
+      {
+        title,
+        description,
+        mentorId: userId, // derived from userId
+        type,
+        fileKey,
+        duration,
+        materialId,
+      },
+      { userId, role }
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

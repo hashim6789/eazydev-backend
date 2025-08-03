@@ -2,23 +2,24 @@ import {
   IMeetingRepository,
   IProgressRepository,
   ISlotRepository,
-} from "../../../../app/repositories";
+} from "../../../repositories";
 import { IController } from "../../../../presentation/http/controllers";
 import { ProgressModel, SlotModel } from "../../../databases/models";
-import { SlotRepository } from "../../../repositories/slot.repository";
+import { SlotRepository } from "../../../repositories/implementations/slot.repository";
 import {
   BookSlotUseCase,
-  GetAllSlotUseCase,
   IBookSlotUseCase,
-  IGetAllSlotUseCase,
 } from "../../../../app/usecases/slot";
-import {
-  BookSlotController,
-  GetSlotsLearnerController,
-} from "../../../../presentation/http/controllers/slot";
-import { ProgressRepository } from "../../../repositories";
-import { MeetingRepository } from "../../../repositories/meeting-repository";
+import { BookSlotController } from "../../../../presentation/http/controllers/slot";
+import { ProgressRepository } from "../../../repositories/implementations";
+import { MeetingRepository } from "../../../repositories/implementations/meeting-repository";
 import { MeetingModel } from "../../../databases/models/meeting.model";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function bookSlotComposer(): IController {
   const repository: ISlotRepository = new SlotRepository(SlotModel);
@@ -33,6 +34,12 @@ export function bookSlotComposer(): IController {
     progressRepository,
     meetingRepository
   );
-  const controller: IController = new BookSlotController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new BookSlotController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

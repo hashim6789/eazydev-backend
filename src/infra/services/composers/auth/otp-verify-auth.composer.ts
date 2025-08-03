@@ -1,14 +1,19 @@
-import { IPasswordHasher } from "../../../../app/providers/password-hasher.provider";
-import { IOtpRepository } from "../../../../app/repositories/otp.repository";
-import { IUsersRepository } from "../../../../app/repositories/user.repository";
+import { IOtpRepository, IUsersRepository } from "../../../repositories";
 import { VerifyOtpUseCase } from "../../../../app/usecases/auth/implementations/verify-otp.usecase";
 import { IVerifyOtpUseCase } from "../../../../app/usecases/auth/interfaces/verify-otp.usecase";
 import { VerifyOtpController } from "../../../../presentation/http/controllers/auth/verify-otp.controller";
 import { IController } from "../../../../presentation/http/controllers/IController";
 import { OtpModel, UserModel } from "../../../databases/models";
-import { PasswordHasher } from "../../../providers/password-hasher.provider";
-import { OtpRepository } from "../../../repositories/otp.repository";
-import { UserRepository } from "../../../repositories/user.repository";
+import { IPasswordHasher } from "../../../providers";
+import { PasswordHasher } from "../../../providers/implementations/password-hasher.provider";
+import { OtpRepository } from "../../../repositories/implementations/otp.repository";
+import { UserRepository } from "../../../repositories/implementations/user.repository";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function otpVerifyComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);
@@ -20,6 +25,12 @@ export function otpVerifyComposer(): IController {
     otpRepository,
     passwordHasher
   );
-  const controller: IController = new VerifyOtpController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new VerifyOtpController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

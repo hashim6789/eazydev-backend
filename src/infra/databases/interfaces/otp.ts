@@ -1,8 +1,8 @@
-import { ObjectId } from "mongoose";
+import { Types, Document } from "mongoose";
 
 export interface IOtp extends Document {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   otp: string;
-  userId: ObjectId;
+  userId: Types.ObjectId;
   expiresIn: Date;
 }

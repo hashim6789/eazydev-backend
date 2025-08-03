@@ -1,4 +1,7 @@
+import { z } from "zod";
 import { MaterialType } from "../types";
+import { ObjectIdSchema } from "./common";
+import { RoleTypes } from "../enums";
 
 export interface IProgressOutDTO {
   id: string;
@@ -85,3 +88,51 @@ export interface PopulatedProgressLearningsDTO {
   completedDate: number | null;
   lessons: ProgressLesson[];
 }
+
+//
+
+export const GetProgressBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+});
+
+//
+// Body validation
+export const LearningContentBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+});
+
+// Path validation
+export const LearningContentPathSchema = z.object({
+  progressId: ObjectIdSchema,
+});
+
+//
+// Path params: progressId
+export const SignedUrlPathSchema = z.object({
+  progressId: ObjectIdSchema,
+});
+
+// Body params
+export const SignedUrlBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+  materialType: z.enum(["video", "reading"]),
+  fileKey: z.string().min(1),
+});
+
+//
+// Path: progressId
+export const UpdateProgressPathSchema = z.object({
+  progressId: ObjectIdSchema,
+});
+
+// Body: userId, role, materialId
+export const UpdateProgressBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+  materialId: ObjectIdSchema,
+});
+
+//

@@ -1,29 +1,26 @@
-import {
-  ICourseRepository,
-  IPurchaseRepository,
-} from "../../../../app/repositories";
+import { IPurchaseRepository } from "../../../repositories";
 import { GetPurchaseUseCases } from "../../../../app/usecases/purchase/implementations";
-import { CreatePurchaseUseCases } from "../../../../app/usecases/purchase/implementations/create-purchase.usecase";
-import {
-  ICreatePurchaseUseCase,
-  IGetPurchaseUseCase,
-} from "../../../../app/usecases/purchase/interfaces";
+import { IGetPurchaseUseCase } from "../../../../app/usecases/purchase/interfaces";
 import { IController } from "../../../../presentation/http/controllers/IController";
+import { GetPurchaseController } from "../../../../presentation/http/controllers/purchase";
+import { PurchaseModel } from "../../../databases/models";
+import { PurchaseRepository } from "../../../repositories/implementations/purchase-repository";
 import {
-  CreatePurchaseController,
-  GetPurchaseController,
-} from "../../../../presentation/http/controllers/purchase";
-import { CourseModel, PurchaseModel } from "../../../databases/models";
-import { CourseRepository } from "../../../repositories";
-import { PurchaseRepository } from "../../../repositories/purchase-repository";
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function getPurchaseComposer(): IController {
   const repository: IPurchaseRepository = new PurchaseRepository(PurchaseModel);
-  const courseRepository: ICourseRepository = new CourseRepository(CourseModel);
-  const useCase: IGetPurchaseUseCase = new GetPurchaseUseCases(
-    repository,
-    courseRepository
+  const useCase: IGetPurchaseUseCase = new GetPurchaseUseCases(repository);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new GetPurchaseController(
+    useCase,
+    httpErrors,
+    httpSuccess
   );
-  const controller: IController = new GetPurchaseController(useCase);
   return controller;
 }

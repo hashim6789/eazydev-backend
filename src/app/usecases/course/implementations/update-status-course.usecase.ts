@@ -15,8 +15,11 @@ import {
   IChatGroupRepository,
   ICourseRepository,
   INotificationRepository,
-} from "../../../repositories";
+} from "../../../../infra/repositories";
 import { IUpdateStatusCourseUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { mapChatGroupToDocument } from "../../../../infra/databases/mappers";
+import { mapNotificationToDocument } from "../../../../infra/databases/mappers/notification";
 
 export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
   constructor(
@@ -117,6 +120,8 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
         createdAt: Date.now(),
       });
 
+      const mappedDocument = mapNotificationToDocument(notification);
+
       // Send notification to the mentor
       if (
         role === "admin" &&
@@ -124,7 +129,7 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
           newStatus === "rejected" ||
           newStatus === "published")
       ) {
-        await this.notificationRepository.create(notification);
+        await this.notificationRepository.create(mappedDocument);
         const io = getIo();
         if (io) {
           console.log(
@@ -137,7 +142,7 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
           );
         }
       } else if (role === "mentor" && newStatus === "requested") {
-        await this.notificationRepository.create(notification);
+        await this.notificationRepository.create(mappedDocument);
         const io = getIo();
         if (io) {
           console.log("Emitting notification to admin:");
@@ -155,12 +160,12 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
           learners: [],
           createdAt: Date.now(),
         });
-        await this.chatGroupRepository.create(group);
+        await this.chatGroupRepository.create(mapChatGroupToDocument(group));
       }
 
       return { data: { course: updatedCourse }, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { ObjectIdSchema } from "./common";
+import { RoleTypes } from "../enums";
 export interface IPurchaseOutDTO {
   id: string;
   purchaseId: string;
@@ -31,3 +34,39 @@ export type ICreatePurchaseRequestDTO = {
 };
 export type IGetPurchaseRequestDTO = { id: string };
 export type IGetAllPurchaseRequestDTO = Pick<ICreatePurchaseInDTO, "learnerId">;
+
+//
+export const CreatePaymentIntentSchema = z.object({
+  courseId: ObjectIdSchema,
+});
+
+//
+export const CreatePurchaseBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+  learnerId: ObjectIdSchema,
+  amount: z.number().positive(),
+  paymentIntentId: z.string().min(1),
+  courseId: ObjectIdSchema,
+});
+
+//
+export const GetAllPurchasesBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+});
+
+//
+export const GetPurchasePathSchema = z.object({
+  id: ObjectIdSchema,
+});
+
+export const GetPurchaseBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+});
+
+//
+export const CheckCoursePurchasedPathSchema = z.object({
+  courseId: ObjectIdSchema,
+});

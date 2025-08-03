@@ -3,20 +3,22 @@ import {
   IGetMaterialRequestDTO,
   IMaterialPopulateMentorDTO,
 } from "../../../../domain/dtos/material";
-import { IMaterialRepository } from "../../../repositories/material.repository";
+import { IMaterialRepository } from "../../../../infra/repositories";
 import { MaterialErrorType } from "../../../../domain/enums/material";
 import { IGetMaterialUseCase } from "../interface/get-material.usecase";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IMaterial } from "../../../../infra/databases/interfaces";
+import { mapMaterialToDTO } from "../../../../infra/databases/mappers";
 
 export class GetMaterialUseCase implements IGetMaterialUseCase {
   constructor(private materialRepository: IMaterialRepository) {}
 
   async execute({
-    userId,
     role,
     materialId,
   }: IGetMaterialRequestDTO): Promise<ResponseDTO> {
     try {
-      let fetchedData: null | IMaterialPopulateMentorDTO = null;
+      let fetchedData: null | IMaterial = null;
 
       if (role === "mentor") {
         fetchedData = await this.materialRepository.findById(materialId);
@@ -28,13 +30,15 @@ export class GetMaterialUseCase implements IGetMaterialUseCase {
           data: { error: MaterialErrorType.MaterialFetchingFailed },
         };
       }
+
+      const mappedData = mapMaterialToDTO(fetchedData);
       return {
         statusCode: 200,
         success: true,
-        data: fetchedData,
+        data: mappedData,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

@@ -1,4 +1,5 @@
 import {
+  ICategoryOutDTO,
   ICreateCategoryRequestDTO,
   Payload,
   ResponseDTO,
@@ -8,8 +9,10 @@ import {
   AuthenticateUserErrorType,
   CategoryErrorType,
 } from "../../../../domain/enums";
-import { ICategoryRepository } from "../../../repositories";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { ICategoryRepository } from "../../../../infra/repositories";
 import { ICreateCategoryUseCase } from "../interfaces";
+import { mapCategoryToDTO } from "../../../../infra/databases/mappers";
 
 export class CreateCategoryUseCase implements ICreateCategoryUseCase {
   constructor(private categoryRepository: ICategoryRepository) {}
@@ -42,7 +45,7 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
       });
 
       const createdCategory = await this.categoryRepository.create(
-        courseEntity
+        courseEntity.toObject()
       );
 
       if (!createdCategory) {
@@ -52,9 +55,11 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
         };
       }
 
-      return { data: { category: createdCategory }, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+      const mappedData: ICategoryOutDTO = mapCategoryToDTO(createdCategory);
+
+      return { data: { category: mappedData }, success: true };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

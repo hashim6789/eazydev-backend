@@ -1,15 +1,17 @@
 import { IGetResetPageUseCase } from "../../../../app/usecases/auth";
-import { IGetResetPageRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
-import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
-  HttpErrors,
+  GetResetPageRequestSchema,
+  IGetResetPageRequestDTO,
+} from "../../../../domain/dtos";
+
+import {
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -18,49 +20,41 @@ import { IController } from "../IController";
 export class GetResetPasswordPageController implements IController {
   constructor(
     private getResetPageUseCase: IGetResetPageUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const path = httpRequest.path as Pick<IGetResetPageRequestDTO, "tokenId">;
+    const query = httpRequest.query as Pick<IGetResetPageRequestDTO, "role">;
 
-    if (
-      httpRequest.path &&
-      Object.keys(httpRequest.path).length > 0 &&
-      httpRequest.query &&
-      Object.keys(httpRequest.query).length > 0
-    ) {
-      const pathParams = Object.keys(httpRequest.path);
-      const queryParams = Object.keys(httpRequest.query);
-
-      if (pathParams.includes("tokenId") && queryParams.includes("role")) {
-        const { tokenId } = httpRequest.path as Pick<
-          IGetResetPageRequestDTO,
-          "tokenId"
-        >;
-        const { role } = httpRequest.query as Pick<
-          IGetResetPageRequestDTO,
-          "role"
-        >;
-
-        response = await this.getResetPageUseCase.execute({ tokenId, role });
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!path.tokenId || !query.role) {
+      const error = this.httpErrors.error_422("Missing tokenId or role");
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const validation = GetResetPageRequestSchema.safeParse({
+      tokenId: path.tokenId,
+      role: query.role,
+    });
+
+    if (!validation.success) {
+      const firstErrorMessage = extractFirstZodMessage(validation.error);
+      const error = this.httpErrors.error_422(firstErrorMessage);
+      return new HttpResponse(error.statusCode, error.body);
+    }
+
+    const getResetPageRequestDTO: IGetResetPageRequestDTO = validation.data;
+    const response = await this.getResetPageUseCase.execute(
+      getResetPageRequestDTO
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

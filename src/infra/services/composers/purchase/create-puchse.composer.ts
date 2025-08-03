@@ -3,7 +3,7 @@ import {
   ICourseRepository,
   IProgressRepository,
   IPurchaseRepository,
-} from "../../../../app/repositories";
+} from "../../../repositories";
 import { CreatePurchaseUseCases } from "../../../../app/usecases/purchase/implementations/create-purchase.usecase";
 import { ICreatePurchaseUseCase } from "../../../../app/usecases/purchase/interfaces";
 import { IController } from "../../../../presentation/http/controllers/IController";
@@ -18,8 +18,14 @@ import {
   ChatGroupRepository,
   CourseRepository,
   ProgressRepository,
-} from "../../../repositories";
-import { PurchaseRepository } from "../../../repositories/purchase-repository";
+} from "../../../repositories/implementations";
+import { PurchaseRepository } from "../../../repositories/implementations/purchase-repository";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function createPurchaseComposer(): IController {
   const repository: IPurchaseRepository = new PurchaseRepository(PurchaseModel);
@@ -36,6 +42,12 @@ export function createPurchaseComposer(): IController {
     progressRepository,
     chatGroupRepository
   );
-  const controller: IController = new CreatePurchaseController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new CreatePurchaseController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

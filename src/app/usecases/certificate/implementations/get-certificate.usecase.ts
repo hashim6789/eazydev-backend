@@ -9,8 +9,13 @@ import { ProgressErrorType } from "../../../../domain/enums/progress";
 import {
   ICertificateRepository,
   IProgressRepository,
-} from "../../../repositories";
+} from "../../../../infra/repositories";
 import { IGetCertificateUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import {
+  mapCertificateToDocument,
+  mapProgressToDTO,
+} from "../../../../infra/databases/mappers";
 
 export class GetCertificateUseCase implements IGetCertificateUseCase {
   constructor(
@@ -48,16 +53,19 @@ export class GetCertificateUseCase implements IGetCertificateUseCase {
         };
       }
 
+      const mappedData = mapProgressToDTO(progress);
+
       const certificateEntity = CertificateEntity.create({
         progressId,
-        courseId: progress.courseId,
-        mentorId: progress.mentorId,
+        courseId: mappedData.courseId,
+        mentorId: mappedData.mentorId,
         learnerId: userId,
         issueDate: Date.now(),
       });
 
-      const createdCertificate =
-        this.certificateRepository.create(certificateEntity);
+      const createdCertificate = this.certificateRepository.create(
+        mapCertificateToDocument(certificateEntity)
+      );
       if (!createdCertificate) {
         return {
           data: { error: CertificateErrorType.CertificateCreationFailed },
@@ -66,8 +74,8 @@ export class GetCertificateUseCase implements IGetCertificateUseCase {
       }
 
       return { data: createdCertificate, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

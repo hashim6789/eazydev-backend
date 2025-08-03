@@ -5,10 +5,11 @@ import {
   Payload,
 } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IUsersRepository } from "../../../repositories/user.repository";
+import { IUsersRepository } from "../../../../infra/repositories";
 import { IVerifyPasswordUseCase } from "../interfaces";
-import { IPasswordHasher } from "../../../providers";
 import { AuthenticateUserErrorType } from "../../../../domain/enums";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IPasswordHasher } from "../../../../infra/providers";
 
 export class VerifyPasswordUseCase implements IVerifyPasswordUseCase {
   constructor(
@@ -40,8 +41,8 @@ export class VerifyPasswordUseCase implements IVerifyPasswordUseCase {
       }
 
       return { success: true, data: user };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

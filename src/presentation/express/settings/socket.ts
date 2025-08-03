@@ -1,5 +1,6 @@
 import { Server as SocketIOServer, Socket, Namespace } from "socket.io";
 import { Server as HttpServer } from "http";
+import { env } from "../configs";
 
 //notification
 export const handleNotification = (
@@ -71,8 +72,8 @@ let io: SocketIOServer | undefined;
 export const connectSocket = (server: HttpServer): SocketIOServer => {
   io = new SocketIOServer(server, {
     cors: {
-      // origin: "http://localhost:5173",
-      origin: "https://www.muhammedhashim.online",
+      origin: env.FRONTEND_HOST,
+      // origin: "https://www.muhammedhashim.online",
       methods: ["GET", "POST"],
     },
   });

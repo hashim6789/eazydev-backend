@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { expressAdapter } from "../../adapters/express.adapter";
 import { authenticateToken, authorizeRole } from "../middlewares";
 import {
+  checkCoursePurchasedComposer,
   createPurchaseComposer,
   getAllPurchaseComposer,
   getPurchaseComposer,
@@ -12,6 +13,18 @@ import {
  */
 export const purchaseRouter = Router();
 
+purchaseRouter.get(
+  "/courses/:courseId",
+  authenticateToken,
+  authorizeRole(["learner"]),
+  async (request: Request, response: Response) => {
+    const adapter = await expressAdapter(
+      request,
+      checkCoursePurchasedComposer()
+    );
+    response.status(adapter.statusCode).json(adapter.body);
+  }
+);
 purchaseRouter.get(
   "/",
   authenticateToken,

@@ -4,8 +4,9 @@ import {
   Payload,
 } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IUsersRepository } from "../../../repositories/user.repository";
+import { IUsersRepository } from "../../../../infra/repositories";
 import { IUpdatePersonalInfoUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class UpdatePersonalInfoUseCase implements IUpdatePersonalInfoUseCase {
   constructor(private userRepository: IUsersRepository) {}
@@ -24,8 +25,8 @@ export class UpdatePersonalInfoUseCase implements IUpdatePersonalInfoUseCase {
       }
 
       return { success: true, data: user };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

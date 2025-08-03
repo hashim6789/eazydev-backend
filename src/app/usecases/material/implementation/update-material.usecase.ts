@@ -1,13 +1,14 @@
 import { Payload } from "../../../../domain/dtos/jwt-payload";
 import { IUpdateMaterialRequestDTO } from "../../../../domain/dtos/material";
-
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { MaterialEntity } from "../../../../domain/entities";
 import { UserErrorType } from "../../../../domain/enums";
 import { AuthenticateUserErrorType } from "../../../../domain/enums/auth";
 import { MaterialErrorType } from "../../../../domain/enums/material";
-import { IMaterialRepository } from "../../../repositories/material.repository";
-import { ICreateMaterialUseCase, IUpdateMaterialUseCase } from "../interface";
+import { IMaterialRepository } from "../../../../infra/repositories";
+import { IUpdateMaterialUseCase } from "../interface";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { mapMaterialToDocument } from "../../../../infra/databases/mappers";
+import { MaterialEntity } from "../../../../domain/entities";
 
 export class UpdateMaterialUseCase implements IUpdateMaterialUseCase {
   constructor(private materialRepository: IMaterialRepository) {}
@@ -32,7 +33,9 @@ export class UpdateMaterialUseCase implements IUpdateMaterialUseCase {
         };
       }
 
-      const material = await this.materialRepository.findById(materialId);
+      const material = await this.materialRepository.findByIdPopulate(
+        materialId
+      );
       if (!material) {
         return {
           data: { error: MaterialErrorType.MaterialNotFound },
@@ -46,18 +49,18 @@ export class UpdateMaterialUseCase implements IUpdateMaterialUseCase {
         };
       }
 
-      const updateData = {
+      const updateData = MaterialEntity.create({
         title,
         mentorId,
         description,
         type,
         duration,
         fileKey,
-      };
+      });
 
       const updatedMaterial = await this.materialRepository.update(
         material.id,
-        updateData
+        mapMaterialToDocument(updateData)
       );
 
       if (!updatedMaterial) {
@@ -68,8 +71,8 @@ export class UpdateMaterialUseCase implements IUpdateMaterialUseCase {
       }
 
       return { data: updatedMaterial.id, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

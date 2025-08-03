@@ -4,7 +4,11 @@ import {
   AnalysisErrorType,
   AuthenticateUserErrorType,
 } from "../../../../domain/enums";
-import { ICourseRepository, IProgressRepository } from "../../../repositories";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import {
+  ICourseRepository,
+  IProgressRepository,
+} from "../../../../infra/repositories";
 import { IGetMentorAnalyzeUseCase } from "../interfaces";
 
 export class GetMentorAnalyzeUseCase implements IGetMentorAnalyzeUseCase {
@@ -50,8 +54,8 @@ export class GetMentorAnalyzeUseCase implements IGetMentorAnalyzeUseCase {
         },
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

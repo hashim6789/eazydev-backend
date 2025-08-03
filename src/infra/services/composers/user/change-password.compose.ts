@@ -1,22 +1,20 @@
-import { IUsersRepository } from "../../../../app/repositories/user.repository";
+import { IUsersRepository } from "../../../repositories";
 import { IController } from "../../../../presentation/http/controllers/IController";
-import { UserRepository } from "../../../repositories/user.repository";
+import { UserRepository } from "../../../repositories/implementations/user.repository";
 import {
   ChangePasswordUseCase,
   IChangePasswordUseCase,
-  IUpdatePersonalInfoUseCase,
-  IVerifyPasswordUseCase,
-  UpdatePersonalInfoUseCase,
-  VerifyPasswordUseCase,
 } from "../../../../app/usecases/user";
-import {
-  ChangePasswordController,
-  UpdatePersonalInfoController,
-  VerifyPasswordController,
-} from "../../../../presentation/http/controllers";
+import { ChangePasswordController } from "../../../../presentation/http/controllers";
 import { UserModel } from "../../../databases/models";
-import { IPasswordHasher } from "../../../../app/providers";
-import { PasswordHasher } from "../../../providers";
+import { PasswordHasher } from "../../../providers/implementations";
+import { IPasswordHasher } from "../../../providers";
+import {
+  HttpErrors,
+  HttpSuccess,
+  IHttpErrors,
+  IHttpSuccess,
+} from "../../../../presentation/http/helpers";
 
 export function ChangePasswordComposer(): IController {
   const repository: IUsersRepository = new UserRepository(UserModel);
@@ -25,6 +23,12 @@ export function ChangePasswordComposer(): IController {
     repository,
     passwordHasher
   );
-  const controller: IController = new ChangePasswordController(useCase);
+  const httpErrors: IHttpErrors = new HttpErrors();
+  const httpSuccess: IHttpSuccess = new HttpSuccess();
+  const controller: IController = new ChangePasswordController(
+    useCase,
+    httpErrors,
+    httpSuccess
+  );
   return controller;
 }

@@ -1,8 +1,8 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { BlockUserRequestDTO } from "../../../../domain/dtos";
 import { UserErrorType } from "../../../../domain/enums/user";
-
-import { IUsersRepository } from "../../../repositories/user.repository";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IUsersRepository } from "../../../../infra/repositories";
 import { IBlockUserUseCase } from "../interfaces/block-user.usecase";
 
 export class BlockUserUseCase implements IBlockUserUseCase {
@@ -24,8 +24,8 @@ export class BlockUserUseCase implements IBlockUserUseCase {
         success: true,
         data: change,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

@@ -1,10 +1,9 @@
 import {
-  ICreatePurchaseRequestDTO,
-  IGetPurchaseRequestDTO,
   Payload,
   ResponseDTO,
+  SimplePagination,
 } from "../../../../domain/dtos";
 
 export interface IGetAllPurchaseUseCase {
-  execute(authData: Payload): Promise<ResponseDTO>;
+  execute(query: SimplePagination, authData: Payload): Promise<ResponseDTO>;
 }

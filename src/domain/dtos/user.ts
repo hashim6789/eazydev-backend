@@ -1,10 +1,7 @@
+import { z } from "zod";
 import { Role, SignupRole } from "../types";
-import { ICourseOutSimplePopulateDTO } from "./course";
-
-export interface IForgotPasswordRequestDTO {
-  email: string;
-  role: Role;
-}
+import { ObjectIdSchema, zStringPositiveInteger } from "./common";
+import { RoleTypes, UserSorts, UserStatuses } from "../enums";
 
 export interface ICreateUserRequestDTO {
   firstName: string;
@@ -51,7 +48,7 @@ export interface QueryUser {
   status: "blocked" | "unblocked" | "all";
   search: string;
   page: string;
-  sort: "ASC" | "DEC";
+  // sort: "ASC" | "DEC";
   limit: string;
 }
 
@@ -139,7 +136,6 @@ export interface IUserOut {
 }
 
 export type IUserDetailOutDTO = IUserOut;
-// & PurchasedCourse
 
 export interface UserDataDTO {
   firstName: string;
@@ -149,3 +145,72 @@ export interface UserDataDTO {
   courses: { title: string; thumbnail: string; price: string }[];
   isBlocked: boolean | null;
 }
+
+//
+export const BlockUserBodySchema = z.object({
+  change: z.boolean(),
+});
+
+export const BlockUserPathSchema = z.object({
+  userId: ObjectIdSchema,
+});
+
+//
+export const ChangePasswordRequestSchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+  newPassword: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+//
+
+// Optional: z.enum([...]) if roles/status are predefined
+export const GetAllUserQuerySchema = z.object({
+  role: z.nativeEnum(RoleTypes),
+  // sort: z.nativeEnum(UserSorts),
+  status: z.nativeEnum(UserStatuses),
+  search: z.string(),
+  page: zStringPositiveInteger("Page"),
+  limit: zStringPositiveInteger("Limit"),
+});
+
+//
+
+export const GetPersonalInfoSchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+});
+
+//
+
+export const GetUserPathSchema = z.object({
+  id: ObjectIdSchema,
+});
+
+export const GetUserQuerySchema = z.object({
+  userRole: z.enum(["learner", "mentor"]),
+});
+
+//
+export const UpdatePersonalInfoBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.enum(["learner", "mentor"]),
+  firstName: z.string().min(1, "firstName is required"),
+  lastName: z.string().min(1, "lastName is required"),
+});
+
+//
+export const UpdateProfilePictureBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.enum(["learner", "mentor"]),
+  profilePicture: z.string().url("profilePicture must be a valid URL"),
+});
+
+//
+export const VerifyPasswordBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.enum(["learner", "mentor"]),
+  currentPassword: z
+    .string()
+    .min(8, "currentPassword must be at least 6 characters"),
+});

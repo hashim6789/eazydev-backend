@@ -1,8 +1,6 @@
 import { IGetAdminAnalyzeUseCase } from "../../../../app/usecases/analyze";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
@@ -16,8 +14,8 @@ import { IController } from "../IController";
 export class GetAdminAnalyzeController implements IController {
   constructor(
     private getAdminAnalysisUseCase: IGetAdminAnalyzeUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {

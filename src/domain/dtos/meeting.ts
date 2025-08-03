@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { ObjectIdSchema } from "./common";
+import { RoleTypes } from "../enums";
 export interface Meeting {
   courseId: string;
   learnerId: string;
@@ -32,3 +35,21 @@ export interface IJoinMeetingRequestDTO {
   peerId: string;
   meetingId: string;
 }
+
+//
+
+export const GetAllMeetingsBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+});
+
+//
+export const JoinMeetingPathSchema = z.object({
+  meetingId: ObjectIdSchema,
+});
+
+export const JoinMeetingBodySchema = z.object({
+  userId: ObjectIdSchema,
+  role: z.nativeEnum(RoleTypes),
+  peerId: z.string().min(1, "Peer ID is required"),
+});

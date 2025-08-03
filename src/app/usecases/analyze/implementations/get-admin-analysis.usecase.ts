@@ -1,10 +1,11 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { AnalysisErrorType } from "../../../../domain/enums";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 import {
   IProgressRepository,
   IPurchaseRepository,
   IUsersRepository,
-} from "../../../repositories";
+} from "../../../../infra/repositories";
 import { IGetAdminAnalyzeUseCase } from "../interfaces";
 
 export class GetAdminAnalyzeUseCase implements IGetAdminAnalyzeUseCase {
@@ -37,8 +38,8 @@ export class GetAdminAnalyzeUseCase implements IGetAdminAnalyzeUseCase {
         },
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

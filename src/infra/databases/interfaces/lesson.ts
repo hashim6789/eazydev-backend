@@ -1,10 +1,9 @@
-import { ObjectId } from "mongoose";
+import { Types, Document } from "mongoose";
 
 export interface ILesson extends Document {
-  _id: ObjectId;
+  _id: Types.ObjectId;
   title: string;
   description: string;
-  mentorId: ObjectId;
-  duration: number;
-  materials: ObjectId[];
+  mentorId: Types.ObjectId;
+  materials: Types.ObjectId[];
 }

@@ -1,16 +1,16 @@
 import { IGetAllMaterialUseCase } from "../../../../app/usecases/material";
-import { Payload } from "../../../../domain/dtos/jwt-payload";
-import { QueryMaterial } from "../../../../domain/dtos/material";
-import { ResponseDTO } from "../../../../domain/dtos/response";
 import {
-  HttpErrors,
+  GetAllMaterialsBodySchema,
+  GetAllMaterialsQuerySchema,
+} from "../../../../domain/dtos/material";
+import {
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -19,54 +19,46 @@ import { IController } from "../IController";
 export class GetAllMaterialController implements IController {
   constructor(
     private getAllMaterialUseCase: IGetAllMaterialUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const queryValidation = GetAllMaterialsQuerySchema.safeParse(
+      httpRequest.query ?? {}
+    );
+    const bodyValidation = GetAllMaterialsBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (
-      httpRequest.query &&
-      httpRequest.body &&
-      Object.keys(httpRequest.query).length > 0 &&
-      Object.keys(httpRequest.body).length > 0
-    ) {
-      const queryParams = Object.keys(httpRequest.query);
-      const bodyParams = Object.keys(httpRequest.body);
+    if (!queryValidation.success || !bodyValidation.success) {
+      const queryError = !queryValidation.success
+        ? extractFirstZodMessage(queryValidation.error)
+        : null;
+      const bodyError = !bodyValidation.success
+        ? extractFirstZodMessage(bodyValidation.error)
+        : null;
+      const errorMessage = queryError || bodyError || "Invalid input";
 
-      if (
-        queryParams.includes("type") &&
-        queryParams.includes("search") &&
-        queryParams.includes("page") &&
-        queryParams.includes("limit") &&
-        bodyParams.includes("userId") &&
-        bodyParams.includes("role")
-      ) {
-        const query = httpRequest.query as QueryMaterial;
-
-        const { userId, role } = httpRequest.body as Payload;
-        response = await this.getAllMaterialUseCase.execute({
-          query,
-          userId,
-          role,
-        });
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+      const error = this.httpErrors.error_422(errorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const query = queryValidation.data;
+    const { userId, role } = bodyValidation.data;
+
+    const response = await this.getAllMaterialUseCase.execute({
+      query,
+      userId,
+      role,
+    });
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

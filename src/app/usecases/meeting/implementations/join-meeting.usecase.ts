@@ -5,8 +5,10 @@ import {
 import { Payload } from "../../../../domain/dtos/jwt-payload";
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { MeetingErrorType } from "../../../../domain/enums/meeting";
-import { IMeetingRepository, ISlotRepository } from "../../../repositories";
-import { IGetAllMeetingUseCase, IJoinMeetingUseCase } from "../interfaces";
+import { IMeetingRepository } from "../../../../infra/repositories";
+import { IJoinMeetingUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IMeeting } from "../../../../infra/databases/interfaces";
 
 export class JoinMeetingUseCase implements IJoinMeetingUseCase {
   constructor(private meetingRepository: IMeetingRepository) {}
@@ -33,22 +35,22 @@ export class JoinMeetingUseCase implements IJoinMeetingUseCase {
       //   }
       // Determine if the user is a mentor or learner
       let otherPeerId = null;
-      let meet: IMeetingOutDTO | null = null;
+      let meet: IMeeting | null = null;
       if (role === "mentor") {
-        meet = await this.meetingRepository.updateById(meetingId, {
+        meet = await this.meetingRepository.update(meetingId, {
           mentorPeerId: peerId,
         });
         otherPeerId = meet ? meet.learnerPeerId : null;
       } else {
-        meet = await this.meetingRepository.updateById(meetingId, {
+        meet = await this.meetingRepository.update(meetingId, {
           learnerPeerId: peerId,
         });
         otherPeerId = meet ? meet.mentorPeerId : null;
       }
 
       return { data: { otherPeerId }, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

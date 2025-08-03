@@ -1,0 +1,15 @@
+export { OtpRepository } from "./otp.repository";
+export { TokenRepository } from "./token-repository";
+export { UserRepository } from "./user.repository";
+export { MaterialRepository } from "./material.repository";
+export { CourseRepository } from "./course.repository";
+export { LessonRepository } from "./lesson.repository";
+export { CategoryRepository } from "./category-repository";
+export { NotificationRepository } from "./notification.repository";
+export { ChatGroupRepository } from "./chat-group.repository";
+export { ChatMessageRepository } from "./chat-message.repository";
+export { ProgressRepository } from "./progress.repository";
+export { PurchaseRepository } from "./purchase-repository";
+export { SlotRepository } from "./slot.repository";
+export { MeetingRepository } from "./meeting-repository";
+export { BaseRepository } from "./base-repository";

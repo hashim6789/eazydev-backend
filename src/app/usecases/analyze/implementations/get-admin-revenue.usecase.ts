@@ -1,5 +1,6 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IPurchaseRepository } from "../../../repositories";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IPurchaseRepository } from "../../../../infra/repositories";
 import { IGetAdminAnalyzeUseCase } from "../interfaces";
 
 export class GetAdminRevenueAnalyzeUseCase implements IGetAdminAnalyzeUseCase {
@@ -14,8 +15,8 @@ export class GetAdminRevenueAnalyzeUseCase implements IGetAdminAnalyzeUseCase {
         data: monthlyRevenueData,
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

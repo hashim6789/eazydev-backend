@@ -17,7 +17,7 @@ import { slotRouter } from "./slot.routes";
 import { meetingRouter } from "./meet.routes";
 import { chatRouter } from "./chat.routes";
 import { analyzeRouter } from "./analyze.routes";
-import { certificateRouter } from "./certificate.routes";
+import { certificateRouter } from "./certificate.route";
 
 export const apiRouter = express.Router();
 

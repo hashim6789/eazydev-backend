@@ -1,15 +1,13 @@
 import { IGetAllChatGroupUseCase } from "../../../../app/usecases/chat/interfaces";
-import { Payload } from "../../../../domain/dtos/jwt-payload";
-import { ResponseDTO } from "../../../../domain/dtos/response";
+import { GetAllChatGroupSchema } from "../../../../domain/dtos/chat-group";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -18,38 +16,31 @@ import { IController } from "../IController";
 export class GetAllChatGroupController implements IController {
   constructor(
     private getAllChatGroupUseCase: IGetAllChatGroupUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const parsedBody = GetAllChatGroupSchema.safeParse(httpRequest.body ?? {});
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (bodyParams.includes("userId") && bodyParams.includes("role")) {
-        const { userId, role } = httpRequest.body as Payload;
-        response = await this.getAllChatGroupUseCase.execute({
-          userId,
-          role,
-        });
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!parsedBody.success) {
+      const firstError = extractFirstZodMessage(parsedBody.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { userId, role } = parsedBody.data;
+    const response = await this.getAllChatGroupUseCase.execute({
+      userId,
+      role,
+    });
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

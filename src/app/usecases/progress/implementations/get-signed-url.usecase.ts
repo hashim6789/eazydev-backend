@@ -2,10 +2,12 @@ import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IGetSignedUrlRequestDTO } from "../../../../domain/dtos/progress";
 import { IGetSignedUrlUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";
-import { IProgressRepository } from "../../../repositories";
+import { IProgressRepository } from "../../../../infra/repositories";
 import { ProgressErrorType } from "../../../../domain/enums/progress";
 import { AuthenticateUserErrorType } from "../../../../domain/enums";
-import { IS3ServiceProvider } from "../../../providers";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { IS3ServiceProvider } from "../../../../infra/providers";
+import { mapProgressToDTO } from "../../../../infra/databases/mappers";
 
 export class GetSignedUrlUseCase implements IGetSignedUrlUseCase {
   constructor(
@@ -27,7 +29,9 @@ export class GetSignedUrlUseCase implements IGetSignedUrlUseCase {
         };
       }
 
-      if (progress.userId !== userId) {
+      const mappedData = mapProgressToDTO(progress);
+
+      if (mappedData.userId !== userId) {
         return {
           success: false,
           data: { error: AuthenticateUserErrorType.UserCanNotDoIt },
@@ -44,8 +48,8 @@ export class GetSignedUrlUseCase implements IGetSignedUrlUseCase {
         success: true,
         data: url,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

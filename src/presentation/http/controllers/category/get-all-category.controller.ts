@@ -1,5 +1,5 @@
 import { IGetAllCategoryUseCase } from "../../../../app/usecases/category";
-import { Payload, ResponseDTO } from "../../../../domain/dtos";
+import { Payload, ResponseDTO, RoleSchema } from "../../../../domain/dtos";
 import {
   HttpErrors,
   HttpResponse,
@@ -9,6 +9,7 @@ import {
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -17,19 +18,24 @@ import { IController } from "../IController";
 export class GetAllCategoryController implements IController {
   constructor(
     private getAllCategoryCase: IGetAllCategoryUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const validation = RoleSchema.safeParse(httpRequest.body ?? {});
 
-    const { role } = (httpRequest.body as Payload) || { role: "learner" };
+    if (!validation.success) {
+      const firstError = extractFirstZodMessage(validation.error);
+      const error = this.httpErrors.error_422(firstError);
+      return new HttpResponse(error.statusCode, error.body);
+    }
 
-    response = await this.getAllCategoryCase.execute(role);
+    const { role } = validation.data;
+    const response = await this.getAllCategoryCase.execute(role);
+
     if (!response.success) {
-      error = this.httpErrors.error_400();
+      const error = this.httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 

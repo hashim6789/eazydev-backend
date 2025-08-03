@@ -1,16 +1,17 @@
 import {
-  ICreateCategoryRequestDTO,
+  ICategoryOutDTO,
   IUpdateCategoryRequestDTO,
   Payload,
   ResponseDTO,
 } from "../../../../domain/dtos";
-import { CategoryEntity } from "../../../../domain/entities";
 import {
   AuthenticateUserErrorType,
   CategoryErrorType,
 } from "../../../../domain/enums";
-import { ICategoryRepository } from "../../../repositories";
-import { ICreateCategoryUseCase, IUpdateCategoryUseCase } from "../interfaces";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { ICategoryRepository } from "../../../../infra/repositories";
+import { IUpdateCategoryUseCase } from "../interfaces";
+import { mapCategoryToDTO } from "../../../../infra/databases/mappers";
 
 export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
   constructor(private categoryRepository: ICategoryRepository) {}
@@ -59,9 +60,11 @@ export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
         };
       }
 
-      return { data: { category: updatedCategory }, success: true };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+      const mappedData: ICategoryOutDTO = mapCategoryToDTO(updatedCategory);
+
+      return { data: { category: mappedData }, success: true };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

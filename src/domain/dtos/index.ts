@@ -1,3 +1,4 @@
+export * from "./auth";
 export * from "./course";
 export * from "./jwt-payload";
 export * from "./response";
@@ -11,3 +12,6 @@ export * from "./meeting";
 export * from "./chat-message";
 export * from "./user";
 export * from "./certificate";
+export * from "./otp";
+export * from "./common";
+export * from "./upload";

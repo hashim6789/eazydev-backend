@@ -1,7 +1,8 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { IGetAllChatGroupUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";
-import { IChatGroupRepository } from "../../../repositories";
+import { IChatGroupRepository } from "../../../../infra/repositories";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllChatGroupUseCase implements IGetAllChatGroupUseCase {
   constructor(private chatGroupRepository: IChatGroupRepository) {}
@@ -17,8 +18,8 @@ export class GetAllChatGroupUseCase implements IGetAllChatGroupUseCase {
         success: true,
         data: groups,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

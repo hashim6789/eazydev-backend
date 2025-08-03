@@ -1,8 +1,10 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
 import { ICreateChatMessageRequestDTO, Payload } from "../../../../domain/dtos";
-import { IChatMessageRepository } from "../../../repositories";
+import { IChatMessageRepository } from "../../../../infra/repositories";
 import { ICreateChatMessageUseCase } from "../interfaces/post-chat-message.usecase";
 import { ChatMessageEntity } from "../../../../domain/entities";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import { mapChatMessageToDocument } from "../../../../infra/databases/mappers";
 
 export class CreateChatMessageUseCase implements ICreateChatMessageUseCase {
   constructor(private chatMessageRepository: IChatMessageRepository) {}
@@ -20,7 +22,7 @@ export class CreateChatMessageUseCase implements ICreateChatMessageUseCase {
       });
 
       const createdMessage = await this.chatMessageRepository.create(
-        chatMessage
+        mapChatMessageToDocument(chatMessage)
       );
 
       return {
@@ -28,8 +30,8 @@ export class CreateChatMessageUseCase implements ICreateChatMessageUseCase {
         success: true,
         data: createdMessage,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

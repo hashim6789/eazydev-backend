@@ -1,15 +1,13 @@
 import { IVerifyOtpUseCase } from "../../../../app/usecases/auth/interfaces/verify-otp.usecase";
-import { IVerifyOtpRequestDTO } from "../../../../domain/dtos/auth/vefiry-otp-auth.dto";
-import { ResponseDTO } from "../../../../domain/dtos/response";
+import { VerifyOtpRequestSchema } from "../../../../domain/dtos";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -18,36 +16,28 @@ import { IController } from "../IController";
 export class VerifyOtpController implements IController {
   constructor(
     private verifyOtpCase: IVerifyOtpUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const validation = VerifyOtpRequestSchema.safeParse(httpRequest.body);
 
-    if (httpRequest.body && Object.keys(httpRequest.body).length > 0) {
-      const bodyParams = Object.keys(httpRequest.body);
-
-      if (bodyParams.includes("otp") && bodyParams.includes("userId")) {
-        const verifyOtpRequestDTO = httpRequest.body as IVerifyOtpRequestDTO;
-
-        response = await this.verifyOtpCase.execute(verifyOtpRequestDTO);
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+    if (!validation.success) {
+      const firstErrorMessage = extractFirstZodMessage(validation.error); // you’ve already built this
+      const error = this.httpErrors.error_422(firstErrorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const verifyOtpRequestDTO = validation.data;
+    const response = await this.verifyOtpCase.execute(verifyOtpRequestDTO);
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

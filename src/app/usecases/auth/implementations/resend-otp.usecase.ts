@@ -1,12 +1,21 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { IUsersRepository } from "../../../repositories/user.repository";
-import { IPasswordHasher } from "../../../providers/password-hasher.provider";
-import { IOtpRepository } from "../../../repositories/otp.repository";
+import {
+  IOtpRepository,
+  IUsersRepository,
+} from "../../../../infra/repositories";
 import { IResendOtpUseCase } from "../interfaces/resend-otp-usecase";
-import { IResendOtpRequestDTO } from "../../../../domain/dtos/auth/resend-otp-auth.dto";
-import { IGenerateOtpProvider } from "../../../providers/generate-otp.provider";
-import { ISendMailProvider } from "../../../providers/send-mail.provider";
-import { IUserDetailOutDTO } from "../../../../domain/dtos";
+import {
+  IResendOtpRequestDTO,
+  IUserDetailOutDTO,
+} from "../../../../domain/dtos";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import {
+  IGenerateOtpProvider,
+  IPasswordHasher,
+  ISendMailProvider,
+} from "../../../../infra/providers";
+import dayjs from "dayjs";
+import { mapOtpToDocument } from "../../../../infra/databases/mappers";
 
 export class ResendOtpUseCase implements IResendOtpUseCase {
   constructor(
@@ -19,7 +28,7 @@ export class ResendOtpUseCase implements IResendOtpUseCase {
 
   async execute({ userId }: IResendOtpRequestDTO): Promise<ResponseDTO> {
     try {
-      const deleteExistingOtp = await this.otpRepository.delete(userId);
+      await this.otpRepository.delete({ userId });
 
       const user = (await this.userRepository.findById(
         userId
@@ -27,10 +36,16 @@ export class ResendOtpUseCase implements IResendOtpUseCase {
 
       const otp = await this.generateOtpProvider.generateOtp();
       console.log("otp =", otp);
+      const expiresIn = dayjs().add(5, "minute").unix();
 
       const hashedOtp = await this.passwordHasher.hash(otp);
+      const mappedDocument = mapOtpToDocument({
+        userId,
+        otp: hashedOtp,
+        expiresIn,
+      });
 
-      const otpDoc = await this.otpRepository.create(userId, hashedOtp);
+      await this.otpRepository.create(mappedDocument);
       await this.sendMailProvider.sendOtpMail(user.email, otp);
 
       return {
@@ -40,8 +55,8 @@ export class ResendOtpUseCase implements IResendOtpUseCase {
           role: user.role,
         },
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

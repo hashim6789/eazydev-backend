@@ -1,21 +1,16 @@
+import { IUpdateLessonUseCase } from "../../../../app/usecases/lesson";
 import {
-  IGetLessonUseCase,
-  IUpdateLessonUseCase,
-} from "../../../../app/usecases/lesson";
-import {
-  IUpdateLessonRequestDTO,
-  Payload,
-  ResponseDTO,
+  UpdateLessonBodySchema,
+  UpdateLessonPathSchema,
 } from "../../../../domain/dtos";
 import {
-  HttpErrors,
   HttpResponse,
-  HttpSuccess,
   IHttpErrors,
   IHttpRequest,
   IHttpResponse,
   IHttpSuccess,
 } from "../../helpers";
+import { extractFirstZodMessage } from "../../utils";
 import { IController } from "../IController";
 
 /**
@@ -24,63 +19,46 @@ import { IController } from "../IController";
 export class UpdateLessonController implements IController {
   constructor(
     private updateLessonUseCase: IUpdateLessonUseCase,
-    private httpErrors: IHttpErrors = new HttpErrors(),
-    private httpSuccess: IHttpSuccess = new HttpSuccess()
+    private httpErrors: IHttpErrors,
+    private httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
-    let error;
-    let response: ResponseDTO;
+    const pathValidation = UpdateLessonPathSchema.safeParse(
+      httpRequest.path ?? {}
+    );
+    const bodyValidation = UpdateLessonBodySchema.safeParse(
+      httpRequest.body ?? {}
+    );
 
-    if (
-      httpRequest.path &&
-      httpRequest.body &&
-      Object.keys(httpRequest.body).length > 0 &&
-      Object.keys(httpRequest.path).length > 0
-    ) {
-      const pathParams = Object.keys(httpRequest.path);
-      const bodyParams = Object.keys(httpRequest.body);
+    if (!pathValidation.success || !bodyValidation.success) {
+      const pathError = !pathValidation.success
+        ? extractFirstZodMessage(pathValidation.error)
+        : null;
+      const bodyError = !bodyValidation.success
+        ? extractFirstZodMessage(bodyValidation.error)
+        : null;
 
-      if (
-        pathParams.includes("lessonId") &&
-        bodyParams.includes("userId") &&
-        bodyParams.includes("role") &&
-        bodyParams.includes("courseId") &&
-        bodyParams.includes("mentorId") &&
-        bodyParams.includes("title") &&
-        bodyParams.includes("description") &&
-        bodyParams.includes("materials")
-      ) {
-        const { lessonId } = httpRequest.path as { lessonId: string };
-        const {
-          userId,
-          role,
-          courseId,
-          title,
-          description,
-          mentorId,
-          materials,
-        } = httpRequest.body as Payload & Omit<IUpdateLessonRequestDTO, "id">;
-
-        response = await this.updateLessonUseCase.execute(
-          { id: lessonId, courseId, title, description, mentorId, materials },
-          { userId, role }
-        );
-      } else {
-        error = this.httpErrors.error_422();
-        return new HttpResponse(error.statusCode, error.body);
-      }
-
-      if (!response.success) {
-        error = this.httpErrors.error_400();
-        return new HttpResponse(error.statusCode, response.data);
-      }
-
-      const success = this.httpSuccess.success_200(response.data);
-      return new HttpResponse(success.statusCode, success.body);
+      const errorMessage = pathError || bodyError || "Invalid input";
+      const error = this.httpErrors.error_422(errorMessage);
+      return new HttpResponse(error.statusCode, error.body);
     }
 
-    error = this.httpErrors.error_500();
-    return new HttpResponse(error.statusCode, error.body);
+    const { lessonId } = pathValidation.data;
+    const { userId, role, courseId, mentorId, title, description, materials } =
+      bodyValidation.data;
+
+    const response = await this.updateLessonUseCase.execute(
+      { id: lessonId, courseId, title, description, mentorId, materials },
+      { userId, role }
+    );
+
+    if (!response.success) {
+      const error = this.httpErrors.error_400();
+      return new HttpResponse(error.statusCode, response.data);
+    }
+
+    const success = this.httpSuccess.success_200(response.data);
+    return new HttpResponse(success.statusCode, success.body);
   }
 }

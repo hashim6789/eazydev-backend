@@ -1,14 +1,9 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import {
-  IGetAllChatGroupUseCase,
-  IGetAllChatMessageUseCase,
-} from "../interfaces";
+import { IGetAllChatMessageUseCase } from "../interfaces";
 import { Payload } from "../../../../domain/dtos";
-import {
-  IChatGroupRepository,
-  IChatMessageRepository,
-} from "../../../repositories";
+import { IChatMessageRepository } from "../../../../infra/repositories";
 import { IGetAllChatMessagesRequestDTO } from "../../../../domain/dtos/chat-group";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllChatMessageUseCase implements IGetAllChatMessageUseCase {
   constructor(private chatMessageRepository: IChatMessageRepository) {}
@@ -24,8 +19,8 @@ export class GetAllChatMessageUseCase implements IGetAllChatMessageUseCase {
         success: true,
         data: messages,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }

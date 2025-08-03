@@ -1,10 +1,9 @@
-import { ObjectId } from "mongoose";
-
+import { Types, Document } from "mongoose";
 export interface ICertificate extends Document {
-  _id: ObjectId;
-  progressId: ObjectId;
-  courseId: ObjectId;
-  mentorId: ObjectId;
-  learnerId: ObjectId;
+  _id: Types.ObjectId;
+  progressId: Types.ObjectId;
+  courseId: Types.ObjectId;
+  mentorId: Types.ObjectId;
+  learnerId: Types.ObjectId;
   issueDate: Date;
 }

@@ -1,15 +1,21 @@
 import { ResponseDTO } from "../../../../domain/dtos/response";
-import { ISignupRequestDTO } from "../../../../domain/dtos/auth";
-import { IUsersRepository } from "../../../repositories/user.repository";
-import { IPasswordHasher } from "../../../providers/password-hasher.provider";
 import { UserEntity } from "../../../../domain/entities/user";
 import { UserErrorType } from "../../../../domain/enums/user";
-import { IGenerateTokenProvider } from "../../../providers/generate-refresh-token.provider";
-import { IOtpRepository } from "../../../repositories/otp.repository";
-import { IGenerateOtpProvider } from "../../../providers/generate-otp.provider";
-import { ISendMailProvider } from "../../../providers/send-mail.provider";
-import { ITokenRepository } from "../../../repositories";
-import { IUserInRequestDTO } from "../../../../domain/dtos";
+import {
+  IUsersRepository,
+  IOtpRepository,
+} from "../../../../infra/repositories";
+
+import { ISignupRequestDTO, IUserInRequestDTO } from "../../../../domain/dtos";
+import { formatErrorResponse } from "../../../../presentation/http/utils";
+import {
+  IGenerateOtpProvider,
+  IGenerateTokenProvider,
+  IPasswordHasher,
+  ISendMailProvider,
+} from "../../../../infra/providers";
+import { mapOtpToDocument } from "../../../../infra/databases/mappers";
+import dayjs from "dayjs";
 
 export interface ISignupUseCase {
   execute(data: ISignupRequestDTO): Promise<ResponseDTO>;
@@ -19,7 +25,6 @@ export class SignupUseCase implements ISignupUseCase {
   constructor(
     private userRepository: IUsersRepository,
     private passwordHasher: IPasswordHasher,
-    private tokenRepository: ITokenRepository,
     private generateTokenProvider: IGenerateTokenProvider,
     private otpRepository: IOtpRepository,
     private generateOtpProvider: IGenerateOtpProvider,
@@ -77,32 +82,46 @@ export class SignupUseCase implements ISignupUseCase {
       });
 
       const otp = await this.generateOtpProvider.generateOtp();
+      const expiresIn = dayjs().add(5, "minute").unix();
+
       console.log("otp =", otp);
 
       const hashedOtp = await this.passwordHasher.hash(otp);
 
-      const otpDoc = await this.otpRepository.create(user.id, hashedOtp);
-      await this.sendMailProvider.sendOtpMail(user.email, otp);
-
-      const token = await this.generateTokenProvider.generateToken(user.id, {
+      const mappedDocument = mapOtpToDocument({
+        otp: hashedOtp,
         userId: user.id,
-        role: user.role,
+        expiresIn,
       });
 
-      const newToken = await this.tokenRepository.create(
+      const otpDoc = await this.otpRepository.create(mappedDocument);
+      await this.sendMailProvider.sendOtpMail(user.email, otp);
+
+      const accessToken = await this.generateTokenProvider.generateToken(
         user.id,
-        user.role,
+        {
+          userId: user.id,
+          role: user.role,
+        },
+        "access"
+      );
+      const refreshToken = await this.generateTokenProvider.generateToken(
+        user.id,
+        {
+          userId: user.id,
+          role: user.role,
+        },
         "refresh"
       );
 
       const outUser = UserEntity.convert(user);
 
       return {
-        data: { refreshTokenId: newToken.id, token, user: outUser },
+        data: { refreshToken, accessToken, user: outUser },
         success: true,
       };
-    } catch (error: any) {
-      return { data: { error: error.message }, success: false };
+    } catch (error: unknown) {
+      return formatErrorResponse(error);
     }
   }
 }
