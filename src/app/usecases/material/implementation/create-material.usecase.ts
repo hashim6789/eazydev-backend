@@ -10,7 +10,7 @@ import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { mapMaterialToDocument } from "../../../../infra/databases/mappers";
 
 export class CreateMaterialUseCase implements ICreateMaterialUseCase {
-  constructor(private materialRepository: IMaterialRepository) {}
+  constructor(private _materialRepository: IMaterialRepository) {}
 
   async execute(
     {
@@ -39,7 +39,7 @@ export class CreateMaterialUseCase implements ICreateMaterialUseCase {
         duration,
       });
 
-      const createdMaterial = await this.materialRepository.create(
+      const createdMaterial = await this._materialRepository.create(
         mapMaterialToDocument(materialEntity)
       );
 

@@ -19,9 +19,9 @@ import { IController } from "../IController";
  */
 export class GoogleLoginController implements IController {
   constructor(
-    private googleLoginCase: IGoogleLoginUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _googleLoginCase: IGoogleLoginUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -29,26 +29,26 @@ export class GoogleLoginController implements IController {
     let response: ResponseDTO;
 
     if (!httpRequest.body || Object.keys(httpRequest.body).length === 0) {
-      error = this.httpErrors.error_500();
+      error = this._httpErrors.error_500();
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const validation = GoogleLoginRequestSchema.safeParse(httpRequest.body);
     if (!validation.success) {
       const firstErrorMessage = extractFirstZodMessage(validation.error);
-      error = this.httpErrors.error_422(firstErrorMessage);
+      error = this._httpErrors.error_422(firstErrorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const googleLoginRequestDTO: IGoogleLoginRequestDTO = validation.data;
-    response = await this.googleLoginCase.execute(googleLoginRequestDTO);
+    response = await this._googleLoginCase.execute(googleLoginRequestDTO);
 
     if (!response.success) {
-      error = this.httpErrors.error_400();
+      error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

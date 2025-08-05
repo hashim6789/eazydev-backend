@@ -16,10 +16,10 @@ export interface ChatGroup {
  * @class
  */
 export class ChatGroupEntity {
-  private _course: string;
-  private _mentor: string;
-  private _learners: string[];
-  private _createdAt: number;
+  private __course: string;
+  private __mentor: string;
+  private __learners: string[];
+  private __createdAt: number;
 
   /**
    * Creates a new chat group instance.
@@ -46,7 +46,7 @@ export class ChatGroupEntity {
    * @readonly
    */
   get course(): string {
-    return this._course;
+    return this.__course;
   }
 
   /**
@@ -54,7 +54,7 @@ export class ChatGroupEntity {
    * @readonly
    */
   get mentor(): string {
-    return this._mentor;
+    return this.__mentor;
   }
 
   /**
@@ -62,7 +62,7 @@ export class ChatGroupEntity {
    * @readonly
    */
   get learners(): string[] {
-    return this._learners;
+    return this.__learners;
   }
 
   /**
@@ -70,7 +70,7 @@ export class ChatGroupEntity {
    * @readonly
    */
   get createdAt(): number {
-    return this._createdAt;
+    return this.__createdAt;
   }
 
   /**
@@ -80,9 +80,9 @@ export class ChatGroupEntity {
    * @param {IChatGroup} props - The properties of the chat group.
    */
   constructor(props: ChatGroup) {
-    this._course = props.course;
-    this._mentor = props.mentor;
-    this._learners = props.learners;
-    this._createdAt = props.createdAt;
+    this.__course = props.course;
+    this.__mentor = props.mentor;
+    this.__learners = props.learners;
+    this.__createdAt = props.createdAt;
   }
 }

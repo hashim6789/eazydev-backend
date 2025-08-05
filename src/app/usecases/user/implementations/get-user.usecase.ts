@@ -6,11 +6,11 @@ import { IGetUserUseCase } from "../interfaces/get-user.uscase";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetUserUseCase implements IGetUserUseCase {
-  constructor(private userRepository: IUsersRepository) {}
+  constructor(private _userRepository: IUsersRepository) {}
 
   async execute({ userId, role }: IGetUserRequestDTO): Promise<ResponseDTO> {
     try {
-      const user = (await this.userRepository.findById(
+      const user = (await this._userRepository.findById(
         userId
       )) as IUserDetailOutDTO | null;
       if (!user) {

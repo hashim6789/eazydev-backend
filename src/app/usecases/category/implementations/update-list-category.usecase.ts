@@ -12,7 +12,7 @@ import { IUpdateListCategoryUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class UpdateListCategoryUseCase implements IUpdateListCategoryUseCase {
-  constructor(private categoryRepository: ICategoryRepository) {}
+  constructor(private _categoryRepository: ICategoryRepository) {}
 
   async execute(
     { categoryId, change, adminId }: IUpdateListCategoryRequestDTO,
@@ -26,7 +26,7 @@ export class UpdateListCategoryUseCase implements IUpdateListCategoryUseCase {
         };
       }
 
-      const isUpdated = await this.categoryRepository.updateListOfCategory(
+      const isUpdated = await this._categoryRepository.updateListOfCategory(
         categoryId,
         change
       );

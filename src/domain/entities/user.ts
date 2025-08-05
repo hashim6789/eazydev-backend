@@ -29,13 +29,13 @@ export interface UserInterface {
  * @class
  */
 export class UserEntity {
-  private _firstName: string;
-  private _lastName: string;
-  private _email: Email;
-  private _role: SignupRole;
-  private _password: string;
-  private _googleId: string;
-  private _profilePicture: string;
+  private __firstName: string;
+  private __lastName: string;
+  private __email: Email;
+  private __role: SignupRole;
+  private __password: string;
+  private __googleId: string;
+  private __profilePicture: string;
 
   /**
    * Creates a new user instance based on the provided data.
@@ -106,7 +106,7 @@ export class UserEntity {
    * @readonly
    */
   get firstName(): string {
-    return this._firstName;
+    return this.__firstName;
   }
   /**
    * Gets the user's name.
@@ -114,7 +114,7 @@ export class UserEntity {
    * @readonly
    */
   get lastName(): string {
-    return this._lastName;
+    return this.__lastName;
   }
 
   /**
@@ -123,7 +123,7 @@ export class UserEntity {
    * @readonly
    */
   get email(): Email {
-    return this._email;
+    return this.__email;
   }
 
   /**
@@ -132,7 +132,7 @@ export class UserEntity {
    * @readonly
    */
   get role(): SignupRole {
-    return this._role;
+    return this.__role;
   }
 
   /**
@@ -141,7 +141,7 @@ export class UserEntity {
    * @readonly
    */
   get password(): string {
-    return this._password;
+    return this.__password;
   }
 
   /**
@@ -150,7 +150,7 @@ export class UserEntity {
    * @readonly
    */
   get googleId(): string {
-    return this._googleId;
+    return this.__googleId;
   }
   /**
    * Gets the user's password.
@@ -158,7 +158,7 @@ export class UserEntity {
    * @readonly
    */
   get profilePicture(): string {
-    return this._profilePicture;
+    return this.__profilePicture;
   }
 
   /**
@@ -168,12 +168,12 @@ export class UserEntity {
    * @param {UserInterface} props - The properties of the user.
    */
   constructor(props: UserInterface) {
-    this._firstName = props.firstName;
-    this._lastName = props.lastName;
-    this._password = props.password;
-    this._role = props.role;
-    this._email = props.email;
-    this._googleId = props.googleId;
-    this._profilePicture = props.profilePicture;
+    this.__firstName = props.firstName;
+    this.__lastName = props.lastName;
+    this.__password = props.password;
+    this.__role = props.role;
+    this.__email = props.email;
+    this.__googleId = props.googleId;
+    this.__profilePicture = props.profilePicture;
   }
 }

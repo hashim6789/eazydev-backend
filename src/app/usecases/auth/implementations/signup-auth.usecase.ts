@@ -23,12 +23,12 @@ export interface ISignupUseCase {
 
 export class SignupUseCase implements ISignupUseCase {
   constructor(
-    private userRepository: IUsersRepository,
-    private passwordHasher: IPasswordHasher,
-    private generateTokenProvider: IGenerateTokenProvider,
-    private otpRepository: IOtpRepository,
-    private generateOtpProvider: IGenerateOtpProvider,
-    private sendMailProvider: ISendMailProvider
+    private _userRepository: IUsersRepository,
+    private _passwordHasher: IPasswordHasher,
+    private _generateTokenProvider: IGenerateTokenProvider,
+    private _otpRepository: IOtpRepository,
+    private _generateOtpProvider: IGenerateOtpProvider,
+    private _sendMailProvider: ISendMailProvider
   ) {}
 
   async execute({
@@ -49,7 +49,7 @@ export class SignupUseCase implements ISignupUseCase {
         profilePicture: "",
       });
 
-      const userAlreadyExists = (await this.userRepository.findByEmail(
+      const userAlreadyExists = (await this._userRepository.findByEmail(
         userEntity.email.address
       )) as IUserInRequestDTO | null;
 
@@ -67,11 +67,11 @@ export class SignupUseCase implements ISignupUseCase {
       }
 
       if (userAlreadyExists && !userAlreadyExists.isVerified) {
-        await this.userRepository.delete(userAlreadyExists.id);
+        await this._userRepository.delete(userAlreadyExists.id);
       }
 
-      const passwordHashed = await this.passwordHasher.hash(password);
-      const user = await this.userRepository.create({
+      const passwordHashed = await this._passwordHasher.hash(password);
+      const user = await this._userRepository.create({
         email: userEntity.email.address,
         firstName: userEntity.firstName,
         lastName: userEntity.lastName,
@@ -81,12 +81,12 @@ export class SignupUseCase implements ISignupUseCase {
         profilePicture: userEntity.profilePicture,
       });
 
-      const otp = await this.generateOtpProvider.generateOtp();
+      const otp = await this._generateOtpProvider.generateOtp();
       const expiresIn = dayjs().add(5, "minute").unix();
 
-      console.log("otp =", otp);
+      //console.log("otp =", otp);
 
-      const hashedOtp = await this.passwordHasher.hash(otp);
+      const hashedOtp = await this._passwordHasher.hash(otp);
 
       const mappedDocument = mapOtpToDocument({
         otp: hashedOtp,
@@ -94,10 +94,10 @@ export class SignupUseCase implements ISignupUseCase {
         expiresIn,
       });
 
-      const otpDoc = await this.otpRepository.create(mappedDocument);
-      await this.sendMailProvider.sendOtpMail(user.email, otp);
+      const otpDoc = await this._otpRepository.create(mappedDocument);
+      await this._sendMailProvider.sendOtpMail(user.email, otp);
 
-      const accessToken = await this.generateTokenProvider.generateToken(
+      const accessToken = await this._generateTokenProvider.generateToken(
         user.id,
         {
           userId: user.id,
@@ -105,7 +105,7 @@ export class SignupUseCase implements ISignupUseCase {
         },
         "access"
       );
-      const refreshToken = await this.generateTokenProvider.generateToken(
+      const refreshToken = await this._generateTokenProvider.generateToken(
         user.id,
         {
           userId: user.id,

@@ -7,7 +7,7 @@ import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { mapChatMessageToDocument } from "../../../../infra/databases/mappers";
 
 export class CreateChatMessageUseCase implements ICreateChatMessageUseCase {
-  constructor(private chatMessageRepository: IChatMessageRepository) {}
+  constructor(private _chatMessageRepository: IChatMessageRepository) {}
 
   async execute(
     { message, groupId }: ICreateChatMessageRequestDTO,
@@ -21,7 +21,7 @@ export class CreateChatMessageUseCase implements ICreateChatMessageUseCase {
         createdAt: Date.now(),
       });
 
-      const createdMessage = await this.chatMessageRepository.create(
+      const createdMessage = await this._chatMessageRepository.create(
         mapChatMessageToDocument(chatMessage)
       );
 

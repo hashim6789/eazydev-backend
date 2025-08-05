@@ -11,8 +11,8 @@ import { mapProgressToDTO } from "../../../../infra/databases/mappers";
 
 export class GetSignedUrlUseCase implements IGetSignedUrlUseCase {
   constructor(
-    private progressRepository: IProgressRepository,
-    private s3ServiceProvider: IS3ServiceProvider
+    private _progressRepository: IProgressRepository,
+    private _s3ServiceProvider: IS3ServiceProvider
   ) {}
 
   async execute(
@@ -20,7 +20,7 @@ export class GetSignedUrlUseCase implements IGetSignedUrlUseCase {
     { userId, role }: Payload
   ): Promise<ResponseDTO> {
     try {
-      const progress = await this.progressRepository.findById(progressId);
+      const progress = await this._progressRepository.findById(progressId);
 
       if (!progress) {
         return {
@@ -38,7 +38,7 @@ export class GetSignedUrlUseCase implements IGetSignedUrlUseCase {
         };
       }
 
-      const url = await this.s3ServiceProvider.getObjectUrl(
+      const url = await this._s3ServiceProvider.getObjectUrl(
         fileKey,
         materialType
       );

@@ -15,9 +15,9 @@ import { IController } from "../IController";
  */
 export class GetPreviewCertificateController implements IController {
   constructor(
-    private getPreviewCertificateCase: IGetPreviewCertificatesUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _getPreviewCertificateCase: IGetPreviewCertificatesUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -31,22 +31,22 @@ export class GetPreviewCertificateController implements IController {
         : null;
 
       const errorMessage = queryError || "Invalid request";
-      const error = this.httpErrors.error_422(errorMessage);
+      const error = this._httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const { certificateId } = pathValidation.data;
 
-    const response = await this.getPreviewCertificateCase.execute(
+    const response = await this._getPreviewCertificateCase.execute(
       certificateId
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

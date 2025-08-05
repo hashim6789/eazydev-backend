@@ -13,8 +13,8 @@ import { mapCertificateToDocument } from "../../../../infra/databases/mappers/ce
 
 export class UpdateProgressUseCase implements IUpdateProgressUseCase {
   constructor(
-    private progressRepository: IProgressRepository,
-    private certificateRepository: ICertificateRepository
+    private _progressRepository: IProgressRepository,
+    private _certificateRepository: ICertificateRepository
   ) {}
 
   async execute(
@@ -22,7 +22,7 @@ export class UpdateProgressUseCase implements IUpdateProgressUseCase {
     { userId }: Payload
   ): Promise<ResponseDTO> {
     try {
-      const progress = await this.progressRepository.updateProgress(
+      const progress = await this._progressRepository.updateProgress(
         progressId,
         materialId
       );
@@ -43,7 +43,7 @@ export class UpdateProgressUseCase implements IUpdateProgressUseCase {
           issueDate: Date.now(),
         });
 
-        await this.certificateRepository.create(
+        await this._certificateRepository.create(
           mapCertificateToDocument(certificateEntity)
         );
       }

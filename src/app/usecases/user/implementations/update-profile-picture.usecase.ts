@@ -11,14 +11,14 @@ import { formatErrorResponse } from "../../../../presentation/http/utils";
 export class UpdateProfilePictureUseCase
   implements IUpdateProfilePictureUseCase
 {
-  constructor(private userRepository: IUsersRepository) {}
+  constructor(private _userRepository: IUsersRepository) {}
 
   async execute(
     { profilePicture }: IUpdateProfilePictureRequestDTO,
     { userId }: Payload
   ): Promise<ResponseDTO> {
     try {
-      const user = await this.userRepository.update(userId, {
+      const user = await this._userRepository.update(userId, {
         profilePicture,
       });
       if (!user) {

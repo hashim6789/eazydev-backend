@@ -9,7 +9,7 @@ import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { IGetAllCertificatesUseCase } from "../interfaces";
 
 export class GetAllCertificateUseCase implements IGetAllCertificatesUseCase {
-  constructor(private certificateRepository: ICertificateRepository) {}
+  constructor(private _certificateRepository: ICertificateRepository) {}
 
   async execute(
     query: SimplePagination,
@@ -19,7 +19,7 @@ export class GetAllCertificateUseCase implements IGetAllCertificatesUseCase {
       const { userId, role } = authData;
       let certificates: PaginationDTO | null = null;
       if (role === "learner") {
-        certificates = await this.certificateRepository.findAllByUser(
+        certificates = await this._certificateRepository.findAllByUser(
           userId,
           query
         );

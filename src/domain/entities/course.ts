@@ -22,14 +22,14 @@ export interface CourseInterface {
  * @class
  */
 export class CourseEntity {
-  private _title: string;
-  private _mentorId: string;
-  private _categoryId: string;
-  private _description: string | undefined;
-  private _thumbnail: string;
-  private _lessons: string[];
-  private _price: number;
-  private _status: CourseStatus;
+  private __title: string;
+  private __mentorId: string;
+  private __categoryId: string;
+  private __description: string | undefined;
+  private __thumbnail: string;
+  private __lessons: string[];
+  private __price: number;
+  private __status: CourseStatus;
 
   /**
    * Creates a new course instance.
@@ -56,7 +56,7 @@ export class CourseEntity {
    * @readonly
    */
   get title(): string {
-    return this._title;
+    return this.__title;
   }
 
   /**
@@ -64,7 +64,7 @@ export class CourseEntity {
    * @readonly
    */
   get mentorId(): string {
-    return this._mentorId;
+    return this.__mentorId;
   }
 
   /**
@@ -72,7 +72,7 @@ export class CourseEntity {
    * @readonly
    */
   get categoryId(): string {
-    return this._categoryId;
+    return this.__categoryId;
   }
 
   /**
@@ -80,7 +80,7 @@ export class CourseEntity {
    * @readonly
    */
   get description(): string | undefined {
-    return this._description;
+    return this.__description;
   }
 
   /**
@@ -88,7 +88,7 @@ export class CourseEntity {
    * @readonly
    */
   get thumbnail(): string {
-    return this._thumbnail;
+    return this.__thumbnail;
   }
 
   /**
@@ -96,7 +96,7 @@ export class CourseEntity {
    * @readonly
    */
   get lessons(): string[] {
-    return this._lessons;
+    return this.__lessons;
   }
 
   /**
@@ -104,7 +104,7 @@ export class CourseEntity {
    * @readonly
    */
   get price(): number {
-    return this._price;
+    return this.__price;
   }
 
   /**
@@ -112,7 +112,7 @@ export class CourseEntity {
    * @readonly
    */
   get status(): CourseStatus {
-    return this._status;
+    return this.__status;
   }
 
   /**
@@ -122,13 +122,13 @@ export class CourseEntity {
    * @param {CourseInterface} props - The properties of the course.
    */
   constructor(props: CourseInterface) {
-    this._title = props.title;
-    this._mentorId = props.mentorId;
-    this._categoryId = props.categoryId;
-    this._description = props.description;
-    this._thumbnail = props.thumbnail;
-    this._lessons = props.lessons;
-    this._price = props.price;
-    this._status = props.status;
+    this.__title = props.title;
+    this.__mentorId = props.mentorId;
+    this.__categoryId = props.categoryId;
+    this.__description = props.description;
+    this.__thumbnail = props.thumbnail;
+    this.__lessons = props.lessons;
+    this.__price = props.price;
+    this.__status = props.status;
   }
 }

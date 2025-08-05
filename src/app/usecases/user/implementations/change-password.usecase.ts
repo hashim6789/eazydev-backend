@@ -12,8 +12,8 @@ import { IPasswordHasher } from "../../../../infra/providers";
 
 export class ChangePasswordUseCase implements IChangePasswordUseCase {
   constructor(
-    private userRepository: IUsersRepository,
-    private passwordHasher: IPasswordHasher
+    private _userRepository: IUsersRepository,
+    private _passwordHasher: IPasswordHasher
   ) {}
 
   async execute(
@@ -27,15 +27,15 @@ export class ChangePasswordUseCase implements IChangePasswordUseCase {
           data: { error: UserErrorType.newPasswordNotValid },
         };
       }
-      const user = (await this.userRepository.findById(
+      const user = (await this._userRepository.findById(
         userId
       )) as IUserValidDTO | null;
       if (!user) {
         return { success: false, data: { error: UserErrorType.UserNotFound } };
       }
 
-      const hashedPassword = await this.passwordHasher.hash(newPassword);
-      const updatedPassword = await this.userRepository.update(userId, {
+      const hashedPassword = await this._passwordHasher.hash(newPassword);
+      const updatedPassword = await this._userRepository.update(userId, {
         password: hashedPassword,
       });
       if (!updatedPassword) {

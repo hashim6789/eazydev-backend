@@ -6,11 +6,11 @@ import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { UserErrorType } from "../../../../domain/enums";
 
 export class CheckUserBlockedUseCase {
-  constructor(private userRepository: IUsersRepository) {}
+  constructor(private _userRepository: IUsersRepository) {}
 
   async execute({ userId }: Payload): Promise<ResponseDTO> {
     try {
-      const user = (await this.userRepository.findById(
+      const user = (await this._userRepository.findById(
         userId
       )) as IUserValidDTO | null;
 

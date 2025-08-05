@@ -16,10 +16,10 @@ export interface ChatMessageInterface {
  * @class
  */
 export class ChatMessageEntity {
-  private _group: string;
-  private _sender: string;
-  private _message: string;
-  private _createdAt: number;
+  private __group: string;
+  private __sender: string;
+  private __message: string;
+  private __createdAt: number;
 
   /**
    * Creates a new chat message instance.
@@ -46,7 +46,7 @@ export class ChatMessageEntity {
    * @readonly
    */
   get group(): string {
-    return this._group;
+    return this.__group;
   }
 
   /**
@@ -54,7 +54,7 @@ export class ChatMessageEntity {
    * @readonly
    */
   get sender(): string {
-    return this._sender;
+    return this.__sender;
   }
 
   /**
@@ -62,7 +62,7 @@ export class ChatMessageEntity {
    * @readonly
    */
   get message(): string {
-    return this._message;
+    return this.__message;
   }
 
   /**
@@ -70,7 +70,7 @@ export class ChatMessageEntity {
    * @readonly
    */
   get createdAt(): number {
-    return this._createdAt;
+    return this.__createdAt;
   }
 
   /**
@@ -80,9 +80,9 @@ export class ChatMessageEntity {
    * @param {ChatMessageInterface} props - The properties of the chat message.
    */
   constructor(props: ChatMessageInterface) {
-    this._group = props.group;
-    this._sender = props.sender;
-    this._message = props.message;
-    this._createdAt = props.createdAt;
+    this.__group = props.group;
+    this.__sender = props.sender;
+    this.__message = props.message;
+    this.__createdAt = props.createdAt;
   }
 }

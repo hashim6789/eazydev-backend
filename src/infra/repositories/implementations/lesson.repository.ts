@@ -18,7 +18,7 @@ export class LessonRepository
     materialId: string
   ): Promise<void> {
     try {
-      await this.model.findByIdAndUpdate(lessonId, {
+      await this._model.findByIdAndUpdate(lessonId, {
         $push: { materials: materialId },
       });
     } catch (error) {
@@ -29,7 +29,7 @@ export class LessonRepository
 
   async findByIdPopulate(id: string): Promise<ILessonOutPopulateDTO | null> {
     try {
-      const lesson = await this.model
+      const lesson = await this._model
         .findById(id)
         .populate("materials", "title type description duration");
 

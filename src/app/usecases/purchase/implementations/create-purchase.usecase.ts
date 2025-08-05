@@ -26,10 +26,10 @@ import {
 
 export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
   constructor(
-    private purchaseRepository: IPurchaseRepository,
-    private courseRepository: ICourseRepository,
-    private progressRepository: IProgressRepository,
-    private chatGroupRepository: IChatGroupRepository
+    private _purchaseRepository: IPurchaseRepository,
+    private _courseRepository: ICourseRepository,
+    private _progressRepository: IProgressRepository,
+    private _chatGroupRepository: IChatGroupRepository
   ) {}
 
   generatePurchaseId(learnerId: string, courseId: string): string {
@@ -57,7 +57,7 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
         };
       }
 
-      const course = await this.courseRepository.findById(courseId);
+      const course = await this._courseRepository.findById(courseId);
       if (!course) {
         return {
           data: { error: CourseErrorType.CourseNotFound },
@@ -85,7 +85,7 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
         purchaseDate: Date.now(),
       });
 
-      const createdPurchase = await this.purchaseRepository.create(purchase);
+      const createdPurchase = await this._purchaseRepository.create(purchase);
 
       const progress = ProgressEntity.create({
         userId: learnerId,
@@ -99,7 +99,7 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
       });
 
       const isAddedToChatGroup =
-        await this.chatGroupRepository.addLearnerToChatGroup(
+        await this._chatGroupRepository.addLearnerToChatGroup(
           courseId,
           learnerId
         );
@@ -112,7 +112,7 @@ export class CreatePurchaseUseCases implements ICreatePurchaseUseCase {
 
       const mappedDocument = mapProgressToDocument(progress);
 
-      await this.progressRepository.create(mappedDocument);
+      await this._progressRepository.create(mappedDocument);
 
       return { data: createdPurchase, success: true };
     } catch (error: unknown) {

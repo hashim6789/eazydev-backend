@@ -5,7 +5,6 @@ import {
   PopulatedProgressLearningsDTO,
   QueryProgress,
 } from "../../../domain/dtos";
-import { ProgressEntity } from "../../../domain/entities/progress";
 import { PaginationDTO } from "../../../domain/dtos";
 import {
   analyzeAllCoursePerformancePipeline,
@@ -20,55 +19,19 @@ export class ProgressRepository
   extends BaseRepository<IProgress>
   implements IProgressRepository
 {
-  // private model: Model<IProgress>;
-
   constructor(model: Model<IProgress>) {
-    // this.model = model;
     super(model);
   }
-
-  // async create(data: ProgressEntity): Promise<IProgressOutDTO> {
-  //   try {
-  //     const createData = new this.model({
-  //       userId: data.userId,
-  //       courseId: data.courseId,
-  //       mentorId: data.mentorId,
-  //       completedLessons: data.completedLessons,
-  //       completedMaterials: data.completedMaterials,
-  //       isCourseCompleted: data.isCourseCompleted,
-  //       progress: data.progress,
-  //       completedDate: data.completedDate,
-  //     });
-  //     const progress = await createData.save();
-
-  //     return {
-  //       id: progress._id.toString(),
-  //       userId: progress.userId.toString(),
-  //       mentorId: progress.mentorId.toString(),
-  //       courseId: progress.courseId.toString(),
-  //       completedLessons: [],
-  //       completedMaterials: [],
-  //       isCourseCompleted: progress.isCourseCompleted,
-  //       progress: progress.progress,
-  //       completedDate: null,
-  //     };
-  //   } catch (error) {
-  //     console.error("Error while creating progress:", error);
-  //     throw new Error("Purchase creation failed");
-  //   }
-  // }
 
   async findAllByUserId(
     { page = "1", limit = "5" }: QueryProgress,
     userId: string
   ): Promise<PaginationDTO> {
     try {
-      // Pagination logic
       const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
       const limitParsed = parseInt(limit, 10);
 
-      // Fetch progresses with query, pagination, and sorting
-      const progresses = await this.model
+      const progresses = await this._model
         .find({ userId })
         .populate("courseId", "title thumbnail")
         .populate("mentorId", "firstName lastName profilePicture")
@@ -76,10 +39,8 @@ export class ProgressRepository
         .limit(limitParsed)
         .lean();
 
-      // Count total documents matching query
-      const total = await this.model.countDocuments({ userId });
+      const total = await this._model.countDocuments({ userId });
 
-      // Construct the pagination response
       return {
         body: progresses.map((progress) => {
           const {
@@ -139,7 +100,7 @@ export class ProgressRepository
 
   async findByIdPopulate(id: string): Promise<PopulatedProgressLearningsDTO> {
     try {
-      const result = (await this.model.aggregate(
+      const result = (await this._model.aggregate(
         ProgressPopulatedPipeline(id)
       )) as PopulatedProgressLearningsDTO[];
 
@@ -153,41 +114,12 @@ export class ProgressRepository
     }
   }
 
-  // async findById(id: string): Promise<IProgressOutDTO | null> {
-  //   try {
-  //     const progress = await this.model.findById(id);
-  //     if (!progress) return null;
-
-  //     return {
-  //       id: progress._id.toString(),
-  //       userId: progress.userId.toString(),
-  //       mentorId: progress.mentorId.toString(),
-  //       courseId: progress.courseId.toString(),
-  //       completedLessons: progress.completedLessons.map((item) =>
-  //         item.toString()
-  //       ),
-  //       completedMaterials: progress.completedMaterials.map((item) =>
-  //         item.toString()
-  //       ),
-  //       isCourseCompleted: progress.isCourseCompleted,
-  //       progress: progress.progress,
-  //       completedDate: progress.completedDate
-  //         ? progress.completedDate.getTime()
-  //         : null,
-  //     };
-  //   } catch (error) {
-  //     console.error("Error while fetching progresses:", error);
-  //     throw new Error("Course fetch failed");
-  //   }
-  // }
-
   async updateProgress(
     id: string,
     materialId: string
   ): Promise<IProgressOutDTO | null> {
     try {
-      // Step 1: Add materialId to completedMaterials
-      const result = await this.model.findByIdAndUpdate(
+      const result = await this._model.findByIdAndUpdate(
         id,
         {
           $addToSet: {
@@ -196,15 +128,13 @@ export class ProgressRepository
         },
         { new: true }
       );
-      // .populate("courseId");
 
       if (!result) {
         throw new Error("Progress document not found");
       }
       const courseId = result.courseId;
 
-      // Step 2: Populate course and lessons
-      const progress = await this.model
+      const progress = await this._model
         .findById(id)
         .populate({
           path: "courseId",
@@ -223,11 +153,11 @@ export class ProgressRepository
         throw new Error("Progress document not found after update");
       }
 
-      const course = progress.courseId as any; // Assuming courseId is populated as a Course type
+      const course = progress.courseId as any;
       const completedMaterials =
         progress.completedMaterials as Types.ObjectId[];
 
-      // Step 3: Check if lessons are completed
+      // Step 1: Check if lessons are completed
       const completedLessons = new Set(
         progress.completedLessons.map((id) => id.toString())
       );
@@ -243,16 +173,16 @@ export class ProgressRepository
           completedLessons.add(lesson._id.toString());
         }
       }
-      // Step 4: Update completedLessons in Progress document
+      // Step 2: Update completedLessons in Progress document
       progress.completedLessons = Array.from(completedLessons).map(
         (id) => new Types.ObjectId(id) as any as Types.ObjectId
       );
 
-      // Step 5: Update course completion status
+      // Step 3: Update course completion status
       progress.isCourseCompleted =
         progress.completedLessons.length === course.lessons.length;
 
-      // Step 6: Calculate and update progress
+      // Step 4: Calculate and update progress
       const totalMaterialsCount = course.lessons.reduce(
         (acc: number, lesson: any) => acc + lesson.materials.length,
         0
@@ -287,11 +217,11 @@ export class ProgressRepository
 
   async mentorAnalysis(mentorId: string): Promise<any> {
     try {
-      const dashboardData = await this.model.aggregate(
+      const dashboardData = await this._model.aggregate(
         mentorPerformanceAnalyzePipeline(mentorId)
       );
 
-      return dashboardData[0]; // Since $fac
+      return dashboardData[0];
     } catch (error) {
       console.error("Error while get mentor analyze progresses:", error);
       throw new Error("Progress analysis fetch failed");
@@ -300,8 +230,7 @@ export class ProgressRepository
 
   async analyzeAllCoursePerformance(): Promise<CoursePerformanceData[]> {
     try {
-      // Execute the aggregation pipeline
-      const coursePerformanceData = await this.model.aggregate(
+      const coursePerformanceData = await this._model.aggregate(
         analyzeAllCoursePerformancePipeline()
       );
       return coursePerformanceData as CoursePerformanceData[];

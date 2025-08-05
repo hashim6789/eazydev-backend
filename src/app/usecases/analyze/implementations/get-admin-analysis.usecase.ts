@@ -10,18 +10,18 @@ import { IGetAdminAnalyzeUseCase } from "../interfaces";
 
 export class GetAdminAnalyzeUseCase implements IGetAdminAnalyzeUseCase {
   constructor(
-    private usersRepository: IUsersRepository,
-    private progressRepository: IProgressRepository,
-    private purchaseRepository: IPurchaseRepository
+    private _usersRepository: IUsersRepository,
+    private _progressRepository: IProgressRepository,
+    private _purchaseRepository: IPurchaseRepository
   ) {}
 
   async execute(): Promise<ResponseDTO> {
     try {
-      const userStatuses = await this.usersRepository.getUsersAnalysis();
+      const userStatuses = await this._usersRepository.getUsersAnalysis();
       const coursePerformanceData =
-        await this.progressRepository.analyzeAllCoursePerformance();
+        await this._progressRepository.analyzeAllCoursePerformance();
       const monthlyRevenueData =
-        await this.purchaseRepository.analyzeMonthlyRevenue();
+        await this._purchaseRepository.analyzeMonthlyRevenue();
       if (!monthlyRevenueData) {
         return {
           data: { error: AnalysisErrorType.AnalysisFetchingFailed },

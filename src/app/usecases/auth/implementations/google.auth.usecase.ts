@@ -24,8 +24,8 @@ interface GoogleApiResponse {
 
 export class GoogleLoginUseCase implements IGoogleLoginUseCase {
   constructor(
-    private userRepository: IUsersRepository,
-    private generateTokenProvider: IGenerateTokenProvider
+    private _userRepository: IUsersRepository,
+    private _generateTokenProvider: IGenerateTokenProvider
   ) {}
 
   private async getGoogleUserData(token: string): Promise<GoogleApiResponse> {
@@ -35,7 +35,7 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
     return response.data;
   }
 
-  private handleUnverifiedOrBlockedUserRole(
+  private _handleUnverifiedOrBlockedUserRole(
     fetchedUser: IUserValidDTO,
     role: SignupRole
   ): ResponseDTO | null {
@@ -57,7 +57,7 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
     googleToken,
     role,
   }: IGoogleLoginRequestDTO): Promise<ResponseDTO> {
-    console.log("usecase");
+    //console.log("usecase");
     try {
       const data = await this.getGoogleUserData(googleToken);
       const userEntity = UserEntity.create({
@@ -70,13 +70,13 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         profilePicture: data.picture,
       });
 
-      const fetchedUser = (await this.userRepository.findByEmail(
+      const fetchedUser = (await this._userRepository.findByEmail(
         data.email
       )) as IUserValidDTO | null;
 
       let user: null | IUserOutRequestDTO = null;
       if (!fetchedUser) {
-        user = await this.userRepository.create({
+        user = await this._userRepository.create({
           email: userEntity.email.address,
           firstName: userEntity.firstName,
           lastName: userEntity.lastName,
@@ -87,20 +87,20 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         });
       } else {
         const unverifiedOrBlockedResponse =
-          this.handleUnverifiedOrBlockedUserRole(fetchedUser, role);
+          this._handleUnverifiedOrBlockedUserRole(fetchedUser, role);
 
         if (unverifiedOrBlockedResponse) {
           return unverifiedOrBlockedResponse;
         }
 
         if (!fetchedUser.googleId) {
-          user = await this.userRepository.update(fetchedUser.id, {
+          user = await this._userRepository.update(fetchedUser.id, {
             googleId: userEntity.googleId,
             profilePicture: userEntity.profilePicture,
             isVerified: true,
           });
         } else {
-          user = await this.userRepository.update(fetchedUser.id, {
+          user = await this._userRepository.update(fetchedUser.id, {
             email: userEntity.email.address,
             firstName: userEntity.firstName,
             lastName: userEntity.lastName,
@@ -116,7 +116,7 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         return { data: { error: UserErrorType.UserCantCreate }, success: true };
       }
 
-      const accessToken = await this.generateTokenProvider.generateToken(
+      const accessToken = await this._generateTokenProvider.generateToken(
         user.id,
         {
           userId: user.id,
@@ -124,7 +124,7 @@ export class GoogleLoginUseCase implements IGoogleLoginUseCase {
         },
         "access"
       );
-      const refreshToken = await this.generateTokenProvider.generateToken(
+      const refreshToken = await this._generateTokenProvider.generateToken(
         user.id,
         {
           userId: user.id,

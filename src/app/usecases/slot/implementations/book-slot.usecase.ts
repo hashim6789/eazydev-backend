@@ -20,9 +20,9 @@ import { mapProgressToDTO } from "../../../../infra/databases/mappers";
 
 export class BookSlotUseCase implements IBookSlotUseCase {
   constructor(
-    private slotRepository: ISlotRepository,
-    private progressRepository: IProgressRepository,
-    private meetingRepository: IMeetingRepository
+    private _slotRepository: ISlotRepository,
+    private _progressRepository: IProgressRepository,
+    private _meetingRepository: IMeetingRepository
   ) {}
 
   async execute(
@@ -37,7 +37,7 @@ export class BookSlotUseCase implements IBookSlotUseCase {
         };
       }
 
-      const progress = await this.progressRepository.findById(progressId);
+      const progress = await this._progressRepository.findById(progressId);
       if (!progress) {
         return {
           data: { error: ProgressErrorType.ProgressNotFound },
@@ -51,12 +51,12 @@ export class BookSlotUseCase implements IBookSlotUseCase {
           success: false,
         };
       }
-      const slot = await this.slotRepository.findById(slotId);
+      const slot = await this._slotRepository.findById(slotId);
       if (!slot || slot.isBooked) {
         return { data: { error: SlotErrorType.SlotNotFound }, success: false };
       }
 
-      const isBooked = await this.slotRepository.bookById(slotId);
+      const isBooked = await this._slotRepository.bookById(slotId);
       if (!isBooked) {
         return { data: { error: SlotErrorType.SlotNotFound }, success: false };
       }
@@ -72,7 +72,7 @@ export class BookSlotUseCase implements IBookSlotUseCase {
       });
 
       //created the meeting
-      await this.meetingRepository.create(mapMeetingToDocument(meetingEntity));
+      await this._meetingRepository.create(mapMeetingToDocument(meetingEntity));
 
       return { data: slot, success: true };
     } catch (error: unknown) {

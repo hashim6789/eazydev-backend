@@ -18,9 +18,9 @@ import { IController } from "../IController";
  */
 export class UpdateMaterialController implements IController {
   constructor(
-    private updateMaterialUseCase: IUpdateMaterialUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _updateMaterialUseCase: IUpdateMaterialUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -40,7 +40,7 @@ export class UpdateMaterialController implements IController {
         : null;
 
       const errorMessage = pathError || bodyError || "Invalid input";
-      const error = this.httpErrors.error_422(errorMessage);
+      const error = this._httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
@@ -48,7 +48,7 @@ export class UpdateMaterialController implements IController {
     const { userId, role, title, description, type, fileKey, duration } =
       bodyValidation.data;
 
-    const response = await this.updateMaterialUseCase.execute(
+    const response = await this._updateMaterialUseCase.execute(
       {
         title,
         description,
@@ -62,11 +62,11 @@ export class UpdateMaterialController implements IController {
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

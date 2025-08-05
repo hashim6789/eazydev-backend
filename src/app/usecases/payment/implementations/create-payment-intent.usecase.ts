@@ -14,10 +14,10 @@ import Stripe from "stripe";
 
 export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
   constructor(
-    private courseRepository: ICourseRepository,
-    private userRepository: IUsersRepository,
-    private progressRepository: IProgressRepository,
-    private stripe: Stripe
+    private _courseRepository: ICourseRepository,
+    private _userRepository: IUsersRepository,
+    private _progressRepository: IProgressRepository,
+    private _stripe: Stripe
   ) {}
 
   async execute(
@@ -25,7 +25,7 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
     { userId, role }: Payload
   ): Promise<ResponseDTO> {
     try {
-      console.log("courseId", courseId);
+      //console.log("courseId", courseId);
 
       if (role !== "learner") {
         return {
@@ -34,7 +34,7 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         };
       }
 
-      const learner = (await this.userRepository.findById(
+      const learner = (await this._userRepository.findById(
         userId
       )) as IUserOut | null;
       if (!learner) {
@@ -44,7 +44,7 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         };
       }
 
-      const course = await this.courseRepository.findById(courseId);
+      const course = await this._courseRepository.findById(courseId);
       if (!course) {
         return {
           success: false,
@@ -59,7 +59,7 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         };
       }
 
-      const existingProgress = await this.progressRepository.findOne({
+      const existingProgress = await this._progressRepository.findOne({
         userId,
         courseId,
       });
@@ -71,7 +71,7 @@ export class CreatePaymentIntentUseCase implements ICreatePaymentIntentUseCase {
         };
       }
 
-      const paymentIntent = await this.stripe.paymentIntents.create({
+      const paymentIntent = await this._stripe.paymentIntents.create({
         amount: course.price * 100,
         currency: "usd",
         metadata: {

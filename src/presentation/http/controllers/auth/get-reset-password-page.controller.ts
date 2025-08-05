@@ -19,9 +19,9 @@ import { IController } from "../IController";
  */
 export class GetResetPasswordPageController implements IController {
   constructor(
-    private getResetPageUseCase: IGetResetPageUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _getResetPageUseCase: IGetResetPageUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -29,7 +29,7 @@ export class GetResetPasswordPageController implements IController {
     const query = httpRequest.query as Pick<IGetResetPageRequestDTO, "role">;
 
     if (!path.tokenId || !query.role) {
-      const error = this.httpErrors.error_422("Missing tokenId or role");
+      const error = this._httpErrors.error_422("Missing tokenId or role");
       return new HttpResponse(error.statusCode, error.body);
     }
 
@@ -40,21 +40,21 @@ export class GetResetPasswordPageController implements IController {
 
     if (!validation.success) {
       const firstErrorMessage = extractFirstZodMessage(validation.error);
-      const error = this.httpErrors.error_422(firstErrorMessage);
+      const error = this._httpErrors.error_422(firstErrorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const getResetPageRequestDTO: IGetResetPageRequestDTO = validation.data;
-    const response = await this.getResetPageUseCase.execute(
+    const response = await this._getResetPageUseCase.execute(
       getResetPageRequestDTO
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

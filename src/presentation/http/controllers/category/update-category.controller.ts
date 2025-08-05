@@ -23,9 +23,9 @@ import { IController } from "../IController";
  */
 export class updateCategoryController implements IController {
   constructor(
-    private updateCategoryUseCase: IUpdateCategoryUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _updateCategoryUseCase: IUpdateCategoryUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -38,13 +38,13 @@ export class updateCategoryController implements IController {
 
     if (!bodyValidation.success) {
       const firstError = extractFirstZodMessage(bodyValidation.error);
-      const error = this.httpErrors.error_422(firstError);
+      const error = this._httpErrors.error_422(firstError);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     if (!pathValidation.success) {
       const firstError = extractFirstZodMessage(pathValidation.error);
-      const error = this.httpErrors.error_422(firstError);
+      const error = this._httpErrors.error_422(firstError);
       return new HttpResponse(error.statusCode, error.body);
     }
 
@@ -52,17 +52,17 @@ export class updateCategoryController implements IController {
 
     const { categoryId } = pathValidation.data;
 
-    const response = await this.updateCategoryUseCase.execute(
+    const response = await this._updateCategoryUseCase.execute(
       { title, adminId, categoryId },
       { userId, role }
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

@@ -18,9 +18,9 @@ import { IController } from "../IController";
  */
 export class GetAllCourseController implements IController {
   constructor(
-    private getAllCourseCase: IGetAllCourseUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _getAllCourseCase: IGetAllCourseUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -39,24 +39,24 @@ export class GetAllCourseController implements IController {
         ? extractFirstZodMessage(userValidation.error)
         : null;
       const errorMessage = queryError || userError || "Invalid request";
-      const error = this.httpErrors.error_422(errorMessage);
+      const error = this._httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const query = queryValidation.data;
     const { userId, role } = userValidation.data;
 
-    const response = await this.getAllCourseCase.execute(query, {
+    const response = await this._getAllCourseCase.execute(query, {
       userId,
       role,
     });
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

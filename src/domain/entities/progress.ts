@@ -20,14 +20,14 @@ export interface ProgressInterface {
  * @class
  */
 export class ProgressEntity {
-  private _userId: string;
-  private _courseId: string;
-  private _mentorId: string;
-  private _completedLessons: string[];
-  private _completedMaterials: string[];
-  private _isCourseCompleted: boolean;
-  private _progress: number;
-  private _completedDate: number | null;
+  private __userId: string;
+  private __courseId: string;
+  private __mentorId: string;
+  private __completedLessons: string[];
+  private __completedMaterials: string[];
+  private __isCourseCompleted: boolean;
+  private __progress: number;
+  private __completedDate: number | null;
 
   /**
    * Creates a new progress instance.
@@ -54,7 +54,7 @@ export class ProgressEntity {
    * @readonly
    */
   get userId(): string {
-    return this._userId;
+    return this.__userId;
   }
 
   /**
@@ -62,14 +62,14 @@ export class ProgressEntity {
    * @readonly
    */
   get courseId(): string {
-    return this._courseId;
+    return this.__courseId;
   }
   /**
    * Gets the course's ID.
    * @readonly
    */
   get mentorId(): string {
-    return this._mentorId;
+    return this.__mentorId;
   }
 
   /**
@@ -77,7 +77,7 @@ export class ProgressEntity {
    * @readonly
    */
   get completedLessons(): string[] {
-    return this._completedLessons;
+    return this.__completedLessons;
   }
 
   /**
@@ -85,7 +85,7 @@ export class ProgressEntity {
    * @readonly
    */
   get completedMaterials(): string[] {
-    return this._completedMaterials;
+    return this.__completedMaterials;
   }
 
   /**
@@ -93,7 +93,7 @@ export class ProgressEntity {
    * @readonly
    */
   get isCourseCompleted(): boolean {
-    return this._isCourseCompleted;
+    return this.__isCourseCompleted;
   }
 
   /**
@@ -101,7 +101,7 @@ export class ProgressEntity {
    * @readonly
    */
   get progress(): number {
-    return this._progress;
+    return this.__progress;
   }
 
   /**
@@ -109,7 +109,7 @@ export class ProgressEntity {
    * @readonly
    */
   get completedDate(): number | null {
-    return this._completedDate;
+    return this.__completedDate;
   }
 
   /**
@@ -119,13 +119,13 @@ export class ProgressEntity {
    * @param {ProgressInterface} props - The properties of the progress.
    */
   constructor(props: ProgressInterface) {
-    this._userId = props.userId;
-    this._courseId = props.courseId;
-    this._mentorId = props.mentorId;
-    this._completedLessons = props.completedLessons;
-    this._completedMaterials = props.completedMaterials;
-    this._isCourseCompleted = props.isCourseCompleted;
-    this._progress = props.progress;
-    this._completedDate = props.completedDate;
+    this.__userId = props.userId;
+    this.__courseId = props.courseId;
+    this.__mentorId = props.mentorId;
+    this.__completedLessons = props.completedLessons;
+    this.__completedMaterials = props.completedMaterials;
+    this.__isCourseCompleted = props.isCourseCompleted;
+    this.__progress = props.progress;
+    this.__completedDate = props.completedDate;
   }
 }

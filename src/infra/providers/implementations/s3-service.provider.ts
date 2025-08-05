@@ -14,10 +14,10 @@ import { IS3ServiceProvider } from "../interfaces";
 dotenv.config();
 
 export class S3ServiceProvider implements IS3ServiceProvider {
-  private s3: S3Client;
+  private _s3: S3Client;
 
   constructor() {
-    this.s3 = new S3Client({
+    this._s3 = new S3Client({
       region: process.env.AWS_REGION,
       credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
@@ -40,7 +40,7 @@ export class S3ServiceProvider implements IS3ServiceProvider {
           : "application/pdf",
     });
 
-    return await getSignedUrl(this.s3, command, { expiresIn: 600 });
+    return await getSignedUrl(this._s3, command, { expiresIn: 600 });
   }
 
   public async putObject(
@@ -55,7 +55,7 @@ export class S3ServiceProvider implements IS3ServiceProvider {
       Body: "",
     });
 
-    return await getSignedUrl(this.s3, command, { expiresIn: 600 });
+    return await getSignedUrl(this._s3, command, { expiresIn: 600 });
   }
 
   public async deleteFileFromS3(
@@ -68,8 +68,8 @@ export class S3ServiceProvider implements IS3ServiceProvider {
         Key: fileKey,
       });
 
-      await this.s3.send(deleteCommand);
-      console.log("File deleted successfully");
+      await this._s3.send(deleteCommand);
+      //console.log("File deleted successfully");
     } catch (err) {
       console.error("Error deleting file:", err);
       throw new Error("File deletion failed");
@@ -93,7 +93,7 @@ export class S3ServiceProvider implements IS3ServiceProvider {
   //     };
 
   //     try {
-  //       await this.s3.send(new PutObjectCommand(params));
+  //       await this._s3.send(new PutObjectCommand(params));
   //       req.file = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${params.Key}`;
   //       next();
   //     } catch (error) {

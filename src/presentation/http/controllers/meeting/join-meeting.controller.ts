@@ -18,9 +18,9 @@ import { IController } from "../IController";
  */
 export class JoinMeetingController implements IController {
   constructor(
-    private joinMeetingUseCase: IJoinMeetingUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _joinMeetingUseCase: IJoinMeetingUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -40,24 +40,24 @@ export class JoinMeetingController implements IController {
         : null;
       const errorMessage = pathError || bodyError || "Invalid input";
 
-      const error = this.httpErrors.error_422(errorMessage);
+      const error = this._httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const { meetingId } = pathValidation.data;
     const { userId, role, peerId } = bodyValidation.data;
 
-    const response = await this.joinMeetingUseCase.execute(
+    const response = await this._joinMeetingUseCase.execute(
       { peerId, meetingId },
       { userId, role }
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

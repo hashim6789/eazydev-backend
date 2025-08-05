@@ -5,11 +5,11 @@ import { IGetLessonUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetLessonUseCase implements IGetLessonUseCase {
-  constructor(private lessonRepository: ILessonRepository) {}
+  constructor(private _lessonRepository: ILessonRepository) {}
 
   async execute(lessonId: string, authData: Payload): Promise<ResponseDTO> {
     try {
-      const lesson = await this.lessonRepository.findByIdPopulate(lessonId);
+      const lesson = await this._lessonRepository.findByIdPopulate(lessonId);
 
       if (!lesson) {
         return {

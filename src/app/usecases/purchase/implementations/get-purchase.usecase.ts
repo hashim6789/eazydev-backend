@@ -12,14 +12,14 @@ import { IGetPurchaseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetPurchaseUseCases implements IGetPurchaseUseCase {
-  constructor(private purchaseRepository: IPurchaseRepository) {}
+  constructor(private _purchaseRepository: IPurchaseRepository) {}
 
   async execute(
     { id }: IGetPurchaseRequestDTO,
     authData: Payload
   ): Promise<ResponseDTO> {
     try {
-      const purchase = await this.purchaseRepository.findById(id);
+      const purchase = await this._purchaseRepository.findById(id);
       if (!purchase) {
         return {
           data: { error: PurchaseErrorType.PurchaseNotFound },

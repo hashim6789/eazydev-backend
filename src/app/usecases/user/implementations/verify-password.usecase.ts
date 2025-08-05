@@ -13,8 +13,8 @@ import { IPasswordHasher } from "../../../../infra/providers";
 
 export class VerifyPasswordUseCase implements IVerifyPasswordUseCase {
   constructor(
-    private userRepository: IUsersRepository,
-    private passwordHasher: IPasswordHasher
+    private _userRepository: IUsersRepository,
+    private _passwordHasher: IPasswordHasher
   ) {}
 
   async execute(
@@ -22,14 +22,14 @@ export class VerifyPasswordUseCase implements IVerifyPasswordUseCase {
     { userId }: Payload
   ): Promise<ResponseDTO> {
     try {
-      const user = (await this.userRepository.findById(
+      const user = (await this._userRepository.findById(
         userId
       )) as IUserValidDTO | null;
       if (!user) {
         return { success: false, data: { error: UserErrorType.UserNotFound } };
       }
 
-      const isValid = await this.passwordHasher.compare(
+      const isValid = await this._passwordHasher.compare(
         currentPassword,
         user.password
       );

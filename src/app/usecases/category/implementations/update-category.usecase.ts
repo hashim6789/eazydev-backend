@@ -14,7 +14,7 @@ import { IUpdateCategoryUseCase } from "../interfaces";
 import { mapCategoryToDTO } from "../../../../infra/databases/mappers";
 
 export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
-  constructor(private categoryRepository: ICategoryRepository) {}
+  constructor(private _categoryRepository: ICategoryRepository) {}
 
   async execute(
     { categoryId, title, adminId }: IUpdateCategoryRequestDTO,
@@ -28,7 +28,7 @@ export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
         };
       }
 
-      const duplicateCategory = await this.categoryRepository.findByTitle(
+      const duplicateCategory = await this._categoryRepository.findByTitle(
         title
       );
       if (duplicateCategory) {
@@ -38,7 +38,7 @@ export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
         };
       }
 
-      const category = await this.categoryRepository.findById(categoryId);
+      const category = await this._categoryRepository.findById(categoryId);
       if (!category) {
         return {
           data: { error: CategoryErrorType.CategoryNotFound },
@@ -48,7 +48,7 @@ export class UpdateCategoryUseCase implements IUpdateCategoryUseCase {
 
       Object.assign(category, { title });
 
-      const updatedCategory = await this.categoryRepository.update(
+      const updatedCategory = await this._categoryRepository.update(
         category.id,
         category
       );

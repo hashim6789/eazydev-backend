@@ -20,9 +20,9 @@ import { IController } from "../IController";
  */
 export class CreateCategoryController implements IController {
   constructor(
-    private createCategoryUseCase: ICreateCategoryUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _createCategoryUseCase: ICreateCategoryUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -30,23 +30,23 @@ export class CreateCategoryController implements IController {
 
     if (!validation.success) {
       const firstError = extractFirstZodMessage(validation.error);
-      const error = this.httpErrors.error_422(firstError);
+      const error = this._httpErrors.error_422(firstError);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const { title, adminId, userId, role } = validation.data;
 
-    const response = await this.createCategoryUseCase.execute(
+    const response = await this._createCategoryUseCase.execute(
       { title, adminId },
       { userId, role }
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_201(response.data);
+    const success = this._httpSuccess.success_201(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

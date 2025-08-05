@@ -10,20 +10,20 @@ import { IMaterialContentUploadUseCase } from "../interface/material-conent-uplo
 export class MaterialContentUploadUseCase
   implements IMaterialContentUploadUseCase
 {
-  constructor(private s3ServiceProvider: IS3ServiceProvider) {}
+  constructor(private _s3ServiceProvider: IS3ServiceProvider) {}
 
   async execute(
     { fileName, fileType, materialType }: IUploadMaterialRequestDTO,
     authData: Payload
   ): Promise<ResponseDTO> {
     try {
-      const url = await this.s3ServiceProvider.putObject(
+      const url = await this._s3ServiceProvider.putObject(
         fileName,
         materialType,
         fileType
       );
 
-      console.log(url);
+      //console.log(url);
 
       if (!url) {
         return {

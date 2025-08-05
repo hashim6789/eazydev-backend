@@ -15,9 +15,9 @@ import { IController } from "../IController";
  */
 export class GetUserDataController implements IController {
   constructor(
-    private getUserDataCase: IGetUserDataUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _getUserDataCase: IGetUserDataUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -34,21 +34,21 @@ export class GetUserDataController implements IController {
         ? null
         : extractFirstZodMessage(pathValidation.error);
       const errorMessage = queryMsg ?? pathMsg ?? "Invalid input";
-      const error = this.httpErrors.error_422(errorMessage);
+      const error = this._httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const { userRole } = queryValidation.data;
     const { id } = pathValidation.data;
 
-    const response = await this.getUserDataCase.execute({ id, userRole });
+    const response = await this._getUserDataCase.execute({ id, userRole });
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

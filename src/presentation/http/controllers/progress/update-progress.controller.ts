@@ -18,9 +18,9 @@ import { IController } from "../IController";
  */
 export class UpdateProgressController implements IController {
   constructor(
-    private updateProgressUseCase: IUpdateProgressUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _updateProgressUseCase: IUpdateProgressUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -40,24 +40,24 @@ export class UpdateProgressController implements IController {
         : null;
       const errorMessage = pathError || bodyError || "Invalid input";
 
-      const error = this.httpErrors.error_422(errorMessage);
+      const error = this._httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const { progressId } = pathValidation.data;
     const { userId, role, materialId } = bodyValidation.data;
 
-    const response = await this.updateProgressUseCase.execute(
+    const response = await this._updateProgressUseCase.execute(
       { progressId, materialId },
       { userId, role }
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

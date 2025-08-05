@@ -9,14 +9,14 @@ import { IGetPersonalInfoUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetPersonalInfoUseCase implements IGetPersonalInfoUseCase {
-  constructor(private userRepository: IUsersRepository) {}
+  constructor(private _userRepository: IUsersRepository) {}
 
   async execute({
     userId,
     role,
   }: IGetPersonalInfoRequestDTO): Promise<ResponseDTO> {
     try {
-      const user = (await this.userRepository.findById(
+      const user = (await this._userRepository.findById(
         userId
       )) as IUserDetailOutDTO | null;
       if (!user) {

@@ -6,14 +6,14 @@ import { formatErrorResponse } from "../../../../presentation/http/utils";
 export class CheckCoursePurchasedUseCases
   implements ICheckCoursePurchasedUseCase
 {
-  constructor(private purchaseRepository: IPurchaseRepository) {}
+  constructor(private _purchaseRepository: IPurchaseRepository) {}
 
   async execute(
     courseId: string,
     { userId, role }: Payload
   ): Promise<ResponseDTO> {
     try {
-      const purchase = await this.purchaseRepository.findOne({
+      const purchase = await this._purchaseRepository.findOne({
         courseId,
         learnerId: userId,
       });

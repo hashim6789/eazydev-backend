@@ -9,11 +9,11 @@ export const handleNotification = (
 ): void => {
   socket.on("joinRoom", (userId) => {
     socket.join(userId);
-    console.log(`User ${userId} joined room ${userId}`);
+    //console.log(`User ${userId} joined room ${userId}`);
   });
 
   socket.on("disconnect", () => {
-    console.log("A user disconnected:", socket.id);
+    //console.log("A user disconnected:", socket.id);
   });
 };
 
@@ -21,7 +21,7 @@ export const handleNotification = (
 export const handleGroupChat = (namespace: Namespace, socket: Socket): void => {
   socket.on("setup", (userId: string) => {
     socket.join(userId);
-    console.log("room created and user joined", userId);
+    //console.log("room created and user joined", userId);
     socket.emit("connected");
   });
 
@@ -29,12 +29,12 @@ export const handleGroupChat = (namespace: Namespace, socket: Socket): void => {
     socket.join(roomData.groupId);
 
     const roomSize = namespace.adapter.rooms.get(roomData.groupId)?.size || 0;
-    console.log(
-      "user joined the group",
-      roomData.groupId,
-      "room size =",
-      roomSize
-    );
+    //console.log(
+    //   "user joined the group",
+    //   roomData.groupId,
+    //   "room size =",
+    //   roomSize
+    // );
 
     socket.to(roomData.groupId).emit("online", { onlineCount: roomSize });
   });
@@ -49,7 +49,7 @@ export const handleGroupChat = (namespace: Namespace, socket: Socket): void => {
   );
 
   socket.on("send message", (message) => {
-    console.log("message", message);
+    //console.log("message", message);
 
     socket.to(message.groupId).emit("receive message", message);
   });
@@ -57,10 +57,10 @@ export const handleGroupChat = (namespace: Namespace, socket: Socket): void => {
     socket.leave(roomData.groupId);
     const roomSize = namespace.adapter.rooms.get(roomData.groupId)?.size || 0;
 
-    console.log(
-      `User ${socket.id} left group ${roomData.groupId} room size =`,
-      roomSize
-    );
+    //console.log(
+    // `User ${socket.id} left group ${roomData.groupId} room size =`,
+    // roomSize
+    // );
 
     socket.to(roomData.groupId).emit("online", { onlineCount: roomSize });
   });
@@ -79,24 +79,24 @@ export const connectSocket = (server: HttpServer): SocketIOServer => {
   });
 
   io.on("connection", (socket) => {
-    console.log("A user connected:", socket.id);
+    //console.log("A user connected:", socket.id);
 
     if (io) {
       handleNotification(io, socket);
     }
 
     socket.on("disconnect", () => {
-      console.log("A user disconnected:", socket.id);
+      //console.log("A user disconnected:", socket.id);
     });
   });
 
   // Namespace for Chats
   const chatNamespace = io.of("/chats");
   chatNamespace.on("connection", (socket) => {
-    console.log("A user connected to /chats namespace:", socket.id);
+    //console.log("A user connected to /chats namespace:", socket.id);
     handleGroupChat(chatNamespace, socket); // Pass Namespace instead of Server
     socket.on("disconnect", () => {
-      console.log("A user disconnected from /chats namespace:", socket.id);
+      //console.log("A user disconnected from /chats namespace:", socket.id);
     });
   });
 

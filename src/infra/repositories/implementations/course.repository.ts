@@ -1,8 +1,5 @@
 import { Model } from "mongoose";
 import {
-  // ICreateCourseInDTO,
-  // ICourseOutDTO,
-  // IUpdateCourseInDTO,
   QueryCourse,
   ICourseOutPopulateDTO,
   ICourseSimpleOutDTO,
@@ -18,45 +15,13 @@ export class CourseRepository
   extends BaseRepository<ICourse>
   implements ICourseRepository
 {
-  // private model: Model<ICourse>;
-
   constructor(model: Model<ICourse>) {
     super(model);
-    // this.model = model;
   }
-  // async create(data: ICreateCourseInDTO): Promise<ICourseOutDTO> {
-  //   try {
-  //     const createData = new this.model({
-  //       title: data.title,
-  //       mentorId: data.mentorId,
-  //       categoryId: data.categoryId,
-  //       description: data.description,
-  //       thumbnail: data.thumbnail,
-  //       price: data.price,
-  //       status: data.status,
-  //     });
-  //     const course = await createData.save();
-
-  //     return {
-  //       id: course._id.toString(),
-  //       title: course.title,
-  //       mentorId: course.mentorId.toString(),
-  //       categoryId: course.categoryId.toString(),
-  //       description: course.description,
-  //       lessons: [],
-  //       thumbnail: course.thumbnail,
-  //       price: course.price,
-  //       status: course.status,
-  //     };
-  //   } catch (error) {
-  //     console.error("Error while creating course:", error);
-  //     throw new Error("Course creation failed");
-  //   }
-  // }
 
   async addLessonToCourse(courseId: string, lessonId: string): Promise<void> {
     try {
-      await this.model.findByIdAndUpdate(courseId, {
+      await this._model.findByIdAndUpdate(courseId, {
         $push: { lessons: lessonId },
       });
     } catch (error) {
@@ -70,7 +35,7 @@ export class CourseRepository
     newStatus: CourseStatus
   ): Promise<ICourseSimpleOutDTO | null> {
     try {
-      const course = await this.model.findByIdAndUpdate(
+      const course = await this._model.findByIdAndUpdate(
         courseId,
         {
           status: newStatus,
@@ -91,38 +56,16 @@ export class CourseRepository
     }
   }
 
-  // async findById(id: string): Promise<ICourseOutDTO | null> {
-  //   try {
-  //     const course = await this.model.findById(id);
-
-  //     if (!course) return null;
-
-  //     return {
-  //       id: course._id.toString(),
-  //       title: course.title,
-  //       mentorId: course.mentorId.toString(),
-  //       categoryId: course.categoryId.toString(),
-  //       description: course.description,
-  //       lessons: course.lessons.map((item) => item.toString()),
-  //       thumbnail: course.thumbnail,
-  //       price: course.price,
-  //       status: course.status,
-  //     };
-  //   } catch (error) {
-  //     console.error("Error while find the course:", error);
-  //     throw new Error("Course fetch failed");
-  //   }
-  // }
   async findByIdPopulate(id: string): Promise<ICourseOutPopulateDTO | null> {
     try {
-      const course = await this.model
+      const course = await this._model
         .findById(id)
         .populate("mentorId", "firstName lastName profilePicture")
         .populate({
           path: "lessons",
           select: "title description",
           populate: {
-            path: "materials", // Populate materials
+            path: "materials",
             select: "title description type duration fileKey",
           },
         })
@@ -130,7 +73,6 @@ export class CourseRepository
 
       if (!course) return null;
 
-      // Extract category details
       const { _id: categoryId, title: categoryTitle } =
         course.categoryId as unknown as {
           title: string;
@@ -176,7 +118,6 @@ export class CourseRepository
         };
       });
 
-      // Extract mentor details
       const {
         _id: mentorId,
         firstName,
@@ -189,7 +130,6 @@ export class CourseRepository
         profilePicture: string;
       };
 
-      // Final DTO structure
       return {
         id: course._id.toString(),
         title: course.title,
@@ -216,30 +156,6 @@ export class CourseRepository
     }
   }
 
-  // async update(
-  //   id: string,
-  //   data: IUpdateCourseInDTO
-  // ): Promise<ICourseOutDTO | null> {
-  //   try {
-  //     const course = await this.model.findByIdAndUpdate(id, data);
-  //     if (!course) return null;
-  //     return {
-  //       id: course._id.toString(),
-  //       title: course.title,
-  //       mentorId: course.mentorId.toString(),
-  //       categoryId: course.categoryId.toString(),
-  //       description: course.description,
-  //       lessons: course.lessons.map(toString),
-  //       thumbnail: course.thumbnail,
-  //       price: course.price,
-  //       status: course.status,
-  //     };
-  //   } catch (error) {
-  //     console.error("Error while find the course:", error);
-  //     throw new Error("Course fetch failed");
-  //   }
-  // }
-
   async findAll({
     category = "all",
     search = "",
@@ -248,52 +164,44 @@ export class CourseRepository
     limit = "5",
   }: QueryCourse): Promise<PaginationDTO> {
     try {
-      // Construct the query
       const query: Record<string, any> = {
         categoryId: category !== "all" ? category : { $exists: true },
         title: { $regex: search, $options: "i" }, // Case-insensitive search
       };
 
-      // Define sorting options
       const sortOptions: { [key: string]: 1 | -1 } = {};
       switch (sort) {
         case "titleAsc":
-          sortOptions.title = 1; // Ascending by title
+          sortOptions.title = 1;
           break;
         case "titleDesc":
-          sortOptions.title = -1; // Descending by title
+          sortOptions.title = -1;
           break;
         case "priceAsc":
-          sortOptions.price = 1; // Ascending by price
+          sortOptions.price = 1;
           break;
         case "priceDesc":
-          sortOptions.price = -1; // Descending by price
+          sortOptions.price = -1;
           break;
         default:
-          sortOptions.title = 1; // Default sorting by title ascending
+          sortOptions.title = 1;
           break;
       }
 
-      // Pagination logic
       const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
       const limitParsed = parseInt(limit, 10);
 
-      // Fetch courses with query, pagination, and sorting
-      const courses = await this.model
+      const courses = await this._model
         .find(query)
         .populate("mentorId", "firstName lastName")
-        .populate("categoryId", "title") // Populate category title
+        .populate("categoryId", "title")
         .skip(skip)
         .limit(limitParsed)
         .sort(sortOptions)
-        .lean(); // Convert mongoose documents to plain objects
+        .lean();
 
-      // Count total documents matching query
-      const total = await this.model.countDocuments(query);
+      const total = await this._model.countDocuments(query);
 
-      console.log("courses", courses);
-
-      // Construct the pagination response
       return {
         body: courses.map((course) => {
           const { _id: id, title } = course.categoryId as unknown as {
@@ -349,52 +257,46 @@ export class CourseRepository
     mentorId: string
   ): Promise<PaginationDTO> {
     try {
-      // Construct the query
       const query: Record<string, any> = {
         mentorId,
 
         status: category !== "all" ? category : { $exists: true },
-        title: { $regex: search, $options: "i" }, // Case-insensitive search
+        title: { $regex: search, $options: "i" },
       };
 
-      // Define sorting options
       const sortOptions: { [key: string]: 1 | -1 } = {};
       switch (sort) {
         case "titleAsc":
-          sortOptions.title = 1; // Ascending by title
+          sortOptions.title = 1;
           break;
         case "titleDesc":
-          sortOptions.title = -1; // Descending by title
+          sortOptions.title = -1;
           break;
         case "priceAsc":
-          sortOptions.price = 1; // Ascending by price
+          sortOptions.price = 1;
           break;
         case "priceDesc":
-          sortOptions.price = -1; // Descending by price
+          sortOptions.price = -1;
           break;
         default:
-          sortOptions.title = 1; // Default sorting by title ascending
+          sortOptions.title = 1;
           break;
       }
 
-      // Pagination logic
       const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
       const limitParsed = parseInt(limit, 10);
 
-      // Fetch courses with query, pagination, and sorting
-      const courses = await this.model
+      const courses = await this._model
         .find(query)
         .populate("mentorId", "firstName lastName")
-        .populate("categoryId", "title") // Populate category title
+        .populate("categoryId", "title")
         .skip(skip)
         .limit(limitParsed)
         .sort(sortOptions)
-        .lean(); // Convert mongoose documents to plain objects
+        .lean();
 
-      // Count total documents matching query
-      const total = await this.model.countDocuments(query);
+      const total = await this._model.countDocuments(query);
 
-      // Construct the pagination response
       return {
         body: courses.map((course) => {
           const { _id: id, title } = course.categoryId as unknown as {
@@ -447,51 +349,45 @@ export class CourseRepository
     limit = "5",
   }: QueryCourse): Promise<PaginationDTO> {
     try {
-      // Construct the query
       const query: Record<string, any> = {
         status: "published",
         categoryId: category !== "all" ? category : { $exists: true },
-        title: { $regex: search, $options: "i" }, // Case-insensitive search
+        title: { $regex: search, $options: "i" },
       };
 
-      // Define sorting options
       const sortOptions: { [key: string]: 1 | -1 } = {};
       switch (sort) {
         case "titleAsc":
-          sortOptions.title = 1; // Ascending by title
+          sortOptions.title = 1;
           break;
         case "titleDesc":
-          sortOptions.title = -1; // Descending by title
+          sortOptions.title = -1;
           break;
         case "priceAsc":
-          sortOptions.price = 1; // Ascending by price
+          sortOptions.price = 1;
           break;
         case "priceDesc":
-          sortOptions.price = -1; // Descending by price
+          sortOptions.price = -1;
           break;
         default:
-          sortOptions.title = 1; // Default sorting by title ascending
+          sortOptions.title = 1;
           break;
       }
 
-      // Pagination logic
       const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
       const limitParsed = parseInt(limit, 10);
 
-      // Fetch courses with query, pagination, and sorting
-      const courses = await this.model
+      const courses = await this._model
         .find(query)
         .populate("mentorId", "firstName lastName profilePicture")
-        .populate("categoryId", "title") // Populate category title
+        .populate("categoryId", "title")
         .skip(skip)
         .limit(limitParsed)
         .sort(sortOptions)
-        .lean(); // Convert mongoose documents to plain objects
+        .lean();
 
-      // Count total documents matching query
-      const total = await this.model.countDocuments(query);
+      const total = await this._model.countDocuments(query);
 
-      // Construct the pagination response
       return {
         body: courses.map((course) => {
           const { _id: id, title } = course.categoryId as unknown as {
@@ -541,12 +437,10 @@ export class CourseRepository
 
   async userRevenueAnalyze(mentorId: string): Promise<any> {
     try {
-      // Execute the aggregation pipeline
-      const results = await this.model
+      const results = await this._model
         .aggregate(mentorRevenueAnalysisPipeline(mentorId))
         .exec();
 
-      // Return the combined result from facets
       return results[0];
     } catch (error) {
       console.error("Error analyzing mentor data:", error);

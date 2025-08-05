@@ -19,9 +19,9 @@ import { IController } from "../IController";
  */
 export class SignupController implements IController {
   constructor(
-    private signupCase: ISignupUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _signupCase: ISignupUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -29,26 +29,26 @@ export class SignupController implements IController {
     let response: ResponseDTO;
 
     if (!httpRequest.body || Object.keys(httpRequest.body).length === 0) {
-      error = this.httpErrors.error_500();
+      error = this._httpErrors.error_500();
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const validation = SignupRequestSchema.safeParse(httpRequest.body);
     if (!validation.success) {
       const firstErrorMessage = extractFirstZodMessage(validation.error);
-      error = this.httpErrors.error_422(firstErrorMessage);
+      error = this._httpErrors.error_422(firstErrorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const signupRequestDTO = validation.data;
-    response = await this.signupCase.execute(signupRequestDTO);
+    response = await this._signupCase.execute(signupRequestDTO);
 
     if (!response.success) {
-      error = this.httpErrors.error_400();
+      error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_201(response.data);
+    const success = this._httpSuccess.success_201(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

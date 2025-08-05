@@ -11,7 +11,7 @@ import { mapMaterialToDocument } from "../../../../infra/databases/mappers";
 import { MaterialEntity } from "../../../../domain/entities";
 
 export class UpdateMaterialUseCase implements IUpdateMaterialUseCase {
-  constructor(private materialRepository: IMaterialRepository) {}
+  constructor(private _materialRepository: IMaterialRepository) {}
 
   async execute(
     {
@@ -33,7 +33,7 @@ export class UpdateMaterialUseCase implements IUpdateMaterialUseCase {
         };
       }
 
-      const material = await this.materialRepository.findByIdPopulate(
+      const material = await this._materialRepository.findByIdPopulate(
         materialId
       );
       if (!material) {
@@ -58,7 +58,7 @@ export class UpdateMaterialUseCase implements IUpdateMaterialUseCase {
         fileKey,
       });
 
-      const updatedMaterial = await this.materialRepository.update(
+      const updatedMaterial = await this._materialRepository.update(
         material.id,
         mapMaterialToDocument(updateData)
       );

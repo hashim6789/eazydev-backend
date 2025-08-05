@@ -23,9 +23,9 @@ import { mapNotificationToDocument } from "../../../../infra/databases/mappers/n
 
 export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
   constructor(
-    private courseRepository: ICourseRepository,
-    private notificationRepository: INotificationRepository,
-    private chatGroupRepository: IChatGroupRepository
+    private _courseRepository: ICourseRepository,
+    private _notificationRepository: INotificationRepository,
+    private _chatGroupRepository: IChatGroupRepository
   ) {}
 
   async execute(
@@ -41,7 +41,7 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
         };
       }
 
-      const existingCourse = await this.courseRepository.findById(courseId);
+      const existingCourse = await this._courseRepository.findById(courseId);
       if (!existingCourse) {
         return {
           data: { error: CourseErrorType.CourseFetchingFailed },
@@ -96,7 +96,7 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
           break;
       }
 
-      const updatedCourse = await this.courseRepository.updateStatusOfCourse(
+      const updatedCourse = await this._courseRepository.updateStatusOfCourse(
         courseId,
         newStatus
       );
@@ -129,23 +129,18 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
           newStatus === "rejected" ||
           newStatus === "published")
       ) {
-        await this.notificationRepository.create(mappedDocument);
+        await this._notificationRepository.create(mappedDocument);
         const io = getIo();
         if (io) {
-          console.log(
-            "Emitting notification to mentor:",
-            updatedCourse.mentorId
-          );
           io.to(updatedCourse.mentorId).emit(
             "receiveNotification",
             notification
           );
         }
       } else if (role === "mentor" && newStatus === "requested") {
-        await this.notificationRepository.create(mappedDocument);
+        await this._notificationRepository.create(mappedDocument);
         const io = getIo();
         if (io) {
-          console.log("Emitting notification to admin:");
           io.to(env.ADMIN_ID as string).emit(
             "receiveNotification",
             notification
@@ -160,7 +155,7 @@ export class UpdateStatusCourseUseCase implements IUpdateStatusCourseUseCase {
           learners: [],
           createdAt: Date.now(),
         });
-        await this.chatGroupRepository.create(mapChatGroupToDocument(group));
+        await this._chatGroupRepository.create(mapChatGroupToDocument(group));
       }
 
       return { data: { course: updatedCourse }, success: true };

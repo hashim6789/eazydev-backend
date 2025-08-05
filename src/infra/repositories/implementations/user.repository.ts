@@ -19,18 +19,12 @@ import {
 import { IUsersRepository } from "../interfaces";
 
 export class UserRepository implements IUsersRepository {
-  private model: Model<IUser>;
+  private _model: Model<IUser>;
 
   constructor(model: Model<IUser>) {
-    this.model = model;
+    this._model = model;
   }
-  /**
-   * Creates a new user.
-   *
-   * @async
-   * @param {ICreateUserRequestDTO} data - The user data.
-   * @returns {Promise<IUserOutRequestDTO>} The created user.
-   */
+
   async create({
     email,
     firstName,
@@ -38,7 +32,7 @@ export class UserRepository implements IUsersRepository {
     role,
     password,
   }: ICreateUserRequestDTO): Promise<IUserOutRequestDTO> {
-    const user = new this.model({
+    const user = new this._model({
       email,
       firstName,
       lastName,
@@ -59,15 +53,8 @@ export class UserRepository implements IUsersRepository {
     };
   }
 
-  /**
-   * Finds a user by email.
-   *
-   * @async
-   * @param {string} email - The email to search for.
-   * @returns {Promise<IUserInRequestDTO | null>} The found user or null.
-   */
   async findByEmail(email: string): Promise<IUserValidDTO | null> {
-    const user = await this.model.findOne({ email }).lean();
+    const user = await this._model.findOne({ email }).lean();
     if (user) {
       return {
         id: user._id.toString(),
@@ -86,15 +73,8 @@ export class UserRepository implements IUsersRepository {
     return null;
   }
 
-  /**
-   * Finds a user by ID.
-   *
-   * @async
-   * @param {string} id - The ID of the user to find.
-   * @returns {Promise<IUserInRequestDTO | null>} The found user or null.
-   */
   async findById(id: string): Promise<IUserValidDTO | null> {
-    const user = await this.model.findById(id).lean();
+    const user = await this._model.findById(id).lean();
     if (user) {
       return {
         id: user._id.toString(),
@@ -113,13 +93,6 @@ export class UserRepository implements IUsersRepository {
     return null;
   }
 
-  /**
-   * Retrieves a paginated list of users.
-   *
-   * @async
-   * @param {number} pageNumber - The page number to retrieve.
-   * @returns {Promise<PaginationDTO>} The paginated list of users.
-   */
   async findAll({
     role = "learner",
     status = "all",
@@ -140,7 +113,7 @@ export class UserRepository implements IUsersRepository {
         { lastName: { $regex: search, $options: "i" } },
       ],
     };
-    const users = await this.model
+    const users = await this._model
       .find(
         query
         // { email: 1, name: 1, createdAt: 1 }
@@ -150,7 +123,7 @@ export class UserRepository implements IUsersRepository {
       .sort({ name: 1 })
       .lean();
 
-    const total = await this.model.countDocuments(query);
+    const total = await this._model.countDocuments(query);
 
     return {
       body: users.map((user) => ({
@@ -168,19 +141,11 @@ export class UserRepository implements IUsersRepository {
     };
   }
 
-  /**
-   * Updates a user with new data.
-   *
-   * @async
-   * @param {IUserOutRequestDTO} user - The user to update.
-   * @param {IUpdateUserRequestDTO} data - The updated user data.
-   * @returns {Promise<IUserOutRequestDTO>} The updated user.
-   */
   async update(
     userId: string,
     data: IUpdateUserRequestDTO
   ): Promise<IUserOutRequestDTO | null> {
-    const userUpdated = await this.model
+    const userUpdated = await this._model
       .findByIdAndUpdate(userId, { $set: data }, { new: true })
       .lean();
     if (!userUpdated) {
@@ -199,25 +164,18 @@ export class UserRepository implements IUsersRepository {
     };
   }
 
-  /**
-   * Deletes a user by ID.
-   *
-   * @async
-   * @param {string} id - The ID of the user to delete.
-   * @returns {Promise<void>} A Promise that resolves once the user is deleted.
-   */
   async delete(id: string): Promise<void> {
-    await this.model.findByIdAndDelete(id);
+    await this._model.findByIdAndDelete(id);
   }
 
   async getUsersAnalysis(): Promise<{
     learnerData: UserStatusData[];
     mentorData: UserStatusData[];
   }> {
-    const learnerData = (await this.model.aggregate(
+    const learnerData = (await this._model.aggregate(
       userStatusesAnalysisPipeline("learner")
     )) as unknown as UserStatusData[];
-    const mentorData = (await this.model.aggregate(
+    const mentorData = (await this._model.aggregate(
       userStatusesAnalysisPipeline("mentor")
     )) as unknown as UserStatusData[];
 
@@ -228,9 +186,9 @@ export class UserRepository implements IUsersRepository {
     let result: UserDataDTO[] = [];
 
     if (role === "mentor") {
-      result = await this.model.aggregate(getMentorAggregationPipeline(id));
+      result = await this._model.aggregate(getMentorAggregationPipeline(id));
     } else if (role === "learner") {
-      result = await this.model.aggregate(getLearnerAggregationPipeline(id));
+      result = await this._model.aggregate(getLearnerAggregationPipeline(id));
     }
 
     return result[0] as UserDataDTO;

@@ -15,9 +15,9 @@ import { IController } from "../IController";
  */
 export class ResetPasswordController implements IController {
   constructor(
-    private resetPasswordUseCase: IResetPasswordUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _resetPasswordUseCase: IResetPasswordUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -25,21 +25,21 @@ export class ResetPasswordController implements IController {
 
     if (!validation.success) {
       const firstErrorMessage = extractFirstZodMessage(validation.error); // your utility
-      const error = this.httpErrors.error_422(firstErrorMessage);
+      const error = this._httpErrors.error_422(firstErrorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const resetPasswordRequestDTO = validation.data;
-    const response = await this.resetPasswordUseCase.execute(
+    const response = await this._resetPasswordUseCase.execute(
       resetPasswordRequestDTO
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

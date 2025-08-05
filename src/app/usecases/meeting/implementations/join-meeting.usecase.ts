@@ -11,14 +11,14 @@ import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { IMeeting } from "../../../../infra/databases/interfaces";
 
 export class JoinMeetingUseCase implements IJoinMeetingUseCase {
-  constructor(private meetingRepository: IMeetingRepository) {}
+  constructor(private _meetingRepository: IMeetingRepository) {}
 
   async execute(
     { peerId, meetingId }: IJoinMeetingRequestDTO,
     { role, userId }: Payload
   ): Promise<ResponseDTO> {
     try {
-      const meeting = await this.meetingRepository.findById(meetingId);
+      const meeting = await this._meetingRepository.findById(meetingId);
       if (!meeting) {
         return {
           data: { error: MeetingErrorType.MeetingNotFound },
@@ -37,12 +37,12 @@ export class JoinMeetingUseCase implements IJoinMeetingUseCase {
       let otherPeerId = null;
       let meet: IMeeting | null = null;
       if (role === "mentor") {
-        meet = await this.meetingRepository.update(meetingId, {
+        meet = await this._meetingRepository.update(meetingId, {
           mentorPeerId: peerId,
         });
         otherPeerId = meet ? meet.learnerPeerId : null;
       } else {
-        meet = await this.meetingRepository.update(meetingId, {
+        meet = await this._meetingRepository.update(meetingId, {
           learnerPeerId: peerId,
         });
         otherPeerId = meet ? meet.mentorPeerId : null;

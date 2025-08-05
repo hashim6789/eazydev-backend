@@ -21,8 +21,8 @@ import {
 
 export class CreateLessonUseCase implements ICreateLessonUseCase {
   constructor(
-    private lessonRepository: ILessonRepository,
-    private courseRepository: ICourseRepository
+    private _lessonRepository: ILessonRepository,
+    private _courseRepository: ICourseRepository
   ) {}
 
   async execute(
@@ -49,7 +49,7 @@ export class CreateLessonUseCase implements ICreateLessonUseCase {
         materials,
       });
 
-      const createdLesson = await this.lessonRepository.create(
+      const createdLesson = await this._lessonRepository.create(
         mapLessonToDocument(lessonEntity)
       );
 
@@ -62,7 +62,7 @@ export class CreateLessonUseCase implements ICreateLessonUseCase {
 
       const mappedData = mapLessonToDTO(createdLesson);
 
-      await this.courseRepository.addLessonToCourse(courseId, mappedData.id);
+      await this._courseRepository.addLessonToCourse(courseId, mappedData.id);
 
       return { data: mappedData.id, success: true };
     } catch (error: unknown) {

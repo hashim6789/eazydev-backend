@@ -12,7 +12,7 @@ import { IUpdateCourseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class UpdateCourseUseCase implements IUpdateCourseUseCase {
-  constructor(private courseRepository: ICourseRepository) {}
+  constructor(private _courseRepository: ICourseRepository) {}
 
   async execute(
     data: IUpdateCourseRequestDTO,
@@ -28,7 +28,7 @@ export class UpdateCourseUseCase implements IUpdateCourseUseCase {
 
       // Update the course properties
 
-      const existingCourse = await this.courseRepository.findById(
+      const existingCourse = await this._courseRepository.findById(
         data.courseId
       );
       if (!existingCourse) {
@@ -42,7 +42,7 @@ export class UpdateCourseUseCase implements IUpdateCourseUseCase {
 
       Object.assign(existingCourse, updateData);
 
-      const updatedCourse = await this.courseRepository.update(
+      const updatedCourse = await this._courseRepository.update(
         courseId,
         existingCourse
       );
