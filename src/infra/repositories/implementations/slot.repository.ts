@@ -5,15 +5,15 @@ import { SlotEntity } from "../../../domain/entities";
 import { ISlotRepository } from "../interfaces";
 
 export class SlotRepository implements ISlotRepository {
-  private model: Model<ISlot>;
+  private _model: Model<ISlot>;
 
   constructor(model: Model<ISlot>) {
-    this.model = model;
+    this._model = model;
   }
 
   async create(data: SlotEntity): Promise<ISlotOutDTO> {
     try {
-      const createData = new this.model({
+      const createData = new this._model({
         mentorId: data.mentorId,
         time: data.time,
         isBooked: data.isBooked,
@@ -34,7 +34,7 @@ export class SlotRepository implements ISlotRepository {
 
   async findAllByMentorId(mentorId: string): Promise<ISlotOutPopulatedDTO[]> {
     try {
-      const slots = await this.model
+      const slots = await this._model
         .find({ mentorId })
         .populate("mentorId", "firstName lastName");
 
@@ -67,7 +67,7 @@ export class SlotRepository implements ISlotRepository {
 
   async findById(id: string): Promise<ISlotOutDTO | null> {
     try {
-      const slot = await this.model.findById(id);
+      const slot = await this._model.findById(id);
       if (!slot) return null;
 
       return {
@@ -84,7 +84,7 @@ export class SlotRepository implements ISlotRepository {
 
   async bookById(id: string): Promise<boolean> {
     try {
-      const slot = await this.model.findByIdAndUpdate(id, { isBooked: true });
+      const slot = await this._model.findByIdAndUpdate(id, { isBooked: true });
       return slot ? true : false;
     } catch (error) {
       console.error("Error while book slot:", error);

@@ -7,7 +7,7 @@ import { IGetAllMaterialRequestDTO } from "../../../../domain/dtos/material";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllMaterialUseCase implements IGetAllMaterialUseCase {
-  constructor(private materialRepository: IMaterialRepository) {}
+  constructor(private _materialRepository: IMaterialRepository) {}
 
   async execute({
     userId,
@@ -20,7 +20,7 @@ export class GetAllMaterialUseCase implements IGetAllMaterialUseCase {
       if (role === "mentor") {
         const filter = { ...query, mentorId: userId };
 
-        fetchedData = await this.materialRepository.findAll(filter);
+        fetchedData = await this._materialRepository.findAll(filter);
         if (!fetchedData) {
           return {
             success: false,

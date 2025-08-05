@@ -19,8 +19,8 @@ import {
 
 export class GetCertificateUseCase implements IGetCertificateUseCase {
   constructor(
-    private certificateRepository: ICertificateRepository,
-    private progressRepository: IProgressRepository
+    private _certificateRepository: ICertificateRepository,
+    private _progressRepository: IProgressRepository
   ) {}
 
   async execute(
@@ -28,7 +28,7 @@ export class GetCertificateUseCase implements IGetCertificateUseCase {
     { userId }: Payload
   ): Promise<ResponseDTO> {
     try {
-      const certificate = await this.certificateRepository.findByProgressId(
+      const certificate = await this._certificateRepository.findByProgressId(
         progressId
       );
       if (certificate) {
@@ -38,7 +38,7 @@ export class GetCertificateUseCase implements IGetCertificateUseCase {
         };
       }
 
-      const progress = await this.progressRepository.findById(progressId);
+      const progress = await this._progressRepository.findById(progressId);
       if (!progress) {
         return {
           data: { error: ProgressErrorType.ProgressNotFound },
@@ -63,7 +63,7 @@ export class GetCertificateUseCase implements IGetCertificateUseCase {
         issueDate: Date.now(),
       });
 
-      const createdCertificate = this.certificateRepository.create(
+      const createdCertificate = this._certificateRepository.create(
         mapCertificateToDocument(certificateEntity)
       );
       if (!createdCertificate) {

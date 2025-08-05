@@ -4,11 +4,9 @@ import { IBaseRepository } from "../interfaces";
 export abstract class BaseRepository<T extends Document>
   implements IBaseRepository<T>
 {
-  constructor(protected readonly model: Model<T>) {}
+  constructor(protected readonly _model: Model<T>) {}
   async create(data: Partial<T>): Promise<T> {
-    console.log("data", data);
-    const document = new this.model(data);
-    console.log(document);
+    const document = new this._model(data);
     const result = await document.save();
     return result;
   }
@@ -18,19 +16,19 @@ export abstract class BaseRepository<T extends Document>
     data: Partial<T>
   ): Promise<T | null> {
     if (!isValidObjectId(id)) throw new Error("Invalid ID format");
-    return this.model.findByIdAndUpdate(id, data, { new: true });
+    return this._model.findByIdAndUpdate(id, data, { new: true });
   }
 
   async findOne(filter: FilterQuery<T>): Promise<T | null> {
-    return this.model.findOne(filter);
+    return this._model.findOne(filter);
   }
   async findById(id: string | Types.ObjectId): Promise<T | null> {
     if (!isValidObjectId(id)) throw new Error("Invalid ID format");
-    return this.model.findById(id);
+    return this._model.findById(id);
   }
 
   async delete(filter: FilterQuery<T>): Promise<void> {
-    const result = await this.model.deleteOne(filter);
+    const result = await this._model.deleteOne(filter);
     if (result.deletedCount === 0) {
       throw new Error("Document not found or already deleted");
     }

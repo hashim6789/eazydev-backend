@@ -14,9 +14,9 @@ import {
 
 export class ForgotPasswordUseCase implements IForgotPasswordUseCase {
   constructor(
-    private userRepository: IUsersRepository,
-    private tokenRepository: ITokenRepository,
-    private sendMailProvider: ISendMailProvider
+    private _userRepository: IUsersRepository,
+    private _tokenRepository: ITokenRepository,
+    private _sendMailProvider: ISendMailProvider
   ) {}
 
   async execute({
@@ -24,7 +24,7 @@ export class ForgotPasswordUseCase implements IForgotPasswordUseCase {
     role,
   }: IForgotPasswordRequestDTO): Promise<ResponseDTO> {
     try {
-      const user = (await this.userRepository.findByEmail(
+      const user = (await this._userRepository.findByEmail(
         email
       )) as IUserValidDTO | null;
 
@@ -42,22 +42,22 @@ export class ForgotPasswordUseCase implements IForgotPasswordUseCase {
         };
       }
 
-      const tokenFounded = (await this.tokenRepository.findByUserIdAndType(
+      const tokenFounded = (await this._tokenRepository.findByUserIdAndType(
         user.id,
         "reset"
       )) as TokenDTO | null;
 
       if (tokenFounded) {
-        await this.tokenRepository.delete(user.id);
+        await this._tokenRepository.delete(user.id);
       }
 
-      const resetToken = await this.tokenRepository.create(
+      const resetToken = await this._tokenRepository.create(
         user.id,
         user.role,
         "reset"
       );
 
-      await this.sendMailProvider.sendForgotPasswordMail(
+      await this._sendMailProvider.sendForgotPasswordMail(
         user.role as SignupRole,
         user,
         resetToken.id

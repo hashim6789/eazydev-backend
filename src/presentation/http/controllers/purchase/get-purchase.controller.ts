@@ -24,9 +24,9 @@ import { IController } from "../IController";
  */
 export class GetPurchaseController implements IController {
   constructor(
-    private getPurchaseUseCase: IGetPurchaseUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _getPurchaseUseCase: IGetPurchaseUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -46,24 +46,24 @@ export class GetPurchaseController implements IController {
         : null;
       const errorMessage = pathError || bodyError || "Invalid input";
 
-      const error = this.httpErrors.error_422(errorMessage);
+      const error = this._httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const { id } = pathValidation.data;
     const { userId, role } = bodyValidation.data;
 
-    const response = await this.getPurchaseUseCase.execute(
+    const response = await this._getPurchaseUseCase.execute(
       { id },
       { userId, role }
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_201(response.data);
+    const success = this._httpSuccess.success_201(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

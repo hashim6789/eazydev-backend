@@ -15,7 +15,7 @@ type EmailProps = {
  * @class
  */
 export class Email {
-  private _address: string;
+  private __address: string;
 
   /**
    * Getter for the email address.
@@ -24,7 +24,7 @@ export class Email {
    * @returns {string} The email address.
    */
   get address(): string {
-    return this._address;
+    return this.__address;
   }
 
   /**
@@ -43,6 +43,6 @@ export class Email {
     ) {
       throw new Error(EmailErrorType.InvalidEmail);
     }
-    this._address = props.address;
+    this.__address = props.address;
   }
 }

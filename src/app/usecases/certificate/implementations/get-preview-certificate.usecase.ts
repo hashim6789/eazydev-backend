@@ -8,11 +8,11 @@ import { IGetPreviewCertificatesUseCase } from "../interfaces";
 export class GetPreviewCertificateUseCase
   implements IGetPreviewCertificatesUseCase
 {
-  constructor(private certificateRepository: ICertificateRepository) {}
+  constructor(private _certificateRepository: ICertificateRepository) {}
 
   async execute(certificateId: string): Promise<ResponseDTO> {
     try {
-      const certificate = await this.certificateRepository.findById(
+      const certificate = await this._certificateRepository.findById(
         certificateId
       );
 

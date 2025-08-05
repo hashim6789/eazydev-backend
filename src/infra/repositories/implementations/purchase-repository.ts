@@ -21,15 +21,15 @@ import { IPurchaseRepository } from "../interfaces";
 import { mapDocumentToPurchase } from "../../databases/mappers";
 
 export class PurchaseRepository implements IPurchaseRepository {
-  private model: Model<IPurchase>;
+  private _model: Model<IPurchase>;
 
   constructor(model: Model<IPurchase>) {
-    this.model = model;
+    this._model = model;
   }
 
   async create(data: ICreatePurchaseInDTO): Promise<IPurchaseOutDTO> {
     try {
-      const createData = new this.model({
+      const createData = new this._model({
         learnerId: data.learnerId,
         purchaseId: data.purchaseId,
         courseId: data.courseId,
@@ -58,7 +58,7 @@ export class PurchaseRepository implements IPurchaseRepository {
 
   async findById(id: string): Promise<IPurchaseOutPopulatedDTO | null> {
     try {
-      const purchase = await this.model
+      const purchase = await this._model
         .findById(id)
         .populate("courseId", "title");
       if (!purchase) return null;
@@ -91,14 +91,13 @@ export class PurchaseRepository implements IPurchaseRepository {
       const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
       const limitParsed = parseInt(limit, 10);
 
-      // Fetch purchases with query, pagination, and sorting
-      const purchases = await this.model
+      const purchases = await this._model
         .find({ learnerId: userId })
         .populate("courseId", "title")
         .skip(skip)
         .limit(limitParsed);
       if (!purchases) return null;
-      const total = await this.model.countDocuments({ learnerId: userId });
+      const total = await this._model.countDocuments({ learnerId: userId });
       return {
         body: purchases.map(mapDocumentToPurchase),
         total,
@@ -113,7 +112,7 @@ export class PurchaseRepository implements IPurchaseRepository {
 
   async analyzeMonthlyRevenue(): Promise<MonthlyRevenueData[]> {
     try {
-      const result = await this.model.aggregate(
+      const result = await this._model.aggregate(
         monthlyRevenuePopulatedPipeline()
       );
 
@@ -126,7 +125,9 @@ export class PurchaseRepository implements IPurchaseRepository {
 
   async analyzeAdminRevenue(): Promise<RevenueData> {
     try {
-      const result = await this.model.aggregate(adminRevenueAnalysisPipeline());
+      const result = await this._model.aggregate(
+        adminRevenueAnalysisPipeline()
+      );
 
       return result[0] as RevenueData;
     } catch (error) {
@@ -137,7 +138,7 @@ export class PurchaseRepository implements IPurchaseRepository {
 
   async analyzeMentorRevenue(mentorId: string): Promise<MentorRevenue> {
     try {
-      const result = await this.model.aggregate(
+      const result = await this._model.aggregate(
         mentorRevenuePipeline(mentorId)
       );
 
@@ -152,7 +153,7 @@ export class PurchaseRepository implements IPurchaseRepository {
     filter: Partial<ICreatePurchaseInDTO>
   ): Promise<IPurchase | null> {
     try {
-      const purchase = await this.model.findOne(filter);
+      const purchase = await this._model.findOne(filter);
       if (!purchase) return null;
 
       if (!purchase) return null;

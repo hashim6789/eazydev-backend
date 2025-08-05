@@ -6,11 +6,11 @@ import { IUsersRepository } from "../../../../infra/repositories";
 import { IBlockUserUseCase } from "../interfaces/block-user.usecase";
 
 export class BlockUserUseCase implements IBlockUserUseCase {
-  constructor(private userRepository: IUsersRepository) {}
+  constructor(private _userRepository: IUsersRepository) {}
 
   async execute({ userId, change }: BlockUserRequestDTO): Promise<ResponseDTO> {
     try {
-      const blockedUser = await this.userRepository.update(userId, {
+      const blockedUser = await this._userRepository.update(userId, {
         isBlocked: change,
       });
 

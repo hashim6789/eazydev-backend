@@ -14,8 +14,8 @@ export interface CategoryInterface {
  * @class
  */
 export class CategoryEntity {
-  private _title: string;
-  private _isListed: boolean;
+  private __title: string;
+  private __isListed: boolean;
 
   /**
    * Creates a new category instance.
@@ -30,8 +30,8 @@ export class CategoryEntity {
 
   toObject(): CategoryInterface {
     return {
-      title: this._title,
-      isListed: this._isListed,
+      title: this.__title,
+      isListed: this.__isListed,
     };
   }
 
@@ -49,7 +49,7 @@ export class CategoryEntity {
    * @readonly
    */
   get title(): string {
-    return this._title;
+    return this.__title;
   }
 
   /**
@@ -57,7 +57,7 @@ export class CategoryEntity {
    * @readonly
    */
   get isListed(): boolean {
-    return this._isListed;
+    return this.__isListed;
   }
 
   /**
@@ -67,7 +67,7 @@ export class CategoryEntity {
    * @param {CategoryInterface} props - The properties of the category.
    */
   constructor(props: CategoryInterface) {
-    this._title = props.title;
-    this._isListed = props.isListed;
+    this.__title = props.title;
+    this.__isListed = props.isListed;
   }
 }

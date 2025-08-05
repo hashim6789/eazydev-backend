@@ -18,9 +18,9 @@ import { IController } from "../IController";
  */
 export class BookSlotController implements IController {
   constructor(
-    private bookSlotUseCase: IBookSlotUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _bookSlotUseCase: IBookSlotUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -35,24 +35,24 @@ export class BookSlotController implements IController {
         ? null
         : extractFirstZodMessage(pathValidation.error);
       const errorMessage = bodyMsg ?? pathMsg ?? "Invalid input";
-      const error = this.httpErrors.error_422(errorMessage);
+      const error = this._httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const { userId, role, progressId, learnerId } = bodyValidation.data;
     const { slotId } = pathValidation.data;
 
-    const response = await this.bookSlotUseCase.execute(
+    const response = await this._bookSlotUseCase.execute(
       { progressId, slotId, learnerId },
       { userId, role }
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

@@ -15,7 +15,7 @@ import { ICreateCategoryUseCase } from "../interfaces";
 import { mapCategoryToDTO } from "../../../../infra/databases/mappers";
 
 export class CreateCategoryUseCase implements ICreateCategoryUseCase {
-  constructor(private categoryRepository: ICategoryRepository) {}
+  constructor(private _categoryRepository: ICategoryRepository) {}
 
   async execute(
     { title, adminId }: ICreateCategoryRequestDTO,
@@ -29,7 +29,7 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
         };
       }
 
-      const duplicateCategory = await this.categoryRepository.findByTitle(
+      const duplicateCategory = await this._categoryRepository.findByTitle(
         title
       );
       if (duplicateCategory) {
@@ -44,7 +44,7 @@ export class CreateCategoryUseCase implements ICreateCategoryUseCase {
         isListed: true,
       });
 
-      const createdCategory = await this.categoryRepository.create(
+      const createdCategory = await this._categoryRepository.create(
         courseEntity.toObject()
       );
 

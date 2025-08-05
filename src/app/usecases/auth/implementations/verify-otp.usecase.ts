@@ -14,14 +14,14 @@ import { IVerifyOtpRequestDTO } from "../../../../domain/dtos";
 
 export class VerifyOtpUseCase implements IVerifyOtpUseCase {
   constructor(
-    private userRepository: IUsersRepository,
-    private otpRepository: IOtpRepository,
-    private passwordHasher: IPasswordHasher
+    private _userRepository: IUsersRepository,
+    private _otpRepository: IOtpRepository,
+    private _passwordHasher: IPasswordHasher
   ) {}
 
   async execute({ otp, userId }: IVerifyOtpRequestDTO): Promise<ResponseDTO> {
     try {
-      const existingOtp = (await this.otpRepository.findByUserId(
+      const existingOtp = (await this._otpRepository.findByUserId(
         userId
       )) as OtpDTO;
       if (!existingOtp) {
@@ -40,7 +40,7 @@ export class VerifyOtpUseCase implements IVerifyOtpUseCase {
         };
       }
 
-      if (!(await this.passwordHasher.compare(otp, existingOtp.otp))) {
+      if (!(await this._passwordHasher.compare(otp, existingOtp.otp))) {
         return {
           statusCode: 400,
           success: false,
@@ -48,7 +48,7 @@ export class VerifyOtpUseCase implements IVerifyOtpUseCase {
         };
       }
 
-      const verifiedUser = await this.userRepository.update(userId, {
+      const verifiedUser = await this._userRepository.update(userId, {
         isVerified: true,
       });
 

@@ -4,12 +4,12 @@ import { IPurchaseRepository } from "../../../../infra/repositories";
 import { IGetAdminAnalyzeUseCase } from "../interfaces";
 
 export class GetAdminRevenueAnalyzeUseCase implements IGetAdminAnalyzeUseCase {
-  constructor(private purchaseRepository: IPurchaseRepository) {}
+  constructor(private _purchaseRepository: IPurchaseRepository) {}
 
   async execute(): Promise<ResponseDTO> {
     try {
       const monthlyRevenueData =
-        await this.purchaseRepository.analyzeAdminRevenue();
+        await this._purchaseRepository.analyzeAdminRevenue();
 
       return {
         data: monthlyRevenueData,

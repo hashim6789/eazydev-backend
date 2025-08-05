@@ -15,9 +15,9 @@ import { IController } from "../IController";
  */
 export class GetAllNotificationController implements IController {
   constructor(
-    private getAllNotificationCase: IGetAllNotificationUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _getAllNotificationCase: IGetAllNotificationUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -27,22 +27,22 @@ export class GetAllNotificationController implements IController {
 
     if (!bodyValidation.success) {
       const firstError = extractFirstZodMessage(bodyValidation.error);
-      const error = this.httpErrors.error_422(firstError);
+      const error = this._httpErrors.error_422(firstError);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const { userId, role } = bodyValidation.data;
 
-    const response = await this.getAllNotificationCase.execute({
+    const response = await this._getAllNotificationCase.execute({
       recipientId: userId,
     });
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

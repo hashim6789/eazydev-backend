@@ -19,13 +19,13 @@ export interface MeetingInterface {
  * @class
  */
 export class MeetingEntity {
-  private _courseId: string;
-  private _learnerId: string;
-  private _mentorId: string;
-  private _roomId: string;
-  private _slotId: string;
-  private _mentorPeerId: string | null;
-  private _learnerPeerId: string | null;
+  private __courseId: string;
+  private __learnerId: string;
+  private __mentorId: string;
+  private __roomId: string;
+  private __slotId: string;
+  private __mentorPeerId: string | null;
+  private __learnerPeerId: string | null;
 
   /**
    * Creates a new meeting instance.
@@ -52,14 +52,14 @@ export class MeetingEntity {
    * @readonly
    */
   get learnerId(): string {
-    return this._learnerId;
+    return this.__learnerId;
   }
   /**
    * Gets the meeting title.
    * @readonly
    */
   get mentorId(): string {
-    return this._mentorId;
+    return this.__mentorId;
   }
 
   /**
@@ -67,14 +67,14 @@ export class MeetingEntity {
    * @readonly
    */
   get courseId(): string {
-    return this._courseId;
+    return this.__courseId;
   }
   /**
    * Gets the meeting message.
    * @readonly
    */
   get slotId(): string {
-    return this._slotId;
+    return this.__slotId;
   }
 
   /**
@@ -82,7 +82,7 @@ export class MeetingEntity {
    * @readonly
    */
   get roomId(): string {
-    return this._roomId;
+    return this.__roomId;
   }
 
   /**
@@ -90,14 +90,14 @@ export class MeetingEntity {
    * @readonly
    */
   get mentorPeerId(): string | null {
-    return this._mentorPeerId;
+    return this.__mentorPeerId;
   }
   /**
    * Gets the meeting creation date.
    * @readonly
    */
   get learnerPeerId(): string | null {
-    return this._learnerPeerId;
+    return this.__learnerPeerId;
   }
 
   /**
@@ -107,12 +107,12 @@ export class MeetingEntity {
    * @param {MeetingInterface} props - The properties of the meeting.
    */
   constructor(props: MeetingInterface) {
-    this._courseId = props.courseId;
-    this._learnerId = props.learnerId;
-    this._mentorId = props.mentorId;
-    this._roomId = props.roomId;
-    this._slotId = props.slotId;
-    this._mentorPeerId = props.mentorPeerId;
-    this._learnerPeerId = props.learnerPeerId;
+    this.__courseId = props.courseId;
+    this.__learnerId = props.learnerId;
+    this.__mentorId = props.mentorId;
+    this.__roomId = props.roomId;
+    this.__slotId = props.slotId;
+    this.__mentorPeerId = props.mentorPeerId;
+    this.__learnerPeerId = props.learnerPeerId;
   }
 }

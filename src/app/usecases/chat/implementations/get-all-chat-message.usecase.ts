@@ -6,14 +6,16 @@ import { IGetAllChatMessagesRequestDTO } from "../../../../domain/dtos/chat-grou
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllChatMessageUseCase implements IGetAllChatMessageUseCase {
-  constructor(private chatMessageRepository: IChatMessageRepository) {}
+  constructor(private _chatMessageRepository: IChatMessageRepository) {}
 
   async execute(
     { groupId }: IGetAllChatMessagesRequestDTO,
     { userId, role }: Payload
   ): Promise<ResponseDTO> {
     try {
-      const messages = await this.chatMessageRepository.findAllByGroup(groupId);
+      const messages = await this._chatMessageRepository.findAllByGroup(
+        groupId
+      );
       return {
         statusCode: 200,
         success: true,

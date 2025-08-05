@@ -5,11 +5,11 @@ import { IGetCourseUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetCourseUseCase implements IGetCourseUseCase {
-  constructor(private courseRepository: ICourseRepository) {}
+  constructor(private _courseRepository: ICourseRepository) {}
 
   async execute(courseId: string): Promise<ResponseDTO> {
     try {
-      const course = await this.courseRepository.findByIdPopulate(courseId);
+      const course = await this._courseRepository.findByIdPopulate(courseId);
       if (!course) {
         return {
           success: false,

@@ -15,9 +15,9 @@ export interface SlotInterface {
  * @class
  */
 export class SlotEntity {
-  private _mentorId: string;
-  private _time: number;
-  private _isBooked: boolean;
+  private __mentorId: string;
+  private __time: number;
+  private __isBooked: boolean;
 
   /**
    * Creates a new slot instance.
@@ -44,7 +44,7 @@ export class SlotEntity {
    * @readonly
    */
   get mentorId(): string {
-    return this._mentorId;
+    return this.__mentorId;
   }
 
   /**
@@ -52,7 +52,7 @@ export class SlotEntity {
    * @readonly
    */
   get time(): number {
-    return this._time;
+    return this.__time;
   }
 
   /**
@@ -60,7 +60,7 @@ export class SlotEntity {
    * @readonly
    */
   get isBooked(): boolean {
-    return this._isBooked;
+    return this.__isBooked;
   }
 
   /**
@@ -70,8 +70,8 @@ export class SlotEntity {
    * @param {SlotInterface} props - The properties of the slot.
    */
   constructor(props: SlotInterface) {
-    this._mentorId = props.mentorId;
-    this._time = props.time;
-    this._isBooked = props.isBooked;
+    this.__mentorId = props.mentorId;
+    this.__time = props.time;
+    this.__isBooked = props.isBooked;
   }
 }

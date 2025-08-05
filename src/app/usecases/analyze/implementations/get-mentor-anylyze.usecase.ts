@@ -13,8 +13,8 @@ import { IGetMentorAnalyzeUseCase } from "../interfaces";
 
 export class GetMentorAnalyzeUseCase implements IGetMentorAnalyzeUseCase {
   constructor(
-    private progressRepository: IProgressRepository,
-    private courseRepository: ICourseRepository
+    private _progressRepository: IProgressRepository,
+    private _courseRepository: ICourseRepository
   ) {}
 
   async execute({ userId, role }: Payload): Promise<ResponseDTO> {
@@ -25,7 +25,7 @@ export class GetMentorAnalyzeUseCase implements IGetMentorAnalyzeUseCase {
           success: false,
         };
       }
-      const fetchedProgressData = await this.progressRepository.mentorAnalysis(
+      const fetchedProgressData = await this._progressRepository.mentorAnalysis(
         userId
       );
       if (!fetchedProgressData) {
@@ -35,9 +35,8 @@ export class GetMentorAnalyzeUseCase implements IGetMentorAnalyzeUseCase {
         };
       }
 
-      const fetchedRevenueData = await this.courseRepository.userRevenueAnalyze(
-        userId
-      );
+      const fetchedRevenueData =
+        await this._courseRepository.userRevenueAnalyze(userId);
       if (!fetchedRevenueData) {
         return {
           data: { error: AnalysisErrorType.AnalysisFetchingFailed },

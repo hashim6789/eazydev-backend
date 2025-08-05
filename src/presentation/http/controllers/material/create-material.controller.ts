@@ -15,9 +15,9 @@ import { IController } from "../IController";
  */
 export class CreateMaterialController implements IController {
   constructor(
-    private createMaterialUseCase: ICreateMaterialUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _createMaterialUseCase: ICreateMaterialUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -27,7 +27,7 @@ export class CreateMaterialController implements IController {
 
     if (!bodyValidation.success) {
       const firstError = extractFirstZodMessage(bodyValidation.error);
-      const error = this.httpErrors.error_422(firstError);
+      const error = this._httpErrors.error_422(firstError);
       return new HttpResponse(error.statusCode, error.body);
     }
 
@@ -42,7 +42,7 @@ export class CreateMaterialController implements IController {
       // lessonId, // optional
     } = bodyValidation.data;
 
-    const response = await this.createMaterialUseCase.execute(
+    const response = await this._createMaterialUseCase.execute(
       {
         title,
         description,
@@ -56,11 +56,11 @@ export class CreateMaterialController implements IController {
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_201(response.data);
+    const success = this._httpSuccess.success_201(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

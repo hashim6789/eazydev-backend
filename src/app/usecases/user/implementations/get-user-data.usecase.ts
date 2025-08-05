@@ -6,15 +6,15 @@ import { IGetUserDataUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetUserDataUseCase implements IGetUserDataUseCase {
-  constructor(private userRepository: IUsersRepository) {}
+  constructor(private _userRepository: IUsersRepository) {}
 
   async execute({
     id,
     userRole,
   }: IGetUserDataRequestDTO): Promise<ResponseDTO> {
     try {
-      const userData = await this.userRepository.getUserData(id, userRole);
-      console.log(" usercase", userData);
+      const userData = await this._userRepository.getUserData(id, userRole);
+      //console.log(" usercase", userData);
       if (!userData) {
         return {
           success: false,

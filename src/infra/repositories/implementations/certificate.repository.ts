@@ -15,18 +15,15 @@ export class CertificateRepository
   extends BaseRepository<ICertificate>
   implements ICertificateRepository
 {
-  // private model: Model<ICertificate>;
-
   constructor(model: Model<ICertificate>) {
     super(model);
-    // this.model = model;
   }
 
   async findByProgressId(
     progressId: string
   ): Promise<ICertificateOutPopulateDTO | null> {
     try {
-      const certificate = await this.model
+      const certificate = await this._model
         .findOne({ progressId })
         .populate("courseId", "title")
         .populate("mentorId", "firstName lastName")
@@ -49,7 +46,7 @@ export class CertificateRepository
       const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
       const limitParsed = parseInt(limit, 10);
 
-      const certificates = await this.model
+      const certificates = await this._model
         .find({ learnerId: userId })
         .populate("courseId", "title")
         .populate("mentorId", "firstName lastName")
@@ -60,7 +57,7 @@ export class CertificateRepository
 
       if (!certificates) return null;
 
-      const total = await this.model.countDocuments({ learnerId: userId });
+      const total = await this._model.countDocuments({ learnerId: userId });
 
       // Return the formatted certificate DTO
       return {
@@ -77,7 +74,7 @@ export class CertificateRepository
 
   async findById(id: string | Types.ObjectId): Promise<ICertificate | null> {
     try {
-      const certificate = await this.model
+      const certificate = await this._model
         .findById(id)
         .populate("courseId", "title")
         .populate("mentorId", "firstName lastName")

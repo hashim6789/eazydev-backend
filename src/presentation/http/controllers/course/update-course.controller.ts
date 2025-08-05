@@ -18,9 +18,9 @@ import { IController } from "../IController";
  */
 export class UpdateCourseController implements IController {
   constructor(
-    private updateCourseUseCase: IUpdateCourseUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _updateCourseUseCase: IUpdateCourseUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -39,7 +39,7 @@ export class UpdateCourseController implements IController {
         ? extractFirstZodMessage(bodyValidation.error)
         : null;
       const errorMessage = bodyError || pathError || "Invalid input data";
-      const error = this.httpErrors.error_422(errorMessage);
+      const error = this._httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
@@ -55,17 +55,17 @@ export class UpdateCourseController implements IController {
       price,
     } = bodyValidation.data;
 
-    const response = await this.updateCourseUseCase.execute(
+    const response = await this._updateCourseUseCase.execute(
       { courseId, mentorId, title, description, categoryId, thumbnail, price },
       { userId, role }
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

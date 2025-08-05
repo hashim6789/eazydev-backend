@@ -29,9 +29,9 @@ export class RecoverUserInformationUserUseCase
    * @param {ITokenManagerProvider} tokenManager - The token manager provider.
    */
   constructor(
-    private refreshTokenRepository: ITokenRepository,
-    private userRepository: IUsersRepository,
-    private tokenManager: ITokenManagerProvider
+    private _refreshTokenRepository: ITokenRepository,
+    private _userRepository: IUsersRepository,
+    private _tokenManager: ITokenManagerProvider
   ) {}
 
   /**
@@ -44,7 +44,7 @@ export class RecoverUserInformationUserUseCase
   async execute({ userId }: IRecoveryUserDTO): Promise<ResponseDTO> {
     try {
       const refreshToken =
-        (await this.refreshTokenRepository.findByUserIdAndType(
+        (await this._refreshTokenRepository.findByUserIdAndType(
           userId,
           "refresh"
         )) as TokenDTO | null;
@@ -56,7 +56,7 @@ export class RecoverUserInformationUserUseCase
         };
       }
 
-      const refreshTokenExpired = this.tokenManager.validateTokenAge(
+      const refreshTokenExpired = this._tokenManager.validateTokenAge(
         refreshToken.expiresIn
       );
 
@@ -67,7 +67,7 @@ export class RecoverUserInformationUserUseCase
         };
       }
 
-      const user = (await this.userRepository.findById(
+      const user = (await this._userRepository.findById(
         refreshToken.userId
       )) as IUserInRequestDTO | null;
 

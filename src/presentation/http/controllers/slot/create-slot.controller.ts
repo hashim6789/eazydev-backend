@@ -15,9 +15,9 @@ import { IController } from "../IController";
  */
 export class CreateSlotController implements IController {
   constructor(
-    private createSlotUseCase: ICreateSlotUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _createSlotUseCase: ICreateSlotUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -28,23 +28,23 @@ export class CreateSlotController implements IController {
     if (!bodyValidation.success) {
       const errorMessage =
         extractFirstZodMessage(bodyValidation.error) || "Invalid input";
-      const error = this.httpErrors.error_422(errorMessage);
+      const error = this._httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const { userId, role, time, mentorId } = bodyValidation.data;
 
-    const response = await this.createSlotUseCase.execute(
+    const response = await this._createSlotUseCase.execute(
       { mentorId, time },
       { userId, role }
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_201(response.data);
+    const success = this._httpSuccess.success_201(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

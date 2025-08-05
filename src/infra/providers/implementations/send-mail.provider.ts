@@ -49,7 +49,7 @@ export class SendMailProvider implements ISendMailProvider {
     resetURL: string
   ): Promise<boolean> {
     try {
-      console.log("mail sent");
+      //console.log("mail sent");
       const transporter = nodemailer.createTransport(mailConfig);
 
       const mailOptions = {

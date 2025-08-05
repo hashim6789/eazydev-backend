@@ -21,12 +21,12 @@ export interface MaterialInterface {
  * @class
  */
 export class MaterialEntity {
-  private _title: string;
-  private _mentorId: string;
-  private _description: string;
-  private _type: MaterialType;
-  private _duration: number;
-  private _fileKey: string;
+  private __title: string;
+  private __mentorId: string;
+  private __description: string;
+  private __type: MaterialType;
+  private __duration: number;
+  private __fileKey: string;
 
   /**
    * Creates a new material instance based on the provided data.
@@ -70,7 +70,7 @@ export class MaterialEntity {
    * @readonly
    */
   get title(): string {
-    return this._title;
+    return this.__title;
   }
   /**
    * Gets the material's name.
@@ -78,7 +78,7 @@ export class MaterialEntity {
    * @readonly
    */
   get mentorId(): string {
-    return this._mentorId;
+    return this.__mentorId;
   }
 
   /**
@@ -87,7 +87,7 @@ export class MaterialEntity {
    * @readonly
    */
   get type(): MaterialType {
-    return this._type;
+    return this.__type;
   }
 
   /**
@@ -96,7 +96,7 @@ export class MaterialEntity {
    * @readonly
    */
   get description(): string {
-    return this._description;
+    return this.__description;
   }
 
   /**
@@ -105,7 +105,7 @@ export class MaterialEntity {
    * @readonly
    */
   get duration(): number {
-    return this._duration;
+    return this.__duration;
   }
 
   /**
@@ -114,7 +114,7 @@ export class MaterialEntity {
    * @readonly
    */
   get fileKey(): string {
-    return this._fileKey;
+    return this.__fileKey;
   }
 
   /**
@@ -124,11 +124,11 @@ export class MaterialEntity {
    * @param {MaterialInterface} props - The properties of the material.
    */
   constructor(props: MaterialInterface) {
-    this._title = props.title;
-    this._description = props.description;
-    this._mentorId = props.mentorId;
-    this._fileKey = props.fileKey;
-    this._type = props.type;
-    this._duration = props.duration;
+    this.__title = props.title;
+    this.__description = props.description;
+    this.__mentorId = props.mentorId;
+    this.__fileKey = props.fileKey;
+    this.__type = props.type;
+    this.__duration = props.duration;
   }
 }

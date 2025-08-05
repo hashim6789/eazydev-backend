@@ -73,8 +73,8 @@ courseRouter.get(
  */
 courseRouter.get(
   "/:courseId",
-  authenticateToken,
-  authorizeRole(["mentor", "admin", "learner"]),
+  // authenticateToken,
+  // authorizeRole(["mentor", "admin", "learner"]),
   async (request: Request, response: Response) => {
     const adapter = await expressAdapter(request, getCourseComposer());
     response.status(adapter.statusCode).json(adapter.body);

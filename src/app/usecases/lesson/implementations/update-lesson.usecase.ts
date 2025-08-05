@@ -13,14 +13,14 @@ import {
 } from "../../../../infra/databases/mappers";
 
 export class UpdateLessonUseCase implements IUpdateLessonUseCase {
-  constructor(private lessonRepository: ILessonRepository) {}
+  constructor(private _lessonRepository: ILessonRepository) {}
 
   async execute(
     data: IUpdateLessonRequestDTO,
     authData: Payload
   ): Promise<ResponseDTO> {
     try {
-      const existingLesson = await this.lessonRepository.findById(data.id);
+      const existingLesson = await this._lessonRepository.findById(data.id);
       if (!existingLesson) {
         return {
           data: { error: LessonErrorType.LessonNotFound },
@@ -40,7 +40,7 @@ export class UpdateLessonUseCase implements IUpdateLessonUseCase {
       const { mentorId, courseId, id, ...updateData } = data;
 
       Object.assign(existingLesson, updateData);
-      const updatedLesson = await this.lessonRepository.update(
+      const updatedLesson = await this._lessonRepository.update(
         data.id,
         existingLesson
       );

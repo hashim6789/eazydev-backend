@@ -9,14 +9,14 @@ import { IUpdatePersonalInfoUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class UpdatePersonalInfoUseCase implements IUpdatePersonalInfoUseCase {
-  constructor(private userRepository: IUsersRepository) {}
+  constructor(private _userRepository: IUsersRepository) {}
 
   async execute(
     { firstName, lastName }: IUpdatePersonalInfoRequestDTO,
     { userId }: Payload
   ): Promise<ResponseDTO> {
     try {
-      const user = await this.userRepository.update(userId, {
+      const user = await this._userRepository.update(userId, {
         firstName,
         lastName,
       });

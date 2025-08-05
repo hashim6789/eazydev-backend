@@ -8,7 +8,7 @@ import { ProgressErrorType } from "../../../../domain/enums/progress";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllProgressUseCase implements IGetAllProgressUseCase {
-  constructor(private progressRepository: IProgressRepository) {}
+  constructor(private _progressRepository: IProgressRepository) {}
 
   async execute(
     query: QueryProgress,
@@ -18,7 +18,7 @@ export class GetAllProgressUseCase implements IGetAllProgressUseCase {
       let paginatedProgresses: null | PaginationDTO = null;
 
       if (role === "learner") {
-        paginatedProgresses = await this.progressRepository.findAllByUserId(
+        paginatedProgresses = await this._progressRepository.findAllByUserId(
           query,
           userId
         );

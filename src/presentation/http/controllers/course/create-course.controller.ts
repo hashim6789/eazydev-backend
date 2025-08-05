@@ -15,9 +15,9 @@ import { IController } from "../IController";
  */
 export class CreateCourseController implements IController {
   constructor(
-    private createCourseUseCase: ICreateCourseUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _createCourseUseCase: ICreateCourseUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -25,7 +25,7 @@ export class CreateCourseController implements IController {
 
     if (!parsedBody.success) {
       const firstError = extractFirstZodMessage(parsedBody.error);
-      const error = this.httpErrors.error_422(firstError);
+      const error = this._httpErrors.error_422(firstError);
       return new HttpResponse(error.statusCode, error.body);
     }
 
@@ -40,17 +40,17 @@ export class CreateCourseController implements IController {
       price,
     } = parsedBody.data;
 
-    const response = await this.createCourseUseCase.execute(
+    const response = await this._createCourseUseCase.execute(
       { title, description, mentorId, categoryId, thumbnail, price },
       { userId, role }
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_201(response.data);
+    const success = this._httpSuccess.success_201(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

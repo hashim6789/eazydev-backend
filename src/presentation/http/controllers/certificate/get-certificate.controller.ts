@@ -18,9 +18,9 @@ import { IController } from "../IController";
  */
 export class GetCertificateController implements IController {
   constructor(
-    private getCertificateUseCase: IGetCertificateUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _getCertificateUseCase: IGetCertificateUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -33,30 +33,30 @@ export class GetCertificateController implements IController {
 
     if (!bodyValidation.success) {
       const firstError = extractFirstZodMessage(bodyValidation.error);
-      const error = this.httpErrors.error_422(firstError);
+      const error = this._httpErrors.error_422(firstError);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     if (!pathValidation.success) {
       const firstError = extractFirstZodMessage(pathValidation.error);
-      const error = this.httpErrors.error_422(firstError);
+      const error = this._httpErrors.error_422(firstError);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const { userId, role } = bodyValidation.data;
     const { progressId } = pathValidation.data;
 
-    const response = await this.getCertificateUseCase.execute(
+    const response = await this._getCertificateUseCase.execute(
       { progressId },
       { userId, role }
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_201(response.data);
+    const success = this._httpSuccess.success_201(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

@@ -14,9 +14,9 @@ import { IPasswordHasher } from "../../../../infra/providers";
 
 export class ResetPasswordUseCase implements IResetPasswordUseCase {
   constructor(
-    private tokenRepository: ITokenRepository,
-    private userRepository: IUsersRepository,
-    private passwordHasher: IPasswordHasher
+    private _tokenRepository: ITokenRepository,
+    private _userRepository: IUsersRepository,
+    private _passwordHasher: IPasswordHasher
   ) {}
 
   async execute({
@@ -25,7 +25,7 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
     password,
   }: IResetPasswordRequestDTO): Promise<ResponseDTO> {
     try {
-      const resetToken = (await this.tokenRepository.findById(
+      const resetToken = (await this._tokenRepository.findById(
         tokenId
       )) as TokenDTO | null;
       if (!resetToken) {
@@ -45,7 +45,7 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
         };
       }
 
-      const user = (await this.userRepository.findById(
+      const user = (await this._userRepository.findById(
         resetToken.userId
       )) as IUserValidDTO | null;
       if (!user) {
@@ -55,8 +55,8 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
         };
       }
 
-      const hashedPassword = await this.passwordHasher.hash(password);
-      const updatedUser = await this.userRepository.update(user.id, {
+      const hashedPassword = await this._passwordHasher.hash(password);
+      const updatedUser = await this._userRepository.update(user.id, {
         password: hashedPassword,
       });
       if (!updatedUser) {
@@ -66,7 +66,7 @@ export class ResetPasswordUseCase implements IResetPasswordUseCase {
         };
       }
 
-      await this.tokenRepository.deleteById(tokenId);
+      await this._tokenRepository.deleteById(tokenId);
 
       return {
         data: { tokenId },

@@ -20,9 +20,8 @@ export class RefreshTokenUserUseCase implements IRefreshTokenUserUseCase {
    * @param {ITokenManagerProvider} tokenManager - The token manager provider.
    */
   constructor(
-    private generateTokenProvider: IGenerateTokenProvider // private refreshTokenRepository: ITokenRepository,
-  ) // private tokenManager: ITokenManagerProvider
-  {}
+    private _generateTokenProvider: IGenerateTokenProvider // private _refreshTokenRepository: ITokenRepository, // private _tokenManager: ITokenManagerProvider
+  ) {}
 
   /**
    * Executes the refresh token user use case.
@@ -33,12 +32,12 @@ export class RefreshTokenUserUseCase implements IRefreshTokenUserUseCase {
    */
   async execute({ userId, role }: Payload): Promise<ResponseDTO> {
     try {
-      const accessToken = await this.generateTokenProvider.generateToken(
+      const accessToken = await this._generateTokenProvider.generateToken(
         userId,
         { userId, role },
         "access"
       );
-      const refreshToken = await this.generateTokenProvider.generateToken(
+      const refreshToken = await this._generateTokenProvider.generateToken(
         userId,
         { userId, role },
         "refresh"

@@ -14,9 +14,9 @@ export interface ILoginUseCase {
 
 export class LoginUseCase implements ILoginUseCase {
   constructor(
-    private userRepository: IUsersRepository,
-    private passwordHasher: IPasswordHasher,
-    private generateTokenProvider: IGenerateTokenProvider // private tokenRepository: ITokenRepository
+    private _userRepository: IUsersRepository,
+    private _passwordHasher: IPasswordHasher,
+    private _generateTokenProvider: IGenerateTokenProvider // private _tokenRepository: ITokenRepository
   ) {}
 
   async execute({
@@ -25,7 +25,7 @@ export class LoginUseCase implements ILoginUseCase {
     role,
   }: ILoginRequestDTO): Promise<ResponseDTO> {
     try {
-      const user = (await this.userRepository.findByEmail(
+      const user = (await this._userRepository.findByEmail(
         email
       )) as IUserValidDTO | null;
 
@@ -43,7 +43,7 @@ export class LoginUseCase implements ILoginUseCase {
         };
       }
 
-      const isValidPassword = await this.passwordHasher.compare(
+      const isValidPassword = await this._passwordHasher.compare(
         password,
         user.password
       );
@@ -54,7 +54,7 @@ export class LoginUseCase implements ILoginUseCase {
         };
       }
 
-      const accessToken = await this.generateTokenProvider.generateToken(
+      const accessToken = await this._generateTokenProvider.generateToken(
         user.id,
         {
           userId: user.id,
@@ -62,7 +62,7 @@ export class LoginUseCase implements ILoginUseCase {
         },
         "access"
       );
-      const refreshToken = await this.generateTokenProvider.generateToken(
+      const refreshToken = await this._generateTokenProvider.generateToken(
         user.id,
         {
           userId: user.id,

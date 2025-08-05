@@ -5,11 +5,11 @@ import { ICategoryRepository } from "../../../../infra/repositories";
 import { IGetAllCategoryAdminUseCase } from "../interfaces";
 
 export class GetAllCategoryAdminUseCase implements IGetAllCategoryAdminUseCase {
-  constructor(private categoryRepository: ICategoryRepository) {}
+  constructor(private _categoryRepository: ICategoryRepository) {}
 
   async execute(query: QueryCategory): Promise<ResponseDTO> {
     try {
-      const categories = await this.categoryRepository.findAll({
+      const categories = await this._categoryRepository.findAll({
         ...query,
         role: "admin",
       });

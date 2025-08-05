@@ -18,9 +18,9 @@ import { IController } from "../IController";
  */
 export class GetLearningContentController implements IController {
   constructor(
-    private getLearningContentUseCase: IGetLearningContentsUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _getLearningContentUseCase: IGetLearningContentsUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -39,24 +39,24 @@ export class GetLearningContentController implements IController {
         ? extractFirstZodMessage(pathValidation.error)
         : null;
       const errorMessage = firstBodyError ?? firstPathError ?? "Invalid input";
-      const error = this.httpErrors.error_422(errorMessage);
+      const error = this._httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const { userId, role } = bodyValidation.data;
     const { progressId } = pathValidation.data;
 
-    const response = await this.getLearningContentUseCase.execute(
+    const response = await this._getLearningContentUseCase.execute(
       { progressId },
       { userId, role }
     );
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

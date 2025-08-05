@@ -17,11 +17,11 @@ export interface CertificateInterface {
  * @class
  */
 export class CertificateEntity {
-  private _progressId: string;
-  private _courseId: string;
-  private _mentorId: string;
-  private _learnerId: string;
-  private _issueDate: number;
+  private __progressId: string;
+  private __courseId: string;
+  private __mentorId: string;
+  private __learnerId: string;
+  private __issueDate: number;
 
   /**
    * Creates a new certificate instance.
@@ -45,11 +45,11 @@ export class CertificateEntity {
 
   toObject(): CertificateInterface {
     return {
-      progressId: this._progressId,
-      courseId: this._courseId,
-      mentorId: this._mentorId,
-      learnerId: this._learnerId,
-      issueDate: this._issueDate,
+      progressId: this.__progressId,
+      courseId: this.__courseId,
+      mentorId: this.__mentorId,
+      learnerId: this.__learnerId,
+      issueDate: this.__issueDate,
     };
   }
 
@@ -58,7 +58,7 @@ export class CertificateEntity {
    * @readonly
    */
   get progressId(): string {
-    return this._progressId;
+    return this.__progressId;
   }
 
   /**
@@ -66,7 +66,7 @@ export class CertificateEntity {
    * @readonly
    */
   get courseId(): string {
-    return this._courseId;
+    return this.__courseId;
   }
 
   /**
@@ -74,34 +74,34 @@ export class CertificateEntity {
    * @readonly
    */
   get mentorId(): string {
-    return this._mentorId;
+    return this.__mentorId;
   }
   /**
    * Gets the certificate's mentor ID.
    * @readonly
    */
   get learnerId(): string {
-    return this._learnerId;
+    return this.__learnerId;
   }
   /**
    * Gets the certificate's mentor ID.
    * @readonly
    */
   get issueDate(): number {
-    return this._issueDate;
+    return this.__issueDate;
   }
 
   /**
    * Gets the certificate's learner ID.
    * @readonly{
-    this._progressId = props.progressId;
-    this._courseId = props.courseId;
-    this._mentorId = props.mentorId;
-    this._learnerId = props.learnerId;
-    this._issueDate = props.issueDate;
+    this.__progressId = props.progressId;
+    this.__courseId = props.courseId;
+    this.__mentorId = props.mentorId;
+    this.__learnerId = props.learnerId;
+    this.__issueDate = props.issueDate;
   }
   get issueDate(): number {
-    return this._issueDate;
+    return this.__issueDate;
   }
 
   /**
@@ -111,10 +111,10 @@ export class CertificateEntity {
    * @param {CertificateInterface} props - The properties of the certificate.
    */
   constructor(props: CertificateInterface) {
-    this._progressId = props.progressId;
-    this._courseId = props.courseId;
-    this._mentorId = props.mentorId;
-    this._learnerId = props.learnerId;
-    this._issueDate = props.issueDate;
+    this.__progressId = props.progressId;
+    this.__courseId = props.courseId;
+    this.__mentorId = props.mentorId;
+    this.__learnerId = props.learnerId;
+    this.__issueDate = props.issueDate;
   }
 }

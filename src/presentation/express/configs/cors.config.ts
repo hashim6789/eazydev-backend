@@ -13,7 +13,7 @@ const allowedOrigins: string[] = [
 
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
-    console.log("Request Origin:", origin);
+    //console.log("Request Origin:", origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {

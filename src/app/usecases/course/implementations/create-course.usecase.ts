@@ -17,7 +17,7 @@ import {
 } from "../../../../infra/databases/mappers";
 
 export class CreateCourseUseCase implements ICreateCourseUseCase {
-  constructor(private courseRepository: ICourseRepository) {}
+  constructor(private _courseRepository: ICourseRepository) {}
 
   async execute(
     {
@@ -31,7 +31,7 @@ export class CreateCourseUseCase implements ICreateCourseUseCase {
     authData: Payload
   ): Promise<ResponseDTO> {
     try {
-      console.log(authData);
+      //console.log(authData);
       if (mentorId !== authData.userId) {
         return {
           data: { error: AuthenticateUserErrorType.UserCanNotDoIt },
@@ -49,7 +49,7 @@ export class CreateCourseUseCase implements ICreateCourseUseCase {
         status: "draft",
       });
 
-      const createdCourse = await this.courseRepository.create(
+      const createdCourse = await this._courseRepository.create(
         mapCourseToDocument(courseEntity)
       );
 

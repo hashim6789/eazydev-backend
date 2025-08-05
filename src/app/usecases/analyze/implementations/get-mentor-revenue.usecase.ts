@@ -12,13 +12,13 @@ export class GetMentorRevenueAnalyzeUseCase
   implements IGetMentorRevenueAnalyzeUseCase
 {
   constructor(
-    private purchaseRepository: IPurchaseRepository,
-    private userRepository: IUsersRepository
+    private _purchaseRepository: IPurchaseRepository,
+    private _userRepository: IUsersRepository
   ) {}
 
   async execute(mentorId: string): Promise<ResponseDTO> {
     try {
-      const mentor = (await this.userRepository.findById(
+      const mentor = (await this._userRepository.findById(
         mentorId
       )) as IUserValidDTO | null;
       if (!mentor || mentor.role !== "mentor") {
@@ -28,7 +28,7 @@ export class GetMentorRevenueAnalyzeUseCase
         };
       }
       const monthlyRevenueData =
-        await this.purchaseRepository.analyzeMentorRevenue(mentorId);
+        await this._purchaseRepository.analyzeMentorRevenue(mentorId);
 
       return {
         data: monthlyRevenueData,

@@ -16,10 +16,10 @@ export interface NotificationInterface {
  * @class
  */
 export class NotificationEntity {
-  private _title: string;
-  private _message: string;
-  private _recipientId: string;
-  private _createdAt: number;
+  private __title: string;
+  private __message: string;
+  private __recipientId: string;
+  private __createdAt: number;
 
   /**
    * Creates a new notification instance.
@@ -46,7 +46,7 @@ export class NotificationEntity {
    * @readonly
    */
   get title(): string {
-    return this._title;
+    return this.__title;
   }
 
   /**
@@ -54,7 +54,7 @@ export class NotificationEntity {
    * @readonly
    */
   get message(): string {
-    return this._message;
+    return this.__message;
   }
 
   /**
@@ -62,7 +62,7 @@ export class NotificationEntity {
    * @readonly
    */
   get recipientId(): string {
-    return this._recipientId;
+    return this.__recipientId;
   }
 
   /**
@@ -70,7 +70,7 @@ export class NotificationEntity {
    * @readonly
    */
   get createdAt(): number {
-    return this._createdAt;
+    return this.__createdAt;
   }
 
   /**
@@ -80,9 +80,9 @@ export class NotificationEntity {
    * @param {NotificationInterface} props - The properties of the notification.
    */
   constructor(props: NotificationInterface) {
-    this._title = props.title;
-    this._message = props.message;
-    this._recipientId = props.recipientId;
-    this._createdAt = props.createdAt;
+    this.__title = props.title;
+    this.__message = props.message;
+    this.__recipientId = props.recipientId;
+    this.__createdAt = props.createdAt;
   }
 }

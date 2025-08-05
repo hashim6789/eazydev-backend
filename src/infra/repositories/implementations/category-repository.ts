@@ -20,7 +20,7 @@ export class CategoryRepository
     change: boolean
   ): Promise<boolean> {
     try {
-      const category = await this.model.findByIdAndUpdate(categoryId, {
+      const category = await this._model.findByIdAndUpdate(categoryId, {
         isListed: change,
       });
 
@@ -50,14 +50,14 @@ export class CategoryRepository
             : true,
         title: { $regex: search, $options: "i" },
       };
-      const categories = await this.model
+      const categories = await this._model
         .find(query)
         .skip((parseInt(page, 10) - 1) * parseInt(limit, 10))
         .limit(parseInt(limit, 10))
         .sort({ updatedAt: -1 })
         .lean();
 
-      const total = await this.model.countDocuments(query);
+      const total = await this._model.countDocuments(query);
 
       return {
         body: categories.map(mapCategoryToDTO),
@@ -76,7 +76,7 @@ export class CategoryRepository
       const query = {
         isListed: role === "admin" ? { $exists: true } : true,
       };
-      const categories = await this.model.find(query).sort({ updatedAt: -1 });
+      const categories = await this._model.find(query).sort({ updatedAt: -1 });
       return categories.map(mapCategoryToDTO);
     } catch (error) {
       console.error("Error while fetch all category:", error);
@@ -86,7 +86,7 @@ export class CategoryRepository
 
   async findByTitle(title: string): Promise<ICategoryOutDTO | null> {
     try {
-      const category = await this.model.findOne({
+      const category = await this._model.findOne({
         title: { $regex: `^${title}$`, $options: "i" }, // Case-insensitive match
       });
       if (!category) return null;

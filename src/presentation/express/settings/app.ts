@@ -8,7 +8,7 @@ import { apiRouter } from "../routers";
  */
 import { connectDB } from "../../../infra/databases/mongoose/connecton";
 import { initializePeerServer } from "./peer";
-import { setupCors } from "../configs";
+import { env, setupCors } from "../configs";
 
 const app = express();
 
@@ -21,8 +21,10 @@ app.use(cookieParser());
 // Database connection setup
 connectDB();
 
-// === Initialize PeerJS ===
-// initializePeerServer();
+if (env.NODE_ENV === "development") {
+  // === Initialize PeerJS ===
+  initializePeerServer();
+}
 
 /**
  * Mounting routes for documentation, user-related, and authentication endpoints.

@@ -19,13 +19,13 @@ export interface PurchaseInterface {
  * @class
  */
 export class PurchaseEntity {
-  private _learnerId: string;
-  private _purchaseId: string;
-  private _courseId: string;
-  private _purchaseDate: number;
-  private _amount: number;
-  private _paymentIntentId: string;
-  private _status: string;
+  private __learnerId: string;
+  private __purchaseId: string;
+  private __courseId: string;
+  private __purchaseDate: number;
+  private __amount: number;
+  private __paymentIntentId: string;
+  private __status: string;
 
   /**
    * Creates a new purchase instance.
@@ -52,14 +52,14 @@ export class PurchaseEntity {
    * @readonly
    */
   get learnerId(): string {
-    return this._learnerId;
+    return this.__learnerId;
   }
   /**
    * Gets the purchase title.
    * @readonly
    */
   get purchaseId(): string {
-    return this._purchaseId;
+    return this.__purchaseId;
   }
 
   /**
@@ -67,7 +67,7 @@ export class PurchaseEntity {
    * @readonly
    */
   get courseId(): string {
-    return this._courseId;
+    return this.__courseId;
   }
 
   /**
@@ -75,7 +75,7 @@ export class PurchaseEntity {
    * @readonly
    */
   get purchaseDate(): number {
-    return this._purchaseDate;
+    return this.__purchaseDate;
   }
 
   /**
@@ -83,21 +83,21 @@ export class PurchaseEntity {
    * @readonly
    */
   get paymentIntentId(): string {
-    return this._paymentIntentId;
+    return this.__paymentIntentId;
   }
   /**
    * Gets the purchase creation date.
    * @readonly
    */
   get amount(): number {
-    return this._amount;
+    return this.__amount;
   }
   /**
    * Gets the purchase creation date.
    * @readonly
    */
   get status(): string {
-    return this._status;
+    return this.__status;
   }
 
   /**
@@ -107,13 +107,13 @@ export class PurchaseEntity {
    * @param {PurchaseInterface} props - The properties of the purchase.
    */
   constructor(props: PurchaseInterface) {
-    // this._id = props.id;
-    this._learnerId = props.learnerId;
-    this._purchaseId = props.purchaseId;
-    this._courseId = props.courseId;
-    this._paymentIntentId = props.paymentIntentId;
-    this._purchaseDate = props.purchaseDate;
-    this._status = props.status;
-    this._amount = props.amount;
+    // this.__id = props.id;
+    this.__learnerId = props.learnerId;
+    this.__purchaseId = props.purchaseId;
+    this.__courseId = props.courseId;
+    this.__paymentIntentId = props.paymentIntentId;
+    this.__purchaseDate = props.purchaseDate;
+    this.__status = props.status;
+    this.__amount = props.amount;
   }
 }

@@ -5,11 +5,11 @@ import { ICategoryRepository } from "../../../../infra/repositories";
 import { IGetAllCategoryUseCase } from "../interfaces";
 
 export class GetAllCategoryUseCase implements IGetAllCategoryUseCase {
-  constructor(private categoryRepository: ICategoryRepository) {}
+  constructor(private _categoryRepository: ICategoryRepository) {}
 
   async execute(role: Role): Promise<ResponseDTO> {
     try {
-      const categories = await this.categoryRepository.fetch(role);
+      const categories = await this._categoryRepository.fetch(role);
 
       return { success: true, data: categories };
     } catch (error: unknown) {

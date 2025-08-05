@@ -5,11 +5,11 @@ import { IChatGroupRepository } from "../../../../infra/repositories";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetAllChatGroupUseCase implements IGetAllChatGroupUseCase {
-  constructor(private chatGroupRepository: IChatGroupRepository) {}
+  constructor(private _chatGroupRepository: IChatGroupRepository) {}
 
   async execute({ userId, role }: Payload): Promise<ResponseDTO> {
     try {
-      const groups = await this.chatGroupRepository.findAllByUserAndRole(
+      const groups = await this._chatGroupRepository.findAllByUserAndRole(
         userId,
         role
       );

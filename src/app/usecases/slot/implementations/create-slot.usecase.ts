@@ -9,7 +9,7 @@ import { ICreateSlotUseCase } from "../interfaces";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class CreateSlotUseCase implements ICreateSlotUseCase {
-  constructor(private slotRepository: ISlotRepository) {}
+  constructor(private _slotRepository: ISlotRepository) {}
 
   async execute(
     { mentorId, time }: ICreateSlotRequestDTO,
@@ -23,7 +23,7 @@ export class CreateSlotUseCase implements ICreateSlotUseCase {
         };
       }
 
-      const slots = await this.slotRepository.findAllByMentorId(mentorId);
+      const slots = await this._slotRepository.findAllByMentorId(mentorId);
       if (slots.length > 0 && slots.some((slot) => slot.time === time)) {
         return {
           data: { error: SlotErrorType.SlotAlreadyExist },
@@ -36,7 +36,7 @@ export class CreateSlotUseCase implements ICreateSlotUseCase {
         isBooked: false,
       });
 
-      const createdSlot = await this.slotRepository.create(slotEntity);
+      const createdSlot = await this._slotRepository.create(slotEntity);
 
       if (!createdSlot) {
         return {

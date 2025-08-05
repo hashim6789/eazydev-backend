@@ -7,14 +7,14 @@ import { formatErrorResponse } from "../../../../presentation/http/utils";
 import { IGetResetPageRequestDTO } from "../../../../domain/dtos";
 
 export class GetResetPageUseCase implements IGetResetPageUseCase {
-  constructor(private tokenRepository: ITokenRepository) {}
+  constructor(private _tokenRepository: ITokenRepository) {}
 
   async execute({
     tokenId,
     role,
   }: IGetResetPageRequestDTO): Promise<ResponseDTO> {
     try {
-      const resetToken = (await this.tokenRepository.findById(
+      const resetToken = (await this._tokenRepository.findById(
         tokenId
       )) as TokenDTO | null;
       if (!resetToken) {

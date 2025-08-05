@@ -16,10 +16,10 @@ export interface LessonInterface {
  * @class
  */
 export class LessonEntity {
-  private _title: string;
-  private _mentorId: string;
-  private _description: string;
-  private _materials: string[];
+  private __title: string;
+  private __mentorId: string;
+  private __description: string;
+  private __materials: string[];
 
   /**
    * Creates a new lesson instance.
@@ -46,7 +46,7 @@ export class LessonEntity {
    * @readonly
    */
   get title(): string {
-    return this._title;
+    return this.__title;
   }
 
   /**
@@ -54,7 +54,7 @@ export class LessonEntity {
    * @readonly
    */
   get mentorId(): string {
-    return this._mentorId;
+    return this.__mentorId;
   }
 
   /**
@@ -62,7 +62,7 @@ export class LessonEntity {
    * @readonly
    */
   get description(): string {
-    return this._description;
+    return this.__description;
   }
 
   /**
@@ -70,7 +70,7 @@ export class LessonEntity {
    * @readonly
    */
   get materials(): string[] {
-    return this._materials;
+    return this.__materials;
   }
 
   /**
@@ -80,9 +80,9 @@ export class LessonEntity {
    * @param {LessonInterface} props - The properties of the lesson.
    */
   constructor(props: LessonInterface) {
-    this._title = props.title;
-    this._mentorId = props.mentorId;
-    this._description = props.description;
-    this._materials = props.materials;
+    this.__title = props.title;
+    this.__mentorId = props.mentorId;
+    this.__description = props.description;
+    this.__materials = props.materials;
   }
 }

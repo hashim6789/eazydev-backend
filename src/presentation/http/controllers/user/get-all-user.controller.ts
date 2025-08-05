@@ -15,9 +15,9 @@ import { IController } from "../IController";
  */
 export class GetAllUserController implements IController {
   constructor(
-    private getAllUserCase: IGetAllUserUseCase,
-    private httpErrors: IHttpErrors,
-    private httpSuccess: IHttpSuccess
+    private _getAllUserCase: IGetAllUserUseCase,
+    private _httpErrors: IHttpErrors,
+    private _httpSuccess: IHttpSuccess
   ) {}
 
   async handle(httpRequest: IHttpRequest): Promise<IHttpResponse> {
@@ -28,20 +28,20 @@ export class GetAllUserController implements IController {
     if (!queryValidation.success) {
       const errorMessage =
         extractFirstZodMessage(queryValidation.error) || "Invalid input";
-      const error = this.httpErrors.error_422(errorMessage);
+      const error = this._httpErrors.error_422(errorMessage);
       return new HttpResponse(error.statusCode, error.body);
     }
 
     const query = queryValidation.data;
 
-    const response = await this.getAllUserCase.execute(query);
+    const response = await this._getAllUserCase.execute(query);
 
     if (!response.success) {
-      const error = this.httpErrors.error_400();
+      const error = this._httpErrors.error_400();
       return new HttpResponse(error.statusCode, response.data);
     }
 
-    const success = this.httpSuccess.success_200(response.data);
+    const success = this._httpSuccess.success_200(response.data);
     return new HttpResponse(success.statusCode, success.body);
   }
 }

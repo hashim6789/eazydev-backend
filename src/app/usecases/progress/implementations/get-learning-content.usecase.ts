@@ -8,14 +8,14 @@ import { AuthenticateUserErrorType } from "../../../../domain/enums";
 import { formatErrorResponse } from "../../../../presentation/http/utils";
 
 export class GetLearningContentUseCase implements IGetLearningContentsUseCase {
-  constructor(private progressRepository: IProgressRepository) {}
+  constructor(private _progressRepository: IProgressRepository) {}
 
   async execute(
     { progressId }: IGetLearningContentRequestDTO,
     { userId }: Payload
   ): Promise<ResponseDTO> {
     try {
-      const progress = await this.progressRepository.findByIdPopulate(
+      const progress = await this._progressRepository.findByIdPopulate(
         progressId
       );
 

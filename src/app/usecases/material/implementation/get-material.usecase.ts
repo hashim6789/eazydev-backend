@@ -11,7 +11,7 @@ import { IMaterial } from "../../../../infra/databases/interfaces";
 import { mapMaterialToDTO } from "../../../../infra/databases/mappers";
 
 export class GetMaterialUseCase implements IGetMaterialUseCase {
-  constructor(private materialRepository: IMaterialRepository) {}
+  constructor(private _materialRepository: IMaterialRepository) {}
 
   async execute({
     role,
@@ -21,7 +21,7 @@ export class GetMaterialUseCase implements IGetMaterialUseCase {
       let fetchedData: null | IMaterial = null;
 
       if (role === "mentor") {
-        fetchedData = await this.materialRepository.findById(materialId);
+        fetchedData = await this._materialRepository.findById(materialId);
       }
 
       if (!fetchedData) {
