@@ -9,5 +9,4 @@ COPY . .
 EXPOSE 3333
 RUN npm run build
 
-# Run app with PM2
 CMD ["npm", "start"]
